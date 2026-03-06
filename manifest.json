@@ -1,15 +1,36 @@
 {
-  "name": "SOLARIS CET R2A",
-  "short_name": "SOLARIS",
+  "name": "SOLARIS CET - Self-Evolving AI Platform",
+  "short_name": "SOLARIS CET",
   "start_url": "/solaris-cet/",
   "display": "standalone",
-  "background_color": "#0F172A",
-  "theme_color": "#D4AF37",
-  "description": "Self-evolving AI platform for CET token holders",
-  "icons": [{
-    "src": "https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreid6hoewfj66y6wwefhiyp46madxlqtgnvut6tz7y2i4xwbj5yda3a",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any maskable"
-  }]
+  "background_color": "#0a0a0f",
+  "theme_color": "#ffd700",
+  "description": "Hyper-scarce CET token (9,000 supply) on TON Blockchain. R2A Protocol for AI agents.",
+  "icons": [
+    {
+      "src": "https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreid6hoewfj66y6wwefhiyp46madxlqtgnvut6tz7y2i4xwbj5yda3a",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "crypto", "defi"],
+  "lang": "en",
+  "dir": "ltr",
+  "orientation": "portrait-primary",
+  "scope": "/solaris-cet/",
+  "shortcuts": [
+    {
+      "name": "Buy CET",
+      "short_name": "Buy",
+      "description": "Trade CET on DeDust",
+      "url": "https://dedust.io/pools/EQDDfi4bTApmYDwglsFajobpwVk-tGS6kDwjD6y2whRFfIif"
+    },
+    {
+      "name": "View Chart",
+      "short_name": "Chart",
+      "description": "View CET price chart",
+      "url": "#chart"
+    }
+  ]
 }
