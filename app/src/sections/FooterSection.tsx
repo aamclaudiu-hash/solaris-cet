@@ -5,6 +5,8 @@ import { Download, FileText, Mail, ArrowRight, Sun, Github, Twitter, MessageCirc
 // Constants defined once to avoid duplication and maintain a single source of truth
 const GITHUB_URL = 'https://github.com/aamclaudiu-hash/solaris-cet';
 const DEDUST_POOL_ADDRESS = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
+const DEDUST_POOL_DEPOSIT_URL = `https://dedust.io/pools/${DEDUST_POOL_ADDRESS}/deposit`;
+const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 const DEDUST_SWAP_URL = `https://dedust.io/swap/TON/${DEDUST_POOL_ADDRESS}`;
 const WHITEPAPER_URL = 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a';
 
@@ -32,7 +34,8 @@ const FooterSection = () => {
 
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copiedPool, setCopiedPool] = useState(false);
+  const [copiedContract, setCopiedContract] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,11 +48,18 @@ const FooterSection = () => {
     }
   };
 
-  const handleCopyContract = () => {
+  const handleCopyPool = () => {
     navigator.clipboard.writeText(DEDUST_POOL_ADDRESS).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+      setCopiedPool(true);
+      setTimeout(() => setCopiedPool(false), 2000);
+    }).catch(() => {/* clipboard access denied – fail silently */});
+  };
+
+  const handleCopyContract = () => {
+    navigator.clipboard.writeText(CET_CONTRACT_ADDRESS).then(() => {
+      setCopiedContract(true);
+      setTimeout(() => setCopiedContract(false), 2000);
+    }).catch(() => {/* clipboard access denied – fail silently */});
   };
 
   useLayoutEffect(() => {
@@ -128,17 +138,44 @@ const FooterSection = () => {
         </div>
 
         {/* Contract address */}
-        <div className="glass-card p-4 mb-6 flex items-center justify-between gap-4">
+        <div className="glass-card p-4 mb-3 flex items-center justify-between gap-4">
           <div className="min-w-0">
-            <div className="hud-label text-[10px] mb-1">DeDust Pool Address (TON)</div>
-            <div className="font-mono text-xs text-solaris-muted truncate">{DEDUST_POOL_ADDRESS}</div>
+            <div className="hud-label text-[10px] mb-1">CET Contract Address (TON)</div>
+            <div className="font-mono text-xs text-solaris-muted truncate">{CET_CONTRACT_ADDRESS}</div>
           </div>
           <button
             onClick={handleCopyContract}
             className="shrink-0 p-2 rounded-lg bg-white/5 hover:bg-solaris-gold/10 transition-colors"
-            aria-label="Copy contract address"
+            aria-label="Copy CET contract address"
           >
-            {copied
+            {copiedContract
+              ? <CheckCircle className="w-4 h-4 text-emerald-400" />
+              : <Copy className="w-4 h-4 text-solaris-muted" />
+            }
+          </button>
+        </div>
+
+        {/* DeDust Pool address */}
+        <div className="glass-card p-4 mb-6 flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <div className="hud-label text-[10px] mb-1">
+              <a
+                href={DEDUST_POOL_DEPOSIT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-solaris-gold transition-colors"
+              >
+                DeDust Pool — CET/USDT ↗
+              </a>
+            </div>
+            <div className="font-mono text-xs text-solaris-muted truncate">{DEDUST_POOL_ADDRESS}</div>
+          </div>
+          <button
+            onClick={handleCopyPool}
+            className="shrink-0 p-2 rounded-lg bg-white/5 hover:bg-solaris-gold/10 transition-colors"
+            aria-label="Copy DeDust pool address"
+          >
+            {copiedPool
               ? <CheckCircle className="w-4 h-4 text-emerald-400" />
               : <Copy className="w-4 h-4 text-solaris-muted" />
             }
@@ -216,9 +253,16 @@ const FooterSection = () => {
             <p className="text-solaris-muted/60 text-sm">
               © {new Date().getFullYear()} Solaris CET. AI Bridge to High Intelligence. All rights reserved.
             </p>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-mono text-[11px] text-emerald-400">LIVE ON TON MAINNET</span>
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[11px] text-solaris-gold font-semibold">₿</span>
+                <span className="font-mono text-[11px] text-solaris-gold">POWERED BY BITCOIN</span>
+              </div>
+              <div className="hidden sm:block w-px h-4 bg-white/10" />
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="font-mono text-[11px] text-emerald-400">LIVE ON TON MAINNET</span>
+              </div>
             </div>
           </div>
         </footer>
