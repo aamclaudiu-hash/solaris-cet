@@ -207,7 +207,7 @@ const NovaAppSection = () => {
           <div className="flex animate-ticker">
             {doubledTickerItems.map((item, idx) => (
               <div
-                key={idx}
+                key={`${item.label}-${idx}`}
                 className="flex items-center gap-3 px-6 border-r border-white/10 last:border-r-0 whitespace-nowrap"
               >
                 <item.icon className="w-4 h-4 text-solaris-gold" />
