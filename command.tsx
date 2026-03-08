@@ -1,17 +1,55 @@
-import * as React from "react"
-import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { Separator } from "@/components/ui/separator"
 
-function Avatar({
+const buttonGroupVariants = cva(
+  "flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md has-[>[data-slot=button-group]]:gap-2",
+  {
+    variants: {
+      orientation: {
+        horizontal:
+          "[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none",
+        vertical:
+          "flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none",
+      },
+    },
+    defaultVariants: {
+      orientation: "horizontal",
+    },
+  }
+)
+
+function ButtonGroup({
   className,
+  orientation,
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Root>) {
+}: React.ComponentProps<"div"> & VariantProps<typeof buttonGroupVariants>) {
   return (
-    <AvatarPrimitive.Root
-      data-slot="avatar"
+    <div
+      role="group"
+      data-slot="button-group"
+      data-orientation={orientation}
+      className={cn(buttonGroupVariants({ orientation }), className)}
+      {...props}
+    />
+  )
+}
+
+function ButtonGroupText({
+  className,
+  asChild = false,
+  ...props
+}: React.ComponentProps<"div"> & {
+  asChild?: boolean
+}) {
+  const Comp = asChild ? Slot : "div"
+
+  return (
+    <Comp
       className={cn(
-        "relative flex size-8 shrink-0 overflow-hidden rounded-full",
+        "bg-muted flex items-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -19,28 +57,17 @@ function Avatar({
   )
 }
 
-function AvatarImage({
+function ButtonGroupSeparator({
   className,
+  orientation = "vertical",
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+}: React.ComponentProps<typeof Separator>) {
   return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
-      className={cn("aspect-square size-full", className)}
-      {...props}
-    />
-  )
-}
-
-function AvatarFallback({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
-  return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
+    <Separator
+      data-slot="button-group-separator"
+      orientation={orientation}
       className={cn(
-        "bg-muted flex size-full items-center justify-center rounded-full",
+        "bg-input relative !m-0 self-stretch data-[orientation=vertical]:h-auto",
         className
       )}
       {...props}
@@ -48,4 +75,9 @@ function AvatarFallback({
   )
 }
 
-export { Avatar, AvatarImage, AvatarFallback }
+export {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+  buttonGroupVariants,
+}

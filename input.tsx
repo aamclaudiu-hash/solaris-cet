@@ -1,25 +1,43 @@
+"use client"
+
 import * as React from "react"
-import { Command as CommandPrimitive } from "cmdk"
-import { SearchIcon } from "lucide-react"
+import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 
-function Command({
+function Drawer({
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) {
+  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
+}
+
+function DrawerTrigger({
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
+  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />
+}
+
+function DrawerPortal({
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Portal>) {
+  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />
+}
+
+function DrawerClose({
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Close>) {
+  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />
+}
+
+function DrawerOverlay({
   className,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Overlay>) {
   return (
-    <CommandPrimitive
-      data-slot="command"
+    <DrawerPrimitive.Overlay
+      data-slot="drawer-overlay"
       className={cn(
-        "bg-popover text-popover-foreground flex h-full w-full flex-col overflow-hidden rounded-md",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
         className
       )}
       {...props}
@@ -27,68 +45,39 @@ function Command({
   )
 }
 
-function CommandDialog({
-  title = "Command Palette",
-  description = "Search for a command to run...",
+function DrawerContent({
+  className,
   children,
-  className,
-  showCloseButton = true,
   ...props
-}: React.ComponentProps<typeof Dialog> & {
-  title?: string
-  description?: string
-  className?: string
-  showCloseButton?: boolean
-}) {
+}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
   return (
-    <Dialog {...props}>
-      <DialogHeader className="sr-only">
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{description}</DialogDescription>
-      </DialogHeader>
-      <DialogContent
-        className={cn("overflow-hidden p-0", className)}
-        showCloseButton={showCloseButton}
-      >
-        <Command className="[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
-          {children}
-        </Command>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-function CommandInput({
-  className,
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.Input>) {
-  return (
-    <div
-      data-slot="command-input-wrapper"
-      className="flex h-9 items-center gap-2 border-b px-3"
-    >
-      <SearchIcon className="size-4 shrink-0 opacity-50" />
-      <CommandPrimitive.Input
-        data-slot="command-input"
+    <DrawerPortal data-slot="drawer-portal">
+      <DrawerOverlay />
+      <DrawerPrimitive.Content
+        data-slot="drawer-content"
         className={cn(
-          "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+          "group/drawer-content bg-background fixed z-50 flex h-auto flex-col",
+          "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80vh] data-[vaul-drawer-direction=top]:rounded-b-lg data-[vaul-drawer-direction=top]:border-b",
+          "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80vh] data-[vaul-drawer-direction=bottom]:rounded-t-lg data-[vaul-drawer-direction=bottom]:border-t",
+          "data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=right]:sm:max-w-sm",
+          "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm",
           className
         )}
         {...props}
-      />
-    </div>
+      >
+        <div className="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+        {children}
+      </DrawerPrimitive.Content>
+    </DrawerPortal>
   )
 }
 
-function CommandList({
-  className,
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.List>) {
+function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <CommandPrimitive.List
-      data-slot="command-list"
+    <div
+      data-slot="drawer-header"
       className={cn(
-        "max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto",
+        "flex flex-col gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-1.5 md:text-left",
         className
       )}
       {...props}
@@ -96,87 +85,51 @@ function CommandList({
   )
 }
 
-function CommandEmpty({
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.Empty>) {
+function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <CommandPrimitive.Empty
-      data-slot="command-empty"
-      className="py-6 text-center text-sm"
+    <div
+      data-slot="drawer-footer"
+      className={cn("mt-auto flex flex-col gap-2 p-4", className)}
       {...props}
     />
   )
 }
 
-function CommandGroup({
+function DrawerTitle({
   className,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Group>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Title>) {
   return (
-    <CommandPrimitive.Group
-      data-slot="command-group"
-      className={cn(
-        "text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-hidden p-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
-        className
-      )}
+    <DrawerPrimitive.Title
+      data-slot="drawer-title"
+      className={cn("text-foreground font-semibold", className)}
       {...props}
     />
   )
 }
 
-function CommandSeparator({
+function DrawerDescription({
   className,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Separator>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Description>) {
   return (
-    <CommandPrimitive.Separator
-      data-slot="command-separator"
-      className={cn("bg-border -mx-1 h-px", className)}
-      {...props}
-    />
-  )
-}
-
-function CommandItem({
-  className,
-  ...props
-}: React.ComponentProps<typeof CommandPrimitive.Item>) {
-  return (
-    <CommandPrimitive.Item
-      data-slot="command-item"
-      className={cn(
-        "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
-      {...props}
-    />
-  )
-}
-
-function CommandShortcut({
-  className,
-  ...props
-}: React.ComponentProps<"span">) {
-  return (
-    <span
-      data-slot="command-shortcut"
-      className={cn(
-        "text-muted-foreground ml-auto text-xs tracking-widest",
-        className
-      )}
+    <DrawerPrimitive.Description
+      data-slot="drawer-description"
+      className={cn("text-muted-foreground text-sm", className)}
       {...props}
     />
   )
 }
 
 export {
-  Command,
-  CommandDialog,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandShortcut,
-  CommandSeparator,
+  Drawer,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
 }
