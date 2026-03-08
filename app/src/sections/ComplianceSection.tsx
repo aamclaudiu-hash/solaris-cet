@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ShieldCheck, FileCheck, Globe, Server } from 'lucide-react';
+import GlowOrbs from '../components/GlowOrbs';
 
 
 const ComplianceSection = () => {
@@ -87,14 +88,18 @@ const ComplianceSection = () => {
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[50vh] grid-floor opacity-20" />
+        <div className="absolute inset-0 tech-grid opacity-30" />
       </div>
+
+      {/* Glow orbs */}
+      <GlowOrbs variant="mixed" />
 
       {/* Left Compliance Card */}
       <div
         ref={leftCardRef}
         className="absolute left-[7vw] top-[26vh] w-[min(38vw,520px)] z-10"
       >
-        <div className="glass-card p-6 lg:p-8">
+        <div className="glass-card p-6 lg:p-8 holo-card">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-10 h-10 rounded-lg bg-emerald-400/10 flex items-center justify-center">
               <ShieldCheck className="w-5 h-5 text-emerald-400" />

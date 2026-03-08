@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { Brain, Lightbulb, Play, Eye } from 'lucide-react';
+import { Brain, Lightbulb, Play, Eye, Zap } from 'lucide-react';
 import AgentBridge from '../components/AgentBridge';
+import GlowOrbs from '../components/GlowOrbs';
 
 
 const steps = [
@@ -105,23 +106,28 @@ const IntelligenceCoreSection = () => {
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[50vh] grid-floor opacity-20" />
+        <div className="absolute inset-0 tech-grid opacity-30" />
       </div>
+
+      {/* Glow orbs */}
+      <GlowOrbs variant="cyan" />
 
       {/* Left Info Card */}
       <div
         ref={leftCardRef}
         className="absolute left-[7vw] top-[26vh] w-[min(34vw,480px)] z-10"
       >
-        <div className="glass-card p-6 lg:p-8">
+        <div className="glass-card p-6 lg:p-8 holo-card">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-lg bg-solaris-cyan/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-solaris-cyan/10 flex items-center justify-center animate-energy-pulse">
               <Brain className="w-5 h-5 text-solaris-cyan" />
             </div>
             <span className="hud-label text-solaris-cyan">AI Integration</span>
           </div>
 
           <h2 className="font-display font-bold text-[clamp(22px,2.5vw,36px)] text-solaris-text mb-4">
-            The Intelligence <span className="text-solaris-cyan">Core</span>
+            The Intelligence{' '}
+            <span className="text-gradient-animated">Core</span>
           </h2>
 
           <div className="space-y-4">
@@ -133,9 +139,28 @@ const IntelligenceCoreSection = () => {
             </p>
           </div>
 
+          {/* Metrics row */}
+          <div className="mt-5 grid grid-cols-3 gap-3">
+            <div className="p-3 rounded-lg bg-white/5 text-center">
+              <div className="font-display font-bold text-lg text-solaris-cyan">34%</div>
+              <div className="hud-label text-[9px]">SUCCESS ↑</div>
+            </div>
+            <div className="p-3 rounded-lg bg-white/5 text-center">
+              <div className="font-display font-bold text-lg text-solaris-gold">74x</div>
+              <div className="hud-label text-[9px]">EFFICIENCY</div>
+            </div>
+            <div className="p-3 rounded-lg bg-white/5 text-center">
+              <div className="font-display font-bold text-lg text-emerald-400">∞</div>
+              <div className="hud-label text-[9px]">SCALE</div>
+            </div>
+          </div>
+
           {/* BRAID mention */}
-          <div className="mt-6 p-4 rounded-xl bg-solaris-cyan/5 border border-solaris-cyan/20">
-            <div className="hud-label text-solaris-cyan mb-2">BRAID Framework</div>
+          <div className="mt-4 p-4 rounded-xl bg-solaris-cyan/5 border border-solaris-cyan/20">
+            <div className="hud-label text-solaris-cyan mb-2 flex items-center gap-2">
+              <Zap className="w-3 h-3" />
+              BRAID Framework
+            </div>
             <p className="text-solaris-muted text-sm">
               Structural reasoning with Mermaid-based logic graphs for{' '}
               <span className="text-solaris-text font-semibold">74x efficiency gains</span>.
@@ -158,6 +183,10 @@ const IntelligenceCoreSection = () => {
               <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
               <div className="w-3 h-3 rounded-full bg-green-500/60" />
               <span className="ml-2 text-solaris-muted text-xs">ReAct Protocol · Live</span>
+              <div className="ml-auto flex items-center gap-1">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-emerald-400 text-[10px]">ACTIVE</span>
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -176,6 +205,7 @@ const IntelligenceCoreSection = () => {
                       color: step.color,
                       border: `1px solid ${step.color}`,
                       opacity: i === reactStep ? 1 : 0.7,
+                      boxShadow: i === reactStep ? `0 0 8px ${step.color}40` : 'none',
                     }}
                   >
                     {step.phase}
@@ -195,6 +225,7 @@ const IntelligenceCoreSection = () => {
 
           {/* ReAct label */}
           <div className="absolute bottom-6 left-6 right-6">
+            <div className="holo-line mb-3" />
             <div className="hud-label text-solaris-cyan mb-2">REASONING TRACE</div>
             <div className="flex items-center gap-2 text-solaris-text text-sm">
               <div className="w-2 h-2 rounded-full bg-solaris-cyan animate-pulse" />

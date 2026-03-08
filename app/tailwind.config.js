@@ -97,6 +97,14 @@ module.exports = {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "orb-pulse": {
+          "0%, 100%": { opacity: "0.6", transform: "translate(-50%, -50%) scale(1)" },
+          "50%": { opacity: "1", transform: "translate(-50%, -50%) scale(1.1)" },
+        },
+        "gold-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(242, 201, 76, 0.15)" },
+          "50%": { boxShadow: "0 0 50px rgba(242, 201, 76, 0.4), 0 0 100px rgba(242, 201, 76, 0.2)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -106,6 +114,8 @@ module.exports = {
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
         "shimmer": "shimmer 5s linear infinite",
         "ticker": "ticker 20s linear infinite",
+        "orb-pulse": "orb-pulse 6s ease-in-out infinite",
+        "gold-pulse": "gold-pulse 3s ease-in-out infinite",
       },
     },
   },
