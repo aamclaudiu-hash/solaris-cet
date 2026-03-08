@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Menu, X, Sun } from 'lucide-react';
 
 // Static data defined outside component to avoid re-creation on every render
@@ -12,10 +12,15 @@ const navLinks = [
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setIsScrolled(scrollTop > 100);
+      setScrollProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -26,16 +31,25 @@ const Navigation = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ${
         isScrolled
-          ? 'bg-solaris-dark/80 backdrop-blur-xl border-b border-white/5'
+          ? 'bg-solaris-dark/85 backdrop-blur-xl border-b border-white/5'
           : 'bg-transparent'
       }`}
     >
+      {/* Scroll progress bar */}
+      <div
+        ref={progressBarRef}
+        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-solaris-gold via-solaris-cyan to-solaris-gold transition-none"
+        style={{ width: `${scrollProgress}%` }}
+      />
+
       <div className="w-full px-6 lg:px-12">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <a href="#" className="flex items-center gap-3 group">
             <div className="relative w-8 h-8 lg:w-10 lg:h-10">
-              <Sun className="w-full h-full text-solaris-gold transition-transform duration-500 group-hover:rotate-180" />
+              <Sun className="w-full h-full text-solaris-gold transition-transform duration-700 group-hover:rotate-180" />
+              {/* Logo glow */}
+              <div className="absolute inset-0 rounded-full bg-solaris-gold/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
             <span className="font-display font-semibold text-lg lg:text-xl text-solaris-text tracking-tight">
               Solaris <span className="text-solaris-gold">CET</span>
@@ -51,14 +65,22 @@ const Navigation = () => {
                 className="text-sm text-solaris-muted hover:text-solaris-text transition-colors duration-300 relative group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-solaris-gold transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-solaris-gold to-solaris-cyan transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden lg:block">
-            <button className="btn-gold text-sm">
+          <div className="hidden lg:flex items-center gap-3">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/20">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-mono text-[11px] text-emerald-400">LIVE</span>
+            </div>
+            <button
+              className="btn-gold text-sm"
+              onClick={() => window.open('https://t.me/SolarisCET', '_blank')}
+              aria-label="Start Mining (opens in new window)"
+            >
               Start Mining
             </button>
           </div>
@@ -67,6 +89,7 @@ const Navigation = () => {
           <button
             className="lg:hidden p-2 text-solaris-text"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>

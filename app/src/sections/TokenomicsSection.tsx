@@ -1,12 +1,41 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { Coins, Pickaxe, Users, TrendingDown } from 'lucide-react';
+import GlowOrbs from '../components/GlowOrbs';
 
+
+const CET_TOTAL_SUPPLY = 9000;
+const CET_MINED_SUPPLY = 9000; // 100% mined on launch - hyper-scarce supply
 
 const TokenomicsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const pillsRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<SVGCircleElement>(null);
+  const [ringVisible, setRingVisible] = useState(false);
+
+  // Animate ring on mount
+  useEffect(() => {
+    const timer = setTimeout(() => setRingVisible(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const circle = ringRef.current;
+    if (!circle || !ringVisible) return;
+
+    const r = 54;
+    const circumference = 2 * Math.PI * r;
+    const progress = CET_MINED_SUPPLY / CET_TOTAL_SUPPLY;
+
+    gsap.set(circle, { strokeDasharray: circumference, strokeDashoffset: circumference });
+    gsap.to(circle, {
+      strokeDashoffset: circumference * (1 - progress),
+      duration: 2,
+      ease: 'power3.out',
+      delay: 0.3,
+    });
+  }, [ringVisible]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -64,6 +93,9 @@ const TokenomicsSection = () => {
     return () => ctx.revert();
   }, []);
 
+  const r = 54;
+  const circumference = 2 * Math.PI * r;
+
   return (
     <section
       ref={sectionRef}
@@ -73,17 +105,19 @@ const TokenomicsSection = () => {
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[50vh] grid-floor opacity-20" />
+        <div className="absolute inset-0 tech-grid opacity-30" />
       </div>
+
+      {/* Glow orbs */}
+      <GlowOrbs variant="cyan" />
 
       {/* Floating metric pills */}
       <div ref={pillsRef} className="absolute inset-0 pointer-events-none z-20">
-        <div
-          className="metric-pill absolute left-[6vw] top-[20vh] glass-card px-5 py-3 flex items-center gap-3 animate-float"
-        >
+        <div className="metric-pill absolute left-[6vw] top-[20vh] glass-card px-5 py-3 flex items-center gap-3 animate-float">
           <Coins className="w-5 h-5 text-solaris-gold" />
           <div>
             <div className="hud-label text-[10px]">Max Supply</div>
-            <div className="font-mono text-solaris-gold font-semibold">21M</div>
+            <div className="font-mono text-solaris-gold font-semibold">21M BTC-S</div>
           </div>
         </div>
         <div
@@ -111,26 +145,66 @@ const TokenomicsSection = () => {
       {/* Main Tokenomics Card */}
       <div
         ref={cardRef}
-        className="relative z-10 w-[min(78vw,1080px)]"
+        className="relative z-10 w-[min(80vw,1100px)]"
       >
-        <div className="glass-card-gold p-8 lg:p-12 relative overflow-hidden">
+        <div className="glass-card-gold p-8 lg:p-12 relative overflow-hidden holo-card">
+          {/* Shimmer border */}
+          <div className="absolute inset-0 rounded-[18px] shimmer-border pointer-events-none" />
+
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-solaris-gold/10 flex items-center justify-center animate-gold-pulse">
               <Coins className="w-6 h-6 text-solaris-gold" />
             </div>
             <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text">
-              Tokenomics
+              <span className="text-gradient-animated">Tokenomics</span>
             </h2>
           </div>
 
           {/* Main content grid */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Left: Supply info */}
-            <div className="space-y-6">
-              <div className="p-5 rounded-xl bg-white/5">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Left: Radial progress ring */}
+            <div className="flex flex-col items-center justify-center">
+              <div className="relative w-36 h-36">
+                <svg className="w-full h-full" viewBox="0 0 128 128" style={{ transform: 'rotate(-90deg)' }}>
+                  <circle
+                    cx="64" cy="64" r={r}
+                    className="progress-ring-track"
+                    strokeWidth="8"
+                  />
+                  <circle
+                    ref={ringRef}
+                    cx="64" cy="64" r={r}
+                    className="progress-ring-fill"
+                    strokeWidth="8"
+                    stroke="url(#ringGrad)"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={circumference}
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#F2C94C" />
+                      <stop offset="100%" stopColor="#2EE7FF" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="font-display font-bold text-2xl text-solaris-gold">100%</div>
+                  <div className="hud-label text-[9px]">MINED</div>
+                </div>
+              </div>
+              <div className="mt-3 text-center">
+                <div className="font-mono text-solaris-gold font-semibold">{CET_TOTAL_SUPPLY.toLocaleString()} CET</div>
+                <div className="hud-label text-[10px] mt-1">TOTAL SUPPLY ON TON NETWORK</div>
+              </div>
+            </div>
+
+            {/* Middle: Supply info */}
+            <div className="space-y-5">
+              <div className="p-4 rounded-xl bg-white/5">
                 <div className="hud-label mb-2">Fixed Supply</div>
-                <div className="font-display font-bold text-3xl lg:text-4xl text-solaris-gold mb-1">
+                <div className="font-display font-bold text-3xl text-solaris-gold mb-1">
                   21,000,000
                 </div>
                 <div className="text-solaris-muted text-sm">BTC-S Total Supply</div>
@@ -156,80 +230,78 @@ const TokenomicsSection = () => {
                 </div>
               </div>
 
-              <div className="p-5 rounded-xl bg-white/5">
-                <div className="hud-label mb-2">Fair Launch Distribution</div>
+              <div className="p-4 rounded-xl bg-white/5">
+                <div className="hud-label mb-3">Distribution</div>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-solaris-muted text-sm">Long-term Mining (90 years)</span>
-                    <span className="font-mono text-solaris-cyan font-semibold">66.66%</span>
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-solaris-muted text-sm">Mining (90 years)</span>
+                      <span className="font-mono text-solaris-cyan font-semibold text-sm">66.66%</span>
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-solaris-cyan to-solaris-gold rounded-full animate-gradient-shift" style={{ width: '66.66%' }} />
+                    </div>
                   </div>
-                  <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                    <div className="h-full w-[66.66%] bg-gradient-to-r from-solaris-cyan to-solaris-gold rounded-full" />
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-solaris-muted text-sm">Team & Advisors</span>
-                    <span className="font-mono text-emerald-400 font-semibold">0.33%</span>
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-solaris-muted text-sm">Team & Advisors</span>
+                      <span className="font-mono text-emerald-400 font-semibold text-sm">0.33%</span>
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                      <div className="h-full bg-emerald-400 rounded-full" style={{ width: '0.33%' }} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right: DCBM */}
-            <div className="space-y-6">
-              <div className="p-5 rounded-xl bg-solaris-gold/5 border border-solaris-gold/20">
+            <div className="space-y-5">
+              <div className="p-4 rounded-xl bg-solaris-gold/5 border border-solaris-gold/20">
                 <div className="flex items-center gap-3 mb-3">
                   <TrendingDown className="w-5 h-5 text-solaris-gold" />
                   <div className="hud-label text-solaris-gold">DCBM Stability</div>
                 </div>
-                <p className="text-solaris-muted text-sm leading-relaxed mb-4">
+                <p className="text-solaris-muted text-sm leading-relaxed mb-3">
                   <span className="text-solaris-text font-medium">Dynamic-Control Buyback Mechanism</span>{' '}
                   uses PID controllers to reduce volatility by{' '}
                   <span className="text-solaris-gold font-semibold">66%</span>.
                 </p>
+                {/* Mini wave bars visual */}
+                <div className="flex items-center gap-1 mb-2">
+                  {[1.0, 1.4, 0.7, 1.2, 0.9, 1.5, 0.8, 1.1, 0.6, 1.3].map((h, i) => (
+                    <div
+                      key={i}
+                      className="wave-bar text-solaris-gold"
+                      style={{ height: `${h * 12}px`, animationDelay: `${i * 0.1}s` }}
+                    />
+                  ))}
+                </div>
                 <div className="flex items-center gap-2 text-xs text-solaris-muted">
                   <div className="w-2 h-2 rounded-full bg-solaris-gold animate-pulse" />
-                  Scientific approach to price stability
+                  Scientific price stability
                 </div>
               </div>
 
-              {/* Visual representation */}
-              <div className="p-5 rounded-xl bg-white/5">
-                <div className="hud-label mb-4">Supply Distribution</div>
-                <div className="flex items-end gap-2 h-24">
-                  <div className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full bg-solaris-cyan/80 rounded-t-lg" style={{ height: '80%' }} />
-                    <span className="text-[10px] text-solaris-muted">Mining</span>
-                  </div>
-                  <div className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full bg-solaris-gold/80 rounded-t-lg" style={{ height: '25%' }} />
-                    <span className="text-[10px] text-solaris-muted">Ecosystem</span>
-                  </div>
-                  <div className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full bg-emerald-400/80 rounded-t-lg" style={{ height: '8%' }} />
-                    <span className="text-[10px] text-solaris-muted">Team</span>
-                  </div>
+              {/* Bottom stats */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-xl bg-white/5 text-center">
+                  <div className="hud-label text-[9px] mb-1">Launch Type</div>
+                  <div className="font-display font-semibold text-sm text-solaris-text">Fair Launch</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 text-center">
+                  <div className="hud-label text-[9px] mb-1">Mining Period</div>
+                  <div className="font-display font-semibold text-sm text-solaris-cyan">90 Years</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 text-center">
+                  <div className="hud-label text-[9px] mb-1">Volatility ↓</div>
+                  <div className="font-display font-semibold text-sm text-solaris-gold">66%</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 text-center">
+                  <div className="hud-label text-[9px] mb-1">Target Val.</div>
+                  <div className="font-display font-semibold text-sm text-emerald-400">€1B</div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Bottom stats */}
-          <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <div className="hud-label mb-1">Launch Type</div>
-              <div className="font-display font-semibold text-solaris-text">Fair Launch</div>
-            </div>
-            <div>
-              <div className="hud-label mb-1">Mining Period</div>
-              <div className="font-display font-semibold text-solaris-cyan">90 Years</div>
-            </div>
-            <div>
-              <div className="hud-label mb-1">Volatility Reduction</div>
-              <div className="font-display font-semibold text-solaris-gold">66%</div>
-            </div>
-            <div>
-              <div className="hud-label mb-1">Target Valuation</div>
-              <div className="font-display font-semibold text-emerald-400">€1B</div>
             </div>
           </div>
         </div>

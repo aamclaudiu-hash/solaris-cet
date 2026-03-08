@@ -1,6 +1,7 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { Shield, Zap, Cpu } from 'lucide-react';
+import { Shield, Zap, Cpu, ArrowLeftRight } from 'lucide-react';
+import GlowOrbs from '../components/GlowOrbs';
 
 
 const HybridEngineSection = () => {
@@ -8,6 +9,27 @@ const HybridEngineSection = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const coinRef = useRef<HTMLImageElement>(null);
+  const svgPathRef = useRef<SVGPathElement>(null);
+  const [activeNode, setActiveNode] = useState<'pow' | 'dpos' | null>(null);
+
+  // SVG path animation
+  useEffect(() => {
+    const path = svgPathRef.current;
+    if (!path) return;
+
+    const len = path.getTotalLength();
+    gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+
+    const tween = gsap.to(path, {
+      strokeDashoffset: 0,
+      duration: 3,
+      ease: 'power2.inOut',
+      repeat: -1,
+      yoyo: true,
+    });
+
+    return () => { tween.kill(); };
+  }, []);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -71,9 +93,9 @@ const HybridEngineSection = () => {
   }, []);
 
   const badges = [
-    { icon: Shield, label: 'PoW', color: 'text-solaris-gold' },
-    { icon: Zap, label: 'DPoS', color: 'text-solaris-cyan' },
-    { icon: Cpu, label: '100K TPS', color: 'text-emerald-400' },
+    { icon: Shield, label: 'PoW Security', color: 'text-solaris-gold', bg: 'bg-solaris-gold/10', border: 'border-solaris-gold/30', key: 'pow' as const },
+    { icon: Zap, label: 'DPoS Speed', color: 'text-solaris-cyan', bg: 'bg-solaris-cyan/10', border: 'border-solaris-cyan/30', key: 'dpos' as const },
+    { icon: Cpu, label: '100K TPS', color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/30', key: null },
   ];
 
   return (
@@ -84,26 +106,40 @@ const HybridEngineSection = () => {
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[50vh] grid-floor opacity-20" />
+        <div className="absolute inset-0 tech-grid opacity-30" />
       </div>
+
+      {/* Glow orbs */}
+      <GlowOrbs variant="gold" />
 
       {/* Background coin */}
       <img
         ref={coinRef}
         src="/hero-coin.png"
         alt=""
-        className="absolute left-[60%] top-[45%] -translate-x-1/2 -translate-y-1/2 w-[min(35vw,400px)] opacity-0"
+        className="absolute left-[60%] top-[45%] -translate-x-1/2 -translate-y-1/2 w-[min(35vw,400px)] opacity-0 pointer-events-none"
       />
 
       {/* Feature Card - Center */}
       <div
         ref={cardRef}
         className="relative z-10 w-[min(72vw,980px)]"
-        style={{ perspective: '1000px' }}
+        style={{ perspective: '1200px' }}
       >
-        <div className="glass-card p-8 lg:p-12 shimmer-border relative">
+        <div className="glass-card p-8 lg:p-12 shimmer-border relative holo-card">
+          {/* Circuit decoration top right */}
+          <div className="absolute top-0 right-0 w-32 h-32 opacity-15 pointer-events-none overflow-hidden rounded-[18px]">
+            <svg viewBox="0 0 128 128" className="w-full h-full">
+              <path d="M128,0 L80,0 L80,30 L50,30 L50,60 L20,60 L20,90 L0,90" stroke="#2EE7FF" strokeWidth="1" fill="none" strokeDasharray="4,6" />
+              <circle cx="80" cy="30" r="4" fill="#2EE7FF" />
+              <circle cx="50" cy="60" r="4" fill="#F2C94C" />
+              <circle cx="20" cy="90" r="4" fill="#2EE7FF" />
+            </svg>
+          </div>
+
           {/* Header */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-solaris-gold/10 flex items-center justify-center animate-gold-pulse">
               <Cpu className="w-6 h-6 text-solaris-gold" />
             </div>
             <h2
@@ -111,17 +147,79 @@ const HybridEngineSection = () => {
               className="font-display font-bold text-[clamp(24px,3vw,40px)] text-solaris-text"
             >
               <span className="word inline-block">The</span>{' '}
-              <span className="word inline-block text-solaris-gold">Hybrid</span>{' '}
+              <span className="word inline-block text-gradient-animated">Hybrid</span>{' '}
               <span className="word inline-block">Engine</span>
             </h2>
           </div>
 
+          {/* Dual consensus diagram */}
+          <div className="mb-8 relative">
+            <div className="flex items-center justify-between gap-4">
+              {/* PoW Node */}
+              <button
+                className={`flex-1 p-4 rounded-xl border transition-all duration-300 cursor-pointer ${
+                  activeNode === 'pow'
+                    ? 'bg-solaris-gold/10 border-solaris-gold shadow-gold'
+                    : 'bg-white/5 border-white/10 hover:border-solaris-gold/40'
+                }`}
+                onClick={() => setActiveNode(activeNode === 'pow' ? null : 'pow')}
+              >
+                <Shield className="w-6 h-6 text-solaris-gold mx-auto mb-2" />
+                <div className="font-mono text-sm text-solaris-gold font-semibold">PoW Layer</div>
+                <div className="text-solaris-muted text-xs mt-1">Bitcoin-grade security</div>
+                {activeNode === 'pow' && (
+                  <div className="mt-3 pt-3 border-t border-solaris-gold/20 text-xs text-solaris-muted text-left">
+                    SHA-256 proof-of-work provides immutable finality and censorship resistance on the base layer.
+                  </div>
+                )}
+              </button>
+
+              {/* Connector SVG */}
+              <div className="flex flex-col items-center gap-2 shrink-0">
+                <ArrowLeftRight className="w-5 h-5 text-solaris-muted" />
+                <div className="w-1 h-8 relative overflow-hidden">
+                  <svg className="w-full h-full" viewBox="0 0 4 32" preserveAspectRatio="none">
+                    <path
+                      ref={svgPathRef}
+                      d="M2,0 L2,32"
+                      stroke="url(#flowGrad)"
+                      strokeWidth="2"
+                      fill="none"
+                    />
+                    <defs>
+                      <linearGradient id="flowGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#F2C94C" />
+                        <stop offset="50%" stopColor="#2EE7FF" />
+                        <stop offset="100%" stopColor="#F2C94C" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+
+              {/* DPoS Node */}
+              <button
+                className={`flex-1 p-4 rounded-xl border transition-all duration-300 cursor-pointer ${
+                  activeNode === 'dpos'
+                    ? 'bg-solaris-cyan/10 border-solaris-cyan shadow-cyan'
+                    : 'bg-white/5 border-white/10 hover:border-solaris-cyan/40'
+                }`}
+                onClick={() => setActiveNode(activeNode === 'dpos' ? null : 'dpos')}
+              >
+                <Zap className="w-6 h-6 text-solaris-cyan mx-auto mb-2" />
+                <div className="font-mono text-sm text-solaris-cyan font-semibold">DPoS Layer</div>
+                <div className="text-solaris-muted text-xs mt-1">100,000 TPS execution</div>
+                {activeNode === 'dpos' && (
+                  <div className="mt-3 pt-3 border-t border-solaris-cyan/20 text-xs text-solaris-muted text-left">
+                    Delegated proof-of-stake enables near-instant finality and massive throughput for agentic workloads.
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
+
           {/* Content */}
-          <div className="space-y-4 mb-8">
-            <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
-              Dual-consensus: <span className="text-solaris-text font-medium">PoW for foundational security</span>,{' '}
-              <span className="text-solaris-text font-medium">DPoS for ultra-fast execution</span>.
-            </p>
+          <div className="space-y-3 mb-8">
             <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
               Dynamic block sizes on the Solaris Layer push throughput to{' '}
               <span className="text-solaris-gold font-semibold">100,000 TPS</span>—without sacrificing decentralization.
@@ -133,29 +231,29 @@ const HybridEngineSection = () => {
             {badges.map((badge) => (
               <div
                 key={badge.label}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10"
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-300 ${badge.bg} ${badge.border}`}
               >
                 <badge.icon className={`w-4 h-4 ${badge.color}`} />
-                <span className="font-mono text-sm text-solaris-text">{badge.label}</span>
+                <span className={`font-mono text-sm ${badge.color}`}>{badge.label}</span>
               </div>
             ))}
           </div>
 
           {/* Stats row */}
           <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-3 gap-4">
-            <div>
+            <div className="stat-card p-3 rounded-lg bg-white/3">
               <div className="hud-label mb-1">Throughput</div>
               <div className="font-display font-bold text-2xl lg:text-3xl text-solaris-gold">
                 100K <span className="text-lg text-solaris-muted">TPS</span>
               </div>
             </div>
-            <div>
+            <div className="stat-card p-3 rounded-lg bg-white/3">
               <div className="hud-label mb-1">Finality</div>
               <div className="font-display font-bold text-2xl lg:text-3xl text-solaris-cyan">
                 2.0 <span className="text-lg text-solaris-muted">sec</span>
               </div>
             </div>
-            <div>
+            <div className="stat-card p-3 rounded-lg bg-white/3">
               <div className="hud-label mb-1">Energy Saved</div>
               <div className="font-display font-bold text-2xl lg:text-3xl text-emerald-400">
                 99.95<span className="text-lg">%</span>

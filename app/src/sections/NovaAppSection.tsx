@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { Smartphone, Droplets, TrendingUp, Clock, Battery } from 'lucide-react';
+import GlowOrbs from '../components/GlowOrbs';
 
 
 // Static data defined outside component to avoid re-creation on every render
@@ -94,7 +95,11 @@ const NovaAppSection = () => {
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[50vh] grid-floor opacity-20" />
+        <div className="absolute inset-0 tech-grid opacity-30" />
       </div>
+
+      {/* Glow orbs */}
+      <GlowOrbs variant="gold" />
 
       {/* Phone Card - Center Left */}
       <div
