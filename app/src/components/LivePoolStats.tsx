@@ -4,6 +4,9 @@ import { useLivePoolData } from '../hooks/useLivePoolData';
 const DEDUST_POOL_URL =
   'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
 
+// DeDust stores fees as basis points × 10 (e.g. 2 = 0.20%)
+const FEE_BASIS_POINTS = 10;
+
 const formatNano = (raw: string): string => {
   const num = Number(raw);
   if (isNaN(num)) return raw;
@@ -20,7 +23,7 @@ const LivePoolStats = () => {
     ? [
         { label: 'TON Reserve', value: formatNano(data.reserveLeft), color: 'cyan' },
         { label: 'CET Reserve', value: formatNano(data.reserveRight), color: 'gold' },
-        { label: 'LP Fee', value: data.lpFee !== '—' ? `${(Number(data.lpFee) / 10).toFixed(2)}%` : '—', color: 'emerald' },
+        { label: 'LP Fee', value: data.lpFee !== '—' ? `${(Number(data.lpFee) / FEE_BASIS_POINTS).toFixed(2)}%` : '—', color: 'emerald' },
         { label: 'LP Supply', value: formatNano(data.totalSupply), color: 'purple' },
       ]
     : [];

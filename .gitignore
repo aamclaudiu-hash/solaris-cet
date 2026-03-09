@@ -94,6 +94,8 @@ errors/
 eslint.config.js
 extends.js
 favicon.svg
+# Un-ignore the app's SVG favicon which is a legitimate tracked asset
+!app/public/favicon.svg
 field.tsx
 fix-project.sh
 form.tsx

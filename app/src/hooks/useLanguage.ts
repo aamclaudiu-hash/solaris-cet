@@ -11,10 +11,13 @@ interface LanguageContextValue {
 
 export const SUPPORTED_LANGS: LangCode[] = ['en', 'es', 'zh', 'ru'];
 
+const isLangCode = (value: string): value is LangCode =>
+  SUPPORTED_LANGS.includes(value as LangCode);
+
 const detectLanguage = (): LangCode => {
   try {
-    const browserLang = navigator.language.slice(0, 2) as LangCode;
-    return SUPPORTED_LANGS.includes(browserLang) ? browserLang : 'en';
+    const browserLang = navigator.language.slice(0, 2);
+    return isLangCode(browserLang) ? browserLang : 'en';
   } catch {
     return 'en';
   }
