@@ -267,10 +267,10 @@ const HeroSection = () => {
       {/* Title Card - Left */}
       <div
         ref={titleCardRef}
-        className="absolute left-[7vw] top-[28vh] w-[min(38vw,520px)] z-20"
+        className="absolute left-[7vw] top-[20vh] w-[min(40vw,540px)] z-20"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        <div className="glass-card-gold p-6 lg:p-8 relative overflow-hidden holo-card">
+        <div className="glass-card-gold p-5 lg:p-7 relative overflow-hidden holo-card">
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-solaris-gold via-solaris-gold to-transparent" />
           
           {/* Circuit trace decoration */}
@@ -281,33 +281,39 @@ const HeroSection = () => {
               <circle cx="40" cy="40" r="3" fill="#2EE7FF" opacity="0.8" />
             </svg>
           </div>
-          
-          <h1
+
+          {/* Logo + Title row */}
+          <div
             ref={headlineRef}
-            className="font-display font-bold text-[clamp(28px,3.8vw,52px)] text-solaris-text mb-1 flex items-center gap-3 flex-wrap"
+            className="flex items-center gap-3 mb-2"
           >
             <img
               src={SOLARIS_LOGO_URL}
               alt="Solaris CET Logo"
-              className="word inline-block w-12 h-12 lg:w-14 lg:h-14 rounded-xl object-contain"
+              className="word shrink-0 w-12 h-12 rounded-xl object-contain"
             />
-            <span className="word inline-block text-gradient-animated">SOLARIS</span>
-            <span className="word inline-block text-solaris-text/80">(CET)</span>
-          </h1>
+            <h1 className="font-display font-bold text-[clamp(26px,3.5vw,50px)] text-solaris-text leading-none">
+              <span className="word inline-block text-gradient-animated">SOLARIS</span>
+              <span className="word inline-block text-solaris-text/80 ml-2">(CET)</span>
+            </h1>
+          </div>
 
           <p
             ref={subheadlineRef}
-            className="font-display font-semibold text-[clamp(13px,1.3vw,18px)] text-solaris-gold mb-1 flex items-center gap-2"
+            className="font-display font-semibold text-[clamp(12px,1.2vw,16px)] text-solaris-gold mb-3 flex items-center gap-2 flex-wrap"
           >
             <img src="/bitcoin-logo.svg" alt="Bitcoin" className="w-5 h-5 inline-block shrink-0" />
             Powered by Bitcoin · Bridge Between AI &amp; High Intelligence
           </p>
-
+          
           <p
             ref={bodyRef}
-            className="text-solaris-muted text-sm lg:text-base leading-relaxed"
+            className="text-solaris-muted text-sm leading-relaxed"
           >
-            A hybrid dual-layer blockchain delivering 100,000 TPS and 2-second finality—combining the security of Bitcoin with the speed of the agentic era. Built on the <span className="text-solaris-cyan font-medium">TON</span> network, using <span className="text-solaris-gold font-medium">ReAct</span>, <span className="text-solaris-gold font-medium">BRAID</span> &amp; <span className="text-solaris-gold font-medium">Self-Actualization</span> protocols to power the next generation of High-Intelligence AI agents.
+            100,000 TPS · 2-second finality on <span className="text-solaris-cyan font-medium">TON</span>. Powered by{' '}
+            <span className="text-solaris-gold font-medium">ReAct</span>,{' '}
+            <span className="text-solaris-gold font-medium">BRAID</span> &amp;{' '}
+            <span className="text-solaris-gold font-medium">Quantum OS</span> protocols — the substrate for next-generation High-Intelligence AI agents.
           </p>
 
           {/* Status pill */}
@@ -321,7 +327,7 @@ const HeroSection = () => {
       {/* CTA Buttons - Left under title */}
       <div
         ref={ctaRef}
-        className="absolute left-[7vw] top-[66vh] z-20 flex flex-wrap gap-4"
+        className="absolute left-[7vw] top-[68vh] z-20 flex flex-wrap gap-3"
       >
         <button
           className="btn-filled-gold flex items-center gap-2 group"
@@ -348,7 +354,7 @@ const HeroSection = () => {
       {/* HUD Card - Right */}
       <div
         ref={hudCardRef}
-        className="absolute right-[7vw] top-[28vh] w-[min(28vw,380px)] z-20"
+        className="absolute right-[7vw] top-[20vh] w-[min(28vw,380px)] z-20"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div className="glass-card p-5 lg:p-6 holo-card">

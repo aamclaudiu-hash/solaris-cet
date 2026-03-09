@@ -2,7 +2,12 @@ import { useRef, useLayoutEffect, useState, useEffect, useCallback } from 'react
 import { gsap } from 'gsap';
 import { Brain, Atom, ChevronRight, RotateCcw, Zap, Eye, Cpu } from 'lucide-react';
 
-// ─── High-Intelligence Neural Reasoning Engine ──────────────────────────────
+// Realistic TON mainnet block height range (as of 2025)
+const TON_MAINNET_BLOCK_MIN = 40_000_000;
+const TON_MAINNET_BLOCK_RANGE = 9_000_000;
+
+// Animation timing constant for the reasoning step interval
+const REASONING_STEP_DELAY_MS = 900;
 
 interface ReasoningStep {
   phase: 'OBSERVE' | 'THINK' | 'PLAN' | 'ACT' | 'VERIFY';
@@ -61,7 +66,7 @@ function buildReasoningSteps(query: string): ReasoningStep[] {
     ? 'Mining session initiated · Hashrate: 14.2 TH/s · Battery impact: ~0%'
     : isAI
     ? 'Agent action dispatched · On-chain reasoning trace anchored to TON block #' +
-      (Math.floor(Math.random() * 9_000_000) + 40_000_000)
+      (Math.floor(Math.random() * TON_MAINNET_BLOCK_RANGE) + TON_MAINNET_BLOCK_MIN)
     : isTon
     ? 'Transaction broadcast · TON mempool accepted · Finality countdown: 2.0s'
     : 'High-Intelligence response generated · Confidence: ' +
@@ -116,7 +121,7 @@ const NeuralReasoningEngine = () => {
       } else {
         setVisibleIndex(idx);
       }
-    }, 900);
+    }, REASONING_STEP_DELAY_MS);
   }, []);
 
   useEffect(() => () => clearTimer(), []);
@@ -309,7 +314,9 @@ const QuantumEntropyOracle = () => {
     setIsCollapsing(true);
     if (animFrameRef.current !== null) cancelAnimationFrame(animFrameRef.current);
 
-    // Collapse each qubit one by one with staggered timing
+    // Collapse each qubit one by one with staggered timing.
+    // Note: Math.random() is used here as a visual simulation of quantum collapse.
+    // In production, this would source entropy from a hardware QRNG API endpoint.
     const newValues: (0 | 1)[] = Array.from({ length: NUM_QUBITS }, () =>
       Math.random() > 0.5 ? 1 : 0
     );
@@ -322,11 +329,11 @@ const QuantumEntropyOracle = () => {
         );
         if (i === NUM_QUBITS - 1) {
           const bits = newValues.join('');
-          const hex = parseInt(bits, 2).toString(16).toUpperCase().padStart(2, '0');
-          const fullHex = Array.from({ length: 32 }, (_, j) =>
-            j < 2 ? (j === 0 ? hex[0] : hex[1]) :
-            Math.floor(Math.random() * 16).toString(16).toUpperCase()
-          ).join('');
+          const seedHex = parseInt(bits, 2).toString(16).toUpperCase().padStart(2, '0');
+          const fullHex = seedHex +
+            Array.from({ length: 30 }, () =>
+              Math.floor(Math.random() * 16).toString(16).toUpperCase()
+            ).join('');
           setEntropyBits(bits);
           setHexKey(fullHex.match(/.{1,8}/g)?.join('-') ?? fullHex);
           setCollapsed(true);
