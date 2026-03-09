@@ -13,6 +13,10 @@ export const SUPPORTED_LANGS: LangCode[] = ['en', 'es', 'zh', 'ru'];
 
 const detectLanguage = (): LangCode => {
   try {
+    const stored = localStorage.getItem('solaris_lang');
+    if (stored && (SUPPORTED_LANGS as string[]).includes(stored)) {
+      return stored as LangCode;
+    }
     const browserLang = navigator.language.slice(0, 2);
     return (SUPPORTED_LANGS as string[]).includes(browserLang) ? (browserLang as LangCode) : 'en';
   } catch {
