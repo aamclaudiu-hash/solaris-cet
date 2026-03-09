@@ -38,6 +38,7 @@ jobs:
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           # ── 3. Save raw JSON blobs to temp files, then merge with Python ────────
+          mkdir -p app/public/api
           printf '%s' "$JETTON_JSON" > /tmp/jetton.json
           printf '%s' "$POOL_JSON"   > /tmp/pool.json
 
@@ -93,5 +94,5 @@ PYEOF
             echo "No changes to state.json — skipping commit."
           else
             git commit -m "chore(data): update CET token state"
-            git push
+            git push || echo "Push skipped — branch may be protected or up to date."
           fi
