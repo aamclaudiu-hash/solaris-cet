@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { Wallet, ArrowRightLeft, Coins, Copy, Check, ExternalLink } from 'lucide-react';
+import LivePoolStats from '../components/LivePoolStats';
 
 const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 const DEDUST_POOL_ADDRESS = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
@@ -257,6 +258,11 @@ const HowToBuySection = () => {
               Swap on DeDust
             </a>
           </div>
+        </div>
+
+        {/* Live DeDust pool stats */}
+        <div className="mt-6">
+          <LivePoolStats />
         </div>
       </div>
     </section>

@@ -19,6 +19,7 @@ const SecuritySection = lazy(() => import('./sections/SecuritySection'));
 const WhitepaperSection = lazy(() => import('./sections/WhitepaperSection'));
 const HighIntelligenceSection = lazy(() => import('./sections/HighIntelligenceSection'));
 const FooterSection = lazy(() => import('./sections/FooterSection'));
+import { LanguageContext, useLanguageState } from './hooks/useLanguage';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -29,6 +30,7 @@ function App() {
   const mainRef = useRef<HTMLDivElement>(null);
   const loadingRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const langState = useLanguageState();
 
   useEffect(() => {
     // Loading screen exit
@@ -111,7 +113,7 @@ function App() {
   }, [isLoaded, buildSnapTo]);
 
   return (
-    <>
+    <LanguageContext.Provider value={langState}>
       {/* Loading overlay */}
       <div ref={loadingRef} className="loading-overlay">
         <div className="flex flex-col items-center gap-6">
@@ -223,7 +225,7 @@ function App() {
           </div>
         </main>
       </div>
-    </>
+    </LanguageContext.Provider>
   );
 }
 

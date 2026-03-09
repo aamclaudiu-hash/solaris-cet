@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Menu, X, Sun } from 'lucide-react';
+import LanguageSelector from './LanguageSelector';
 
 // Static data defined outside component to avoid re-creation on every render
 const navLinks = [
@@ -85,6 +86,7 @@ const Navigation = () => {
 
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
+            <LanguageSelector />
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/20">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="font-mono text-[11px] text-emerald-400">LIVE</span>
