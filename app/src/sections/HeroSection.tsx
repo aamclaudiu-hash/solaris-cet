@@ -4,6 +4,9 @@ import { ArrowRight, Zap, Activity, Globe } from 'lucide-react';
 import ParticleCanvas from '../components/ParticleCanvas';
 import GlowOrbs from '../components/GlowOrbs';
 
+const SOLARIS_LOGO_URL = 'https://github.com/user-attachments/assets/f8caeafa-4f7c-4f59-a149-ba41b2bca701';
+const DEDUST_POOL_URL = 'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB/deposit';
+
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -246,7 +249,7 @@ const HeroSection = () => {
       >
         <img
           src="/hero-coin.png"
-          alt="Bitcoin Solaris Coin"
+          alt="Solaris CET Coin"
           className="w-full h-auto animate-coin-rotate drop-shadow-[0_0_80px_rgba(242,201,76,0.35)]"
         />
         {/* Coin reflection */}
@@ -281,28 +284,34 @@ const HeroSection = () => {
           
           <h1
             ref={headlineRef}
-            className="font-display font-bold text-[clamp(32px,4vw,56px)] text-solaris-text mb-2"
+            className="font-display font-bold text-[clamp(28px,3.8vw,52px)] text-solaris-text mb-1 flex items-center gap-3 flex-wrap"
           >
-            <span className="word inline-block">Bitcoin</span>{' '}
-            <span className="word inline-block text-gradient-animated">Solaris</span>
+            <img
+              src={SOLARIS_LOGO_URL}
+              alt="Solaris CET Logo"
+              className="word inline-block w-12 h-12 lg:w-14 lg:h-14 rounded-xl object-contain"
+            />
+            <span className="word inline-block text-gradient-animated">SOLARIS</span>
+            <span className="word inline-block text-solaris-text/80">(CET)</span>
           </h1>
-          
+
           <p
             ref={subheadlineRef}
-            className="font-display font-semibold text-[clamp(16px,1.5vw,24px)] text-solaris-gold mb-4"
+            className="font-display font-semibold text-[clamp(13px,1.3vw,18px)] text-solaris-gold mb-1 flex items-center gap-2"
           >
-            The Substrate for High-Intelligence Models
+            <img src="/bitcoin-logo.svg" alt="Bitcoin" className="w-5 h-5 inline-block shrink-0" />
+            Powered by Bitcoin · Bridge Between AI &amp; High Intelligence
           </p>
-          
+
           <p
             ref={bodyRef}
             className="text-solaris-muted text-sm lg:text-base leading-relaxed"
           >
-            A hybrid dual-layer blockchain delivering 100,000 TPS and 2-second finality—combining the security of Bitcoin with the speed of the agentic era.
+            A hybrid dual-layer blockchain delivering 100,000 TPS and 2-second finality—combining the security of Bitcoin with the speed of the agentic era. Built on the <span className="text-solaris-cyan font-medium">TON</span> network, using <span className="text-solaris-gold font-medium">ReAct</span>, <span className="text-solaris-gold font-medium">BRAID</span> &amp; <span className="text-solaris-gold font-medium">Self-Actualization</span> protocols to power the next generation of High-Intelligence AI agents.
           </p>
 
           {/* Status pill */}
-          <div className="mt-4 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-mono text-[11px] text-emerald-400">LIVE ON TON MAINNET</span>
           </div>
@@ -312,7 +321,7 @@ const HeroSection = () => {
       {/* CTA Buttons - Left under title */}
       <div
         ref={ctaRef}
-        className="absolute left-[7vw] top-[58vh] z-20 flex flex-wrap gap-4"
+        className="absolute left-[7vw] top-[66vh] z-20 flex flex-wrap gap-4"
       >
         <button
           className="btn-filled-gold flex items-center gap-2 group"
@@ -330,7 +339,7 @@ const HeroSection = () => {
         </button>
         <button
           className="btn-gold flex items-center gap-2"
-          onClick={() => window.open('https://dedust.io/swap/TON/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB', '_blank')}
+          onClick={() => window.open(DEDUST_POOL_URL, '_blank')}
         >
           Buy CET on DeDust
         </button>
