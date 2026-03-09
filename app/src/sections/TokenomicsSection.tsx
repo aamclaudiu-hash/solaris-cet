@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { Coins, Pickaxe, Users, TrendingDown } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
+import LivePoolStats from '../components/LivePoolStats';
 
 
 const CET_TOTAL_SUPPLY = 9000;
@@ -231,6 +232,7 @@ const TokenomicsSection = () => {
                     </div>
                   </div>
                 </div>
+                <LivePoolStats />
               </div>
 
               <div className="p-4 rounded-xl bg-white/5">
