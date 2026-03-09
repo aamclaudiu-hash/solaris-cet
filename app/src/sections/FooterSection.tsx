@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { Download, FileText, Mail, ArrowRight, Sun, Github, Twitter, MessageCircle, Send, Globe, Copy, CheckCircle } from 'lucide-react';
+import SocialShare from '../components/SocialShare';
 
 // Constants defined once to avoid duplication and maintain a single source of truth
 const GITHUB_URL = 'https://github.com/aamclaudiu-hash/solaris-cet';
@@ -282,6 +283,8 @@ const FooterSection = () => {
               © {new Date().getFullYear()} Solaris CET. AI Bridge to High Intelligence. All rights reserved.
             </p>
           <div className="flex flex-col sm:flex-row items-center gap-3">
+              <SocialShare />
+              <div className="hidden sm:block w-px h-4 bg-white/10" />
               <div className="flex items-center gap-2">
                 <span className="font-mono text-[11px] text-solaris-gold font-semibold">₿</span>
                 <span className="font-mono text-[11px] text-solaris-gold">POWERED BY BITCOIN</span>
