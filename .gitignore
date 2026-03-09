@@ -43,6 +43,12 @@ npm-debug.log*
 *.ico
 *.svg
 
+# Track PWA and OG assets in app/public/
+!app/public/favicon.svg
+!app/public/icon-192.png
+!app/public/icon-512.png
+!app/public/og-image.png
+
 # Zip archives and deployment bundles
 *.zip
 /solaris-cet-deploy/
