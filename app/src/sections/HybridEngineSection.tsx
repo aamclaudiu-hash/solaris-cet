@@ -36,6 +36,12 @@ const HybridEngineSection = () => {
     if (!section) return;
 
     const ctx = gsap.context(() => {
+      // Promote scroll-linked elements onto the GPU compositor
+      gsap.set([cardRef.current, coinRef.current], { willChange: 'transform, opacity' });
+      if (titleRef.current) {
+        gsap.set(titleRef.current.querySelectorAll('.word'), { willChange: 'transform, opacity' });
+      }
+
       const scrollTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,

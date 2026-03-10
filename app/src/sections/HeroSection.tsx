@@ -78,6 +78,16 @@ const HeroSection = () => {
   // Load animation (auto-play on mount)
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Promote animated elements onto the GPU compositor before tweening
+      gsap.set(
+        [coinRef.current, titleCardRef.current, hudCardRef.current, ctaRef.current, statsTickerRef.current],
+        { willChange: 'transform, opacity' }
+      );
+      if (headlineRef.current) {
+        gsap.set(headlineRef.current.querySelectorAll('.word'), { willChange: 'transform, opacity' });
+      }
+      gsap.set([subheadlineRef.current, bodyRef.current], { willChange: 'transform, opacity' });
+
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       // Coin entrance
@@ -146,6 +156,17 @@ const HeroSection = () => {
         { y: 0, opacity: 1, duration: 0.5 },
         0.85
       );
+
+      // Release will-change after entrance animation completes to free GPU memory
+      tl.call(() => {
+        gsap.set(
+          [coinRef.current, titleCardRef.current, hudCardRef.current, ctaRef.current, statsTickerRef.current, subheadlineRef.current, bodyRef.current],
+          { willChange: 'auto' }
+        );
+        if (headlineRef.current) {
+          gsap.set(headlineRef.current.querySelectorAll('.word'), { willChange: 'auto' });
+        }
+      });
     }, sectionRef);
 
     return () => ctx.revert();

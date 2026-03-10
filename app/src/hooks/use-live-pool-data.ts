@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, startTransition } from 'react';
 
 const DEDUST_POOL_ADDRESS = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
 const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
@@ -27,106 +27,86 @@ interface DeDustPrice {
   price: string;
 }
 
-export interface PoolData {
+export interface PoolMetrics {
   priceUsd: number | null;
   tvlUsd: number | null;
   volume24hUsd: number | null;
   tonPriceUsd: number | null;
-  loading: boolean;
-  error: string | null;
-  lastUpdated: Date | null;
+  lastUpdated: Date;
 }
 
-const INITIAL_STATE: PoolData = {
-  priceUsd: null,
-  tvlUsd: null,
-  volume24hUsd: null,
-  tonPriceUsd: null,
-  loading: true,
-  error: null,
-  lastUpdated: null,
-};
+export async function fetchPoolMetrics(): Promise<PoolMetrics> {
+  const [poolsRes, pricesRes] = await Promise.all([
+    fetch('https://api.dedust.io/v2/pools'),
+    fetch('https://api.dedust.io/v2/prices'),
+  ]);
 
-export function useLivePoolData(): PoolData {
-  const [data, setData] = useState<PoolData>(INITIAL_STATE);
+  if (!poolsRes.ok || !pricesRes.ok) {
+    throw new Error('Failed to fetch DeDust data');
+  }
 
-  const fetchData = useCallback(async () => {
-    try {
-      const [poolsRes, pricesRes] = await Promise.all([
-        fetch('https://api.dedust.io/v2/pools'),
-        fetch('https://api.dedust.io/v2/prices'),
-      ]);
+  const pools: DeDustPool[] = await poolsRes.json();
+  const prices: DeDustPrice[] = await pricesRes.json();
 
-      if (!poolsRes.ok || !pricesRes.ok) {
-        throw new Error('Failed to fetch DeDust data');
-      }
+  // Get TON USD price from prices endpoint
+  const tonEntry = prices.find((p) => p.address === 'native');
+  const tonPriceUsd = tonEntry ? parseFloat(tonEntry.price) : null;
 
-      const pools: DeDustPool[] = await poolsRes.json();
-      const prices: DeDustPrice[] = await pricesRes.json();
+  // Find the CET/TON pool by address
+  const cetPool = pools.find((p) => p.address === DEDUST_POOL_ADDRESS);
 
-      // Get TON USD price from prices endpoint
-      const tonEntry = prices.find((p) => p.address === 'native');
-      const tonPriceUsd = tonEntry ? parseFloat(tonEntry.price) : null;
+  // Look up CET price directly from prices endpoint
+  const cetAddressLower = CET_CONTRACT_ADDRESS.toLowerCase();
+  const cetEntry = prices.find(
+    (p) => p.address.toLowerCase() === cetAddressLower
+  );
+  let priceUsd: number | null = cetEntry ? parseFloat(cetEntry.price) : null;
 
-      // Find the CET/TON pool by address
-      const cetPool = pools.find((p) => p.address === DEDUST_POOL_ADDRESS);
+  let tvlUsd: number | null = null;
+  let volume24hUsd: number | null = null;
 
-      // Look up CET price directly from prices endpoint
-      const cetAddressLower = CET_CONTRACT_ADDRESS.toLowerCase();
-      const cetEntry = prices.find(
-        (p) => p.address.toLowerCase() === cetAddressLower
-      );
-      let priceUsd: number | null = cetEntry ? parseFloat(cetEntry.price) : null;
+  if (cetPool && tonPriceUsd) {
+    // Determine which reserve index corresponds to TON vs CET
+    const tonIndex = cetPool.assets[0].type === 'native' ? 0 : 1;
+    const cetIndex = tonIndex === 0 ? 1 : 0;
 
-      let tvlUsd: number | null = null;
-      let volume24hUsd: number | null = null;
+    const tonReserve = parseFloat(cetPool.reserves[tonIndex]) / 1e9;
+    const cetReserve = parseFloat(cetPool.reserves[cetIndex]) / 10 ** CET_DECIMALS;
 
-      if (cetPool && tonPriceUsd) {
-        // Determine which reserve index corresponds to TON vs CET
-        const tonIndex = cetPool.assets[0].type === 'native' ? 0 : 1;
-        const cetIndex = tonIndex === 0 ? 1 : 0;
-
-        const tonReserve = parseFloat(cetPool.reserves[tonIndex]) / 1e9;
-        const cetReserve = parseFloat(cetPool.reserves[cetIndex]) / 10 ** CET_DECIMALS;
-
-        // Calculate CET price from reserves if not available in prices endpoint
-        if (priceUsd === null && cetReserve > 0) {
-          priceUsd = (tonReserve / cetReserve) * tonPriceUsd;
-        }
-
-        // TVL = 2× the TON side (symmetric pool)
-        tvlUsd = tonReserve * tonPriceUsd * 2;
-
-        // 24 h volume (in nanoTON → TON → USD)
-        if (cetPool.stats?.volume_24h) {
-          const volumeTon = parseFloat(cetPool.stats.volume_24h) / 1e9;
-          volume24hUsd = volumeTon * tonPriceUsd;
-        }
-      }
-
-      setData({
-        priceUsd,
-        tvlUsd,
-        volume24hUsd,
-        tonPriceUsd,
-        loading: false,
-        error: null,
-        lastUpdated: new Date(),
-      });
-    } catch (err) {
-      setData((prev) => ({
-        ...prev,
-        loading: false,
-        error: err instanceof Error ? err.message : 'Fetch failed',
-      }));
+    // Calculate CET price from reserves if not available in prices endpoint
+    if (priceUsd === null && cetReserve > 0) {
+      priceUsd = (tonReserve / cetReserve) * tonPriceUsd;
     }
-  }, []);
+
+    // TVL = 2× the TON side (symmetric pool)
+    tvlUsd = tonReserve * tonPriceUsd * 2;
+
+    // 24 h volume (in nanoTON → TON → USD)
+    if (cetPool.stats?.volume_24h) {
+      const volumeTon = parseFloat(cetPool.stats.volume_24h) / 1e9;
+      volume24hUsd = volumeTon * tonPriceUsd;
+    }
+  }
+
+  return { priceUsd, tvlUsd, volume24hUsd, tonPriceUsd, lastUpdated: new Date() };
+}
+
+/**
+ * Returns a refreshable Promise<PoolMetrics> suitable for React 19 `use()`.
+ * Must be called outside the Suspense boundary and the promise passed down
+ * to a child that calls `use(promise)`.
+ */
+export function usePoolMetricsPromise(): Promise<PoolMetrics> {
+  const [promise, setPromise] = useState<Promise<PoolMetrics>>(() => fetchPoolMetrics());
 
   useEffect(() => {
-    fetchData();
-    const id = setInterval(fetchData, REFRESH_INTERVAL_MS);
+    const id = setInterval(() => {
+      startTransition(() => {
+        setPromise(fetchPoolMetrics());
+      });
+    }, REFRESH_INTERVAL_MS);
     return () => clearInterval(id);
-  }, [fetchData]);
+  }, []);
 
-  return data;
+  return promise;
 }
