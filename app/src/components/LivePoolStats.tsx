@@ -1,33 +1,26 @@
 import { Activity, RefreshCw, ExternalLink } from 'lucide-react';
-import { useLivePoolData } from '../hooks/useLivePoolData';
+import { useLivePoolData } from '../hooks/use-live-pool-data';
 
 const DEDUST_POOL_URL =
   'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
 
-const formatNanoValue = (raw: string, unit: string): string => {
-  const num = Number(raw);
-  if (isNaN(num)) return raw;
-  // Values are in nano units (1e-9); divide by 1e9 to get whole units
-  if (num >= 1e9) return `${(num / 1e9).toFixed(2)} ${unit}`;
-  if (num >= 1e6) return `${(num / 1e6).toFixed(2)}M`;
-  if (num >= 1e3) return `${(num / 1e3).toFixed(2)}K`;
-  return `${num.toFixed(2)}`;
+const formatUsd = (value: number | null): string => {
+  if (value === null || value < 0) return '—';
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(2)}K`;
+  if (value >= 1) return `$${value.toFixed(2)}`;
+  return `$${value.toFixed(4)}`;
 };
 
-const formatNano = (raw: string): string => formatNanoValue(raw, 'TON');
-const formatNanoCet = (raw: string): string => formatNanoValue(raw, 'CET');
-
 const LivePoolStats = () => {
-  const { data, loading, error, lastUpdated } = useLivePoolData();
+  const { priceUsd, tvlUsd, volume24hUsd, tonPriceUsd, loading, error, lastUpdated } = useLivePoolData();
 
-  const stats = data
-    ? [
-        { label: 'TON Reserve', value: formatNano(data.reserveLeft), color: 'cyan' },
-        { label: 'CET Reserve', value: formatNanoCet(data.reserveRight), color: 'gold' },
-        { label: 'LP Fee', value: data.lpFee !== '—' ? `${(Number(data.lpFee) / 10).toFixed(2)}%` : '—', color: 'emerald' },
-        { label: 'LP Supply', value: formatNano(data.totalSupply), color: 'purple' },
-      ]
-    : [];
+  const stats = [
+    { label: 'CET Price', value: formatUsd(priceUsd), color: 'gold' },
+    { label: 'TVL', value: formatUsd(tvlUsd), color: 'cyan' },
+    { label: '24h Volume', value: formatUsd(volume24hUsd), color: 'emerald' },
+    { label: 'TON Price', value: formatUsd(tonPriceUsd), color: 'purple' },
+  ];
 
   return (
     <div className="glass-card p-5 lg:p-6">
@@ -90,7 +83,7 @@ const LivePoolStats = () => {
                     : 'text-purple-400'
                 }`}
               >
-                {loading && !data ? (
+                {loading && priceUsd === null ? (
                   <span className="animate-pulse">—</span>
                 ) : (
                   stat.value
