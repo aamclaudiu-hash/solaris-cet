@@ -4,6 +4,11 @@ app/dist/
 *.log
 npm-debug.log*
 
+# Playwright E2E test artifacts
+app/test-results/
+app/playwright-report/
+app/.lighthouseci/
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Root-level stray files & build artifacts
 #
