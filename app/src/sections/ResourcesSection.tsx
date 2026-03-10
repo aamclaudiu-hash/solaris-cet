@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
-import { BarChart2, BookOpen, Globe, ExternalLink } from 'lucide-react';
+import { BarChart2, BookOpen, Globe, ExternalLink, Bot } from 'lucide-react';
 
 interface Resource {
   name: string;
@@ -12,7 +12,7 @@ interface Resource {
 interface ResourceCategory {
   id: string;
   icon: typeof BarChart2;
-  color: 'gold' | 'cyan' | 'emerald';
+  color: 'gold' | 'cyan' | 'emerald' | 'violet';
   label: string;
   title: string;
   resources: Resource[];
@@ -101,6 +101,33 @@ const categories: ResourceCategory[] = [
       },
     ],
   },
+  {
+    id: 'ai-agents',
+    icon: Bot,
+    color: 'violet',
+    label: 'AI & AGENTS',
+    title: 'Build with AI',
+    resources: [
+      {
+        name: 'Hugging Face',
+        description: 'The leading open-source hub for machine-learning models, datasets, and demos — the go-to platform for AI research and deployment.',
+        href: 'https://huggingface.co',
+        tag: 'huggingface.co',
+      },
+      {
+        name: 'OpenAI',
+        description: 'Research lab and API provider behind GPT-4 and beyond. Access state-of-the-art language, vision, and reasoning models.',
+        href: 'https://openai.com',
+        tag: 'openai.com',
+      },
+      {
+        name: 'Papers With Code',
+        description: 'Free, open resource linking the latest ML papers with their official implementations — ideal for tracking AI breakthroughs.',
+        href: 'https://paperswithcode.com',
+        tag: 'paperswithcode.com',
+      },
+    ],
+  },
 ];
 
 const colorMap: Record<string, { bg: string; text: string; border: string; hud: string; hoverBorder: string }> = {
@@ -124,6 +151,13 @@ const colorMap: Record<string, { bg: string; text: string; border: string; hud: 
     border: 'border-emerald-400/30',
     hud: 'text-emerald-400',
     hoverBorder: 'hover:border-emerald-400/30',
+  },
+  violet: {
+    bg: 'bg-violet-400/10',
+    text: 'text-violet-400',
+    border: 'border-violet-400/30',
+    hud: 'text-violet-400',
+    hoverBorder: 'hover:border-violet-400/30',
   },
 };
 
@@ -215,7 +249,7 @@ const ResourcesSection = () => {
         {/* Resource columns */}
         <div
           ref={gridRef}
-          className="grid md:grid-cols-3 gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           {categories.map((cat) => {
             const Icon = cat.icon;
