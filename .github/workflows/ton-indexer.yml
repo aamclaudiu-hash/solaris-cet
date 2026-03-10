@@ -44,6 +44,35 @@ jobs:
 
           TIMESTAMP="$TIMESTAMP" python3 .github/scripts/update_state.py
 
+      - name: Validate state.json structure
+        run: |
+          set -euo pipefail
+
+          STATE="app/public/api/state.json"
+
+          # Ensure the file is valid JSON
+          python3 -c "import json,sys; json.load(open('${STATE}'))" \
+            && echo "✓ Valid JSON"
+
+          # Verify required keys with jq
+          check() {
+            VALUE=$(jq -r "$1" "${STATE}")
+            if [ "$VALUE" = "null" ] || [ -z "$VALUE" ]; then
+              echo "MISSING or null: $1" >&2
+              return 1
+            fi
+            echo "✓ $1 = ${VALUE}"
+          }
+
+          check ".token.symbol"
+          check ".token.name"
+          check ".token.contract"
+          check ".token.decimals"
+          check ".pool.address"
+          check ".updatedAt"
+
+          echo "✓ state.json schema validation passed"
+
       - name: Commit and push if state changed
         run: |
           git config user.name  "github-actions[bot]"
@@ -58,3 +87,4 @@ jobs:
             git commit -m "chore(data): update CET token state"
             git push || echo "Push skipped — branch may be protected or up to date."
           fi
+

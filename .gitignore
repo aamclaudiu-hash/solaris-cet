@@ -4,6 +4,11 @@ app/dist/
 *.log
 npm-debug.log*
 
+# Blueprint / Tact build artefacts
+contracts/build/
+contracts/temp/
+contracts/node_modules/
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Root-level stray files & build artifacts
 #
