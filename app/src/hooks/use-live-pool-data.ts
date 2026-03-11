@@ -51,8 +51,12 @@ export function useLivePoolData(): PoolData {
   const [data, setData] = useState<PoolData>(INITIAL_STATE);
 
   const fetchData = useCallback(async () => {
+    // Use AbortController + setTimeout for broad browser compatibility
+    // (AbortSignal.timeout() is not available in all environments).
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
     try {
-      const signal = AbortSignal.timeout(8000);
+      const { signal } = controller;
       const [poolsRes, pricesRes] = await Promise.all([
         fetch('https://api.dedust.io/v2/pools', { signal }),
         fetch('https://api.dedust.io/v2/prices', { signal }),
@@ -120,6 +124,8 @@ export function useLivePoolData(): PoolData {
         loading: false,
         error: err instanceof Error ? err.message : 'Fetch failed',
       }));
+    } finally {
+      clearTimeout(timeoutId);
     }
   }, []);
 

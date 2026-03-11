@@ -1,10 +1,12 @@
 {
   "name": "cet-multisig",
+  "private": true,
   "version": "1.0.0",
   "description": "Multi-Sig wrapper for the CET Token and DeDust LP on TON",
   "license": "MIT",
   "scripts": {
     "build": "blueprint build",
+    "pretest": "npm run build",
     "test": "jest",
     "deploy": "blueprint run deployMultiSigWrapper"
   },
