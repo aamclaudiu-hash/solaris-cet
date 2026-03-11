@@ -289,31 +289,38 @@
 
 .animate-float {
   animation: float 4.5s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
+  will-change: opacity, box-shadow;
 }
 
 .animate-coin-rotate {
   animation: coin-rotate 6s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 .animate-ticker {
   animation: ticker-scroll 20s linear infinite;
+  will-change: transform;
 }
 
 .animate-energy-pulse {
   animation: energy-pulse 2.5s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 .animate-gradient-shift {
   background-size: 200% 200%;
   animation: gradient-shift 6s ease infinite;
+  will-change: background-position;
 }
 
 .animate-text-flicker {
   animation: text-flicker 8s ease-in-out infinite;
+  will-change: opacity;
 }
 
 /* ─────────────────────────────────────────────
@@ -352,6 +359,7 @@
   background: linear-gradient(90deg, transparent, rgba(46, 231, 255, 0.3), transparent);
   animation: scanline 4s linear infinite;
   pointer-events: none;
+  will-change: transform;
 }
 
 /* ─────────────────────────────────────────────
@@ -476,6 +484,7 @@
   border-radius: 2px;
   background: currentColor;
   animation: wave 1.2s ease-in-out infinite;
+  will-change: transform;
 }
 
 .wave-bar:nth-child(2) { animation-delay: 0.1s; }
@@ -499,6 +508,7 @@
   border-radius: 50%;
   background: white;
   animation: star-twinkle ease-in-out infinite;
+  will-change: opacity;
 }
 
 /* ─────────────────────────────────────────────
@@ -560,6 +570,7 @@
   background-size: 200% 100%;
   border-radius: 1px;
   animation: loading-bar 1.8s ease forwards, shimmer 1.5s linear infinite;
+  will-change: width, background-position;
 }
 
 /* ─────────────────────────────────────────────
@@ -627,6 +638,7 @@
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(24px);
+  will-change: transform, opacity;
 }
 
 /* ─────────────────────────────────────────────

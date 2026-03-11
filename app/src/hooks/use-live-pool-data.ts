@@ -47,12 +47,26 @@ const INITIAL_STATE: PoolData = {
   lastUpdated: null,
 };
 
+/**
+ * Returns an AbortSignal that fires after `ms` milliseconds.
+ * Uses `AbortSignal.timeout()` when available (Chrome 103+, Safari 17.4+, Firefox 100+)
+ * and falls back to `AbortController + setTimeout` for older runtimes.
+ */
+function createTimeoutSignal(ms: number): AbortSignal {
+  if (typeof AbortSignal.timeout === 'function') {
+    return AbortSignal.timeout(ms);
+  }
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), ms);
+  return controller.signal;
+}
+
 export function useLivePoolData(): PoolData {
   const [data, setData] = useState<PoolData>(INITIAL_STATE);
 
   const fetchData = useCallback(async () => {
     try {
-      const signal = AbortSignal.timeout(8000);
+      const signal = createTimeoutSignal(8000);
       const [poolsRes, pricesRes] = await Promise.all([
         fetch('https://api.dedust.io/v2/pools', { signal }),
         fetch('https://api.dedust.io/v2/prices', { signal }),
