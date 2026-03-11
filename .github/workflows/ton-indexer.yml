@@ -2,8 +2,8 @@ name: TON Chain Indexer
 
 on:
   schedule:
-    # Run every 5 minutes
-    - cron: "*/5 * * * *"
+    # Run every 1 hour
+    - cron: "0 * * * *"
   workflow_dispatch: # Allow manual triggering
 
 permissions:
@@ -13,59 +13,49 @@ jobs:
   index:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
+          ref: main
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch CET token state and write state.json
+      - name: Install Python dependencies
+        run: pip install requests --quiet
+
+      - name: Run indexer script
         env:
           CET_CONTRACT: "EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX"
           DEDUST_POOL: "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB"
           CET_DECIMALS: "9"
+        run: python3 .github/scripts/update_state.py
+
+      - name: Commit state.json to gh-pages branch
         run: |
           set -euo pipefail
 
-          # ── 1. Jetton master info ─────────────────────────────────────────────
-          JETTON_JSON=$(curl -sf \
-            "https://tonapi.io/v2/jettons/${CET_CONTRACT}" \
-            -H "Accept: application/json" || echo '{}')
-
-          # ── 2. DeDust single-pool info (reserveLeft / reserveRight / lpFee) ────
-          POOL_JSON=$(curl -sf \
-            "https://api.dedust.io/v2/pools/${DEDUST_POOL}" \
-            -H "Accept: application/json" || echo '{}')
-
-          # ── 3. DeDust prices list (TON and CET USD prices) ────────────────────
-          PRICES_JSON=$(curl -sf \
-            "https://api.dedust.io/v2/prices" \
-            -H "Accept: application/json" || echo '[]')
-
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-          # ── 4. Save raw JSON blobs to temp files, then merge with Python ────────
-          mkdir -p app/public/api
-          printf '%s' "$JETTON_JSON" > /tmp/jetton.json
-          printf '%s' "$POOL_JSON"   > /tmp/pool.json
-          printf '%s' "$PRICES_JSON" > /tmp/prices.json
-
-          CET_CONTRACT="$CET_CONTRACT" \
-          DEDUST_POOL="$DEDUST_POOL" \
-          CET_DECIMALS="$CET_DECIMALS" \
-          TIMESTAMP="$TIMESTAMP" \
-          python3 .github/scripts/update_state.py
-
-      - name: Commit and push if state changed
-        run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # Stash the generated file before switching branches
+          cp app/public/api/state.json /tmp/state.json
+
+          # Switch to gh-pages (create orphan if it doesn't exist yet)
+          if git fetch origin gh-pages 2>/dev/null; then
+            git checkout gh-pages
+          else
+            git checkout --orphan gh-pages
+            git rm -rf . --quiet || true
+          fi
+
+          mkdir -p app/public/api
+          cp /tmp/state.json app/public/api/state.json
           git add app/public/api/state.json
 
-          # Only commit (and trigger a Pages redeploy) when data has actually changed
+          # Only commit when data has actually changed
           if git diff --cached --quiet; then
             echo "No changes to state.json — skipping commit."
           else
             git commit -m "chore(data): update CET token state"
-            git push || echo "Push skipped — branch may be protected or up to date."
+            git push origin gh-pages
           fi

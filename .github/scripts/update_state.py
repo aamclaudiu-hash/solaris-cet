@@ -1,28 +1,46 @@
-"""Update app/public/api/state.json with current CET token and pool data."""
+"""Update app/public/api/state.json with live CET token and pool data from DeDust."""
 
 import json
 import os
+import sys
+from datetime import datetime, timezone
 
-cet_contract = os.environ["CET_CONTRACT"]
-dedust_pool = os.environ["DEDUST_POOL"]
-timestamp = os.environ["TIMESTAMP"]
-cet_decimals = int(os.environ.get("CET_DECIMALS", "9"))
+import requests
 
-with open("/tmp/jetton.json") as f:
-    jetton = json.load(f)
+CET_CONTRACT = os.environ.get("CET_CONTRACT", "EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX")
+DEDUST_POOL = os.environ.get("DEDUST_POOL", "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB")
+CET_DECIMALS = int(os.environ.get("CET_DECIMALS", "9"))
+TIMESTAMP = os.environ.get("TIMESTAMP") or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-with open("/tmp/pool.json") as f:
-    pool = json.load(f)
+TONAPI_BASE = "https://tonapi.io/v2"
+DEDUST_BASE = "https://api.dedust.io/v2"
+TIMEOUT = 15  # seconds
 
-with open("/tmp/prices.json") as f:
-    prices = json.load(f)
 
-# ── Token metadata ────────────────────────────────────────────────────────────
-meta = jetton.get("metadata", {})
-total_supply = jetton.get("total_supply")
+def fetch_json(url: str) -> "dict | list | None":
+    """Fetch JSON from *url*, returning None on any error."""
+    try:
+        resp = requests.get(url, headers={"Accept": "application/json"}, timeout=TIMEOUT)
+        resp.raise_for_status()
+        return resp.json()
+    except (ValueError, TypeError, requests.exceptions.RequestException) as exc:
+        print(f"WARNING: failed to fetch {url}: {exc}", file=sys.stderr)
+        return None
+
+
+# ── 1. Jetton metadata ────────────────────────────────────────────────────────
+jetton: dict = fetch_json(f"{TONAPI_BASE}/jettons/{CET_CONTRACT}") or {}
+meta: dict = jetton.get("metadata", {}) if isinstance(jetton, dict) else {}
+total_supply = jetton.get("total_supply") if isinstance(jetton, dict) else None
 decimals_raw = meta.get("decimals")
 
-# ── TON USD price from DeDust prices list ─────────────────────────────────────
+# ── 2. DeDust single-pool info ────────────────────────────────────────────────
+pool: dict = fetch_json(f"{DEDUST_BASE}/pools/{DEDUST_POOL}") or {}
+
+# ── 3. DeDust prices list ─────────────────────────────────────────────────────
+prices = fetch_json(f"{DEDUST_BASE}/prices") or []
+
+# ── TON / CET USD price from DeDust prices list ───────────────────────────────
 ton_price_usd: float | None = None
 cet_price_usd: float | None = None
 
@@ -36,30 +54,29 @@ if isinstance(prices, list):
                     ton_price_usd = float(price_str)
                 except (ValueError, TypeError):
                     pass
-            if cet_contract and addr == cet_contract.lower() and price_str:
+            if CET_CONTRACT and addr == CET_CONTRACT.lower() and price_str:
                 try:
                     cet_price_usd = float(price_str)
                 except (ValueError, TypeError):
                     pass
 
 # ── Pool reserves ─────────────────────────────────────────────────────────────
-# DeDust single-pool endpoint returns reserveLeft (TON, nanoTON) and
-# reserveRight (CET, nano-CET).
-reserve_left_raw = pool.get("reserveLeft")   # nanoTON string
-reserve_right_raw = pool.get("reserveRight")  # nano-CET string
+# DeDust single-pool endpoint: reserveLeft (TON, nanoTON), reserveRight (CET, nano-CET)
+reserve_left_raw = pool.get("reserveLeft") if isinstance(pool, dict) else None
+reserve_right_raw = pool.get("reserveRight") if isinstance(pool, dict) else None
 
 tvl_ton: float | None = None
 if reserve_left_raw is not None:
     try:
         tvl_ton = float(reserve_left_raw) / 1e9 * 2  # both sides of symmetric pool
     except (ValueError, TypeError):
-        pass
+        tvl_ton = None
 
 # Fall back to computing CET price from reserves if not in prices list
 if cet_price_usd is None and ton_price_usd and reserve_left_raw and reserve_right_raw:
     try:
         ton_reserve = float(reserve_left_raw) / 1e9
-        cet_reserve = float(reserve_right_raw) / (10 ** cet_decimals)
+        cet_reserve = float(reserve_right_raw) / (10 ** CET_DECIMALS)
         if cet_reserve > 0:
             cet_price_usd = (ton_reserve / cet_reserve) * ton_price_usd
     except (ValueError, TypeError, ZeroDivisionError):
@@ -67,26 +84,31 @@ if cet_price_usd is None and ton_price_usd and reserve_left_raw and reserve_righ
 
 tvl_usd: float | None = None
 if tvl_ton is not None and ton_price_usd is not None:
-    tvl_usd = tvl_ton * ton_price_usd
+    try:
+        tvl_usd = tvl_ton * ton_price_usd
+    except (ValueError, TypeError):
+        tvl_usd = None
 
 # ── Write state ───────────────────────────────────────────────────────────────
 state = {
     "token": {
         "symbol": meta.get("symbol") or "CET",
         "name": meta.get("name") or "SOLARIS CET",
-        "contract": cet_contract,
+        "contract": CET_CONTRACT,
         "totalSupply": total_supply if total_supply is not None else None,
-        "decimals": int(decimals_raw) if decimals_raw is not None else cet_decimals,
+        "decimals": int(decimals_raw) if decimals_raw is not None else CET_DECIMALS,
     },
     "pool": {
-        "address": dedust_pool,
-        "tvlTon": round(tvl_ton, 4) if tvl_ton is not None else None,
-        "tvlUsd": round(tvl_usd, 2) if tvl_usd is not None else None,
-        "priceUsd": round(cet_price_usd, 6) if cet_price_usd is not None else None,
-        "tonPriceUsd": round(ton_price_usd, 4) if ton_price_usd is not None else None,
+        "address": DEDUST_POOL,
+        "tvlTon": round(tvl_ton, 4) if tvl_ton is not None else 0,
+        "tvlUsd": round(tvl_usd, 4) if tvl_usd is not None else 0,
+        "priceUsd": round(cet_price_usd, 4) if cet_price_usd is not None else 0,
+        "tonPriceUsd": round(ton_price_usd, 4) if ton_price_usd is not None else 0,
     },
-    "updatedAt": timestamp,
+    "updatedAt": TIMESTAMP,
 }
+
+os.makedirs("app/public/api", exist_ok=True)
 
 with open("app/public/api/state.json", "w") as f:
     json.dump(state, f, indent=2)
