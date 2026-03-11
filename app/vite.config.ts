@@ -61,16 +61,13 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB to cover phone-mockup.png
         runtimeCaching: [
           {
-            // Stale-While-Revalidate for the static chain-indexed API snapshot.
-            // The cached value is served instantly while a fresh copy is fetched
-            // in the background — ideal for hourly-updated data.
-            urlPattern: /\/api\/state\.json$/i,
+            urlPattern: /\/api\/state\.json$/,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'chain-state-cache',
+              cacheName: 'state-json-cache',
               expiration: {
-                maxEntries: 5,
-                maxAgeSeconds: 60 * 60 * 2, // 2 hours
+                maxEntries: 1,
+                maxAgeSeconds: 60 * 5, // 5 minutes
               },
             },
           },
