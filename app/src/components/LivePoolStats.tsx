@@ -5,14 +5,14 @@ const DEDUST_POOL_URL =
   'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
 
 const formatUsd = (value: number | null): string => {
-  if (value === null) return '—';
+  if (value === null || !Number.isFinite(value)) return '—';
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
   if (value >= 1_000) return `$${(value / 1_000).toFixed(2)}K`;
   return `$${value.toFixed(4)}`;
 };
 
 const formatPrice = (value: number | null): string => {
-  if (value === null) return '—';
+  if (value === null || !Number.isFinite(value)) return '—';
   if (value < 0.001) return `$${value.toExponential(2)}`;
   return `$${value.toFixed(4)}`;
 };
