@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import { Menu, X, Sun } from 'lucide-react';
 import LanguageSelector from './LanguageSelector';
 import WalletConnect from './WalletConnect';
-import MultiSigTest from './MultiSigTest';
 
 // Static data defined outside component to avoid re-creation on every render
 const navLinks = [
@@ -102,7 +101,6 @@ const Navigation = () => {
             >
               Start Mining
             </button>
-            <MultiSigTest />
           </div>
 
           {/* Mobile Menu Button */}
