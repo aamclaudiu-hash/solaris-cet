@@ -48,6 +48,7 @@ npm-debug.log*
 !app/public/icon-192.png
 !app/public/icon-512.png
 !app/public/og-image.png
+!app/public/logo.png
 !app/public/bitcoin-logo.svg
 !app/public/hero-coin.png
 !app/public/hologram-cube.png
@@ -76,6 +77,9 @@ npm-debug.log*
 /transformation/
 /vendor/
 /src/
+
+# Track project documentation
+!docs/
 
 # Miscellaneous files that do not belong at root
 /components.json
