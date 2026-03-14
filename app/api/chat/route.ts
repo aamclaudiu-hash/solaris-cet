@@ -1,61 +1,50 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import OpenAI from 'openai';
 
-export default async function handler(
-  req: VercelRequest,
-  res: VercelResponse,
-): Promise<void> {
-  console.log('Request received');
-  console.log('Key present: ' + !!process.env.GROQ_API_KEY);
-
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
-  }
-
+export async function POST(req: Request): Promise<Response> {
   try {
-    const { query } = req.body as { query?: string };
-
-    if (!query || typeof query !== 'string' || !query.trim()) {
-      res.status(400).json({ error: 'Missing or empty query field' });
-      return;
+    // 1. Check API Key
+    if (!process.env.GROQ_API_KEY) {
+      return Response.json(
+        { message: 'GROQ_API_KEY is not configured on the server.' },
+        { status: 500 },
+      );
     }
 
-    const apiKey = process.env.GROQ_API_KEY;
-    if (!apiKey) {
-      res.status(500).json({ error: 'GROQ_API_KEY is not configured' });
-      return;
+    // 2. Parse Request
+    const body = (await req.json()) as { query?: unknown };
+    const userQuery = body.query;
+
+    if (!userQuery || typeof userQuery !== 'string' || !userQuery.trim()) {
+      return Response.json(
+        { message: 'Query parameter is missing.' },
+        { status: 400 },
+      );
     }
 
-    const client = new OpenAI({
-      apiKey,
+    // 3. Initialize Groq via OpenAI SDK
+    const openai = new OpenAI({
+      apiKey: process.env.GROQ_API_KEY,
       baseURL: 'https://api.groq.com/openai/v1',
     });
 
-    const completion = await client.chat.completions.create({
+    // 4. Call Groq
+    const completion = await openai.chat.completions.create({
       model: 'llama3-8b-8192',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are the Solaris AI Oracle, an expert assistant for the Solaris CET token project on the TON blockchain. ' +
-            'Provide concise, accurate, and helpful responses about the Solaris CET ecosystem, DeFi, and the TON blockchain.',
-        },
-        {
-          role: 'user',
-          content: query.trim(),
-        },
-      ],
-      max_tokens: 512,
+      messages: [{ role: 'user', content: userQuery }],
       temperature: 0.7,
     });
 
-    const response = completion.choices[0]?.message?.content ?? '';
-    res.status(200).json({ response });
-  } catch (err) {
+    const reply =
+      completion.choices[0]?.message?.content || 'Oracle is silent.';
+
+    // 5. Return EXACT format expected by frontend ({ response: string })
+    return Response.json({ response: reply }, { status: 200 });
+  } catch (error: unknown) {
+    console.error('API Route Error:', error);
     const message =
-      err instanceof Error ? err.message : 'Unknown error occurred';
-    console.error('API route error:', message);
-    res.status(500).json({ error: message });
+      error instanceof Error
+        ? error.message
+        : 'An unexpected error occurred in the Oracle Core.';
+    return Response.json({ message }, { status: 500 });
   }
 }
