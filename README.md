@@ -156,3 +156,4 @@ Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before submitting a pull reques
 
 This project is licensed under the **MIT License** — see [LICENSE](./LICENSE) for details.
 You are free to fork, modify, and host your own instance under the same license terms.
+
