@@ -1,9 +1,10 @@
 import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { Coins, Pickaxe, Users, TrendingDown } from 'lucide-react';
+import { Coins, TrendingDown } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import LivePoolStats from '../components/LivePoolStats';
 import ChainStateWidget from '../components/ChainStateWidget';
+import Tokenomics from '../components/Tokenomics';
 
 
 const CET_TOTAL_SUPPLY = 9000;
@@ -121,28 +122,28 @@ const TokenomicsSection = () => {
         <div className="metric-pill absolute left-[6vw] top-[20vh] glass-card px-5 py-3 flex items-center gap-3 animate-float">
           <Coins className="w-5 h-5 text-solaris-gold" />
           <div>
-            <div className="hud-label text-[10px]">Max Supply</div>
-            <div className="font-mono text-solaris-gold font-semibold">21M BTC-S</div>
+            <div className="hud-label text-[10px]">Total Supply</div>
+            <div className="font-mono text-solaris-gold font-semibold">9,000 CET</div>
           </div>
         </div>
         <div
           className="metric-pill absolute right-[8vw] top-[24vh] glass-card px-5 py-3 flex items-center gap-3 animate-float"
           style={{ animationDelay: '0.5s' }}
         >
-          <Pickaxe className="w-5 h-5 text-solaris-cyan" />
+          <Coins className="w-5 h-5 text-solaris-cyan" />
           <div>
-            <div className="hud-label text-[10px]">Mining</div>
-            <div className="font-mono text-solaris-cyan font-semibold">66.66%</div>
+            <div className="hud-label text-[10px]">Liquidity</div>
+            <div className="font-mono text-solaris-cyan font-semibold">60%</div>
           </div>
         </div>
         <div
           className="metric-pill absolute right-[10vw] top-[64vh] glass-card px-5 py-3 flex items-center gap-3 animate-float"
           style={{ animationDelay: '1s' }}
         >
-          <Users className="w-5 h-5 text-emerald-400" />
+          <Coins className="w-5 h-5 text-emerald-400" />
           <div>
-            <div className="hud-label text-[10px]">Team</div>
-            <div className="font-mono text-emerald-400 font-semibold">0.33%</div>
+            <div className="hud-label text-[10px]">Mining</div>
+            <div className="font-mono text-emerald-400 font-semibold">20%</div>
           </div>
         </div>
       </div>
@@ -205,32 +206,26 @@ const TokenomicsSection = () => {
               </div>
             </div>
 
-            {/* Middle: Supply info */}
+            {/* Middle: Supply info + Tokenomics grid */}
             <div className="space-y-5">
               <div className="p-4 rounded-xl bg-white/5">
                 <div className="hud-label mb-2">Fixed Supply</div>
-                <div className="font-display font-bold text-3xl text-solaris-gold mb-1">
-                  21,000,000
-                </div>
-                <div className="text-solaris-muted text-sm">BTC-S Total Supply</div>
-                <div className="mt-3 pt-3 border-t border-white/10">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="hud-label text-[10px] mb-1">CET (TON Network)</div>
-                      <div className="font-display font-bold text-xl text-solaris-cyan">9,000</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="hud-label text-[10px] mb-1">DeDust Pool</div>
-                      <a
-                        href="https://dedust.io/swap/TON/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="View CET token on DeDust exchange"
-                        className="font-mono text-[10px] text-solaris-cyan hover:text-solaris-gold transition-colors"
-                      >
-                        EQB5…lfnB ↗
-                      </a>
-                    </div>
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                  <div>
+                    <div className="font-display font-bold text-3xl text-solaris-gold">9,000</div>
+                    <div className="text-solaris-muted text-sm">CET Total Supply</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="hud-label text-[10px] mb-1">DeDust Pool</div>
+                    <a
+                      href="https://dedust.io/swap/TON/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="View CET token on DeDust exchange"
+                      className="font-mono text-[10px] text-solaris-cyan hover:text-solaris-gold transition-colors"
+                    >
+                      EQB5…lfnB ↗
+                    </a>
                   </div>
                 </div>
                 <LivePoolStats />
@@ -241,26 +236,7 @@ const TokenomicsSection = () => {
 
               <div className="p-4 rounded-xl bg-white/5">
                 <div className="hud-label mb-3">Distribution</div>
-                <div className="space-y-3">
-                  <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-solaris-muted text-sm">Mining (90 years)</span>
-                      <span className="font-mono text-solaris-cyan font-semibold text-sm">66.66%</span>
-                    </div>
-                    <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-solaris-cyan to-solaris-gold rounded-full animate-gradient-shift" style={{ width: '66.66%' }} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-solaris-muted text-sm">Team & Advisors</span>
-                      <span className="font-mono text-emerald-400 font-semibold text-sm">0.33%</span>
-                    </div>
-                    <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                      <div className="h-full bg-emerald-400 rounded-full" style={{ width: '0.33%' }} />
-                    </div>
-                  </div>
-                </div>
+                <Tokenomics />
               </div>
             </div>
 
