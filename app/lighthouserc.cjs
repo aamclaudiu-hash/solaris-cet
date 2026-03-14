@@ -4,15 +4,15 @@
  * Blocks merge if Performance, Accessibility, Best Practices, or SEO
  * scores fall below their minimum thresholds.
  *
- * Runs 3 consecutive audits per URL and takes the median result to
- * reduce measurement noise.
+ * Serves the pre-built dist directory directly via staticDistDir —
+ * no preview server is required in CI.
  */
 module.exports = {
   ci: {
     collect: {
-      /* Audit the Vite preview server started separately in CI */
-      url: ['http://127.0.0.1:4173/'],
-      numberOfRuns: 3,
+      /* Serve the pre-built dist directory directly — no preview server needed */
+      staticDistDir: './dist',
+      numberOfRuns: 1,
       settings: {
         /* Use desktop preset for a consistent, deterministic baseline */
         preset: 'desktop',

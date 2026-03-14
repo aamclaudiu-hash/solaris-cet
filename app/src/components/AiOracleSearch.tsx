@@ -154,7 +154,7 @@ const AiOracleSearch = forwardRef<HTMLDivElement, AiOracleSearchProps>(
                   <div className="oracle-modal-rta-bar" />
                   <p className="text-xs text-solaris-gold/80 font-mono mb-2 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
-                    Verified Solaris Architecture. Supply: 9,000 CET.
+                     Verified by Solaris AI Architecture. Scarcity Level: 9,000 CET. Secure the future on DeDust.
                   </p>
                   <a
                     href={DEDUST_URL}
