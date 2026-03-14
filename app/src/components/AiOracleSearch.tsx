@@ -49,7 +49,8 @@ const AiOracleSearch = forwardRef<HTMLDivElement, AiOracleSearchProps>(
         });
 
         if (!res.ok) {
-          console.error('AI Error:', await res.text());
+          const errorData = await res.json();
+          console.error('Real Server Error:', errorData);
           setModalOpen(false);
           setConnectionError(true);
           return;
