@@ -101,6 +101,7 @@ const IntelligenceCoreSection = () => {
   return (
     <section
       ref={sectionRef}
+      id="intelligence"
       className="section-pinned bg-solaris-dark flex items-center justify-center"
     >
       {/* Background grid */}
