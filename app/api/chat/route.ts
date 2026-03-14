@@ -29,7 +29,7 @@ export async function POST(req: Request): Promise<Response> {
 
     // 4. Call Groq
     const completion = await openai.chat.completions.create({
-      model: 'llama3-8b-8192',
+      model: 'llama-3.1-8b-instant',
       messages: [{ role: 'user', content: userQuery }],
       temperature: 0.7,
     });
