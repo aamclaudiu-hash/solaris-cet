@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect, forwardRef, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Sparkles, X, ExternalLink, Loader2 } from 'lucide-react';
+import ReActTerminal from './ReActTerminal';
 
 const DEDUST_URL =
   'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB/deposit';
@@ -157,19 +158,17 @@ const AiOracleSearch = forwardRef<HTMLDivElement, AiOracleSearchProps>(
               {/* Query echo */}
               <p className="oracle-modal-query">"{query}"</p>
 
-              {/* Response body */}
+              {/* Response body — animated ReAct reasoning terminal */}
               <div className="oracle-modal-response">
-                {loading ? (
+                {loading && !responseText ? (
                   <div className="flex items-center gap-3 text-solaris-muted">
                     <Loader2 className="w-4 h-4 animate-spin text-solaris-gold" aria-hidden="true" />
                     <span className="text-sm animate-pulse">
-                      Processing query through Solaris AI…
+                      Initializing ReAct loop via Groq LPU…
                     </span>
                   </div>
                 ) : (
-                  <p className="text-sm text-solaris-text/90 leading-relaxed whitespace-pre-wrap">
-                    {responseText}
-                  </p>
+                  <ReActTerminal responseText={responseText} isLoading={loading} />
                 )}
               </div>
 
