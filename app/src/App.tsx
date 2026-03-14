@@ -24,6 +24,7 @@ const EcosystemIndexSection = lazy(() => import('./sections/EcosystemIndexSectio
 const ResourcesSection = lazy(() => import('./sections/ResourcesSection'));
 const FooterSection = lazy(() => import('./sections/FooterSection'));
 import { LanguageContext, useLanguageState } from './hooks/useLanguage';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -277,6 +278,7 @@ function App() {
   return (
     <TonConnectUIProvider manifestUrl="https://aamclaudiu-hash.github.io/solaris-cet/tonconnect-manifest.json">
       <AppContent />
+      <Analytics />
     </TonConnectUIProvider>
   );
 }
