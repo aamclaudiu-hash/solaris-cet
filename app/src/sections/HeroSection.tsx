@@ -374,7 +374,7 @@ const HeroSection = () => {
           <button
             className="btn-filled-gold flex items-center gap-2 group active:scale-95 transition-transform"
             aria-label="Start Mobile Mining on Telegram"
-            onClick={() => { triggerHaptic(); window.open('https://t.me/SolarisCET', '_blank'); }}
+            onClick={() => { triggerHaptic(); window.open('https://t.me/SolarisCET', '_blank', 'noopener,noreferrer'); }}
           >
             <Zap className="w-4 h-4" />
             Start Mobile Mining
@@ -390,7 +390,7 @@ const HeroSection = () => {
           <button
             className="btn-gold flex items-center gap-2 active:scale-95 transition-transform"
             aria-label="Buy CET on DeDust exchange"
-            onClick={() => { triggerHaptic(); window.open(DEDUST_POOL_URL, '_blank'); }}
+            onClick={() => { triggerHaptic(); window.open(DEDUST_POOL_URL, '_blank', 'noopener,noreferrer'); }}
           >
             Buy CET on DeDust
           </button>
