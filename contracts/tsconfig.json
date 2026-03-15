@@ -1,1 +1,1 @@
-{\n  "compilerOptions": {\n    "target": "ES2020",\n    "module": "commonjs",\n    "moduleResolution": "node",\n    "esModuleInterop": true,\n    "strict": true,\n    "types": ["node", "jest"],\n    "skipLibCheck": true\n  },\n  "include": ["tests/**/*.ts", "wrappers/**/*.ts", "scripts/**/*.ts", "**/*.ts"]\n}
+{"compilerOptions":{"target":"ES2020","module":"commonjs","moduleResolution":"node","esModuleInterop":true,"strict":true,"types":["node","jest"],"skipLibCheck":true},"include":["tests/**/*.ts","wrappers/**/*.ts","scripts/**/*.ts","**/*.ts"]}
