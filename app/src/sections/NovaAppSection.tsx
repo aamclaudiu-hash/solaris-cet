@@ -195,7 +195,8 @@ const NovaAppSection = () => {
           <div className="space-y-4 mb-6">
             <p className="text-solaris-muted text-sm lg:text-base leading-relaxed">
               Mine <span className="text-solaris-gold font-semibold">CET</span> from your smartphone{' '}
-              <span className="text-solaris-text font-medium">without draining battery</span>.
+              <span className="text-solaris-text font-medium">with minimal battery impact</span>.
+              Mining suspends automatically when the app is in the background.
             </p>
             <p className="text-solaris-muted text-sm lg:text-base leading-relaxed">
               <span className="text-solaris-cyan font-semibold">Liquid staking</span> converts rewards into sCET—so you stay liquid while earning. Powered by the TON blockchain and High-Intelligence AI protocols.
@@ -211,7 +212,7 @@ const NovaAppSection = () => {
               <span className="text-xs text-solaris-cyan font-medium">Liquid Staking</span>
             </div>
             <div className="px-3 py-1.5 rounded-lg bg-emerald-400/10 border border-emerald-400/20">
-              <span className="text-xs text-emerald-400 font-medium">Zero Battery Drain</span>
+              <span className="text-xs text-emerald-400 font-medium">90% Battery Savings</span>
             </div>
           </div>
         </div>

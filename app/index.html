@@ -46,11 +46,11 @@
     <!-- Content Security Policy -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://plausible.io;
+                   script-src 'self' 'unsafe-inline' https://plausible.io https://telegram.org;
                    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
                    img-src 'self' data: https:;
                    font-src 'self' data: https://fonts.gstatic.com;
-                   connect-src 'self' https://toncenter.com https://tonapi.io https://github.com https://api.dedust.io https://bridge.tonapi.io https://tonconnectapi.com https://plausible.io;
+                   connect-src 'self' https://toncenter.com https://tonapi.io https://github.com https://api.dedust.io https://bridge.tonapi.io https://tonconnectapi.com https://plausible.io https://telegram.org;
                    frame-src 'none';" />
 
     <!-- Structured Data -->
@@ -80,6 +80,12 @@
     />
 
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+    <!-- Telegram Mini App SDK — enables window.Telegram.WebApp when the app
+         runs inside Telegram. The SDK is served from telegram.org's CDN and
+         updated by Telegram; SRI is intentionally omitted because pinning a
+         hash would break every time Telegram pushes an update. -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   </head>
   <body>

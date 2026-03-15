@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import Navigation from './components/Navigation';
 import CursorGlow from './components/CursorGlow';
+import TouchRipple from './components/TouchRipple';
 import LazyLoadWrapper from './components/LazyLoadWrapper';
 import { ErrorBoundary } from './components/ErrorBoundary';
 // Pinned sections — loaded eagerly so the snap/scroll setup can find their ScrollTriggers
@@ -29,7 +30,7 @@ import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LOADING_DURATION_MS = 1800;
+const LOADING_DURATION_MS = 800;
 
 function AppContent() {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -154,6 +155,9 @@ function AppContent() {
 
       {/* Cursor glow effect */}
       <CursorGlow />
+
+      {/* Touch ripple effect (mobile) */}
+      <TouchRipple />
 
       <div ref={mainRef} className="relative bg-solaris-dark min-h-screen">
         {/* Noise overlay */}

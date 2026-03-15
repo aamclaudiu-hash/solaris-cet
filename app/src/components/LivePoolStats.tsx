@@ -75,6 +75,11 @@ const LivePoolStats = () => {
               <ExternalLink className="w-3 h-3" />
             </a>
           </p>
+          {lastUpdated && (
+            <p className="text-solaris-muted/60 text-[11px] font-mono">
+              Last cached: {lastUpdated.toLocaleTimeString()}
+            </p>
+          )}
           <p className="text-solaris-muted/60 text-[11px]">
             Follow us on{' '}
             <a

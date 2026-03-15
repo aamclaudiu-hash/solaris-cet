@@ -344,6 +344,27 @@
 }
 
 /* ─────────────────────────────────────────────
+   TOUCH RIPPLE (mobile cursor-glow replacement)
+───────────────────────────────────────────── */
+
+.touch-ripple {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 201, 76, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9998;
+  animation: touch-ripple-expand 600ms ease-out forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes touch-ripple-expand {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* ─────────────────────────────────────────────
    SCAN LINE
 ───────────────────────────────────────────── */
 
@@ -566,7 +587,7 @@
   background: linear-gradient(90deg, #F2C94C, #2EE7FF, #F2C94C);
   background-size: 200% 100%;
   border-radius: 1px;
-  animation: loading-bar 1.8s ease forwards, shimmer 1.5s linear infinite;
+  animation: loading-bar 0.8s ease forwards, shimmer 1.5s linear infinite;
   will-change: width, background-position;
 }
 
