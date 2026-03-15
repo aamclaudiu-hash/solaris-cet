@@ -239,7 +239,9 @@ const HeroSection = () => {
 
   return (
     <section
+      id="hero"
       ref={sectionRef}
+      aria-label="Solaris CET Hero"
       className="section-pinned bg-solaris-dark flex items-center justify-center"
       style={{ perspective: '1200px' }}
     >
@@ -266,7 +268,7 @@ const HeroSection = () => {
       >
         <img
           src={`${import.meta.env.BASE_URL}hero-coin.png`}
-          alt="Solaris CET Coin"
+          alt="Solaris CET Token Asset"
           width="512"
           height="512"
           className="w-full h-auto animate-coin-rotate drop-shadow-[0_0_80px_rgba(242,201,76,0.35)]"
@@ -346,7 +348,7 @@ const HeroSection = () => {
       </div>
 
       {/* CTA Buttons + AI Oracle Search — stacked column to prevent mobile overlap */}
-      <div className="absolute left-[5vw] sm:left-[7vw] top-[62vh] sm:top-[68vh] z-20 flex flex-col gap-3 w-[min(90vw,540px)] sm:w-[min(40vw,540px)]">
+      <div className="flex flex-col items-center w-full gap-y-12 px-4 py-8 z-20 sm:absolute sm:left-[7vw] sm:top-[68vh] sm:w-[min(40vw,540px)] sm:items-start sm:gap-3 sm:px-0 sm:py-0">
         {/* CTA Buttons */}
         <div
           ref={ctaRef}
@@ -354,6 +356,7 @@ const HeroSection = () => {
         >
           <button
             className="btn-filled-gold flex items-center gap-2 group"
+            aria-label="Start Mobile Mining on Telegram"
             onClick={() => window.open('https://t.me/SolarisCET', '_blank')}
           >
             <Zap className="w-4 h-4" />
@@ -362,12 +365,14 @@ const HeroSection = () => {
           </button>
           <button
             className="btn-gold"
+            aria-label="Explore ReAct Protocol"
             onClick={() => document.getElementById('intelligence')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Explore ReAct Protocol
           </button>
           <button
             className="btn-gold flex items-center gap-2"
+            aria-label="Buy CET on DeDust exchange"
             onClick={() => window.open(DEDUST_POOL_URL, '_blank')}
           >
             Buy CET on DeDust
