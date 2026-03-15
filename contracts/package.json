@@ -5,7 +5,7 @@
   "description": "Solaris CET TON smart contracts — Multi-Signature Wrapper",
   "scripts": {
     "build": "blueprint build",
-    "pretest": "npm run build",
+    "pretest": "npx blueprint build MultiSigWrapper",
     "test": "jest",
     "deploy": "blueprint run deployMultiSigWrapper"
   },
