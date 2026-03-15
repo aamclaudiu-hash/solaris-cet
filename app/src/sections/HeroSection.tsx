@@ -1,6 +1,6 @@
-import { useEffect, useRef, useLayoutEffect } from 'react';
+import { useEffect, useRef, useLayoutEffect, useState } from 'react';
 import { gsap } from 'gsap';
-import { ArrowRight, Zap, Activity, Globe } from 'lucide-react';
+import { ArrowRight, Zap, Activity, Globe, X, Brain } from 'lucide-react';
 import ParticleCanvas from '../components/ParticleCanvas';
 import GlowOrbs from '../components/GlowOrbs';
 import AiOracleSearch from '../components/AiOracleSearch';
@@ -8,6 +8,11 @@ import AiOracleSearch from '../components/AiOracleSearch';
 const SOLARIS_LOGO_URL = `${import.meta.env.BASE_URL}icon-192.png`;
 const DEDUST_POOL_URL = 'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB/deposit';
 
+
+/** Trigger a short haptic vibration on supported devices. */
+const triggerHaptic = () => {
+  navigator.vibrate?.(15);
+};
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -20,6 +25,17 @@ const HeroSection = () => {
   const bodyRef = useRef<HTMLParagraphElement>(null);
   const statsTickerRef = useRef<HTMLDivElement>(null);
   const oracleSearchRef = useRef<HTMLDivElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsModalOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isModalOpen]);
 
   // Mouse parallax effect
   useEffect(() => {
@@ -271,6 +287,7 @@ const HeroSection = () => {
           alt="Solaris CET Token Asset"
           width="512"
           height="512"
+          fetchPriority="high"
           className="w-full h-auto animate-coin-rotate drop-shadow-[0_0_80px_rgba(242,201,76,0.35)]"
         />
         {/* Coin reflection */}
@@ -348,42 +365,44 @@ const HeroSection = () => {
       </div>
 
       {/* CTA Buttons + AI Oracle Search — stacked column to prevent mobile overlap */}
-      <div className="flex flex-col items-center w-full gap-y-12 px-4 py-8 z-20 sm:absolute sm:left-[7vw] sm:top-[68vh] sm:w-[min(40vw,540px)] sm:items-start sm:gap-3 sm:px-0 sm:py-0">
+      <div className="flex flex-col items-center w-full gap-y-12 px-4 py-8 z-20 lg:absolute lg:left-[7vw] lg:top-[68vh] lg:w-[min(40vw,540px)] lg:items-start lg:gap-3 lg:px-0 lg:py-0">
         {/* CTA Buttons */}
         <div
           ref={ctaRef}
           className="flex flex-wrap gap-3"
         >
           <button
-            className="btn-filled-gold flex items-center gap-2 group"
+            className="btn-filled-gold flex items-center gap-2 group active:scale-95 transition-transform"
             aria-label="Start Mobile Mining on Telegram"
-            onClick={() => window.open('https://t.me/SolarisCET', '_blank')}
+            onClick={() => { triggerHaptic(); window.open('https://t.me/SolarisCET', '_blank'); }}
           >
             <Zap className="w-4 h-4" />
             Start Mobile Mining
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </button>
           <button
-            className="btn-gold"
+            className="btn-gold active:scale-95 transition-transform"
             aria-label="Explore ReAct Protocol"
-            onClick={() => document.getElementById('intelligence')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => { triggerHaptic(); setIsModalOpen(true); }}
           >
             Explore ReAct Protocol
           </button>
           <button
-            className="btn-gold flex items-center gap-2"
+            className="btn-gold flex items-center gap-2 active:scale-95 transition-transform"
             aria-label="Buy CET on DeDust exchange"
-            onClick={() => window.open(DEDUST_POOL_URL, '_blank')}
+            onClick={() => { triggerHaptic(); window.open(DEDUST_POOL_URL, '_blank'); }}
           >
             Buy CET on DeDust
           </button>
         </div>
 
         {/* AI Oracle Search Bar */}
-        <AiOracleSearch
-          ref={oracleSearchRef}
-          className="w-full"
-        />
+        <div className="relative z-10 w-full">
+          <AiOracleSearch
+            ref={oracleSearchRef}
+            className="w-full"
+          />
+        </div>
       </div>
 
       {/* HUD Card - Right (hidden on mobile) */}
@@ -487,6 +506,92 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
+      {/* ReAct Protocol Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="ReAct Protocol - Solaris Constitution"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-2xl border border-solaris-gold/20 bg-gradient-to-b from-[#1a1a2e] to-[#0d0d1a] p-6 lg:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 text-solaris-muted hover:text-solaris-text transition-colors active:scale-95"
+              aria-label="Close ReAct Protocol modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-solaris-gold/30 bg-solaris-gold/5 mb-4">
+                <Activity className="w-3.5 h-3.5 text-solaris-gold" />
+                <span className="font-mono text-[10px] text-solaris-gold tracking-widest uppercase">ReAct Protocol v1.0</span>
+              </div>
+              <h2 className="font-display font-bold text-2xl lg:text-3xl text-solaris-text mb-2">
+                The Solaris <span className="text-gradient-animated">Constitution</span>
+              </h2>
+              <p className="text-solaris-muted text-sm">Autonomous reasoning framework for high-intelligence agents</p>
+            </div>
+
+            {/* Constitution Phases */}
+            <div className="space-y-6">
+              {/* Phase 1: Diagnostic */}
+              <div className="glass-card p-5 border-l-2 border-l-[#F2C94C]">
+                <div className="flex items-center gap-2 mb-2">
+                  <Brain className="w-4 h-4 text-[#F2C94C]" />
+                  <h3 className="font-mono text-sm font-bold text-[#F2C94C] tracking-wider">I. DIAGNOSTIC INTERN</h3>
+                </div>
+                <p className="text-solaris-text/80 text-sm leading-relaxed">
+                  The agent performs deep internal analysis of the query context, evaluating token metrics,
+                  blockchain state, and market conditions. Every reasoning chain is logged and verifiable —
+                  no black-box decisions.
+                </p>
+              </div>
+
+              {/* Phase 2: Decoding */}
+              <div className="glass-card p-5 border-l-2 border-l-[#F97316]">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="w-4 h-4 text-[#F97316]" />
+                  <h3 className="font-mono text-sm font-bold text-[#F97316] tracking-wider">II. DECODARE ORACOL</h3>
+                </div>
+                <p className="text-solaris-text/80 text-sm leading-relaxed">
+                  Oracle decoding translates raw chain data into actionable intelligence. The BRAID
+                  framework cross-references multiple data streams to build a unified decision matrix
+                  for autonomous agent operations.
+                </p>
+              </div>
+
+              {/* Phase 3: Directive */}
+              <div className="glass-card p-5 border-l-2 border-l-[#34D399]">
+                <div className="flex items-center gap-2 mb-2">
+                  <ArrowRight className="w-4 h-4 text-[#34D399]" />
+                  <h3 className="font-mono text-sm font-bold text-[#34D399] tracking-wider">III. DIRECTIVĂ DE ACȚIUNE</h3>
+                </div>
+                <p className="text-solaris-text/80 text-sm leading-relaxed">
+                  The final directive synthesizes all analysis into a clear, executable action.
+                  Human-in-the-Loop verification ensures no autonomous action proceeds without
+                  explicit user consent — security and trust by design.
+                </p>
+              </div>
+            </div>
+
+            {/* Signature */}
+            <div className="mt-8 pt-6 border-t border-white/5 text-center">
+              <p className="font-mono text-[10px] text-solaris-muted/60 tracking-widest uppercase">
+                Architected by Claudiu
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
