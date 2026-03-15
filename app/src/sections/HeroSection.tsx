@@ -294,13 +294,17 @@ const HeroSection = () => {
         className="absolute left-1/2 top-[70%] sm:top-[52%] -translate-x-1/2 -translate-y-1/2 w-[min(70vw,520px)] sm:w-[min(42vw,520px)] z-10"
         style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
       >
-        <img
-          src={`${import.meta.env.BASE_URL}hero-coin.png`}
-          alt="Solaris CET Token Asset"
-          width="512"
-          height="512"
-          className="w-full h-auto animate-coin-rotate drop-shadow-[0_0_80px_rgba(242,201,76,0.35)]"
-        />
+        <picture>
+          <source srcSet={`${import.meta.env.BASE_URL}hero-coin.webp`} type="image/webp" />
+          <img
+            src={`${import.meta.env.BASE_URL}hero-coin.png`}
+            alt="Solaris CET Token Asset"
+            width="512"
+            height="512"
+            fetchPriority="high"
+            className="w-full h-auto animate-coin-rotate drop-shadow-[0_0_80px_rgba(242,201,76,0.35)]"
+          />
+        </picture>
         {/* Coin reflection */}
         <div
           className="absolute inset-x-[15%] bottom-0 h-[30%] pointer-events-none"

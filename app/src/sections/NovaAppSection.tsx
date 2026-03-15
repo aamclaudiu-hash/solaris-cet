@@ -115,13 +115,17 @@ const NovaAppSection = () => {
           {/* Phone mockup */}
           <div className="h-full flex flex-col">
             <div className="flex-1 relative">
-              <img
-                src={`${import.meta.env.BASE_URL}phone-mockup.png`}
-                alt="Solaris CET App"
-                width="360"
-                height="720"
-                className="w-full h-full object-contain"
-              />
+              <picture>
+                <source srcSet={`${import.meta.env.BASE_URL}phone-mockup.webp`} type="image/webp" />
+                <img
+                  src={`${import.meta.env.BASE_URL}phone-mockup.png`}
+                  alt="Solaris CET App"
+                  width="360"
+                  height="720"
+                  loading="lazy"
+                  className="w-full h-full object-contain"
+                />
+              </picture>
 
               {/* App UI overlay */}
               <div className="absolute inset-[8%] top-[12%] bottom-[10%] flex flex-col">
