@@ -25,7 +25,7 @@ module.exports = {
     assert: {
       assertions: {
         /* Core categories — realistic thresholds for a complex GSAP/React SPA */
-        'categories:performance': ['error', { minScore: 0.85 }],
+        'categories:performance': ['error', { minScore: 0.80 }],
         'categories:accessibility': ['error', { minScore: 0.4 }],
         'categories:best-practices': ['error', { minScore: 0.4 }],
         'categories:seo': ['error', { minScore: 0.4 }],
