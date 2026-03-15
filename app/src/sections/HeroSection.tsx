@@ -10,6 +10,9 @@ type MiningState = 'IDLE' | 'PROCESSING' | 'SUCCESS';
 
 const SOLARIS_LOGO_URL = `${import.meta.env.BASE_URL}icon-192.png`;
 const DEDUST_POOL_URL = 'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB/deposit';
+const TELEGRAM_BOT_URL = 'https://t.me/SolarisCET';
+const PROCESSING_DURATION_MS = 2000;
+const SUCCESS_DISPLAY_MS = 3000;
 
 
 const HeroSection = () => {
@@ -33,12 +36,12 @@ const HeroSection = () => {
 
     setTimeout(() => {
       setMiningState('SUCCESS');
-      window.open('https://t.me/SolarisCET', '_blank');
+      window.open(TELEGRAM_BOT_URL, '_blank');
 
       setTimeout(() => {
         setMiningState('IDLE');
-      }, 3000);
-    }, 2000);
+      }, SUCCESS_DISPLAY_MS);
+    }, PROCESSING_DURATION_MS);
   }, [miningState]);
 
   // Mouse parallax effect
@@ -397,7 +400,7 @@ const HeroSection = () => {
             )}
             {miningState === 'SUCCESS' && (
               <>
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
                 Mining Active
               </>
             )}
