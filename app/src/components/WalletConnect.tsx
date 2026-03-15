@@ -24,8 +24,8 @@ const WalletConnect = () => {
           amount: "10000000"
         }]
       });
-    } catch (e) {
-      console.error(e);
+    } catch (e: unknown) {
+      console.error('[WalletConnect] Transaction error:', e instanceof Error ? e.message : e);
     }
   };
 
