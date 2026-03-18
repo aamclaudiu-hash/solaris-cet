@@ -27,7 +27,7 @@ jobs:
           cache-dependency-path: app/package-lock.json
 
       - name: Restore Vite build cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: app/node_modules/.vite
           key: vite-cache-${{ runner.os }}-${{ hashFiles('app/package-lock.json', 'app/vite.config.ts') }}
@@ -43,7 +43,7 @@ jobs:
         run: npm run build
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: app/dist
@@ -70,7 +70,7 @@ jobs:
         run: npm ci
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: app/dist
@@ -83,7 +83,7 @@ jobs:
 
       - name: Upload Lighthouse report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lighthouse-report
           path: app/.lighthouseci
@@ -111,7 +111,7 @@ jobs:
         run: npm ci
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
@@ -128,7 +128,7 @@ jobs:
         run: npx playwright install-deps chromium
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: app/dist
@@ -139,7 +139,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: app/playwright-report
