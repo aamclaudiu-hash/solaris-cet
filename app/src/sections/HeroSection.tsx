@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useRef, useLayoutEffect, useState, useCallback, memo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,11 +8,6 @@ import AiOracleSearch from '../components/AiOracleSearch';
 import {
   TooltipProvider
 } from '../components/ui/tooltip';
-
-// Register GSAP Plugins for Enterprise-grade scroll performance
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 // --- CONSTANTS & CONFIGURATION ---
 const APP_CONFIG = {
@@ -75,6 +68,34 @@ const HeroSection: React.FC = () => {
 
   // --- ANIMATION CORE (GSAP) ---
   useLayoutEffect(() => {
+    // On mobile (< 768px), skip GSAP animations and leave all elements at their
+    // natural visible state to prevent a blank screen caused by fromTo opacity: 0.
+    const isMobile =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 767px)').matches;
+
+    if (isMobile) {
+      // Ensure elements are fully visible without inline-style overrides
+      // (no GSAP "from" state is applied, so they remain visible by default).
+      const els: (HTMLElement | null)[] = [
+        coinWrapperRef.current,
+        titleContainerRef.current,
+        hudWrapperRef.current,
+        tickerContainerRef.current,
+      ];
+      els.forEach(el => {
+        if (el) {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }
+      });
+      if (oracleWrapperRef.current) {
+        oracleWrapperRef.current.style.opacity = '1';
+        oracleWrapperRef.current.style.width = '100%';
+      }
+      return;
+    }
+
     const ctx = gsap.context(() => {
       const mainTl = gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.2 } });
 
@@ -85,7 +106,7 @@ const HeroSection: React.FC = () => {
         .fromTo(oracleWrapperRef.current, { width: "0%", opacity: 0 }, { width: "100%", opacity: 1, duration: 0.8 }, "-=0.5")
         .fromTo(tickerContainerRef.current, { y: 100 }, { y: 0 }, "-=0.5");
 
-      // Scroll Orchestration
+      // Scroll Orchestration (desktop only)
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
