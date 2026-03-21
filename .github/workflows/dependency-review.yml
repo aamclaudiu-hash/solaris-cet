@@ -1,0 +1,38 @@
+name: Dependency Review
+
+# Blocks PRs that introduce dependencies with known high/critical
+# vulnerabilities by using GitHub's free Dependency Review action.
+#
+# Only runs on pull requests — push events do not change the
+# lockfile in a way that requires re-review.
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "app/package.json"
+      - "app/package-lock.json"
+      - "contracts/package.json"
+      - "contracts/package-lock.json"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Fail on high and critical severity vulnerabilities
+          fail-on-severity: high
+          # Post a summary comment on the PR
+          comment-summary-in-pr: always
+          # Deny explicitly listed licenses that are incompatible with the project
+          deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0
