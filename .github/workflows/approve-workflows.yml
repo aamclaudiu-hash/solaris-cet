@@ -12,7 +12,9 @@ on:
     # Watch every workflow defined in the repository.
     workflows:
       - "CI — Continuous Integration"
+      - "CodeQL Security Analysis"
       - "Community Automation"
+      - "Dependency Review"
       - "Deploy Solaris CET to GitHub Pages"
       - "Lighthouse CI — Quality Gate"
       - "TON Chain Indexer"

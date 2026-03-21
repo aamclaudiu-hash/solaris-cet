@@ -1,0 +1,44 @@
+name: Dependency Review
+
+# Runs on every pull request targeting main.
+# Compares the dependency graph before and after the change and blocks merge
+# if any newly-introduced package has a known HIGH or CRITICAL vulnerability.
+#
+# Results are posted as a PR comment for easy review.
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Scan for vulnerable dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Block PRs that introduce HIGH or CRITICAL vulnerabilities.
+          fail-on-severity: high
+          # Post a summary comment on the PR listing all new vulnerabilities.
+          comment-summary-in-pr: always
+          # Warn (but don't fail) on any license that isn't in the allow-list.
+          # These are the SPDX identifiers of licenses used by the project's deps.
+          allow-licenses: >-
+            MIT,
+            Apache-2.0,
+            ISC,
+            BSD-2-Clause,
+            BSD-3-Clause,
+            CC0-1.0,
+            0BSD,
+            Unlicense,
+            Python-2.0,
+            BlueOak-1.0.0
