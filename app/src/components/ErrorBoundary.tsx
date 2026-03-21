@@ -65,7 +65,7 @@ export class ErrorBoundary extends Component<Props, State> {
       const canRetry = this.state.retryCount < MAX_RETRIES;
 
       return (
-        <div className="py-16 flex items-center justify-center text-white">
+        <div role="alert" className="py-16 flex items-center justify-center text-white">
           <div className="text-center px-6">
             <h1 className="text-2xl font-bold mb-3">Something went wrong</h1>
             <p className="text-gray-400 mb-5 text-sm">
