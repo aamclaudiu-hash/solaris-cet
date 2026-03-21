@@ -11,8 +11,9 @@ on:
   workflow_run:
     # Watch every workflow defined in the repository.
     workflows:
-      - "CI — Continuous Integration"
+      - "CI — Quality Gate"
       - "Community Automation"
+      - "Dependency Review"
       - "Deploy Solaris CET to GitHub Pages"
       - "Lighthouse CI — Quality Gate"
       - "TON Chain Indexer"
@@ -21,6 +22,8 @@ on:
       - "CodeQL — Security Analysis"
       - "Stale Issues & PRs"
       - "PR Auto-Labeler"
+      - "CodeQL Security Analysis"
+      - "Dependency Review"
     types: [requested]
 
 permissions:

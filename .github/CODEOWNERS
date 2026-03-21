@@ -1,29 +1,44 @@
-# CODEOWNERS — Automatic review requests for pull requests.
+# CODEOWNERS — Solaris CET
 #
-# Each pattern maps to one or more GitHub users/teams who are automatically
-# requested as reviewers when the matching files are changed.
-# Patterns are evaluated from bottom to top; the last match wins.
-# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# Each line is a pattern followed by one or more owners (GitHub usernames
+# or team slugs). Owners are automatically requested for review when a
+# pull request changes matching files.
+#
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# ── Global default ─────────────────────────────────────────────────────────
-*                          @aamclaudiu-hash
+# Default owner for everything not matched by a more specific rule
+* @Solaris-CET/maintainers
 
-# ── CI / GitHub configuration ──────────────────────────────────────────────
-.github/                   @aamclaudiu-hash
-.github/workflows/         @aamclaudiu-hash
+# Core application source
+app/src/                    @Solaris-CET/maintainers
+app/src/sections/           @Solaris-CET/maintainers
+app/src/components/         @Solaris-CET/maintainers
+app/src/hooks/              @Solaris-CET/maintainers
+app/src/lib/                @Solaris-CET/maintainers
+app/src/workers/            @Solaris-CET/maintainers
+app/src/i18n/               @Solaris-CET/maintainers
 
-# ── App source code ────────────────────────────────────────────────────────
-app/src/                   @aamclaudiu-hash
-app/src/sections/          @aamclaudiu-hash
-app/src/components/        @aamclaudiu-hash
+# Tests — require review on any test change
+app/src/__tests__/          @Solaris-CET/maintainers
+app/tests/                  @Solaris-CET/maintainers
 
-# ── Smart contracts ────────────────────────────────────────────────────────
-contracts/                 @aamclaudiu-hash
+# Build & tooling configuration
+app/vite.config.ts          @Solaris-CET/maintainers
+app/tailwind.config.js      @Solaris-CET/maintainers
+app/tsconfig*.json          @Solaris-CET/maintainers
+app/package.json            @Solaris-CET/maintainers
+app/package-lock.json       @Solaris-CET/maintainers
 
-# ── Documentation ──────────────────────────────────────────────────────────
-*.md                       @aamclaudiu-hash
-docs/                      @aamclaudiu-hash
+# CI/CD workflows — changes here affect the whole pipeline
+.github/workflows/          @Solaris-CET/maintainers
+.github/dependabot.yml      @Solaris-CET/maintainers
 
-# ── Security-sensitive files ───────────────────────────────────────────────
-SECURITY.md                @aamclaudiu-hash
-.github/workflows/codeql.yml  @aamclaudiu-hash
+# Smart contracts — critical security surface
+contracts/                  @Solaris-CET/maintainers
+
+# Documentation
+README.md                   @Solaris-CET/maintainers
+CONTRIBUTING.md             @Solaris-CET/maintainers
+SECURITY.md                 @Solaris-CET/maintainers
+WHITEPAPER.md               @Solaris-CET/maintainers
+docs/                       @Solaris-CET/maintainers

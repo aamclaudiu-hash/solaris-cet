@@ -8,6 +8,7 @@ import AiOracleSearch from '../components/AiOracleSearch';
 import {
   TooltipProvider
 } from '../components/ui/tooltip';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 // --- CONSTANTS & CONFIGURATION ---
 const APP_CONFIG = {
@@ -53,6 +54,7 @@ const HeroSection: React.FC = () => {
   const tickerContainerRef = useRef<HTMLDivElement>(null);
   
   const [miningState, setMiningState] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
+  const prefersReducedMotion = useReducedMotion();
 
   // --- BUSINESS LOGIC ---
   const handleMiningOperation = useCallback(async () => {
@@ -68,13 +70,15 @@ const HeroSection: React.FC = () => {
 
   // --- ANIMATION CORE (GSAP) ---
   useLayoutEffect(() => {
-    // On mobile (< 768px), skip GSAP animations and leave all elements at their
-    // natural visible state to prevent a blank screen caused by fromTo opacity: 0.
+    // Skip GSAP animations on mobile (< 768px) or when the user has requested
+    // reduced motion via their OS/browser accessibility settings.  Both cases
+    // leave all elements at their natural visible state to prevent a blank
+    // screen caused by `fromTo opacity: 0`.
     const isMobile =
       typeof window !== 'undefined' &&
       window.matchMedia('(max-width: 767px)').matches;
 
-    if (isMobile) {
+    if (isMobile || prefersReducedMotion) {
       // Ensure elements are fully visible without inline-style overrides
       // (no GSAP "from" state is applied, so they remain visible by default).
       const els: (HTMLElement | null)[] = [
@@ -121,7 +125,7 @@ const HeroSection: React.FC = () => {
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   // --- RENDER ---
   return (
@@ -147,13 +151,16 @@ const HeroSection: React.FC = () => {
               </div>
               
               <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                Dezvoltăm un protocol de <span className="text-white font-bold">High Intelligence</span> pe TON. 
-                Sistemul utilizează bucle de execuție <span className="text-yellow-500 underline decoration-dotted">ReAct</span> pentru autonomie totală a agenților AI.
+                Token RWA de mare impact ancorat în <span className="text-white font-bold">infrastructura agricolă și AI</span> din Cetățuia. 
+                Motorul de raționament dual <span className="text-yellow-500 underline decoration-dotted">Grok × Gemini</span> alimentează protocolul RAV pentru autonomie totală a agenților.
               </p>
 
               <div ref={ctaGroupRef} className="flex flex-wrap gap-4">
                 <button 
                   onClick={handleMiningOperation}
+                  aria-live="polite"
+                  aria-busy={miningState === 'PROCESSING'}
+                  aria-label={miningState === 'IDLE' ? 'Start mining' : miningState === 'PROCESSING' ? 'Processing mining operation' : 'Mining initiated successfully'}
                   className="px-8 py-4 bg-yellow-500 text-black font-bold rounded-2xl hover:scale-105 transition-transform flex items-center gap-2"
                 >
                   {miningState === 'IDLE' ? <><Zap size={20} /> START MINING</> : <Loader2 className="animate-spin" />}

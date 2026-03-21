@@ -37,6 +37,15 @@ updates:
         patterns:
           - "lucide-react"
       # Group Vite + all vite plugins
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - "tailwind-merge"
+          - "tailwindcss-animate"
+          - "tw-animate-css"
+          - "autoprefixer"
+          - "postcss"
       vite:
         patterns:
           - "vite"
@@ -82,6 +91,24 @@ updates:
           - "recharts"
 
   # ── Contracts (npm) ────────────────────────────────────────────────────────
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+      typescript:
+        patterns:
+          - "typescript"
+          - "typescript-eslint"
+          - "@types/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-plugin-*"
+          - "@eslint/*"
+      tonconnect:
+        patterns:
+          - "@tonconnect/*"
+
   - package-ecosystem: "npm"
     directory: "/contracts"
     schedule:
@@ -95,6 +122,25 @@ updates:
       - "smart-contracts"
     commit-message:
       prefix: "chore(contracts-deps)"
+      - "contracts"
+    commit-message:
+      prefix: "chore(contracts-deps)"
+      prefix-development: "chore(contracts-deps-dev)"
+
+  - package-ecosystem: "npm"
+    directory: "/scripts"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Bucharest"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "scripts"
+    commit-message:
+      prefix: "chore(scripts-deps)"
+      prefix-development: "chore(scripts-deps-dev)"
 
   # ── GitHub Actions ─────────────────────────────────────────────────────────
   - package-ecosystem: "github-actions"
