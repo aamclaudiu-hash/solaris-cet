@@ -1,0 +1,36 @@
+name: Dependency Review
+
+# Uses the free GitHub Dependency Review Action to detect newly-introduced
+# vulnerable or license-incompatible packages on every pull request targeting
+# `main` before they are merged.
+#
+# The action compares the dependency graph snapshot of the base branch with
+# that of the PR head and fails if any added dependency has a known CVE at the
+# configured severity level.
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Block PRs that introduce HIGH or CRITICAL vulnerabilities.
+          fail-on-severity: high
+          # Allowed open-source licenses (SPDX expressions).
+          # Extend this list if additional permissive licenses are needed.
+          allow-licenses: MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause, 0BSD, CC0-1.0, Unlicense, Python-2.0
+          # Post a summary comment on the PR with the full dependency diff.
+          comment-summary-in-pr: always
