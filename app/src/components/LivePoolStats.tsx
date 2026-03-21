@@ -1,31 +1,19 @@
 import { Activity, RefreshCw, ExternalLink } from 'lucide-react';
 import { useLivePoolData } from '../hooks/use-live-pool-data';
+import { formatUSD, formatCryptoPrice } from '../lib/utils';
 
 const DEDUST_POOL_URL =
   'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
-
-const formatUsd = (value: number | null): string => {
-  if (value === null || !Number.isFinite(value)) return '—';
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(2)}K`;
-  return `$${value.toFixed(4)}`;
-};
-
-const formatPrice = (value: number | null): string => {
-  if (value === null || !Number.isFinite(value)) return '—';
-  if (value < 0.001) return `$${value.toExponential(2)}`;
-  return `$${value.toFixed(4)}`;
-};
 
 const LivePoolStats = () => {
   const { priceUsd, tvlUsd, volume24hUsd, tonPriceUsd, loading, error, lastUpdated } =
     useLivePoolData();
 
   const stats = [
-    { label: 'CET Price', value: formatPrice(priceUsd), color: 'gold' },
-    { label: 'TVL', value: formatUsd(tvlUsd), color: 'cyan' },
-    { label: '24h Volume', value: formatUsd(volume24hUsd), color: 'emerald' },
-    { label: 'TON Price', value: formatUsd(tonPriceUsd), color: 'purple' },
+    { label: 'CET Price', value: formatCryptoPrice(priceUsd), color: 'gold' },
+    { label: 'TVL', value: formatUSD(tvlUsd), color: 'cyan' },
+    { label: '24h Volume', value: formatUSD(volume24hUsd), color: 'emerald' },
+    { label: 'TON Price', value: formatUSD(tonPriceUsd), color: 'purple' },
   ];
 
   return (
