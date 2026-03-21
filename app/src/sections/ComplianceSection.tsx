@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ShieldCheck, FileCheck, Globe, Server } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 
 const ComplianceSection = () => {
@@ -9,10 +10,19 @@ const ComplianceSection = () => {
   const leftCardRef = useRef<HTMLDivElement>(null);
   const rightCardRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile || prefersReducedMotion) {
+      [leftCardRef.current, rightCardRef.current, badgesRef.current].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+      });
+      return;
+    }
 
     const ctx = gsap.context(() => {
       const scrollTl = gsap.timeline({
@@ -78,7 +88,7 @@ const ComplianceSection = () => {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <section

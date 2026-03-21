@@ -5,6 +5,7 @@ import GlowOrbs from '../components/GlowOrbs';
 import LivePoolStats from '../components/LivePoolStats';
 import ChainStateWidget from '../components/ChainStateWidget';
 import { useLanguage } from '../hooks/useLanguage';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 
 const CET_TOTAL_SUPPLY = 9000;
@@ -21,6 +22,7 @@ const TokenomicsSection = () => {
   const ringRef = useRef<SVGCircleElement>(null);
   const [ringVisible, setRingVisible] = useState(false);
   const { t } = useLanguage();
+  const prefersReducedMotion = useReducedMotion();
 
   // Animate ring on mount
   useEffect(() => {
@@ -50,6 +52,14 @@ const TokenomicsSection = () => {
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile || prefersReducedMotion) {
+      [cardRef.current, pillsRef.current].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+      });
+      return;
+    }
 
     const ctx = gsap.context(() => {
       const scrollTl = gsap.timeline({
@@ -101,7 +111,7 @@ const TokenomicsSection = () => {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <section

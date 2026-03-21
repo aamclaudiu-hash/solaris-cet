@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { Shield, Zap, Cpu, ArrowLeftRight } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 
 const HybridEngineSection = () => {
@@ -11,6 +12,7 @@ const HybridEngineSection = () => {
   const coinRef = useRef<HTMLImageElement>(null);
   const svgPathRef = useRef<SVGPathElement>(null);
   const [activeNode, setActiveNode] = useState<'pow' | 'dpos' | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   // SVG path animation
   useEffect(() => {
@@ -34,6 +36,14 @@ const HybridEngineSection = () => {
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile || prefersReducedMotion) {
+      [cardRef.current, titleRef.current, coinRef.current].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+      });
+      return;
+    }
 
     const ctx = gsap.context(() => {
       const scrollTl = gsap.timeline({
@@ -90,7 +100,7 @@ const HybridEngineSection = () => {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   const badges = [
     { icon: Shield, label: 'PoW Security', color: 'text-solaris-gold', bg: 'bg-solaris-gold/10', border: 'border-solaris-gold/30', key: 'pow' as const },
