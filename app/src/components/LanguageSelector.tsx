@@ -8,6 +8,7 @@ const LANG_LABELS: Record<LangCode, string> = {
   ru: 'RU',
   ro: 'RO',
   pt: 'PT',
+  de: 'DE',
 };
 
 const LanguageSelector = () => {

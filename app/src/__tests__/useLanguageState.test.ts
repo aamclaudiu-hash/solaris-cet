@@ -71,8 +71,8 @@ describe('useLanguageState', () => {
   });
 
   it('exposes all supported languages', () => {
-    expect(SUPPORTED_LANGS).toEqual(expect.arrayContaining(['en', 'es', 'zh', 'ru', 'ro', 'pt']));
-    expect(SUPPORTED_LANGS).toHaveLength(6);
+    expect(SUPPORTED_LANGS).toEqual(expect.arrayContaining(['en', 'es', 'zh', 'ru', 'ro', 'pt', 'de']));
+    expect(SUPPORTED_LANGS).toHaveLength(7);
   });
 
   it('setLang accepts every supported language without throwing', async () => {

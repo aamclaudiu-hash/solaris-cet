@@ -38,7 +38,8 @@ describe("SUPPORTED_LANGS", () => {
   it("includes Russian", () => expect(SUPPORTED_LANGS).toContain("ru"));
   it("includes Romanian", () => expect(SUPPORTED_LANGS).toContain("ro"));
   it("includes Portuguese", () => expect(SUPPORTED_LANGS).toContain("pt"));
-  it("has exactly 6 entries", () => expect(SUPPORTED_LANGS).toHaveLength(6));
+  it("includes German", () => expect(SUPPORTED_LANGS).toContain("de"));
+  it("has exactly 7 entries", () => expect(SUPPORTED_LANGS).toHaveLength(7));
 });
 
 // ── detectLanguage ────────────────────────────────────────────────────────────
@@ -50,11 +51,11 @@ describe("detectLanguage", () => {
 
   it("ignores stored value when it is not a supported language", () => {
     // Falls back to browser lang
-    expect(detectLanguage("de", "zh-CN")).toBe("zh");
+    expect(detectLanguage("fr", "zh-CN")).toBe("zh");
   });
 
   it("returns 'en' when stored value is null and browser lang is unsupported", () => {
-    expect(detectLanguage(null, "de-DE")).toBe("en");
+    expect(detectLanguage(null, "fr-FR")).toBe("en");
   });
 
   it("detects browser language from a locale string (e.g. 'zh-CN' → 'zh')", () => {
@@ -134,7 +135,7 @@ describe("localStorage lang persistence", () => {
   });
 
   it("falls back to English when both stored value and browser lang are unsupported", () => {
-    const lang = detectLanguage("de", "fr-FR");
+    const lang = detectLanguage("fr", "ja-JP");
     expect(lang).toBe("en");
   });
 });

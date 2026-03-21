@@ -1,4 +1,4 @@
-export type LangCode = 'en' | 'es' | 'zh' | 'ru' | 'ro' | 'pt';
+export type LangCode = 'en' | 'es' | 'zh' | 'ru' | 'ro' | 'pt' | 'de';
 
 export interface Translations {
   nav: {
@@ -181,6 +181,32 @@ const translations: Record<LangCode, Translations> = {
       title: 'Tokenomia',
       supply: 'Oferta Total',
       poolAddress: 'Endereço do Pool DeDust',
+    },
+  },
+  de: {
+    nav: {
+      home: 'Startseite',
+      cetApp: 'CET App',
+      tokenomics: 'Tokenomik',
+      roadmap: 'Fahrplan',
+      howToBuy: 'Wie Kaufen',
+      whitepaper: 'Whitepaper',
+      resources: 'Ressourcen',
+    },
+    hero: {
+      tagline: 'Das digitale Fundament von Cetățuia',
+      subtitle: 'Ein extrem seltener Token mit 9.000 CET auf der TON-Blockchain',
+      buyNow: 'CET kaufen',
+      learnMore: 'Mehr erfahren',
+      description:
+        'Wirkungsstarker RWA-Token, verankert in der landwirtschaftlichen und KI-Infrastruktur von Cetățuia. Jede Einheit gewährt Zugang zum Solaris Prime Tactical Ecosystem, einer Reasoning-Hierarchie, die von Gemini 3 Pro Preview angetrieben wird. Das duale Reasoning-Modul Grok × Gemini treibt das RAV-Protokoll für volle Agentenautonomie an.',
+      startMining: 'MINING STARTEN',
+      docs: 'DOKUMENTE',
+    },
+    tokenomics: {
+      title: 'Tokenomik',
+      supply: 'Gesamtangebot',
+      poolAddress: 'DeDust Pool-Adresse',
     },
   },
 };

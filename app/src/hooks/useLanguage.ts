@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import translations, { type LangCode, type Translations } from '../i18n/translations';
 
 export type { LangCode };
@@ -9,7 +9,46 @@ interface LanguageContextValue {
   t: Translations;
 }
 
-export const SUPPORTED_LANGS: LangCode[] = ['en', 'es', 'zh', 'ru', 'ro', 'pt'];
+export const SUPPORTED_LANGS: LangCode[] = ['en', 'es', 'zh', 'ru', 'ro', 'pt', 'de'];
+
+/**
+ * Maps ISO 3166-1 alpha-2 country codes to a supported LangCode.
+ * Only countries whose primary official language is a supported locale are listed.
+ */
+const COUNTRY_LANG_MAP: Partial<Record<string, LangCode>> = {
+  // German-speaking countries
+  DE: 'de', AT: 'de', CH: 'de', LI: 'de',
+  // Spanish-speaking countries
+  ES: 'es', MX: 'es', AR: 'es', CO: 'es', PE: 'es', VE: 'es', CL: 'es',
+  UY: 'es', BO: 'es', PY: 'es', EC: 'es', CR: 'es', PA: 'es', DO: 'es',
+  CU: 'es', GT: 'es', HN: 'es', SV: 'es', NI: 'es',
+  // Chinese-speaking regions
+  CN: 'zh', TW: 'zh', HK: 'zh', MO: 'zh',
+  // Russian-speaking countries
+  RU: 'ru', BY: 'ru', KZ: 'ru', KG: 'ru',
+  // Romanian-speaking countries
+  RO: 'ro', MD: 'ro',
+  // Portuguese-speaking countries
+  PT: 'pt', BR: 'pt', AO: 'pt', MZ: 'pt', CV: 'pt', GW: 'pt', ST: 'pt', TL: 'pt',
+};
+
+/**
+ * Fetches the visitor's country via a lightweight public geo-IP service and
+ * returns the mapped LangCode, or null when the country is unknown / unmapped.
+ */
+async function detectCountryLanguage(): Promise<LangCode | null> {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3000);
+    const res = await fetch('https://api.country.is/', { signal: controller.signal });
+    clearTimeout(timer);
+    if (!res.ok) return null;
+    const data = await res.json() as { country: string };
+    return COUNTRY_LANG_MAP[data.country] ?? null;
+  } catch {
+    return null;
+  }
+}
 
 const detectLanguage = (): LangCode => {
   try {
@@ -53,6 +92,21 @@ export const useLanguageState = (): LanguageContextValue => {
     } catch {
       // ignore storage errors (e.g. in private browsing)
     }
+  }, []);
+
+  // Geo-IP fallback: fires once on mount when the user has no stored preference.
+  // If the visitor's country maps to a supported language, update accordingly.
+  useEffect(() => {
+    try {
+      if (localStorage.getItem('solaris_lang')) return;
+    } catch {
+      return;
+    }
+    detectCountryLanguage().then((countryLang) => {
+      if (countryLang) {
+        setLangState(countryLang);
+      }
+    });
   }, []);
 
   return { lang, setLang, t: translations[lang] };
