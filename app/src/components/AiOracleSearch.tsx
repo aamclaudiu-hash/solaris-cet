@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { X, Send } from 'lucide-react';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -24,6 +26,12 @@ interface MetricsData {
   confidence: number;
   latency: number;
   cetCost: number;
+}
+
+interface ChatEntry {
+  question: string;
+  answer: string;
+  confidence: number;
 }
 
 // --- KNOWLEDGE BASE: contextual responses for key topics ---
@@ -96,31 +104,157 @@ function buildContextualResponse(q: string): { answer: string; confidence: numbe
   };
 }
 
+// --- ReAct phase status helper ---
+function getReActPhaseStatus(phase: ReActPhase, targetPhases: ReActPhase[]): string {
+  if (phase === 'idle') return 'text-gray-600 border-gray-800';
+  if (phase === 'complete')
+    return 'text-green-500 border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.2)]';
+  if (targetPhases.includes(phase))
+    return 'text-yellow-400 border-yellow-400/50 shadow-[0_0_15px_rgba(250,204,21,0.2)] animate-pulse';
+
+  const phaseOrder: ReActPhase[] = [
+    'idle', 'observe_parse', 'observe_context',
+    'think_route', 'think_validate',
+    'act_execute', 'act_consensus', 'complete',
+  ];
+  const currentIndex = phaseOrder.indexOf(phase);
+  const targetIndex = Math.max(...targetPhases.map(p => phaseOrder.indexOf(p)));
+  return currentIndex > targetIndex
+    ? 'text-green-400 border-green-400/30'
+    : 'text-gray-600 border-gray-800';
+}
+
+// --- ReAct Panels (shared between widget and modal) ---
+function ReActPanels({ phase }: { phase: ReActPhase }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* OBSERVE */}
+      <div className={`flex flex-col p-5 rounded-2xl border-2 transition-all duration-500 bg-gray-950/50 backdrop-blur-sm ${getReActPhaseStatus(phase, ['observe_parse', 'observe_context'])}`}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-base uppercase tracking-wider">1. Observe</h3>
+          <span className="text-xs font-mono bg-gray-900 px-2 py-1 rounded">INPUT PARSER</span>
+        </div>
+        <div className="text-sm space-y-2 opacity-80">
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${phase === 'observe_parse' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 1 ? 'bg-green-500' : 'bg-gray-700'}`} />
+            <span>Intent Extraction</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${phase === 'observe_context' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 2 ? 'bg-green-500' : 'bg-gray-700'}`} />
+            <span>Context Mapping</span>
+          </div>
+        </div>
+      </div>
+
+      {/* THINK */}
+      <div className={`flex flex-col p-5 rounded-2xl border-2 transition-all duration-500 bg-gray-950/50 backdrop-blur-sm ${getReActPhaseStatus(phase, ['think_route', 'think_validate'])}`}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-base uppercase tracking-wider">2. Think</h3>
+          <span className="text-xs font-mono bg-gray-900 px-2 py-1 rounded">GEMINI REASON</span>
+        </div>
+        <div className="text-sm space-y-2 opacity-80">
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${phase === 'think_route' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 3 ? 'bg-green-500' : 'bg-gray-700'}`} />
+            <span>Logic Routing</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${phase === 'think_validate' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 4 ? 'bg-green-500' : 'bg-gray-700'}`} />
+            <span>Constraint Validation</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ACT */}
+      <div className={`flex flex-col p-5 rounded-2xl border-2 transition-all duration-500 bg-gray-950/50 backdrop-blur-sm ${getReActPhaseStatus(phase, ['act_execute', 'act_consensus'])}`}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-base uppercase tracking-wider">3. Act</h3>
+          <span className="text-xs font-mono bg-gray-900 px-2 py-1 rounded">GROK ACT</span>
+        </div>
+        <div className="text-sm space-y-2 opacity-80">
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${phase === 'act_execute' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 5 ? 'bg-green-500' : 'bg-gray-700'}`} />
+            <span>Execution Payload</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${phase === 'act_consensus' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 6 ? 'bg-green-500' : 'bg-gray-700'}`} />
+            <span>TON Consensus</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 export default function AiOracleSearch() {
   // --- STATE MANAGEMENT ---
   const [query, setQuery] = useState('');
+  const [submittedQuestion, setSubmittedQuestion] = useState('');
   const [phase, setPhase] = useState<ReActPhase>('idle');
   const [logs, setLogs] = useState<TelemetryLog[]>([]);
   const [metrics, setMetrics] = useState<MetricsData>({ confidence: 0, latency: 0, cetCost: 0 });
   const [finalResponse, setFinalResponse] = useState('');
   const [oracleConfidence, setOracleConfidence] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [chatHistory, setChatHistory] = useState<ChatEntry[]>([]);
 
   const terminalRef = useRef<HTMLDivElement>(null);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const modalInputRef = useRef<HTMLInputElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // --- AUTO-SCROLL TERMINAL ---
+  // Auto-scroll telemetry terminal
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, [logs]);
 
-  // Clear all pending timers on unmount
+  // Scroll chat to latest entry
   useEffect(() => {
-    return () => {
-      timersRef.current.forEach(clearTimeout);
-    };
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory, submittedQuestion, finalResponse]);
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => { timersRef.current.forEach(clearTimeout); };
   }, []);
+
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = isModalOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isModalOpen]);
+
+  // --- CLOSE HANDLER ---
+  const handleClose = useCallback(() => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+    setIsModalOpen(false);
+    setPhase('idle');
+    setQuery('');
+    setLogs([]);
+    setFinalResponse('');
+    setOracleConfidence(0);
+    setMetrics({ confidence: 0, latency: 0, cetCost: 0 });
+    setChatHistory([]);
+    setSubmittedQuestion('');
+  }, []);
+
+  // Escape key closes the modal
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isModalOpen, handleClose]);
+
+  // Focus follow-up input when a response is ready
+  useEffect(() => {
+    if (!isModalOpen || phase !== 'complete') return;
+    const t = setTimeout(() => modalInputRef.current?.focus(), 200);
+    return () => clearTimeout(t);
+  }, [isModalOpen, phase]);
 
   // --- UTILITY ---
   const generateHash = useCallback(
@@ -142,20 +276,16 @@ export default function AiOracleSearch() {
   };
 
   // --- CORE LOGIC: REASON TO ACT PROTOCOL ---
-  const handleQuantumProcessing = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim() || (phase !== 'idle' && phase !== 'complete')) return;
-
+  const processQuestion = useCallback((q: string) => {
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
 
-    const q = query.trim();
     const { answer, confidence } = buildContextualResponse(q);
     const hash = generateHash();
     const tokenCount = q.split(/\s+/).length;
     const startMs = performance.now();
 
-    // Reset
+    setSubmittedQuestion(q);
     setLogs([]);
     setFinalResponse('');
     setOracleConfidence(0);
@@ -223,271 +353,278 @@ export default function AiOracleSearch() {
     schedule(() => {
       setPhase('complete');
     }, 9200);
-  };
+  }, [generateHash, addLog]);
 
-  const resetOracle = () => {
-    timersRef.current.forEach(clearTimeout);
-    timersRef.current = [];
-    setPhase('idle');
+  // Hero widget submit → open modal + start processing
+  const handleHeroSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    const q = query.trim();
     setQuery('');
-    setLogs([]);
-    setFinalResponse('');
-    setOracleConfidence(0);
-    setMetrics({ confidence: 0, latency: 0, cetCost: 0 });
+    setIsModalOpen(true);
+    processQuestion(q);
   };
 
-  // --- RENDER HELPERS ---
-  const getPhaseStatus = (currentPhase: ReActPhase, targetPhases: ReActPhase[]) => {
-    if (phase === 'idle') return 'text-gray-600 border-gray-800';
-    if (phase === 'complete')
-      return 'text-green-500 border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.2)]';
-    if (targetPhases.includes(currentPhase))
-      return 'text-yellow-400 border-yellow-400/50 shadow-[0_0_15px_rgba(250,204,21,0.2)] animate-pulse';
-
-    const phaseOrder: ReActPhase[] = [
-      'idle', 'observe_parse', 'observe_context',
-      'think_route', 'think_validate',
-      'act_execute', 'act_consensus', 'complete',
-    ];
-    const currentIndex = phaseOrder.indexOf(currentPhase);
-    const targetIndex = Math.max(...targetPhases.map(p => phaseOrder.indexOf(p)));
-    return currentIndex > targetIndex
-      ? 'text-green-400 border-green-400/30'
-      : 'text-gray-600 border-gray-800';
+  // Modal follow-up submit → archive current Q&A, start new question
+  const handleModalSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim() || isProcessing) return;
+    if (finalResponse) {
+      setChatHistory(prev => [
+        ...prev,
+        { question: submittedQuestion, answer: finalResponse, confidence: oracleConfidence },
+      ]);
+    }
+    const q = query.trim();
+    setQuery('');
+    processQuestion(q);
   };
 
   const isProcessing = phase !== 'idle' && phase !== 'complete';
 
+  // ── RENDER ────────────────────────────────────────────────────────────────────
   return (
-    <div className="w-full max-w-5xl mx-auto bg-black border border-gray-800 rounded-3xl p-4 md:p-8 shadow-2xl font-sans relative overflow-hidden z-20">
-      {/* Background Grid Effect */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+    <>
+      {/* ── Hero trigger widget ──────────────────────────────────────────────── */}
+      <div className="w-full max-w-5xl mx-auto bg-black border border-gray-800 rounded-3xl p-4 md:p-8 shadow-2xl font-sans relative overflow-hidden z-20">
+        {/* Background grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
-      {/* Header */}
-      <div className="relative z-10 flex flex-col items-center mb-8">
-        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
-          Solaris Oracle
-        </h2>
-        <p className="text-gray-400 text-sm mt-1 tracking-widest uppercase">
-          Grok × Gemini · RAV Protocol Bridge
-        </p>
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>
-          <span className="text-gray-600 text-xs">×</span>
-          <span className="text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-purple-400">Grok ACT</span>
+        {/* Header */}
+        <div className="relative z-10 flex flex-col items-center mb-8">
+          <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
+            Solaris Oracle
+          </h2>
+          <p className="text-gray-400 text-sm mt-1 tracking-widest uppercase">
+            Grok × Gemini · RAV Protocol Bridge
+          </p>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>
+            <span className="text-gray-600 text-xs">×</span>
+            <span className="text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-purple-400">Grok ACT</span>
+          </div>
         </div>
+
+        {/* Input */}
+        <form
+          onSubmit={handleHeroSubmit}
+          className="relative z-10 flex flex-col md:flex-row w-full gap-4"
+        >
+          <div className="flex-grow relative">
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="Ask about price, mining, AI agents, security, roadmap…"
+              className="w-full px-6 py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-base"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-8 py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 shadow-[0_0_20px_rgba(234,179,8,0.2)] whitespace-nowrap"
+          >
+            INITIATE PROTOCOL
+          </button>
+        </form>
       </div>
 
-      {/* Input Area */}
-      <form
-        onSubmit={handleQuantumProcessing}
-        className="relative z-10 flex flex-col md:flex-row w-full gap-4 mb-8"
-      >
-        <div className="flex-grow relative">
-          <input
-            type="text"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            disabled={isProcessing}
-            placeholder="Ask about price, mining, AI agents, security, roadmap…"
-            className="w-full px-6 py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all disabled:opacity-50 text-base"
-          />
-          {isProcessing && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2">
-              <div className="w-5 h-5 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin" />
-            </div>
-          )}
-        </div>
-        <button
-          type="submit"
-          disabled={isProcessing}
-          className="px-8 py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 disabled:from-gray-800 disabled:to-gray-900 disabled:text-gray-500 shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:shadow-none whitespace-nowrap"
-        >
-          {phase === 'idle'
-            ? 'INITIATE PROTOCOL'
-            : phase === 'complete'
-            ? 'SYSTEM IDLE'
-            : 'PROCESSING…'}
-        </button>
-      </form>
-
-      {/* ReAct Architecture Visualizer */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* OBSERVE */}
+      {/* ── Full-screen Oracle Modal ─────────────────────────────────────────── */}
+      {isModalOpen && createPortal(
         <div
-          className={`flex flex-col p-5 rounded-2xl border-2 transition-all duration-500 bg-gray-950/50 backdrop-blur-sm ${getPhaseStatus(phase, ['observe_parse', 'observe_context'])}`}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Solaris Oracle"
+          className="fixed inset-0 z-[9999] bg-[#020202]/98 backdrop-blur-xl flex flex-col font-sans"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-lg uppercase tracking-wider">1. Observe</h3>
-            <span className="text-xs font-mono bg-gray-900 px-2 py-1 rounded">INPUT PARSER</span>
-          </div>
-          <div className="text-sm space-y-2 opacity-80">
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${phase === 'observe_parse' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 1 ? 'bg-green-500' : 'bg-gray-700'}`} />
-              <span>Intent Extraction</span>
+          {/* Modal header */}
+          <header className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-gray-800 bg-black/60 backdrop-blur-md">
+            <div>
+              <h2 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
+                Solaris Oracle
+              </h2>
+              <p className="text-gray-500 text-xs tracking-widest uppercase mt-0.5">
+                Grok × Gemini · RAV Protocol Bridge
+              </p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${phase === 'observe_context' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 2 ? 'bg-green-500' : 'bg-gray-700'}`} />
-              <span>Context Mapping</span>
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:inline text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>
+              <span className="hidden sm:inline text-gray-600 text-xs">×</span>
+              <span className="hidden sm:inline text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-purple-400">Grok ACT</span>
+              <button
+                onClick={handleClose}
+                aria-label="Close Oracle"
+                className="ml-2 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-          </div>
-        </div>
+          </header>
 
-        {/* THINK */}
-        <div
-          className={`flex flex-col p-5 rounded-2xl border-2 transition-all duration-500 bg-gray-950/50 backdrop-blur-sm ${getPhaseStatus(phase, ['think_route', 'think_validate'])}`}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-lg uppercase tracking-wider">2. Think</h3>
-            <span className="text-xs font-mono bg-gray-900 px-2 py-1 rounded">GEMINI REASON</span>
-          </div>
-          <div className="text-sm space-y-2 opacity-80">
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${phase === 'think_route' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 3 ? 'bg-green-500' : 'bg-gray-700'}`} />
-              <span>Logic Routing</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${phase === 'think_validate' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 4 ? 'bg-green-500' : 'bg-gray-700'}`} />
-              <span>Constraint Validation</span>
-            </div>
-          </div>
-        </div>
+          {/* Scrollable conversation area */}
+          <div className="flex-1 overflow-y-auto px-4 py-6 md:px-8">
+            <div className="max-w-5xl mx-auto space-y-10">
 
-        {/* ACT */}
-        <div
-          className={`flex flex-col p-5 rounded-2xl border-2 transition-all duration-500 bg-gray-950/50 backdrop-blur-sm ${getPhaseStatus(phase, ['act_execute', 'act_consensus'])}`}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-lg uppercase tracking-wider">3. Act</h3>
-            <span className="text-xs font-mono bg-gray-900 px-2 py-1 rounded">GROK ACT</span>
-          </div>
-          <div className="text-sm space-y-2 opacity-80">
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${phase === 'act_execute' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 5 ? 'bg-green-500' : 'bg-gray-700'}`} />
-              <span>Execution Payload</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${phase === 'act_consensus' ? 'bg-yellow-400 animate-pulse' : phaseOrderIndex(phase) > 6 ? 'bg-green-500' : 'bg-gray-700'}`} />
-              <span>TON Consensus</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Terminal & Metrics Area */}
-      {phase !== 'idle' && (
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-4 gap-4 transition-all duration-700">
-          {/* Telemetry Terminal */}
-          <div className="lg:col-span-3 bg-gray-950 border border-gray-800 rounded-xl p-4 font-mono text-xs overflow-hidden flex flex-col h-56 shadow-inner">
-            <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-800 text-gray-500">
-              <span>&gt;_ RAV_TERMINAL · Grok × Gemini v3.0</span>
-              <span className={isProcessing ? 'text-yellow-500 animate-pulse' : 'text-green-500'}>
-                {isProcessing ? 'PROCESSING' : '● DONE'}
-              </span>
-            </div>
-            <div ref={terminalRef} className="flex-1 overflow-y-auto space-y-1 pr-1">
-              {logs.map(log => (
-                <div key={log.id} className="flex gap-3 hover:bg-gray-900/50 p-0.5 rounded">
-                  <span className="text-gray-600 min-w-[88px] shrink-0">[{log.timestamp}]</span>
-                  <span
-                    className={`min-w-[68px] font-bold shrink-0 ${
-                      log.type === 'INFO'
-                        ? 'text-blue-400'
-                        : log.type === 'WARN'
-                        ? 'text-yellow-400'
-                        : log.type === 'SEC'
-                        ? 'text-green-400'
-                        : 'text-purple-400'
-                    }`}
-                  >
-                    [{log.type}]
-                  </span>
-                  <span className="text-gray-300 break-all">{log.message}</span>
+              {/* ── Chat history (previous Q&As) ── */}
+              {chatHistory.map((entry, i) => (
+                <div key={i} className="space-y-4 opacity-50">
+                  {/* User bubble */}
+                  <div className="flex justify-end">
+                    <div className="bg-gray-900 border border-gray-700 rounded-2xl rounded-tr-sm px-5 py-3 max-w-2xl">
+                      <p className="text-gray-300 text-sm">{entry.question}</p>
+                    </div>
+                  </div>
+                  {/* Oracle bubble */}
+                  <div className="flex justify-start">
+                    <div className="bg-green-950/40 border border-green-500/20 rounded-2xl rounded-tl-sm px-5 py-4 max-w-2xl">
+                      <p className="text-green-400 text-xs font-mono mb-2 uppercase tracking-widest">
+                        Oracle · {entry.confidence.toFixed(1)}% confidence
+                      </p>
+                      <p className="text-white text-sm leading-relaxed">{entry.answer}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
+
+              {/* ── Current session ── */}
+              {submittedQuestion && (
+                <div className="space-y-6">
+                  {/* Current user question bubble */}
+                  <div className="flex justify-end">
+                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl rounded-tr-sm px-5 py-3 max-w-2xl">
+                      <p className="text-yellow-200 text-sm">{submittedQuestion}</p>
+                    </div>
+                  </div>
+
+                  {/* ReAct phase visualizer */}
+                  <ReActPanels phase={phase} />
+
+                  {/* Terminal & Metrics */}
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                    {/* Telemetry terminal */}
+                    <div className="lg:col-span-3 bg-gray-950 border border-gray-800 rounded-xl p-4 font-mono text-xs overflow-hidden flex flex-col h-56 shadow-inner">
+                      <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-800 text-gray-500">
+                        <span>&gt;_ RAV_TERMINAL · Grok × Gemini v3.0</span>
+                        <span className={isProcessing ? 'text-yellow-500 animate-pulse' : 'text-green-500'}>
+                          {isProcessing ? 'PROCESSING' : '● DONE'}
+                        </span>
+                      </div>
+                      <div ref={terminalRef} className="flex-1 overflow-y-auto space-y-1 pr-1">
+                        {logs.map(log => (
+                          <div key={log.id} className="flex gap-3 hover:bg-gray-900/50 p-0.5 rounded">
+                            <span className="text-gray-600 min-w-[88px] shrink-0">[{log.timestamp}]</span>
+                            <span className={`min-w-[68px] font-bold shrink-0 ${
+                              log.type === 'INFO' ? 'text-blue-400'
+                              : log.type === 'WARN' ? 'text-yellow-400'
+                              : log.type === 'SEC' ? 'text-green-400'
+                              : 'text-purple-400'
+                            }`}>
+                              [{log.type}]
+                            </span>
+                            <span className="text-gray-300 break-all">{log.message}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Live metrics */}
+                    <div className="bg-gray-950 border border-gray-800 rounded-xl p-4 flex flex-col justify-between h-56">
+                      <h4 className="text-gray-500 font-mono text-xs mb-3 border-b border-gray-800 pb-2">
+                        SYS_METRICS
+                      </h4>
+                      <div className="space-y-3">
+                        <div>
+                          <div className="text-gray-400 text-xs mb-1">Logic Confidence</div>
+                          <div className="flex items-end gap-1">
+                            <span className={`text-2xl font-bold tabular-nums ${metrics.confidence > 90 ? 'text-green-500' : 'text-yellow-500'}`}>
+                              {metrics.confidence.toFixed(1)}
+                            </span>
+                            <span className="text-gray-500 mb-0.5 text-sm">%</span>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-gray-400 text-xs mb-1">Network Latency</div>
+                          <div className="flex items-end gap-1">
+                            <span className="text-2xl font-bold text-blue-400 tabular-nums">{metrics.latency}</span>
+                            <span className="text-gray-500 mb-0.5 text-sm">ms</span>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-gray-400 text-xs mb-1">Est. Action Cost</div>
+                          <div className="flex items-end gap-1">
+                            <span className="text-xl font-bold text-yellow-500 tabular-nums">{metrics.cetCost.toFixed(4)}</span>
+                            <span className="text-gray-500 mb-0.5 text-xs">CET</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Oracle final response */}
+                  {phase === 'complete' && finalResponse && (
+                    <div className="flex justify-start">
+                      <div className="bg-gradient-to-br from-green-950/80 to-black border border-green-500/30 rounded-2xl rounded-tl-sm p-6 w-full">
+                        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                          <p className="text-green-400 text-xs font-mono font-bold uppercase tracking-widest">
+                            Oracle Response · Confidence {oracleConfidence.toFixed(1)}%
+                          </p>
+                          <div className="h-1.5 w-28 bg-gray-800 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-yellow-500 to-green-500 rounded-full transition-all duration-1000"
+                              style={{ width: `${oracleConfidence}%` }}
+                            />
+                          </div>
+                        </div>
+                        <p className="text-white text-base leading-relaxed">{finalResponse}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div ref={chatEndRef} />
             </div>
           </div>
 
-          {/* Live Metrics */}
-          <div className="bg-gray-950 border border-gray-800 rounded-xl p-4 flex flex-col justify-between h-56">
-            <h4 className="text-gray-500 font-mono text-xs mb-3 border-b border-gray-800 pb-2">
-              SYS_METRICS
-            </h4>
-
-            <div className="space-y-3">
-              <div>
-                <div className="text-gray-400 text-xs mb-1">Logic Confidence</div>
-                <div className="flex items-end gap-1">
-                  <span
-                    className={`text-2xl font-bold tabular-nums ${
-                      metrics.confidence > 90 ? 'text-green-500' : 'text-yellow-500'
-                    }`}
-                  >
-                    {metrics.confidence.toFixed(1)}
-                  </span>
-                  <span className="text-gray-500 mb-0.5 text-sm">%</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="text-gray-400 text-xs mb-1">Network Latency</div>
-                <div className="flex items-end gap-1">
-                  <span className="text-2xl font-bold text-blue-400 tabular-nums">
-                    {metrics.latency}
-                  </span>
-                  <span className="text-gray-500 mb-0.5 text-sm">ms</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="text-gray-400 text-xs mb-1">Est. Action Cost</div>
-                <div className="flex items-end gap-1">
-                  <span className="text-xl font-bold text-yellow-500 tabular-nums">
-                    {metrics.cetCost.toFixed(4)}
-                  </span>
-                  <span className="text-gray-500 mb-0.5 text-xs">CET</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Final Output */}
-      {phase === 'complete' && finalResponse && (
-        <div className="mt-6 relative z-10 p-6 bg-gradient-to-r from-green-950/80 to-black border border-green-500/30 rounded-xl animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="flex items-start gap-4 mb-4">
-            <div className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500/20 text-green-400">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-                <p className="text-green-400 text-xs font-mono font-bold uppercase tracking-widest">
-                  Oracle Response · Confidence {oracleConfidence.toFixed(1)}%
-                </p>
-                <div className="h-1.5 w-24 bg-gray-800 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-yellow-500 to-green-500 rounded-full transition-all duration-1000"
-                    style={{ width: `${oracleConfidence}%` }}
-                  />
-                </div>
-              </div>
-              <p className="text-white text-sm leading-relaxed">{finalResponse}</p>
-            </div>
-          </div>
-          <div className="flex justify-end">
-            <button
-              onClick={resetOracle}
-              className="px-5 py-2 border border-gray-700 rounded-lg text-xs text-gray-400 hover:text-white hover:border-gray-500 transition-colors font-mono"
+          {/* ── Follow-up input (sticky bottom) ── */}
+          <div className="shrink-0 border-t border-gray-800 bg-black/80 backdrop-blur-md px-4 py-4 md:px-8">
+            <form
+              onSubmit={handleModalSubmit}
+              className="flex gap-3 max-w-5xl mx-auto"
             >
-              Acknowledge & Reset
-            </button>
+              <div className="flex-grow relative">
+                <input
+                  ref={modalInputRef}
+                  type="text"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  disabled={isProcessing}
+                  placeholder={phase === 'complete' ? 'Ask a follow-up question…' : 'Ask about price, mining, AI agents, security, roadmap…'}
+                  className="w-full px-5 py-3.5 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all disabled:opacity-40 text-sm"
+                />
+                {isProcessing && (
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                    <div className="w-4 h-4 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
+              <button
+                type="submit"
+                disabled={isProcessing || !query.trim()}
+                aria-label="Send question"
+                className="px-5 py-3.5 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 disabled:from-gray-800 disabled:to-gray-900 disabled:text-gray-500 shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:shadow-none flex items-center gap-2 whitespace-nowrap"
+              >
+                <Send className="w-4 h-4" />
+                <span className="hidden sm:inline">SEND</span>
+              </button>
+            </form>
+            <p className="text-center text-gray-700 text-xs mt-2 font-mono">
+              Press <kbd className="bg-gray-900 border border-gray-700 px-1.5 py-0.5 rounded text-[11px]">Esc</kbd> to close
+            </p>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
-    </div>
+    </>
   );
 }
 
@@ -500,4 +637,5 @@ function phaseOrderIndex(currentPhase: string): number {
   ];
   return phases.indexOf(currentPhase as ReActPhase);
 }
+
 
