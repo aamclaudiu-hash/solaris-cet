@@ -1,19 +1,20 @@
-import { describe, it, expect } from "vitest";
-
 /**
- * Unit tests for the mining reward calculation logic extracted from
- * app/src/workers/mining.worker.ts.
+ * Unit tests for the mining reward calculation logic.
  *
- * These tests run in a Node environment (no DOM/Worker API needed) and verify
- * that the calculation formulae produce correct, deterministic results for
- * the inputs described in the Solaris CET whitepaper.
+ * The `calculateRewards` function lives in `mining.worker.ts` but its
+ * business logic is pure (no side-effects, no Web-Worker globals), so we
+ * inline a copy of the formula here and test the numeric contract directly.
+ *
+ * Why inline instead of importing the worker file directly?
+ * Web Workers import using `self.onmessage`, which is not available in
+ * Node-based Vitest environments.  Extracting the pure maths into a test
+ * helper ensures the formula is fully covered without polyfilling the entire
+ * Worker runtime.
  */
 
-// ---------------------------------------------------------------------------
-// Replicate the pure calculation function here so it can be tested without
-// instantiating a Web Worker.
-// ---------------------------------------------------------------------------
+import { describe, it, expect } from "vitest";
 
+// ── Replica of the pure calculation function from mining.worker.ts ──────────
 interface MiningInput {
   adjustedHashrate: number;
   stake: number;
@@ -38,83 +39,76 @@ function calculateRewards(input: MiningInput): MiningResult {
     apy: Number(apy.toFixed(1)),
   };
 }
+// ────────────────────────────────────────────────────────────────────────────
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
-
-describe("calculateRewards", () => {
-  it("returns zero daily/monthly yield when hashrate is zero", () => {
+describe("calculateRewards — mining worker formula", () => {
+  it("returns zero daily / monthly rewards for zero hashrate and zero stake", () => {
     const result = calculateRewards({ adjustedHashrate: 0, stake: 0 });
     expect(result.daily).toBe(0);
     expect(result.monthly).toBe(0);
   });
 
-  it("returns base APY of 15 when hashrate and stake are both zero", () => {
+  it("returns the base APY of 15 % when hashrate and stake are both zero", () => {
     const result = calculateRewards({ adjustedHashrate: 0, stake: 0 });
     expect(result.apy).toBe(15);
   });
 
-  it("daily yield scales linearly with hashrate when stake is zero", () => {
-    const r1 = calculateRewards({ adjustedHashrate: 1, stake: 0 });
-    const r2 = calculateRewards({ adjustedHashrate: 2, stake: 0 });
-    expect(r2.daily).toBeCloseTo(r1.daily * 2, 4);
+  it("computes daily rewards correctly for 1 TH/s with no stake", () => {
+    // daily = 1 * 0.0082 * (1 + 0/10000) = 0.0082
+    const result = calculateRewards({ adjustedHashrate: 1, stake: 0 });
+    expect(result.daily).toBe(0.0082);
   });
 
-  it("monthly yield is approximately 30× daily yield (within rounding tolerance)", () => {
-    const result = calculateRewards({ adjustedHashrate: 2.5, stake: 500 });
-    // Both values are independently rounded, so allow for rounding error of ~0.01
-    expect(result.monthly).toBeCloseTo(result.daily * 30, 0);
+  it("computes monthly rewards as daily × 30", () => {
+    const result = calculateRewards({ adjustedHashrate: 10, stake: 0 });
+    expect(result.monthly).toBeCloseTo(result.daily * 30, 2);
   });
 
-  it("stake multiplier increases yield proportionally", () => {
-    const withoutStake = calculateRewards({ adjustedHashrate: 1, stake: 0 });
-    const withMaxStake = calculateRewards({ adjustedHashrate: 1, stake: 10_000 });
-    // stakeMultiplier at 10,000 is 2.0 → yield should double
-    expect(withMaxStake.daily).toBeCloseTo(withoutStake.daily * 2, 4);
+  it("stake multiplier increases daily rewards proportionally", () => {
+    const noStake = calculateRewards({ adjustedHashrate: 10, stake: 0 });
+    const withStake = calculateRewards({ adjustedHashrate: 10, stake: 10_000 });
+    // stakeMultiplier at max stake (10,000) = 2 → rewards double
+    expect(withStake.daily).toBeCloseTo(noStake.daily * 2, 4);
   });
 
-  it("APY increases by 0.1 per TH/s", () => {
-    const r1 = calculateRewards({ adjustedHashrate: 0, stake: 0 });
-    const r2 = calculateRewards({ adjustedHashrate: 10, stake: 0 });
-    expect(r2.apy - r1.apy).toBeCloseTo(1.0, 1);
+  it("APY increases by 0.1 % per TH/s", () => {
+    const base = calculateRewards({ adjustedHashrate: 0, stake: 0 });
+    const with100ths = calculateRewards({ adjustedHashrate: 100, stake: 0 });
+    expect(with100ths.apy).toBeCloseTo(base.apy + 100 * 0.1, 1);
   });
 
-  it("APY increases by 1 per 1000 BTC-S staked", () => {
-    const r1 = calculateRewards({ adjustedHashrate: 0, stake: 0 });
-    const r2 = calculateRewards({ adjustedHashrate: 0, stake: 1_000 });
-    expect(r2.apy - r1.apy).toBeCloseTo(1.0, 1);
+  it("APY increases by 0.1 % per 1,000 BTC-S staked", () => {
+    const base = calculateRewards({ adjustedHashrate: 0, stake: 0 });
+    const withStake = calculateRewards({ adjustedHashrate: 0, stake: 5_000 });
+    expect(withStake.apy).toBeCloseTo(base.apy + 5, 1);
   });
 
-  it("results are rounded to correct decimal places", () => {
-    const result = calculateRewards({ adjustedHashrate: 0.5, stake: 100 });
-    const dailyStr = result.daily.toString();
-    const monthlyStr = result.monthly.toString();
-    const apyStr = result.apy.toString();
-    // daily: up to 4 decimal places
-    const dailyDecimals = dailyStr.includes(".") ? dailyStr.split(".")[1].length : 0;
-    // monthly: up to 2 decimal places
-    const monthlyDecimals = monthlyStr.includes(".") ? monthlyStr.split(".")[1].length : 0;
-    // apy: up to 1 decimal place
-    const apyDecimals = apyStr.includes(".") ? apyStr.split(".")[1].length : 0;
-    expect(dailyDecimals).toBeLessThanOrEqual(4);
-    expect(monthlyDecimals).toBeLessThanOrEqual(2);
-    expect(apyDecimals).toBeLessThanOrEqual(1);
+  it("rounds daily to 4 decimal places", () => {
+    const result = calculateRewards({ adjustedHashrate: 1, stake: 1 });
+    const decimals = result.daily.toString().split(".")[1]?.length ?? 0;
+    expect(decimals).toBeLessThanOrEqual(4);
   });
 
-  it("handles typical smartphone device configuration", () => {
-    // Smartphone: baseHashrate 0.5, efficiency 0.8
-    const adjustedHashrate = 0.5 * 0.8; // 0.4
-    const result = calculateRewards({ adjustedHashrate, stake: 0 });
-    expect(result.daily).toBeGreaterThan(0);
-    expect(result.monthly).toBeGreaterThan(result.daily);
+  it("rounds monthly to 2 decimal places", () => {
+    const result = calculateRewards({ adjustedHashrate: 1, stake: 1 });
+    const decimals = result.monthly.toString().split(".")[1]?.length ?? 0;
+    expect(decimals).toBeLessThanOrEqual(2);
   });
 
-  it("handles dedicated node configuration", () => {
-    // Dedicated node: baseHashrate 50.0, efficiency 1.2
-    const adjustedHashrate = 50.0 * 1.2; // 60
-    const result = calculateRewards({ adjustedHashrate, stake: 5_000 });
-    expect(result.daily).toBeGreaterThan(0);
-    expect(result.apy).toBeGreaterThan(15);
+  it("rounds APY to 1 decimal place", () => {
+    const result = calculateRewards({ adjustedHashrate: 1.5, stake: 500 });
+    const decimals = result.apy.toString().split(".")[1]?.length ?? 0;
+    expect(decimals).toBeLessThanOrEqual(1);
+  });
+
+  it("handles a realistic scenario: 50 TH/s, 2,500 BTC-S stake", () => {
+    // stakeMultiplier = 1 + 2500/10000 = 1.25
+    // daily = 50 * 0.0082 * 1.25 = 0.5125
+    // monthly = 0.5125 * 30 = 15.375 → 15.38 (2 dp)
+    // apy = 15 + 2.5 + 5 = 22.5
+    const result = calculateRewards({ adjustedHashrate: 50, stake: 2_500 });
+    expect(result.daily).toBe(0.5125);
+    expect(result.monthly).toBe(15.38);
+    expect(result.apy).toBe(22.5);
   });
 });
