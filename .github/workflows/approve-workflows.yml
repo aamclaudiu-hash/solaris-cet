@@ -16,6 +16,8 @@ on:
       - "Deploy Solaris CET to GitHub Pages"
       - "Lighthouse CI — Quality Gate"
       - "TON Chain Indexer"
+      - "CodeQL Security Analysis"
+      - "Dependency Review"
     types: [requested]
 
 permissions:
