@@ -106,6 +106,8 @@ export const useLanguageState = (): LanguageContextValue => {
       if (countryLang) {
         setLangState(countryLang);
       }
+    }).catch(() => {
+      // silently ignore – geo detection is a best-effort enhancement
     });
   }, []);
 
