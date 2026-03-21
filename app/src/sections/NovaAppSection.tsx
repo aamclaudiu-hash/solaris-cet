@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { TrendingUp, Droplets, Clock, Battery } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 const SOLARIS_LOGO_URL = `${import.meta.env.BASE_URL}icon-192.png`;
 
@@ -22,10 +23,19 @@ const NovaAppSection = () => {
   const phoneRef = useRef<HTMLDivElement>(null);
   const textPanelRef = useRef<HTMLDivElement>(null);
   const tickerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile || prefersReducedMotion) {
+      [phoneRef.current, textPanelRef.current, tickerRef.current].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+      });
+      return;
+    }
 
     const ctx = gsap.context(() => {
       const scrollTl = gsap.timeline({
@@ -86,7 +96,7 @@ const NovaAppSection = () => {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <section

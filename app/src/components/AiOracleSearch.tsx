@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Send } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -34,74 +35,41 @@ interface ChatEntry {
   confidence: number;
 }
 
-// --- KNOWLEDGE BASE: contextual responses for key topics ---
-const KNOWLEDGE_BASE: Record<string, { answer: string; confidence: number }> = {
-  price: {
-    answer:
-      'CET trades on DeDust (TON) with a fixed supply of 9,000 tokens — genuine hyper-scarcity. Current pool: EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB. The DCBM model correlates scarcity with a 90-year emission schedule, projecting long-term value accumulation driven purely by on-chain demand.',
-    confidence: 94.7,
-  },
-  mining: {
-    answer:
-      'CET mining runs for 90 years with a decaying reward curve — 66.66% of total supply enters circulation through proof-of-work. Active nodes: 18,420+. Battery drain approaches 0% thanks to the Zero-Battery constraint in the Quantum OS scheduler. Optimal mining window analysis shows Q3 2025 as a high-efficiency period.',
-    confidence: 97.2,
-  },
-  ai: {
-    answer:
-      'Solaris CET embeds a BRAID (Blockchain-Recursive AI Decision) framework: every AI agent action is validated through a 5-phase ReAct loop (Observe → Think → Plan → Act → Verify) and anchored on-chain for immutable auditability. No black-box decisions — every reasoning trace is public and verifiable.',
-    confidence: 99.1,
-  },
-  ton: {
-    answer:
-      'CET lives on TON mainnet — ~100,000 TPS throughput, 2-second finality, sharded architecture. The smart contract was audited by Cyberscope and KYC-verified. TON\'s infinite sharding allows Solaris to scale the High Intelligence oracle layer without congestion.',
-    confidence: 96.8,
-  },
-  buy: {
-    answer:
-      'Buy CET on DeDust DEX: connect your TON wallet → navigate to pool EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB → swap TON for CET. Slippage recommended: 0.5–1%. Only 9,000 CET exist globally — each token represents a 0.011% ownership of the total supply.',
-    confidence: 98.3,
-  },
-  quantum: {
-    answer:
-      'Quantum OS is Solaris CET\'s entropy layer: 8 simulated qubits in superposition collapse via a QRNG-seeded wavefunction to generate unpredictable cryptographic seeds. This entropy powers fair mining randomness, agent scheduling, and zero-knowledge proof generation — making every on-chain event provably random.',
-    confidence: 95.6,
-  },
-  security: {
-    answer:
-      'CET contract passed Cyberscope\'s smart-contract audit with zero critical findings. The team completed full KYC. On-chain reasoning traces prevent hallucinated AI decisions. Multi-layer security: Quantum OS entropy + ReAct verification loops + TON\'s BFT consensus (66.7% honest nodes required for finality).',
-    confidence: 98.9,
-  },
-  roadmap: {
-    answer:
-      'Q1–Q2 2025 (DONE): Contract deployed, audit passed, DeDust pool live, IPFS whitepaper published. Q3 2025 (ACTIVE): AI precision farming pilot in Puiești, Developer SDK beta, ReAct on-chain traces. Q4 2025+: Next-gen processing units, Self-Actualization Protocol mainnet, cross-chain bridge exploration.',
-    confidence: 99.5,
-  },
+// --- CONFIDENCE SCORES per topic ---
+const CONFIDENCE_SCORES: Record<string, number> = {
+  price: 94.7,
+  mining: 97.2,
+  ai: 99.1,
+  ton: 96.8,
+  buy: 98.3,
+  quantum: 95.6,
+  security: 98.9,
+  roadmap: 99.5,
+  default: 91.4,
 };
 
-function buildContextualResponse(q: string): { answer: string; confidence: number } {
+// Keyword sets covering multiple languages for topic detection
+const TOPIC_KEYWORDS: Record<string, string[]> = {
+  price:    ['price', 'value', 'worth', 'market', 'preț', 'pret', 'valoare', 'precio', '价格', 'цена', 'preis', 'preço'],
+  mining:   ['mine', 'mining', 'earn', 'reward', 'minar', 'minare', 'minería', '挖矿', 'майнинг', 'mining', 'mineração'],
+  ai:       ['ai', 'intelligence', 'agent', 'react', 'braid', 'inteligenta', 'inteligență', 'inteligencia', '人工智能', 'искусственный', 'künstliche', 'inteligência'],
+  ton:      ['ton', 'blockchain', 'chain', 'network', 'rețea', 'retea', 'blockchain', '区块链', 'блокчейн', 'rede'],
+  buy:      ['buy', 'purchase', 'swap', 'dedust', 'cumpara', 'cumpără', 'comprar', '购买', 'купить', 'kaufen', 'comprar'],
+  quantum:  ['quantum', 'qubit', 'entropy', 'cuantic', 'kvantum', 'cuántico', '量子', 'квантовый', 'quanten'],
+  security: ['security', 'audit', 'safe', 'kyc', 'securitate', 'seguridad', '安全', 'безопасность', 'sicherheit', 'segurança'],
+  roadmap:  ['road', 'roadmap', 'plan', 'future', 'phase', 'parcurs', 'hoja de ruta', '路线图', 'дорожная', 'fahrplan', 'roteiro'],
+};
+
+import type { OracleKnowledge } from '../i18n/translations';
+
+function buildContextualResponse(q: string, knowledge: OracleKnowledge): { answer: string; confidence: number } {
   const lower = q.toLowerCase();
-  if (lower.includes('price') || lower.includes('value') || lower.includes('worth') || lower.includes('market'))
-    return KNOWLEDGE_BASE['price'];
-  if (lower.includes('mine') || lower.includes('mining') || lower.includes('earn') || lower.includes('reward'))
-    return KNOWLEDGE_BASE['mining'];
-  if (lower.includes('ai') || lower.includes('intelligence') || lower.includes('agent') || lower.includes('react') || lower.includes('braid'))
-    return KNOWLEDGE_BASE['ai'];
-  if (lower.includes('ton') || lower.includes('blockchain') || lower.includes('chain') || lower.includes('network'))
-    return KNOWLEDGE_BASE['ton'];
-  if (lower.includes('buy') || lower.includes('purchase') || lower.includes('swap') || lower.includes('dedust'))
-    return KNOWLEDGE_BASE['buy'];
-  if (lower.includes('quantum') || lower.includes('qubit') || lower.includes('entropy'))
-    return KNOWLEDGE_BASE['quantum'];
-  if (lower.includes('security') || lower.includes('audit') || lower.includes('safe') || lower.includes('kyc'))
-    return KNOWLEDGE_BASE['security'];
-  if (lower.includes('road') || lower.includes('plan') || lower.includes('future') || lower.includes('phase'))
-    return KNOWLEDGE_BASE['roadmap'];
-  // Default: general project answer
-  return {
-    answer:
-      'Solaris CET is a hyper-scarce token (9,000 CET supply) on the TON blockchain with a 90-year mining horizon. It bridges AI agents to on-chain execution via the BRAID Framework and Quantum OS, making every decision transparent, verifiable, and immutable. Ask about price, mining, AI, security, or roadmap for deep insights.',
-    confidence: 91.4,
-  };
+  for (const [topic, keywords] of Object.entries(TOPIC_KEYWORDS)) {
+    if (keywords.some(kw => lower.includes(kw))) {
+      return { answer: knowledge[topic as keyof OracleKnowledge], confidence: CONFIDENCE_SCORES[topic] };
+    }
+  }
+  return { answer: knowledge.default, confidence: CONFIDENCE_SCORES.default };
 }
 
 // --- ReAct phase status helper ---
@@ -122,6 +90,96 @@ function getReActPhaseStatus(phase: ReActPhase, targetPhases: ReActPhase[]): str
   return currentIndex > targetIndex
     ? 'text-green-400 border-green-400/30'
     : 'text-gray-600 border-gray-800';
+}
+
+// --- Markdown renderer for oracle responses ---
+// Supports: **bold**, *italic*, `code`, - bullet lists, numbered lists, \n\n paragraphs
+function MarkdownText({ text }: { text: string }) {
+  const renderLine = (line: string, key: number) => {
+    // Check for numbered list item
+    const numberedMatch = line.match(/^(\d+)\.\s+(.*)/);
+    if (numberedMatch) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="text-yellow-500 font-bold shrink-0 min-w-[1.2em]">{numberedMatch[1]}.</span>
+          <span>{renderInline(numberedMatch[2])}</span>
+        </li>
+      );
+    }
+    // Check for bullet list item
+    if (line.startsWith('- ') || line.startsWith('• ')) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="text-yellow-500 mt-1.5 shrink-0">▸</span>
+          <span>{renderInline(line.slice(2))}</span>
+        </li>
+      );
+    }
+    // Checkbox items
+    if (line.startsWith('- ✅') || line.startsWith('- 🔄') || line.startsWith('- 🔮')) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="shrink-0">{line.slice(2, 4)}</span>
+          <span>{renderInline(line.slice(4))}</span>
+        </li>
+      );
+    }
+    return <p key={key} className="leading-relaxed">{renderInline(line)}</p>;
+  };
+
+  const renderInline = (text: string): React.ReactNode => {
+    const parts: React.ReactNode[] = [];
+    let idx = 0;
+    // Pattern: **bold**, *italic*, `code`
+    const pattern = /(\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`)/g;
+    let match: RegExpExecArray | null;
+    let lastIndex = 0;
+    pattern.lastIndex = 0;
+    while ((match = pattern.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(<span key={idx}>{text.slice(lastIndex, match.index)}</span>);
+        idx += 1;
+      }
+      if (match[2]) {
+        parts.push(<strong key={idx} className="text-yellow-300 font-semibold">{match[2]}</strong>);
+      } else if (match[3]) {
+        parts.push(<em key={idx} className="text-gray-300 italic">{match[3]}</em>);
+      } else if (match[4]) {
+        parts.push(<code key={idx} className="bg-gray-800 text-yellow-400 px-1.5 py-0.5 rounded text-xs font-mono break-all">{match[4]}</code>);
+      }
+      idx += 1;
+      lastIndex = pattern.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      parts.push(<span key={idx}>{text.slice(lastIndex)}</span>);
+    }
+    return parts;
+  };
+
+  // Split into paragraphs by double newline
+  const paragraphs = text.split(/\n\n+/);
+  return (
+    <div className="space-y-3 text-sm leading-relaxed">
+      {paragraphs.map((para, pi) => {
+        const lines = para.split('\n').filter(l => l.trim() !== '');
+        const hasList = lines.some(
+          l => l.startsWith('- ') || l.startsWith('• ') || /^\d+\.\s/.test(l)
+        );
+        if (hasList) {
+          return (
+            <ul key={pi} className="space-y-1.5 pl-1">
+              {lines.map((line, li) => renderLine(line, li))}
+            </ul>
+          );
+        }
+        return (
+          <React.Fragment key={pi}>
+            {lines.map((line, li) => renderLine(line, li))}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
 }
 
 // --- ReAct Panels (shared between widget and modal) ---
@@ -187,6 +245,9 @@ function ReActPanels({ phase }: { phase: ReActPhase }) {
 
 
 export default function AiOracleSearch() {
+  // --- LANGUAGE ---
+  const { t } = useLanguage();
+
   // --- STATE MANAGEMENT ---
   const [query, setQuery] = useState('');
   const [submittedQuestion, setSubmittedQuestion] = useState('');
@@ -280,7 +341,7 @@ export default function AiOracleSearch() {
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
 
-    const { answer, confidence } = buildContextualResponse(q);
+    const { answer, confidence } = buildContextualResponse(q, t.oracle.knowledge);
     const hash = generateHash();
     const tokenCount = q.split(/\s+/).length;
     const startMs = performance.now();
@@ -353,7 +414,7 @@ export default function AiOracleSearch() {
     schedule(() => {
       setPhase('complete');
     }, 9200);
-  }, [generateHash, addLog]);
+  }, [generateHash, addLog, t.oracle.knowledge]);
 
   // Hero widget submit → open modal + start processing
   const handleHeroSubmit = (e: React.FormEvent) => {
@@ -391,12 +452,12 @@ export default function AiOracleSearch() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
         {/* Header */}
-        <div className="relative z-10 flex flex-col items-center mb-8">
-          <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
-            Solaris Oracle
+        <div className="relative z-10 flex flex-col items-center mb-6 md:mb-8">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
+            {t.oracle.title}
           </h2>
-          <p className="text-gray-400 text-sm mt-1 tracking-widest uppercase">
-            Grok × Gemini · RAV Protocol Bridge
+          <p className="text-gray-400 text-xs md:text-sm mt-1 tracking-widest uppercase">
+            {t.oracle.subtitle}
           </p>
           <div className="flex items-center gap-2 mt-2">
             <span className="text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>
@@ -408,22 +469,22 @@ export default function AiOracleSearch() {
         {/* Input */}
         <form
           onSubmit={handleHeroSubmit}
-          className="relative z-10 flex flex-col md:flex-row w-full gap-4"
+          className="relative z-10 flex flex-col sm:flex-row w-full gap-3 md:gap-4"
         >
           <div className="flex-grow relative">
             <input
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Ask about price, mining, AI agents, security, roadmap…"
-              className="w-full px-6 py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-base"
+              placeholder={t.oracle.placeholder}
+              className="w-full px-4 md:px-6 py-3.5 md:py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-sm md:text-base"
             />
           </div>
           <button
             type="submit"
-            className="px-8 py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 shadow-[0_0_20px_rgba(234,179,8,0.2)] whitespace-nowrap"
+            className="px-6 md:px-8 py-3.5 md:py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 shadow-[0_0_20px_rgba(234,179,8,0.2)] whitespace-nowrap text-sm md:text-base"
           >
-            INITIATE PROTOCOL
+            {t.oracle.sendButton}
           </button>
         </form>
       </div>
@@ -437,13 +498,13 @@ export default function AiOracleSearch() {
           className="fixed inset-0 z-[9999] bg-[#020202]/98 backdrop-blur-xl flex flex-col font-sans"
         >
           {/* Modal header */}
-          <header className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-gray-800 bg-black/60 backdrop-blur-md">
+          <header className="shrink-0 flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-gray-800 bg-black/60 backdrop-blur-md">
             <div>
-              <h2 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
-                Solaris Oracle
+              <h2 className="text-lg md:text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
+                {t.oracle.title}
               </h2>
               <p className="text-gray-500 text-xs tracking-widest uppercase mt-0.5">
-                Grok × Gemini · RAV Protocol Bridge
+                {t.oracle.subtitle}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -475,11 +536,13 @@ export default function AiOracleSearch() {
                   </div>
                   {/* Oracle bubble */}
                   <div className="flex justify-start">
-                    <div className="bg-green-950/40 border border-green-500/20 rounded-2xl rounded-tl-sm px-5 py-4 max-w-2xl">
+                    <div className="bg-green-950/40 border border-green-500/20 rounded-2xl rounded-tl-sm px-5 py-4 max-w-2xl w-full">
                       <p className="text-green-400 text-xs font-mono mb-2 uppercase tracking-widest">
-                        Oracle · {entry.confidence.toFixed(1)}% confidence
+                        {t.oracle.oracleResponse} · {entry.confidence.toFixed(1)}% {t.oracle.confidence}
                       </p>
-                      <p className="text-white text-sm leading-relaxed">{entry.answer}</p>
+                      <div className="text-white">
+                        <MarkdownText text={entry.answer} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -501,11 +564,11 @@ export default function AiOracleSearch() {
                   {/* Terminal & Metrics */}
                   <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
                     {/* Telemetry terminal */}
-                    <div className="lg:col-span-3 bg-gray-950 border border-gray-800 rounded-xl p-4 font-mono text-xs overflow-hidden flex flex-col h-56 shadow-inner">
+                    <div className="lg:col-span-3 bg-gray-950 border border-gray-800 rounded-xl p-3 md:p-4 font-mono text-xs overflow-hidden flex flex-col h-40 md:h-56 shadow-inner">
                       <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-800 text-gray-500">
                         <span>&gt;_ RAV_TERMINAL · Grok × Gemini v3.0</span>
                         <span className={isProcessing ? 'text-yellow-500 animate-pulse' : 'text-green-500'}>
-                          {isProcessing ? 'PROCESSING' : '● DONE'}
+                          {isProcessing ? t.oracle.processing : `● ${t.oracle.done}`}
                         </span>
                       </div>
                       <div ref={terminalRef} className="flex-1 overflow-y-auto space-y-1 pr-1">
@@ -527,7 +590,7 @@ export default function AiOracleSearch() {
                     </div>
 
                     {/* Live metrics */}
-                    <div className="bg-gray-950 border border-gray-800 rounded-xl p-4 flex flex-col justify-between h-56">
+                    <div className="bg-gray-950 border border-gray-800 rounded-xl p-4 flex flex-col justify-between h-40 md:h-56">
                       <h4 className="text-gray-500 font-mono text-xs mb-3 border-b border-gray-800 pb-2">
                         SYS_METRICS
                       </h4>
@@ -562,11 +625,22 @@ export default function AiOracleSearch() {
                   {/* Oracle final response */}
                   {phase === 'complete' && finalResponse && (
                     <div className="flex justify-start">
-                      <div className="bg-gradient-to-br from-green-950/80 to-black border border-green-500/30 rounded-2xl rounded-tl-sm p-6 w-full">
-                        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-                          <p className="text-green-400 text-xs font-mono font-bold uppercase tracking-widest">
-                            Oracle Response · Confidence {oracleConfidence.toFixed(1)}%
-                          </p>
+                      <div className="bg-gradient-to-br from-green-950/80 to-black border border-green-500/30 rounded-2xl rounded-tl-sm p-5 md:p-6 w-full">
+                        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-lg bg-yellow-500/20 border border-yellow-500/40 flex items-center justify-center shrink-0">
+                              <svg viewBox="0 0 16 16" className="w-4 h-4 text-yellow-400" fill="currentColor">
+                                <circle cx="8" cy="8" r="3" />
+                                <path d="M8 1 L8.6 4.5 L8 4 L7.4 4.5 Z" />
+                                <path d="M8 15 L8.6 11.5 L8 12 L7.4 11.5 Z" />
+                                <path d="M1 8 L4.5 8.6 L4 8 L4.5 7.4 Z" />
+                                <path d="M15 8 L11.5 8.6 L12 8 L11.5 7.4 Z" />
+                              </svg>
+                            </div>
+                            <p className="text-green-400 text-xs font-mono font-bold uppercase tracking-widest">
+                              {t.oracle.oracleResponse} · {t.oracle.confidence} {oracleConfidence.toFixed(1)}%
+                            </p>
+                          </div>
                           <div className="h-1.5 w-28 bg-gray-800 rounded-full overflow-hidden">
                             <div
                               className="h-full bg-gradient-to-r from-yellow-500 to-green-500 rounded-full transition-all duration-1000"
@@ -574,7 +648,9 @@ export default function AiOracleSearch() {
                             />
                           </div>
                         </div>
-                        <p className="text-white text-base leading-relaxed">{finalResponse}</p>
+                        <div className="text-white">
+                          <MarkdownText text={finalResponse} />
+                        </div>
                       </div>
                     </div>
                   )}
@@ -598,7 +674,7 @@ export default function AiOracleSearch() {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   disabled={isProcessing}
-                  placeholder={phase === 'complete' ? 'Ask a follow-up question…' : 'Ask about price, mining, AI agents, security, roadmap…'}
+                  placeholder={phase === 'complete' ? t.oracle.followUpPlaceholder : t.oracle.placeholder}
                   className="w-full px-5 py-3.5 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all disabled:opacity-40 text-sm"
                 />
                 {isProcessing && (
@@ -618,7 +694,7 @@ export default function AiOracleSearch() {
               </button>
             </form>
             <p className="text-center text-gray-700 text-xs mt-2 font-mono">
-              Press <kbd className="bg-gray-900 border border-gray-700 px-1.5 py-0.5 rounded text-[11px]">Esc</kbd> to close
+              {t.oracle.escToClose}
             </p>
           </div>
         </div>,

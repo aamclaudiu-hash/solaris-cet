@@ -86,6 +86,11 @@ function AppContent() {
 
     // Setup global snap for pinned sections
     const setupGlobalSnap = () => {
+      // Skip snap on mobile — pin animations are disabled on mobile,
+      // so snap would create confusing empty scroll space.
+      const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+      if (isMobile) return;
+
       const pinned = ScrollTrigger.getAll()
         .filter(st => st.vars.pin)
         .sort((a, b) => a.start - b.start);

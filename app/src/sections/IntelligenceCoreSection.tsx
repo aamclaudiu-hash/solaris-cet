@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { Brain, Lightbulb, Play, Eye, Zap } from 'lucide-react';
 import AgentBridge from '../components/AgentBridge';
 import GlowOrbs from '../components/GlowOrbs';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 
 const steps = [
@@ -20,6 +21,7 @@ const IntelligenceCoreSection = () => {
   const rightCardRef = useRef<HTMLDivElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);
   const [reactStep, setReactStep] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,6 +33,14 @@ const IntelligenceCoreSection = () => {
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+    if (isMobile || prefersReducedMotion) {
+      [leftCardRef.current, rightCardRef.current, chipsRef.current].forEach(el => {
+        if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+      });
+      return;
+    }
 
     const ctx = gsap.context(() => {
       const scrollTl = gsap.timeline({
@@ -96,7 +106,7 @@ const IntelligenceCoreSection = () => {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <section
