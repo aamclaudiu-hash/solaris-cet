@@ -146,9 +146,13 @@ const Navigation = () => {
           <div className="mt-2">
             <WalletConnect />
           </div>
-          <button className="btn-gold text-sm mt-4">
-            Start Mining
-          </button>
+          <button
+              className="btn-gold text-sm mt-4"
+              onClick={() => window.open('https://t.me/SolarisCET', '_blank', 'noopener,noreferrer')}
+              aria-label="Start Mining (opens in new window)"
+            >
+              Start Mining
+            </button>
         </nav>
       </div>
     </header>
