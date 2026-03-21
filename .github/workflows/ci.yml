@@ -57,6 +57,8 @@ jobs:
   unit-test:
     name: Unit Tests (Vitest)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -72,9 +74,18 @@ jobs:
         working-directory: app
         run: npm ci
 
-      - name: Run unit tests
+      - name: Run unit tests with coverage
         working-directory: app
-        run: npm test
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage-report-${{ github.sha }}
+          path: app/coverage
+          retention-days: 14
+          if-no-files-found: warn
 
   # ── Stage 2: Build (waits for both quality gates) ─────────────────────────
   build:
