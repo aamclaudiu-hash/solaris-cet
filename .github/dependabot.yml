@@ -24,6 +24,33 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
+      ton:
+        patterns:
+          - "@tonconnect/*"
+      gsap:
+        patterns:
+          - "gsap"
+          - "@gsap/*"
+      lucide:
+        patterns:
+          - "lucide-react"
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "vite-plugin-*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "eslint-plugin-*"
+          - "typescript-eslint"
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@playwright/test"
+          - "playwright"
 
   - package-ecosystem: "github-actions"
     directory: "/"

@@ -1,0 +1,53 @@
+name: CodeQL Security Analysis
+
+# Scans the JavaScript/TypeScript source for security vulnerabilities using
+# GitHub's free CodeQL engine.  Runs on every push/PR to `main` and on a weekly
+# schedule so newly-discovered CVEs are caught even without a code change.
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "app/src/**"
+      - "app/package.json"
+      - "app/package-lock.json"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "app/src/**"
+      - "app/package.json"
+      - "app/package-lock.json"
+  schedule:
+    # Every Monday at 08:00 UTC
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  analyze:
+    name: Analyze (javascript-typescript)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          # Use the default query suite plus the security-and-quality extended
+          # queries for a broader vulnerability surface.
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"

@@ -1,0 +1,64 @@
+name: Stale Issues & PRs
+
+# Automatically mark issues and pull requests as stale after a period of
+# inactivity, and close them if there is no further activity.
+# Uses the free GitHub `actions/stale` action.
+
+on:
+  schedule:
+    # Run at 01:00 UTC every day
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Mark and close stale items
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/stale@v9
+        with:
+          # ── Issues ──────────────────────────────────────────────────────────
+          days-before-issue-stale: 60
+          days-before-issue-close: 14
+          stale-issue-label: "stale"
+          stale-issue-message: >
+            👋 This issue has been automatically marked as **stale** because it
+            has not had any activity in the last 60 days.
+
+            If this is still relevant, please leave a comment to keep it open.
+            It will be closed automatically in **14 days** if no further activity
+            occurs.
+
+            Thank you for contributing to **Solaris CET**! 🚀
+          close-issue-message: >
+            🔒 This issue was closed automatically after 14 days of inactivity
+            following the stale notice.  Feel free to reopen it if the problem
+            resurfaces or you have new information.
+
+          # ── Pull Requests ────────────────────────────────────────────────────
+          days-before-pr-stale: 30
+          days-before-pr-close: 10
+          stale-pr-label: "stale"
+          stale-pr-message: >
+            👋 This pull request has been automatically marked as **stale** because
+            it has not had any activity in the last 30 days.
+
+            Please update the branch, address any review comments, or leave a
+            comment to keep it open.  It will be closed automatically in **10 days**
+            if no further activity occurs.
+          close-pr-message: >
+            🔒 This pull request was closed automatically after 10 days of inactivity
+            following the stale notice.  Feel free to reopen it or create a new PR
+            if the work is still relevant.
+
+          # ── Shared options ───────────────────────────────────────────────────
+          # Never mark items that have any of these labels as stale
+          exempt-issue-labels: "pinned,security,bug,in-progress,blocked"
+          exempt-pr-labels: "pinned,security,in-progress,blocked,dependencies"
+          # Only process a limited number of items per run to stay within API limits
+          operations-per-run: 60
