@@ -110,6 +110,18 @@ jobs:
         working-directory: app
         run: npm ci
 
+      - name: Run unit tests with coverage
+        working-directory: app
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage-report
+          path: app/coverage
+          retention-days: 30
+          if-no-files-found: warn
       - name: Audit for high/critical vulnerabilities
         working-directory: app
         run: npm audit --audit-level=high

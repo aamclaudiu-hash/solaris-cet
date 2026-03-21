@@ -1,5 +1,11 @@
 name: CodeQL — Security Analysis
 
+# Runs static application security testing (SAST) on every push and pull
+# request targeting `main`, and on a weekly schedule to catch new advisories
+# in code that has not changed.
+#
+# Scans JavaScript/TypeScript for data-flow vulnerabilities, XSS patterns,
+# prototype pollution, path-traversal, and other insecure code patterns.
 # Runs on every push to `main`, every pull request targeting `main`,
 # and on a weekly schedule to catch newly-disclosed vulnerabilities in
 # unchanged code.
@@ -19,6 +25,15 @@ permissions:
   security-events: write
   actions: read
 
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: CodeQL Analysis (JavaScript / TypeScript)
+    runs-on: ubuntu-latest
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
@@ -36,6 +51,8 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
+          languages: javascript-typescript
+          # Use the security-extended query suite for a broader set of checks
           languages: ${{ matrix.language }}
           # Use the default CodeQL query suite plus the security-extended pack
           # which covers OWASP Top 10 and other high-severity patterns.
@@ -52,6 +69,10 @@ jobs:
         working-directory: app
         run: npm ci
 
+      - name: Build application (for CodeQL autobuild context)
+        working-directory: app
+        run: npm run build
+        continue-on-error: true
       - name: Build application (for CodeQL analysis)
         working-directory: app
         run: npm run build
@@ -59,4 +80,5 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
+          category: "/language:javascript-typescript"
           category: "/language:${{ matrix.language }}"
