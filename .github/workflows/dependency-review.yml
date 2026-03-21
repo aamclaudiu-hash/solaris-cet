@@ -1,0 +1,33 @@
+name: Dependency Review
+
+# Blocks pull requests that introduce dependencies with known vulnerabilities.
+# Uses GitHub's free Dependency Review API — no external service required.
+# Checks every npm package added/updated in the PR against the GitHub
+# Advisory Database and fails if any HIGH or CRITICAL severity CVEs are found.
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    name: Scan dependencies for vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Fail the check for HIGH and CRITICAL severity vulnerabilities
+          fail-on-severity: high
+          # Post a summary comment on the PR with any findings
+          comment-summary-in-pr: always
+          # Warn on licenses not in the allowed list (informational only)
+          warn-only: false
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, 0BSD, CC0-1.0, Unlicense, BlueOak-1.0.0
