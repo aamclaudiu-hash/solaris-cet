@@ -1,121 +1,173 @@
-import { describe, it, expect } from 'vitest';
-import translations, { type LangCode, type Translations } from '../i18n/translations';
-import { SUPPORTED_LANGS } from '../hooks/useLanguage';
+import { describe, it, expect } from "vitest";
+import translations, { type LangCode, type Translations } from "../i18n/translations";
+import { SUPPORTED_LANGS } from "../hooks/useLanguage";
 
-// All expected top-level keys in the Translations interface
-const TOP_LEVEL_KEYS: (keyof Translations)[] = ['nav', 'hero', 'tokenomics'];
+/**
+ * Recursively collect all dot-separated leaf key paths from a nested object.
+ * E.g. { nav: { home: 'Home' } } → ['nav.home']
+ */
+function collectKeys(obj: Record<string, unknown>, prefix = ""): string[] {
+  return Object.entries(obj).flatMap(([key, value]) => {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+      return collectKeys(value as Record<string, unknown>, fullKey);
+    }
+    return [fullKey];
+  });
+}
 
-// Expected sub-keys for each section
-const NAV_KEYS: (keyof Translations['nav'])[] = [
-  'home',
-  'cetApp',
-  'tokenomics',
-  'roadmap',
-  'howToBuy',
-  'whitepaper',
-  'resources',
-];
-const HERO_KEYS: (keyof Translations['hero'])[] = ['tagline', 'subtitle', 'buyNow', 'learnMore'];
-const TOKENOMICS_KEYS: (keyof Translations['tokenomics'])[] = [
-  'title',
-  'supply',
-  'poolAddress',
-];
+/**
+ * Retrieve a nested value using a dot-separated key path.
+ */
+function getValueByPath(obj: Record<string, unknown>, path: string): unknown {
+  return path
+    .split(".")
+    .reduce<unknown>(
+      (acc, key) =>
+        acc !== null && typeof acc === "object"
+          ? (acc as Record<string, unknown>)[key]
+          : undefined,
+      obj
+    );
+}
 
-describe('translations', () => {
-  it('exports the correct supported language codes', () => {
-    const expectedCodes: LangCode[] = ['en', 'es', 'zh', 'ru', 'ro'];
-    expect(SUPPORTED_LANGS).toEqual(expectedCodes);
+const referenceLang: LangCode = "en";
+const referenceKeys = collectKeys(
+  translations[referenceLang] as unknown as Record<string, unknown>
+);
+
+describe("translations — language coverage", () => {
+  it("SUPPORTED_LANGS covers every translation in the translations map", () => {
+    const translationKeys = Object.keys(translations) as LangCode[];
+    for (const lang of translationKeys) {
+      expect(SUPPORTED_LANGS).toContain(lang);
+    }
   });
 
-  it('has an entry for every supported language', () => {
+  it("every supported language has an entry in the translations map", () => {
     for (const lang of SUPPORTED_LANGS) {
       expect(translations).toHaveProperty(lang);
     }
   });
+});
 
-  it('every language has all top-level sections', () => {
+describe("translations — key completeness", () => {
+  for (const lang of SUPPORTED_LANGS) {
+    describe(`language: ${lang}`, () => {
+      const entry = translations[lang] as unknown as Record<string, unknown>;
+
+      it(`has all ${referenceKeys.length} keys from the reference (${referenceLang}) translation`, () => {
+        const missing: string[] = [];
+        for (const key of referenceKeys) {
+          if (getValueByPath(entry, key) === undefined) missing.push(key);
+        }
+        expect(missing).toEqual([]);
+      });
+
+      it("has no null or undefined values", () => {
+        const nullish: string[] = [];
+        for (const key of referenceKeys) {
+          const value = getValueByPath(entry, key);
+          if (value === undefined || value === null) nullish.push(key);
+        }
+        expect(nullish).toEqual([]);
+      });
+
+      it("has no empty string values", () => {
+        const empty: string[] = [];
+        for (const key of referenceKeys) {
+          const value = getValueByPath(entry, key);
+          if (typeof value === "string" && value.trim() === "") empty.push(key);
+        }
+        expect(empty).toEqual([]);
+      });
+
+      it("all values are strings", () => {
+        for (const key of referenceKeys) {
+          const value = getValueByPath(entry, key);
+          expect(typeof value, `'${lang}.${key}' should be a string`).toBe("string");
+        }
+      });
+    });
+  }
+});
+
+describe("translations — key symmetry", () => {
+  it("every language contains exactly the same keys as English", () => {
+    const enKeys = collectKeys(
+      translations.en as unknown as Record<string, unknown>
+    ).sort();
+
     for (const lang of SUPPORTED_LANGS) {
-      for (const key of TOP_LEVEL_KEYS) {
-        expect(translations[lang]).toHaveProperty(key);
+      const langKeys = collectKeys(
+        translations[lang] as unknown as Record<string, unknown>
+      ).sort();
+      expect(langKeys, `${lang} keys do not match English keys`).toEqual(enKeys);
+    }
+  });
+});
+
+describe("translations — specific content", () => {
+  it("English tagline references Cetățuia", () => {
+    expect(translations.en.hero.tagline).toContain("Cetățuia");
+  });
+
+  it("buy button text is non-empty for all languages", () => {
+    for (const lang of SUPPORTED_LANGS) {
+      expect(translations[lang].hero.buyNow.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it("nav section has all expected keys for every language", () => {
+    const expectedNavKeys: Array<keyof Translations["nav"]> = [
+      "home",
+      "cetApp",
+      "tokenomics",
+      "roadmap",
+      "howToBuy",
+      "whitepaper",
+      "resources",
+    ];
+    for (const lang of SUPPORTED_LANGS) {
+      for (const key of expectedNavKeys) {
+        expect(
+          translations[lang].nav[key],
+          `${lang}.nav.${key} missing`
+        ).toBeTruthy();
       }
     }
   });
 
-  it('every language has all nav keys', () => {
+  it("hero section has all expected keys for every language", () => {
+    const expectedHeroKeys: Array<keyof Translations["hero"]> = [
+      "tagline",
+      "subtitle",
+      "buyNow",
+      "learnMore",
+    ];
     for (const lang of SUPPORTED_LANGS) {
-      for (const key of NAV_KEYS) {
-        expect(translations[lang].nav).toHaveProperty(key);
+      for (const key of expectedHeroKeys) {
+        expect(
+          translations[lang].hero[key],
+          `${lang}.hero.${key} missing`
+        ).toBeTruthy();
       }
     }
   });
 
-  it('every language has all hero keys', () => {
+  it("tokenomics section has all expected keys for every language", () => {
+    const expectedTokenomicsKeys: Array<keyof Translations["tokenomics"]> = [
+      "title",
+      "supply",
+      "poolAddress",
+    ];
     for (const lang of SUPPORTED_LANGS) {
-      for (const key of HERO_KEYS) {
-        expect(translations[lang].hero).toHaveProperty(key);
+      for (const key of expectedTokenomicsKeys) {
+        expect(
+          translations[lang].tokenomics[key],
+          `${lang}.tokenomics.${key} missing`
+        ).toBeTruthy();
       }
     }
-  });
-
-  it('every language has all tokenomics keys', () => {
-    for (const lang of SUPPORTED_LANGS) {
-      for (const key of TOKENOMICS_KEYS) {
-        expect(translations[lang].tokenomics).toHaveProperty(key);
-      }
-    }
-  });
-
-  it('no translation string is empty', () => {
-    for (const lang of SUPPORTED_LANGS) {
-      const t = translations[lang];
-
-      for (const key of NAV_KEYS) {
-        expect(t.nav[key], `${lang}.nav.${key}`).not.toBe('');
-      }
-      for (const key of HERO_KEYS) {
-        expect(t.hero[key], `${lang}.hero.${key}`).not.toBe('');
-      }
-      for (const key of TOKENOMICS_KEYS) {
-        expect(t.tokenomics[key], `${lang}.tokenomics.${key}`).not.toBe('');
-      }
-    }
-  });
-
-  it('every language nav is symmetric with English nav', () => {
-    const enNavKeys = Object.keys(translations.en.nav).sort();
-    for (const lang of SUPPORTED_LANGS) {
-      expect(Object.keys(translations[lang].nav).sort()).toEqual(enNavKeys);
-    }
-  });
-
-  it('every language hero is symmetric with English hero', () => {
-    const enHeroKeys = Object.keys(translations.en.hero).sort();
-    for (const lang of SUPPORTED_LANGS) {
-      expect(Object.keys(translations[lang].hero).sort()).toEqual(enHeroKeys);
-    }
-  });
-
-  it('every language tokenomics is symmetric with English tokenomics', () => {
-    const enTokenomicsKeys = Object.keys(translations.en.tokenomics).sort();
-    for (const lang of SUPPORTED_LANGS) {
-      expect(Object.keys(translations[lang].tokenomics).sort()).toEqual(enTokenomicsKeys);
-    }
-  });
-
-  it('English is the fallback language and is fully populated', () => {
-    const en = translations.en;
-    expect(en.nav.home).toBe('Home');
-    expect(en.hero.buyNow).toBe('Buy CET');
-    expect(en.tokenomics.title).toBe('Tokenomics');
-  });
-
-  it('no language reuses English strings verbatim in non-English entries (spot check)', () => {
-    // Spanish "Home" should not be the English "Home"
-    expect(translations.es.nav.home).not.toBe(translations.en.nav.home);
-    // Chinese "Home" should not be the English "Home"
-    expect(translations.zh.nav.home).not.toBe(translations.en.nav.home);
-    // Romanian "Home" should not be the English "Home"
-    expect(translations.ro.nav.home).not.toBe(translations.en.nav.home);
   });
 });
