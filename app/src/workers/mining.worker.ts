@@ -6,6 +6,9 @@
  * (e.g. the 90-year smooth-decay mining schedule described in the Solaris
  * CET whitepaper).
  *
+ * The calculation logic lives in `../lib/mining-calc.ts` so it can be
+ * unit-tested independently of the Worker environment.
+ *
  * Message protocol
  * ──────────────────────────────────────────────────────────────────────────
  * Incoming  { type: 'CALCULATE_REWARDS', payload: MiningInput }
@@ -13,14 +16,14 @@
  *           { type: 'ERROR',             message: string }
  */
 
-export type { MiningInput, MiningResult } from '../lib/mining';
-import { calculateRewards, type MiningInput } from '../lib/mining';
+import { calculateRewards } from '../lib/mining-calc';
+export type { MiningInput, MiningResult } from '../lib/mining-calc';
 
 // ---------------------------------------------------------------------------
 // Worker message handler
 // ---------------------------------------------------------------------------
 
-self.onmessage = (event: MessageEvent<{ type: string; payload: MiningInput }>) => {
+self.onmessage = (event: MessageEvent<{ type: string; payload: Parameters<typeof calculateRewards>[0] }>) => {
   const { type, payload } = event.data;
 
   if (type === 'CALCULATE_REWARDS') {

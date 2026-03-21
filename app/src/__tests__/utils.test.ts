@@ -1,7 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cn, formatAddress, formatCompactNumber, debounce } from "../lib/utils";
-
-// ── cn (class name utility) ──────────────────────────────────────────────────
+import { cn, formatUsd, formatPrice, clamp, debounce } from "../lib/utils";
 
 describe("cn (class name utility)", () => {
   it("returns an empty string when called with no arguments", () => {
@@ -38,104 +36,161 @@ describe("cn (class name utility)", () => {
   });
 });
 
-// ── formatAddress ────────────────────────────────────────────────────────────
-
-describe("formatAddress", () => {
-  const longAddress = "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB";
-
-  it("truncates a long address with defaults (prefix=6, suffix=4)", () => {
-    expect(formatAddress(longAddress)).toBe("EQB5_h…lfnB");
+// ---------------------------------------------------------------------------
+// formatUsd
+// ---------------------------------------------------------------------------
+describe("formatUsd", () => {
+  it("returns '—' for null", () => {
+    expect(formatUsd(null)).toBe("—");
   });
 
-  it("uses custom prefix and suffix lengths", () => {
-    expect(formatAddress(longAddress, 4, 6)).toBe("EQB5…IelfnB");
+  it("returns '—' for undefined", () => {
+    expect(formatUsd(undefined)).toBe("—");
   });
 
-  it("returns the address unchanged when it is short enough to fit", () => {
-    const short = "EQB5lfnB";
-    // 8 chars ≤ 6 + 4 + 1 = 11 → no truncation needed
-    expect(formatAddress(short)).toBe(short);
+  it("returns '—' for NaN", () => {
+    expect(formatUsd(NaN)).toBe("—");
   });
 
-  it("returns the address unchanged when prefix + suffix cover the whole string", () => {
-    const exact = "EQB5_lfnB"; // 9 chars, prefix=6 suffix=4 → 6+4+1=11 > 9 → keep
-    expect(formatAddress(exact)).toBe(exact);
+  it("returns '—' for Infinity", () => {
+    expect(formatUsd(Infinity)).toBe("—");
   });
 
-  it("handles an empty string gracefully", () => {
-    expect(formatAddress("")).toBe("");
-  });
-});
-
-// ── formatCompactNumber ──────────────────────────────────────────────────────
-
-describe("formatCompactNumber", () => {
-  it("formats numbers below 1,000 with locale separators", () => {
-    expect(formatCompactNumber(500)).toBe("500");
+  it("formats millions with M suffix", () => {
+    expect(formatUsd(1_234_567)).toBe("$1.23M");
+    expect(formatUsd(10_000_000)).toBe("$10.00M");
   });
 
-  it("formats numbers in the thousands range with K suffix", () => {
-    expect(formatCompactNumber(1500)).toBe("1.5K");
+  it("formats thousands with K suffix", () => {
+    expect(formatUsd(5_678)).toBe("$5.68K");
+    expect(formatUsd(1_000)).toBe("$1.00K");
   });
 
-  it("formats numbers in the millions range with M suffix", () => {
-    expect(formatCompactNumber(1_500_000)).toBe("1.5M");
+  it("formats small values with 4 decimal places", () => {
+    expect(formatUsd(0.0042)).toBe("$0.0042");
+    expect(formatUsd(3.14)).toBe("$3.1400");
   });
 
-  it("formats numbers in the billions range with B suffix", () => {
-    expect(formatCompactNumber(2_400_000_000)).toBe("2.4B");
-  });
-
-  it("respects custom decimals parameter", () => {
-    expect(formatCompactNumber(1_234_567, 1)).toBe("1.2M");
+  it("handles exactly 1 000 000", () => {
+    expect(formatUsd(1_000_000)).toBe("$1.00M");
   });
 
   it("handles zero", () => {
-    expect(formatCompactNumber(0)).toBe("0");
-  });
-
-  it("handles negative numbers", () => {
-    expect(formatCompactNumber(-2_000_000)).toBe("-2M");
-  });
-
-  it("trims unnecessary trailing zeros from compact suffix", () => {
-    // 2,000,000 → "2M" not "2.00M"
-    expect(formatCompactNumber(2_000_000)).toBe("2M");
+    expect(formatUsd(0)).toBe("$0.0000");
   });
 });
 
-// ── debounce ─────────────────────────────────────────────────────────────────
-
-describe("debounce", () => {
-  it("delays the function call by the specified time", async () => {
-    let callCount = 0;
-    const debounced = debounce(() => { callCount++; }, 50);
-
-    debounced();
-    expect(callCount).toBe(0); // not called yet
-
-    await new Promise((resolve) => setTimeout(resolve, 80));
-    expect(callCount).toBe(1); // called once after delay
+// ---------------------------------------------------------------------------
+// formatPrice
+// ---------------------------------------------------------------------------
+describe("formatPrice", () => {
+  it("returns '—' for null", () => {
+    expect(formatPrice(null)).toBe("—");
   });
 
-  it("cancels pending calls when invoked again before the delay", async () => {
+  it("returns '—' for undefined", () => {
+    expect(formatPrice(undefined)).toBe("—");
+  });
+
+  it("returns '—' for NaN", () => {
+    expect(formatPrice(NaN)).toBe("—");
+  });
+
+  it("uses exponential notation for values < 0.001", () => {
+    const result = formatPrice(0.00042);
+    expect(result).toMatch(/^\$/);
+    expect(result).toContain("e");
+  });
+
+  it("formats normal prices with 4 decimal places", () => {
+    expect(formatPrice(3.1415)).toBe("$3.1415");
+    expect(formatPrice(100)).toBe("$100.0000");
+  });
+
+  it("uses exponential for exactly 0.0009", () => {
+    const result = formatPrice(0.0009);
+    expect(result).toMatch(/^\$/);
+    expect(result).toContain("e");
+  });
+
+  it("does not use exponential for exactly 0.001", () => {
+    expect(formatPrice(0.001)).toBe("$0.0010");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// clamp
+// ---------------------------------------------------------------------------
+describe("clamp", () => {
+  it("returns the value when within range", () => {
+    expect(clamp(5, 0, 10)).toBe(5);
+  });
+
+  it("clamps to minimum when value is below range", () => {
+    expect(clamp(-3, 0, 10)).toBe(0);
+  });
+
+  it("clamps to maximum when value is above range", () => {
+    expect(clamp(15, 0, 10)).toBe(10);
+  });
+
+  it("returns min when value equals min", () => {
+    expect(clamp(0, 0, 10)).toBe(0);
+  });
+
+  it("returns max when value equals max", () => {
+    expect(clamp(10, 0, 10)).toBe(10);
+  });
+
+  it("works with floating-point bounds", () => {
+    expect(clamp(0.5, 0.1, 0.9)).toBe(0.5);
+    expect(clamp(1.5, 0.1, 0.9)).toBe(0.9);
+  });
+
+  it("works with negative ranges", () => {
+    expect(clamp(-5, -10, -1)).toBe(-5);
+    expect(clamp(0, -10, -1)).toBe(-1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// debounce
+// ---------------------------------------------------------------------------
+describe("debounce", () => {
+  it("delays the function call", async () => {
     let callCount = 0;
-    const debounced = debounce(() => { callCount++; }, 50);
+    const fn = debounce(() => { callCount++; }, 50);
 
-    debounced();
-    debounced();
-    debounced();
+    fn();
+    fn();
+    fn();
 
-    await new Promise((resolve) => setTimeout(resolve, 80));
-    expect(callCount).toBe(1); // called only once despite 3 rapid calls
+    // Not yet called (within delay window)
+    expect(callCount).toBe(0);
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(callCount).toBe(1);
+  });
+
+  it("resets the timer on each call — only the last call fires", async () => {
+    const calls: string[] = [];
+    const fn = debounce((label: string) => { calls.push(label); }, 50);
+
+    fn("a");
+    fn("b");
+    fn("c");
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(calls).toEqual(["c"]);
   });
 
   it("passes arguments to the wrapped function", async () => {
-    let received: string | undefined;
-    const debounced = debounce((s: string) => { received = s; }, 50);
+    let received: number[] = [];
+    const fn = debounce((...args: number[]) => { received = args; }, 30);
 
-    debounced("hello");
-    await new Promise((resolve) => setTimeout(resolve, 80));
-    expect(received).toBe("hello");
+    fn(1, 2, 3);
+
+    await new Promise(resolve => setTimeout(resolve, 80));
+    expect(received).toEqual([1, 2, 3]);
   });
 });
