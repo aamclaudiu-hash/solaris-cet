@@ -92,10 +92,20 @@ const phases: Phase[] = [
   },
 ];
 
-const statusConfig: Record<PhaseStatus, { icon: typeof CheckCircle; iconClass: string; borderClass: string; badgeClass: string; label: string }> = {
+interface PhaseStatusConfig {
+  icon: typeof CheckCircle;
+  iconClass: string;
+  iconAnimClass: string;
+  borderClass: string;
+  badgeClass: string;
+  label: string;
+}
+
+const statusConfig: Record<PhaseStatus, PhaseStatusConfig> = {
   done: {
     icon: CheckCircle,
     iconClass: 'text-emerald-400',
+    iconAnimClass: '',
     borderClass: 'border-emerald-400/30',
     badgeClass: 'bg-emerald-400/10 text-emerald-400 border-emerald-400/30',
     label: 'Completed',
@@ -103,6 +113,7 @@ const statusConfig: Record<PhaseStatus, { icon: typeof CheckCircle; iconClass: s
   active: {
     icon: Loader,
     iconClass: 'text-solaris-gold',
+    iconAnimClass: 'animate-spin',
     borderClass: 'border-solaris-gold/40',
     badgeClass: 'bg-solaris-gold/10 text-solaris-gold border-solaris-gold/30',
     label: 'In Progress',
@@ -110,6 +121,7 @@ const statusConfig: Record<PhaseStatus, { icon: typeof CheckCircle; iconClass: s
   upcoming: {
     icon: Circle,
     iconClass: 'text-solaris-muted',
+    iconAnimClass: '',
     borderClass: 'border-white/10',
     badgeClass: 'bg-white/5 text-solaris-muted border-white/10',
     label: 'Planned',
@@ -218,7 +230,7 @@ const RoadmapSection = () => {
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-solaris-muted text-xs">{phase.quarter}</span>
                   <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border ${cfg.badgeClass}`}>
-                    <StatusIcon className={`w-3 h-3 ${cfg.iconClass}`} />
+                    <StatusIcon className={`w-3 h-3 ${cfg.iconClass} ${cfg.iconAnimClass}`} />
                     {cfg.label}
                   </span>
                 </div>
@@ -232,7 +244,7 @@ const RoadmapSection = () => {
                 <ul className="space-y-2 flex-1">
                   {phase.milestones.map((m) => (
                     <li key={m.text} className="flex items-start gap-2">
-                      <StatusIcon className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${cfg.iconClass}`} />
+                      <StatusIcon className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${cfg.iconClass} ${cfg.iconAnimClass}`} />
                       <span className="text-solaris-muted text-xs leading-relaxed">{m.text}</span>
                     </li>
                   ))}
