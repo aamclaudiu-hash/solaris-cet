@@ -1,37 +1,28 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
- * useDebounce — delays updating the returned value until `delay` ms have
- * elapsed without `value` changing.  Useful for search inputs and live-filter
- * scenarios where you want to avoid firing expensive operations on every key
- * stroke.
+ * useDebounce — returns a debounced copy of `value` that only updates after
+ * `delay` milliseconds have elapsed without a new value being received.
  *
- * @param value - The value to debounce.
- * @param delay - Debounce delay in milliseconds (default: 300).
- * @returns The debounced value, which lags behind `value` by up to `delay` ms.
+ * Useful for delaying expensive operations (API calls, heavy filtering) until
+ * the user has stopped typing.
  *
  * @example
+ * ```tsx
  * const [query, setQuery] = useState('');
- * const debouncedQuery = useDebounce(query, 400);
- * useEffect(() => { fetchResults(debouncedQuery); }, [debouncedQuery]);
+ * const debouncedQuery = useDebounce(query, 300);
+ *
+ * useEffect(() => {
+ *   if (debouncedQuery) fetchResults(debouncedQuery);
+ * }, [debouncedQuery]);
+ * ```
  */
 export function useDebounce<T>(value: T, delay = 300): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (timerRef.current !== null) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      if (timerRef.current !== null) {
-        clearTimeout(timerRef.current);
-      }
-    };
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
   }, [value, delay]);
 
   return debouncedValue;

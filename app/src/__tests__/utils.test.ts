@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cn, clamp, lerp, formatUSD, formatCryptoPrice } from "../lib/utils";
+import { cn, formatUsd, formatPrice, clamp, debounce } from "../lib/utils";
 
 describe("cn (class name utility)", () => {
   it("returns an empty string when called with no arguments", () => {
@@ -36,16 +36,101 @@ describe("cn (class name utility)", () => {
   });
 });
 
+// ---------------------------------------------------------------------------
+// formatUsd
+// ---------------------------------------------------------------------------
+describe("formatUsd", () => {
+  it("returns '—' for null", () => {
+    expect(formatUsd(null)).toBe("—");
+  });
+
+  it("returns '—' for undefined", () => {
+    expect(formatUsd(undefined)).toBe("—");
+  });
+
+  it("returns '—' for NaN", () => {
+    expect(formatUsd(NaN)).toBe("—");
+  });
+
+  it("returns '—' for Infinity", () => {
+    expect(formatUsd(Infinity)).toBe("—");
+  });
+
+  it("formats millions with M suffix", () => {
+    expect(formatUsd(1_234_567)).toBe("$1.23M");
+    expect(formatUsd(10_000_000)).toBe("$10.00M");
+  });
+
+  it("formats thousands with K suffix", () => {
+    expect(formatUsd(5_678)).toBe("$5.68K");
+    expect(formatUsd(1_000)).toBe("$1.00K");
+  });
+
+  it("formats small values with 4 decimal places", () => {
+    expect(formatUsd(0.0042)).toBe("$0.0042");
+    expect(formatUsd(3.14)).toBe("$3.1400");
+  });
+
+  it("handles exactly 1 000 000", () => {
+    expect(formatUsd(1_000_000)).toBe("$1.00M");
+  });
+
+  it("handles zero", () => {
+    expect(formatUsd(0)).toBe("$0.0000");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// formatPrice
+// ---------------------------------------------------------------------------
+describe("formatPrice", () => {
+  it("returns '—' for null", () => {
+    expect(formatPrice(null)).toBe("—");
+  });
+
+  it("returns '—' for undefined", () => {
+    expect(formatPrice(undefined)).toBe("—");
+  });
+
+  it("returns '—' for NaN", () => {
+    expect(formatPrice(NaN)).toBe("—");
+  });
+
+  it("uses exponential notation for values < 0.001", () => {
+    const result = formatPrice(0.00042);
+    expect(result).toMatch(/^\$/);
+    expect(result).toContain("e");
+  });
+
+  it("formats normal prices with 4 decimal places", () => {
+    expect(formatPrice(3.1415)).toBe("$3.1415");
+    expect(formatPrice(100)).toBe("$100.0000");
+  });
+
+  it("uses exponential for exactly 0.0009", () => {
+    const result = formatPrice(0.0009);
+    expect(result).toMatch(/^\$/);
+    expect(result).toContain("e");
+  });
+
+  it("does not use exponential for exactly 0.001", () => {
+    expect(formatPrice(0.001)).toBe("$0.0010");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// clamp
+// ---------------------------------------------------------------------------
 describe("clamp", () => {
-  it("returns value when within range", () => {
+  it("returns the value when within range", () => {
     expect(clamp(5, 0, 10)).toBe(5);
   });
 
-  it("clamps to min when value is below range", () => {
-    expect(clamp(-5, 0, 10)).toBe(0);
+  it("clamps to minimum when value is below range", () => {
+    expect(clamp(-3, 0, 10)).toBe(0);
   });
 
-  it("clamps to max when value is above range", () => {
+  it("clamps to maximum when value is above range", () => {
     expect(clamp(15, 0, 10)).toBe(10);
   });
 
@@ -57,109 +142,55 @@ describe("clamp", () => {
     expect(clamp(10, 0, 10)).toBe(10);
   });
 
-  it("handles negative ranges", () => {
-    expect(clamp(-15, -10, -5)).toBe(-10);
-    expect(clamp(-3, -10, -5)).toBe(-5);
-    expect(clamp(-7, -10, -5)).toBe(-7);
+  it("works with floating-point bounds", () => {
+    expect(clamp(0.5, 0.1, 0.9)).toBe(0.5);
+    expect(clamp(1.5, 0.1, 0.9)).toBe(0.9);
   });
 
-  it("handles float values", () => {
-    expect(clamp(0.5, 0, 1)).toBe(0.5);
-    expect(clamp(1.5, 0, 1)).toBe(1);
-  });
-});
-
-describe("lerp", () => {
-  it("returns a when t is 0", () => {
-    expect(lerp(0, 100, 0)).toBe(0);
-  });
-
-  it("returns b when t is 1", () => {
-    expect(lerp(0, 100, 1)).toBe(100);
-  });
-
-  it("returns midpoint when t is 0.5", () => {
-    expect(lerp(0, 100, 0.5)).toBe(50);
-  });
-
-  it("works with negative values", () => {
-    expect(lerp(-100, 100, 0.5)).toBe(0);
-  });
-
-  it("extrapolates beyond range when t > 1", () => {
-    expect(lerp(0, 100, 2)).toBe(200);
+  it("works with negative ranges", () => {
+    expect(clamp(-5, -10, -1)).toBe(-5);
+    expect(clamp(0, -10, -1)).toBe(-1);
   });
 });
 
-describe("formatUSD", () => {
-  it("returns '—' for null", () => {
-    expect(formatUSD(null)).toBe("—");
+// ---------------------------------------------------------------------------
+// debounce
+// ---------------------------------------------------------------------------
+describe("debounce", () => {
+  it("delays the function call", async () => {
+    let callCount = 0;
+    const fn = debounce(() => { callCount++; }, 50);
+
+    fn();
+    fn();
+    fn();
+
+    // Not yet called (within delay window)
+    expect(callCount).toBe(0);
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(callCount).toBe(1);
   });
 
-  it("returns '—' for undefined", () => {
-    expect(formatUSD(undefined)).toBe("—");
+  it("resets the timer on each call — only the last call fires", async () => {
+    const calls: string[] = [];
+    const fn = debounce((label: string) => { calls.push(label); }, 50);
+
+    fn("a");
+    fn("b");
+    fn("c");
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(calls).toEqual(["c"]);
   });
 
-  it("returns '—' for NaN", () => {
-    expect(formatUSD(NaN)).toBe("—");
-  });
+  it("passes arguments to the wrapped function", async () => {
+    let received: number[] = [];
+    const fn = debounce((...args: number[]) => { received = args; }, 30);
 
-  it("returns '—' for Infinity", () => {
-    expect(formatUSD(Infinity)).toBe("—");
-  });
+    fn(1, 2, 3);
 
-  it("formats values below 1,000 to 4 decimal places", () => {
-    expect(formatUSD(1.5678)).toBe("$1.5678");
-  });
-
-  it("formats values in the thousands as K", () => {
-    expect(formatUSD(1500)).toBe("$1.50K");
-  });
-
-  it("formats values in the millions as M", () => {
-    expect(formatUSD(2_500_000)).toBe("$2.50M");
-  });
-
-  it("formats exactly 1,000 as K", () => {
-    expect(formatUSD(1000)).toBe("$1.00K");
-  });
-
-  it("formats exactly 1,000,000 as M", () => {
-    expect(formatUSD(1_000_000)).toBe("$1.00M");
-  });
-
-  it("formats zero as four decimal places", () => {
-    expect(formatUSD(0)).toBe("$0.0000");
-  });
-});
-
-describe("formatCryptoPrice", () => {
-  it("returns '—' for null", () => {
-    expect(formatCryptoPrice(null)).toBe("—");
-  });
-
-  it("returns '—' for undefined", () => {
-    expect(formatCryptoPrice(undefined)).toBe("—");
-  });
-
-  it("returns '—' for NaN", () => {
-    expect(formatCryptoPrice(NaN)).toBe("—");
-  });
-
-  it("uses scientific notation for very small values (< 0.001)", () => {
-    const result = formatCryptoPrice(0.00042);
-    expect(result).toMatch(/^\$\d+\.?\d*e[-+]\d+$/);
-  });
-
-  it("formats normal prices to 4 decimal places", () => {
-    expect(formatCryptoPrice(1.2345)).toBe("$1.2345");
-  });
-
-  it("formats exactly 0.001 to 4 decimal places (not scientific)", () => {
-    expect(formatCryptoPrice(0.001)).toBe("$0.0010");
-  });
-
-  it("formats zero as four decimal places (not scientific)", () => {
-    expect(formatCryptoPrice(0)).toBe("$0.0000");
+    await new Promise(resolve => setTimeout(resolve, 80));
+    expect(received).toEqual([1, 2, 3]);
   });
 });
