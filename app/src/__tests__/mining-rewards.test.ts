@@ -45,7 +45,7 @@ describe("calculateRewards", () => {
     expect(result.monthly).toBeCloseTo(result.daily * 30, 1);
   });
 
-  it("stake multiplier doubles yield at max stake (10 000 BTC-S)", () => {
+  it("stake multiplier doubles yield at max stake (10_000 BTC-S)", () => {
     const noStake = calculateRewards({ adjustedHashrate: 100, stake: 0 });
     const maxStake = calculateRewards({ adjustedHashrate: 100, stake: 10_000 });
     expect(maxStake.daily).toBeCloseTo(noStake.daily * 2, 2);
@@ -62,7 +62,7 @@ describe("calculateRewards", () => {
     expect(r200.apy - r100.apy).toBeCloseTo(10.0, 1);
   });
 
-  it("APY increases by 0.1 per 100 BTC-S staked (1 per 1 000)", () => {
+  it("APY increases by 0.1 per 100 BTC-S staked (1 per 1_000)", () => {
     const r0 = calculateRewards({ adjustedHashrate: 0, stake: 0 });
     const r1k = calculateRewards({ adjustedHashrate: 0, stake: 1_000 });
     expect(r1k.apy - r0.apy).toBeCloseTo(1.0, 1);
