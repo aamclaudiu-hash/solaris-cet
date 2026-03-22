@@ -212,11 +212,21 @@ const HeroSection: React.FC = () => {
                 <StatRow label="NODES" value="ACTIVE [300+]" colorClass="text-white" />
               </div>
 
-              <div className="mt-6 md:mt-12 h-16 md:h-24 w-full bg-black/40 rounded-2xl border border-white/5 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-end">
-                   {/* Simplified Dynamic Wave Visualizer */}
-                   <div className="w-full h-full bg-gradient-to-t from-yellow-500/10 to-transparent" />
-                </div>
+              <div className="mt-5 md:mt-10 flex items-center justify-between text-[10px] font-mono text-solaris-muted">
+                <span>HASHRATE MONITOR</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                  LIVE
+                </span>
+              </div>
+              <div className="mt-2 h-14 md:h-20 w-full bg-black/40 rounded-2xl border border-white/5 overflow-hidden flex items-end gap-px px-2 pb-1.5">
+                {[0.4, 0.7, 0.5, 0.9, 0.6, 1.0, 0.8, 0.7, 0.5, 0.9, 0.6, 1.0, 0.8, 0.4, 0.7, 0.5, 0.9, 0.6, 1.0, 0.8].map((h, i) => (
+                  <div
+                    key={i}
+                    className="wave-bar flex-1 text-solaris-gold"
+                    style={{ height: `${h * 100}%`, animationDelay: `${i * 0.08}s` }}
+                  />
+                ))}
               </div>
             </div>
           </div>
