@@ -77,7 +77,7 @@ const Navigation = () => {
       <div className="w-full px-6 xl:px-12">
         <div className="flex items-center justify-between h-16 xl:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3 group">
+          <a href="#main-content" className="flex items-center gap-3 group">
             <div className="relative w-8 h-8 xl:w-10 xl:h-10">
               <Sun className="w-full h-full text-solaris-gold transition-transform duration-700 group-hover:rotate-180" />
               {/* Logo glow */}

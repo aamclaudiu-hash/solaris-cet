@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect, useState } from 'react';
 import { gsap } from 'gsap';
-import { Download, FileText, Mail, ArrowRight, Sun, Github, Twitter, MessageCircle, Send, Globe, Copy, CheckCircle } from 'lucide-react';
+import { Download, FileText, Mail, ArrowRight, Sun, Github, Twitter, Send, Globe, Copy, CheckCircle } from 'lucide-react';
 import SocialShare from '../components/SocialShare';
 
 // Constants defined once to avoid duplication and maintain a single source of truth
@@ -13,15 +13,14 @@ const WHITEPAPER_URL = 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkr
 
 // Static data defined outside component to avoid re-creation on every render
 const footerLinks = [
-  { label: 'Privacy', href: '#' },
-  { label: 'Terms', href: '#' },
-  { label: 'Contact', href: '#' },
+  { label: 'Privacy', href: WHITEPAPER_URL, icon: undefined },
+  { label: 'Terms', href: WHITEPAPER_URL, icon: undefined },
+  { label: 'Contact', href: 'https://t.me/SolarisCET', icon: undefined },
   { label: 'GitHub', href: GITHUB_URL, icon: Github },
 ];
 
 const socialLinks = [
-  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter', color: 'hover:text-[#1DA1F2] hover:bg-[#1DA1F2]/10' },
-  { icon: MessageCircle, href: 'https://discord.gg', label: 'Discord', color: 'hover:text-[#5865F2] hover:bg-[#5865F2]/10' },
+  { icon: Twitter, href: 'https://twitter.com/SolarisCET', label: 'Twitter', color: 'hover:text-[#1DA1F2] hover:bg-[#1DA1F2]/10' },
   { icon: Send, href: 'https://t.me/SolarisCET', label: 'Telegram', color: 'hover:text-[#2AABEE] hover:bg-[#2AABEE]/10' },
   { icon: Github, href: GITHUB_URL, label: 'GitHub', color: 'hover:text-solaris-text hover:bg-white/10' },
   { icon: Globe, href: DEDUST_SWAP_URL, label: 'DeDust', color: 'hover:text-solaris-gold hover:bg-solaris-gold/10' },
@@ -120,11 +119,16 @@ const FooterSection = () => {
               Download the Solaris CET App. Connect a wallet. Begin earning on the bridge between current AI and High Intelligence.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <button className="btn-filled-gold flex items-center gap-2 group">
+              <a
+                href="https://t.me/+tKlfzx7IWopmNWQ0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-filled-gold flex items-center gap-2 group"
+              >
                 <Download className="w-4 h-4" />
-                Download Solaris CET App
+                Start Mining on Telegram
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </button>
+              </a>
               <a
                 href={WHITEPAPER_URL}
                 target="_blank"
