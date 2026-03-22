@@ -126,7 +126,7 @@ const HybridEngineSection = () => {
       <img
         ref={coinRef}
         src={`${import.meta.env.BASE_URL}hero-coin.png`}
-        alt=""
+        alt="Solaris CET token coin"
         width="400"
         height="400"
         className="absolute left-[60%] top-[45%] -translate-x-1/2 -translate-y-1/2 w-[min(35vw,400px)] opacity-0 pointer-events-none"

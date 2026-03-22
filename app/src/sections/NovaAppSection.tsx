@@ -13,6 +13,8 @@ const tickerItems = [
   { label: 'Earnings', value: '0.0041 CET / hr', icon: Droplets },
   { label: 'Uptime', value: '99.97%', icon: Battery },
   { label: 'Next Payout', value: '00:14:22', icon: Clock },
+  { label: 'AI Agents', value: '200,000+', icon: Battery },
+  { label: 'Miners Active', value: '18,420', icon: TrendingUp },
 ];
 
 // Pre-build the doubled ticker array once to avoid array spread on every render

@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect, useState } from 'react';
 import { gsap } from 'gsap';
-import { Download, FileText, Mail, ArrowRight, Sun, Github, Twitter, Send, Globe, Copy, CheckCircle } from 'lucide-react';
+import { Download, FileText, ArrowRight, Sun, Github, Twitter, Send, Globe, Copy, CheckCircle, Zap } from 'lucide-react';
 import SocialShare from '../components/SocialShare';
 
 // Constants defined once to avoid duplication and maintain a single source of truth
@@ -32,21 +32,8 @@ const FooterSection = () => {
   const newsletterRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
-  const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [copiedPool, setCopiedPool] = useState(false);
   const [copiedContract, setCopiedContract] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setIsSubscribed(true);
-      setTimeout(() => {
-        setIsSubscribed(false);
-        setEmail('');
-      }, 3000);
-    }
-  };
 
   const handleCopyPool = () => {
     navigator.clipboard.writeText(DEDUST_POOL_ADDRESS).then(() => {
@@ -220,26 +207,32 @@ const FooterSection = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Mail className="w-4 h-4 text-solaris-gold" />
-                <span className="hud-label text-solaris-gold">Stay Updated</span>
+                <Send className="w-4 h-4 text-[#2AABEE]" />
+                <span className="hud-label text-[#2AABEE]">Join the Community</span>
               </div>
-              <p className="text-solaris-text">Get network updates (no spam).</p>
+              <p className="text-solaris-text">Get live updates, talk to the team, and follow the 200,000-agent build in real time.</p>
+              <p className="text-solaris-muted text-xs mt-1">Telegram · Free · No spam · Instant access</p>
             </div>
-            <form onSubmit={handleSubscribe} className="flex gap-3 w-full lg:w-auto">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email address"
-                className="flex-1 lg:w-64 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text placeholder:text-solaris-muted/50 focus:outline-none focus:border-solaris-gold/50 transition-colors"
-              />
-              <button
-                type="submit"
-                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${isSubscribed ? 'bg-emerald-400 text-solaris-dark' : 'btn-gold'}`}
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <a
+                href="https://t.me/SolarisCET"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2AABEE]/10 border border-[#2AABEE]/30 text-[#2AABEE] font-semibold text-sm hover:bg-[#2AABEE]/20 transition-all duration-200 active:scale-95"
               >
-                {isSubscribed ? 'Subscribed!' : 'Subscribe'}
-              </button>
-            </form>
+                <Send className="w-4 h-4" />
+                Join Telegram Channel
+              </a>
+              <a
+                href="https://t.me/+tKlfzx7IWopmNWQ0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-solaris-gold/10 border border-solaris-gold/30 text-solaris-gold font-semibold text-sm hover:bg-solaris-gold/20 transition-all duration-200 active:scale-95"
+              >
+                <Zap className="w-4 h-4" />
+                Start Mining Bot
+              </a>
+            </div>
           </div>
         </div>
 
