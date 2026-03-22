@@ -116,6 +116,7 @@ const FAQSection = () => {
     <section
       id="faq"
       ref={sectionRef}
+      aria-label="Frequently Asked Questions"
       className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden"
     >
       <GlowOrbs variant="cyan" />
@@ -145,9 +146,11 @@ const FAQSection = () => {
           {faqs.map((faq, i) => (
             <div key={i} className="faq-item glass-card border border-white/10 overflow-hidden">
               <button
+                id={`faq-btn-${i}`}
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full flex items-center justify-between p-6 text-left group"
                 aria-expanded={openIndex === i}
+                aria-controls={`faq-panel-${i}`}
               >
                 <span className="font-display font-semibold text-solaris-text text-base group-hover:text-solaris-gold transition-colors pr-4">
                   {faq.question}
@@ -159,6 +162,9 @@ const FAQSection = () => {
                 />
               </button>
               <div
+                id={`faq-panel-${i}`}
+                role="region"
+                aria-labelledby={`faq-btn-${i}`}
                 className={`overflow-hidden transition-all duration-300 ease-in-out ${
                   openIndex === i ? 'max-h-96' : 'max-h-0'
                 }`}

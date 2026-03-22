@@ -194,6 +194,7 @@ const RoadmapSection = () => {
     <section
       id="roadmap"
       ref={sectionRef}
+      aria-label="Project Roadmap"
       className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden"
     >
       {/* Background decorations */}

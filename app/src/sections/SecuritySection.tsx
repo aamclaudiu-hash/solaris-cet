@@ -117,6 +117,7 @@ const SecuritySection = () => {
   return (
     <section
       ref={sectionRef}
+      aria-label="Security and Compliance"
       className="relative bg-solaris-dark py-24 lg:py-32"
     >
       {/* Background grid */}
