@@ -4,6 +4,7 @@ import { Coins, Pickaxe, Users, TrendingDown } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import LivePoolStats from '../components/LivePoolStats';
 import ChainStateWidget from '../components/ChainStateWidget';
+import TokenomicsChart from '../components/TokenomicsChart';
 import { useLanguage } from '../hooks/useLanguage';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -324,6 +325,11 @@ const TokenomicsSection = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Token distribution donut chart */}
+          <div className="mt-8">
+            <TokenomicsChart />
           </div>
         </div>
       </div>
