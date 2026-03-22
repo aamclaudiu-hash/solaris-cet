@@ -1,92 +1,144 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
-import { Crown, Code2, Palette, Brain, Shield, Globe } from 'lucide-react';
+import {
+  Crown, Code2, Palette, Brain, Shield, Globe,
+  Users, TrendingUp, Coins, FileCheck,
+} from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
+import AnimatedCounter from '../components/AnimatedCounter';
 
+// Total: 48 000 + 34 000 + 27 000 + 21 000 + 18 000 + 17 000 + 13 000 + 10 000 + 7 000 + 5 000 = 200 000
 interface Department {
   id: string;
   name: string;
-  tagline: string;
-  agents: string[];
+  agentCount: number;
+  roles: string[];
   icon: typeof Crown;
   iconBg: string;
   iconColor: string;
   borderColor: string;
-  badgeColor: string;
+  countColor: string;
 }
 
 const departments: Department[] = [
   {
-    id: 'csuite',
-    name: 'C-Suite',
-    tagline: '3 strategic agents driving vision, architecture and product',
-    agents: ['CEO Agent', 'CTO Agent', 'CPO Agent'],
-    icon: Crown,
-    iconBg: 'bg-solaris-gold/10',
-    iconColor: 'text-solaris-gold',
-    borderColor: 'border-solaris-gold/30',
-    badgeColor: 'bg-solaris-gold/10 text-solaris-gold border-solaris-gold/30',
+    id: 'customer-ops',
+    name: 'Customer Operations',
+    agentCount: 48_000,
+    roles: ['Tier-1 Support', 'Tier-2 Escalation', 'Account Success', 'Onboarding', 'Retention', 'Feedback Analysis'],
+    icon: Users,
+    iconBg: 'bg-cyan-400/10',
+    iconColor: 'text-cyan-400',
+    borderColor: 'border-cyan-400/20',
+    countColor: 'text-cyan-400',
   },
   {
     id: 'engineering',
     name: 'Engineering',
-    tagline: '5 engineering agents building and optimizing at machine speed',
-    agents: ['VP Engineering', 'Senior Frontend ×2', 'Performance Engineer', 'QA Engineer'],
+    agentCount: 34_000,
+    roles: ['Frontend', 'Backend', 'Infrastructure', 'Mobile', 'QA & Testing', 'Performance', 'Platform'],
     icon: Code2,
-    iconBg: 'bg-cyan-400/10',
-    iconColor: 'text-cyan-400',
-    borderColor: 'border-cyan-400/30',
-    badgeColor: 'bg-cyan-400/10 text-cyan-400 border-cyan-400/30',
+    iconBg: 'bg-blue-400/10',
+    iconColor: 'text-blue-400',
+    borderColor: 'border-blue-400/20',
+    countColor: 'text-blue-400',
   },
   {
-    id: 'design',
-    name: 'Design',
-    tagline: '3 design agents delivering pixel-perfect, accessible interfaces',
-    agents: ['VP Design', 'UX Architect', 'UI Specialist'],
-    icon: Palette,
-    iconBg: 'bg-purple-400/10',
-    iconColor: 'text-purple-400',
-    borderColor: 'border-purple-400/30',
-    badgeColor: 'bg-purple-400/10 text-purple-400 border-purple-400/30',
-  },
-  {
-    id: 'intelligence',
-    name: 'Intelligence',
-    tagline: '3 intelligence agents powering the ReAct protocol and on-chain reasoning',
-    agents: ['AI Oracle Lead', 'ML Research', 'Data Pipeline'],
-    icon: Brain,
+    id: 'sales',
+    name: 'Sales & Growth',
+    agentCount: 27_000,
+    roles: ['SDR', 'Account Executive', 'Partner Manager', 'Deal Intelligence', 'Pipeline Ops', 'Forecasting'],
+    icon: TrendingUp,
     iconBg: 'bg-emerald-400/10',
     iconColor: 'text-emerald-400',
-    borderColor: 'border-emerald-400/30',
-    badgeColor: 'bg-emerald-400/10 text-emerald-400 border-emerald-400/30',
+    borderColor: 'border-emerald-400/20',
+    countColor: 'text-emerald-400',
+  },
+  {
+    id: 'data-intelligence',
+    name: 'Data & Intelligence',
+    agentCount: 21_000,
+    roles: ['ML Research', 'Data Pipeline', 'AI Oracle', 'Model Ops', 'BI Analyst', 'Synthetic Data'],
+    icon: Brain,
+    iconBg: 'bg-purple-400/10',
+    iconColor: 'text-purple-400',
+    borderColor: 'border-purple-400/20',
+    countColor: 'text-purple-400',
+  },
+  {
+    id: 'finance',
+    name: 'Finance & Analytics',
+    agentCount: 18_000,
+    roles: ['FP&A', 'Treasury', 'Tax Compliance', 'Accounting', 'Risk Modelling', 'Payroll'],
+    icon: Coins,
+    iconBg: 'bg-solaris-gold/10',
+    iconColor: 'text-solaris-gold',
+    borderColor: 'border-solaris-gold/20',
+    countColor: 'text-solaris-gold',
+  },
+  {
+    id: 'marketing',
+    name: 'Marketing & Content',
+    agentCount: 17_000,
+    roles: ['Copywriting', 'SEO', 'Social Media', 'Paid Ads', 'Email Campaigns', 'Brand Strategy'],
+    icon: Globe,
+    iconBg: 'bg-orange-400/10',
+    iconColor: 'text-orange-400',
+    borderColor: 'border-orange-400/20',
+    countColor: 'text-orange-400',
+  },
+  {
+    id: 'product-design',
+    name: 'Product & Design',
+    agentCount: 13_000,
+    roles: ['Product Manager', 'UX Researcher', 'UI Designer', 'Prototyping', 'A/B Testing', 'Roadmap Planning'],
+    icon: Palette,
+    iconBg: 'bg-pink-400/10',
+    iconColor: 'text-pink-400',
+    borderColor: 'border-pink-400/20',
+    countColor: 'text-pink-400',
   },
   {
     id: 'security',
-    name: 'Security',
-    tagline: '3 security agents operating 24/7 threat monitoring',
-    agents: ['CISO', 'Smart Contract Auditor', 'Penetration Tester'],
+    name: 'Security & Compliance',
+    agentCount: 10_000,
+    roles: ['SOC Analyst', 'Smart Contract Auditor', 'Pen Tester', 'GDPR/KYC', 'Threat Intel', 'Incident Response'],
     icon: Shield,
     iconBg: 'bg-red-400/10',
     iconColor: 'text-red-400',
-    borderColor: 'border-red-400/30',
-    badgeColor: 'bg-red-400/10 text-red-400 border-red-400/30',
+    borderColor: 'border-red-400/20',
+    countColor: 'text-red-400',
   },
   {
-    id: 'operations',
-    name: 'Operations',
-    tagline: '3 operations agents ensuring global reach and uptime',
-    agents: ['DevOps', 'i18n Engineer', 'Community Manager'],
-    icon: Globe,
-    iconBg: 'bg-solaris-gold/10',
-    iconColor: 'text-solaris-gold',
-    borderColor: 'border-solaris-gold/30',
-    badgeColor: 'bg-solaris-gold/10 text-solaris-gold border-solaris-gold/30',
+    id: 'legal',
+    name: 'Legal & Risk',
+    agentCount: 7_000,
+    roles: ['Contract Review', 'IP Management', 'Regulatory Watch', 'Litigation Support', 'Policy Drafting'],
+    icon: FileCheck,
+    iconBg: 'bg-amber-400/10',
+    iconColor: 'text-amber-400',
+    borderColor: 'border-amber-400/20',
+    countColor: 'text-amber-400',
+  },
+  {
+    id: 'research',
+    name: 'Research & Innovation',
+    agentCount: 5_000,
+    roles: ['Quantum Research', 'Advanced AI R&D', 'Blockchain Protocol', 'Agricultural Science', 'Patent Analysis'],
+    icon: Crown,
+    iconBg: 'bg-solaris-cyan/10',
+    iconColor: 'text-solaris-cyan',
+    borderColor: 'border-solaris-cyan/20',
+    countColor: 'text-solaris-cyan',
   },
 ];
+
+const TOTAL_AGENTS = 200_000;
 
 const AITeamSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -110,6 +162,22 @@ const AITeamSection = () => {
         }
       );
 
+      gsap.fromTo(
+        statsRef.current,
+        { y: 24, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: statsRef.current,
+            start: 'top 85%',
+            end: 'top 60%',
+            scrub: true,
+          },
+        }
+      );
+
       const cards = cardsRef.current?.querySelectorAll('.team-card');
       if (cards) {
         gsap.fromTo(
@@ -118,12 +186,12 @@ const AITeamSection = () => {
           {
             y: 0,
             opacity: 1,
-            stagger: 0.12,
+            stagger: 0.08,
             duration: 0.7,
             scrollTrigger: {
               trigger: cardsRef.current,
               start: 'top 80%',
-              end: 'top 35%',
+              end: 'top 20%',
               scrub: true,
             },
           }
@@ -150,8 +218,9 @@ const AITeamSection = () => {
       </div>
 
       <div className="relative z-10 px-6 lg:px-12 max-w-7xl mx-auto">
+
         {/* Section heading */}
-        <div ref={headingRef} className="max-w-2xl mb-16">
+        <div ref={headingRef} className="max-w-3xl mb-10">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
               <Brain className="w-5 h-5 text-solaris-gold" />
@@ -160,58 +229,104 @@ const AITeamSection = () => {
           </div>
 
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
-            Powered by{' '}
-            <span className="text-solaris-gold">Autonomous Intelligence</span>
+            200,000 Agents.{' '}
+            <span className="text-solaris-gold">Zero Marginal Cost.</span>
           </h2>
 
           <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
-            The world's first AI-native corporate structure — every role filled by a Solaris
-            agent operating at the speed of thought.
+            Large enterprises deploy hundreds of thousands of employees — now augmented by AI.
+            Solaris CET matches that scale entirely through autonomous agents: 200,000 specialists
+            operating 24/7, across 10 departments, at the speed of thought.
           </p>
         </div>
 
-        {/* Department cards */}
+        {/* Grand-total stat bar */}
+        <div ref={statsRef} className="glass-card-gold p-6 mb-12 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+          <div>
+            <div className="hud-label text-solaris-gold mb-1">TOTAL WORKFORCE</div>
+            <div className="font-display font-black text-4xl lg:text-5xl text-solaris-gold">
+              <AnimatedCounter end={TOTAL_AGENTS} className="tabular-nums" />
+            </div>
+            <div className="text-solaris-muted text-xs mt-1">Autonomous Agents Deployed</div>
+          </div>
+          <div>
+            <div className="hud-label text-solaris-cyan mb-1">DEPARTMENTS</div>
+            <div className="font-display font-black text-4xl lg:text-5xl text-solaris-cyan">
+              <AnimatedCounter end={10} className="tabular-nums" />
+            </div>
+            <div className="text-solaris-muted text-xs mt-1">Enterprise Divisions</div>
+          </div>
+          <div>
+            <div className="hud-label text-emerald-400 mb-1">UPTIME</div>
+            <div className="font-display font-black text-4xl lg:text-5xl text-emerald-400">
+              24/7
+            </div>
+            <div className="text-solaris-muted text-xs mt-1">Always On — No Sleep, No Breaks</div>
+          </div>
+        </div>
+
+        {/* Department cards — 5 columns on large screens, 2 on small */}
         <div
           ref={cardsRef}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
         >
           {departments.map((dept) => {
             const DeptIcon = dept.icon;
-            const agentCount = dept.agents.length;
 
             return (
               <div
                 key={dept.id}
-                className={`team-card glass-card p-6 border ${dept.borderColor} flex flex-col gap-4 group hover:border-opacity-60 transition-all duration-300`}
+                className={`team-card glass-card p-5 border ${dept.borderColor} flex flex-col gap-3 group hover:border-opacity-60 transition-all duration-300`}
               >
                 {/* Icon + department name */}
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl ${dept.iconBg} flex items-center justify-center shrink-0`}>
-                    <DeptIcon className={`w-5 h-5 ${dept.iconColor}`} />
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-lg ${dept.iconBg} flex items-center justify-center shrink-0`}>
+                    <DeptIcon className={`w-4 h-4 ${dept.iconColor}`} />
                   </div>
-                  <span className={`hud-label ${dept.iconColor}`}>{dept.name.toUpperCase()}</span>
+                  <span className={`hud-label text-[10px] leading-tight ${dept.iconColor}`}>
+                    {dept.name.toUpperCase()}
+                  </span>
                 </div>
 
-                {/* Agent list */}
-                <ul className="space-y-1.5 flex-1">
-                  {dept.agents.map((agent) => (
-                    <li key={agent} className="flex items-center gap-2">
-                      <span className={`w-1 h-1 rounded-full ${dept.iconColor} bg-current shrink-0`} />
-                      <span className="text-solaris-text text-sm">{agent}</span>
+                {/* Hero headcount */}
+                <div>
+                  <div className={`font-display font-black text-3xl ${dept.countColor} tabular-nums leading-none`}>
+                    <AnimatedCounter
+                      end={dept.agentCount}
+                      suffix="+"
+                      className="tabular-nums"
+                    />
+                  </div>
+                  <div className="hud-label text-[10px] mt-0.5">AGENTS</div>
+                </div>
+
+                {/* Role list */}
+                <ul className="space-y-1 flex-1">
+                  {dept.roles.map((role) => (
+                    <li key={role} className="flex items-center gap-1.5">
+                      <span className={`w-1 h-1 rounded-full bg-current shrink-0 ${dept.iconColor}`} />
+                      <span className="text-solaris-muted text-xs leading-tight">{role}</span>
                     </li>
                   ))}
                 </ul>
-
-                {/* Footer: headcount badge + tagline */}
-                <div className="flex flex-col gap-2 pt-2 border-t border-white/5">
-                  <span className={`self-start flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border ${dept.badgeColor}`}>
-                    {agentCount} Agent{agentCount !== 1 ? 's' : ''}
-                  </span>
-                  <p className="text-solaris-muted text-xs leading-relaxed">{dept.tagline}</p>
-                </div>
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom comparison callout */}
+        <div className="mt-10 glass-card p-6 border border-white/10 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+          <div className="shrink-0 w-12 h-12 rounded-2xl bg-solaris-gold/10 flex items-center justify-center">
+            <TrendingUp className="w-6 h-6 text-solaris-gold" />
+          </div>
+          <div>
+            <div className="hud-label text-solaris-gold mb-1">COMPETITIVE PARITY</div>
+            <p className="text-solaris-muted text-sm leading-relaxed">
+              Fortune 500 companies deploy 100,000–300,000 employees — increasingly augmented by AI.
+              Solaris CET matches that scale with <span className="text-solaris-text font-semibold">200,000 autonomous agents</span>:
+              zero HR overhead, zero downtime, infinite parallelism.
+            </p>
+          </div>
         </div>
       </div>
     </section>
