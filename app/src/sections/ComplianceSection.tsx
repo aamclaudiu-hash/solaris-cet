@@ -93,6 +93,7 @@ const ComplianceSection = () => {
   return (
     <section
       ref={sectionRef}
+      aria-label="Compliance and Regulation"
       className="section-pinned bg-solaris-dark flex items-center justify-center"
     >
       {/* Background grid */}

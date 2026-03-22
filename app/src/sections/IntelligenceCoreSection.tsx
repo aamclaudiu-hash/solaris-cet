@@ -112,6 +112,7 @@ const IntelligenceCoreSection = () => {
     <section
       ref={sectionRef}
       id="intelligence"
+      aria-label="Intelligence Core"
       className="section-pinned bg-solaris-dark flex items-center justify-center"
     >
       {/* Background grid */}
