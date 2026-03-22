@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Send, Copy, Check, ExternalLink, ChevronRight, Sparkles } from 'lucide-react';
+import { X, Send, Copy, Check, ExternalLink, ChevronRight, Sparkles, Trash2 } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -328,7 +329,7 @@ export default function AiOracleSearch() {
   const [finalResponse, setFinalResponse] = useState('');
   const [oracleConfidence, setOracleConfidence] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [chatHistory, setChatHistory] = useState<ChatEntry[]>([]);
+  const [chatHistory, setChatHistory] = useLocalStorage<ChatEntry[]>('oracle-chat-history', []);
   const [copiedResponse, setCopiedResponse] = useState(false);
   const [detectedTopic, setDetectedTopic] = useState<string>('default');
 
@@ -619,10 +620,20 @@ export default function AiOracleSearch() {
               <span className="hidden sm:inline text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>
               <span className="hidden sm:inline text-gray-600 text-xs">×</span>
               <span className="hidden sm:inline text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-purple-400">Grok ACT</span>
+              {chatHistory.length > 0 && (
+                <button
+                  onClick={() => setChatHistory([])}
+                  aria-label="Clear chat history"
+                  title="Clear history"
+                  className="p-2 rounded-lg text-gray-600 hover:text-red-400 hover:bg-gray-800 transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
               <button
                 onClick={handleClose}
                 aria-label="Close Oracle"
-                className="ml-2 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+                className="ml-1 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

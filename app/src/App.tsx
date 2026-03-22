@@ -248,63 +248,63 @@ function AppContent() {
             </LazyLoadWrapper>
           </div>
 
-          {/* Section 11: How to Buy - pin: false */}
+          {/* Section 10: How to Buy - pin: false */}
           <div className="relative z-[80]">
             <LazyLoadWrapper>
               <ErrorBoundary><HowToBuySection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
 
-          {/* Section 12: Mining Calculator - pin: false */}
+          {/* Section 11: Mining Calculator - pin: false */}
           <div className="relative z-[90]">
             <LazyLoadWrapper>
               <ErrorBoundary><MiningCalculatorSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
 
-          {/* Section 13: Security - pin: false */}
+          {/* Section 12: Security - pin: false */}
           <div className="relative z-[100]">
             <LazyLoadWrapper>
               <ErrorBoundary><SecuritySection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
           
-          {/* Section 14: Whitepaper - pin: false */}
+          {/* Section 13: Whitepaper - pin: false */}
           <div className="relative z-[105]">
             <LazyLoadWrapper>
               <ErrorBoundary><WhitepaperSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
 
-          {/* Section 15: High Intelligence - pin: false */}
+          {/* Section 14: High Intelligence - pin: false */}
           <div className="relative z-[108]">
             <LazyLoadWrapper>
               <ErrorBoundary><HighIntelligenceSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
           
-          {/* Section 16: Ecosystem Index - pin: false */}
+          {/* Section 15: Ecosystem Index - pin: false */}
           <div className="relative z-[109]">
             <LazyLoadWrapper>
               <ErrorBoundary><EcosystemIndexSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
 
-          {/* Section 17: Resources - pin: false */}
+          {/* Section 16: Resources - pin: false */}
           <div className="relative z-[110]">
             <LazyLoadWrapper>
               <ErrorBoundary><ResourcesSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
 
-          {/* Section 18: FAQ - pin: false */}
+          {/* Section 17: FAQ - pin: false */}
           <div className="relative z-[112]">
             <LazyLoadWrapper>
               <ErrorBoundary><FAQSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
           
-          {/* Section 19: Footer - pin: false */}
+          {/* Section 18: Footer - pin: false */}
           <div className="relative z-[113]">
             <LazyLoadWrapper>
               <ErrorBoundary><FooterSection /></ErrorBoundary>

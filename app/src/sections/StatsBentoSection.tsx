@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { Users, Coins, Zap, Clock, Shield, TrendingUp, Globe, ArrowRight } from 'lucide-react';
 import AnimatedCounter from '../components/AnimatedCounter';
+import GlowOrbs from '../components/GlowOrbs';
 
 // ─── Stat data ────────────────────────────────────────────────────────────
 
@@ -120,8 +121,9 @@ const StatsBento = () => {
       aria-label="Solaris CET core statistics"
       className="relative bg-solaris-dark py-20 lg:py-28 overflow-hidden mesh-bg"
     >
-      {/* Aurora background */}
+      {/* Aurora + orbs background */}
       <div className="absolute inset-0 aurora-bg opacity-60 pointer-events-none" aria-hidden="true" />
+      <GlowOrbs variant="aurora" />
 
       <div className="relative z-10 px-6 lg:px-12 max-w-7xl mx-auto">
 

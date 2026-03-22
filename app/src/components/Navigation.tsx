@@ -5,13 +5,14 @@ import WalletConnect from './WalletConnect';
 import { useLanguage } from '../hooks/useLanguage';
 
 const NAV_HREFS = [
-  { key: 'cetApp',    href: '#nova-app' },
-  { key: 'tokenomics', href: '#staking' },
-  { key: 'roadmap',  href: '#roadmap' },
-  { key: 'team',     href: '#team' },
-  { key: 'howToBuy', href: '#how-to-buy' },
-  { key: 'resources', href: '#resources' },
-  { key: 'faq',      href: '#faq' },
+  { key: 'cetApp',      href: '#nova-app'    },
+  { key: 'tokenomics',  href: '#staking'     },
+  { key: 'roadmap',     href: '#roadmap'     },
+  { key: 'team',        href: '#team'        },
+  { key: 'competition', href: '#competition' },
+  { key: 'howToBuy',    href: '#how-to-buy'  },
+  { key: 'resources',   href: '#resources'   },
+  { key: 'faq',         href: '#faq'         },
 ] as const;
 
 /**

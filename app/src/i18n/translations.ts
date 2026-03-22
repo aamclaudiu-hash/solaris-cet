@@ -31,6 +31,7 @@ export interface Translations {
     whitepaper: string;
     resources: string;
     faq: string;
+    competition: string;
   };
   hero: {
     tagline: string;
@@ -73,6 +74,7 @@ const translations: Record<LangCode, Translations> = {
       whitepaper: 'Whitepaper',
       resources: 'Resources',
       faq: 'FAQ',
+      competition: 'Compare',
     },
     hero: {
       tagline: 'The Digital Foundation of Cetățuia',
@@ -132,6 +134,7 @@ const translations: Record<LangCode, Translations> = {
       whitepaper: 'Libro Blanco',
       resources: 'Recursos',
       faq: 'Preguntas',
+      competition: 'Comparar',
     },
     hero: {
       tagline: 'La Base Digital de Cetățuia',
@@ -191,6 +194,7 @@ const translations: Record<LangCode, Translations> = {
       whitepaper: '白皮书',
       resources: '资源',
       faq: '常见问题',
+      competition: '对比',
     },
     hero: {
       tagline: 'Cetățuia 的数字基础',
@@ -250,6 +254,7 @@ const translations: Record<LangCode, Translations> = {
       whitepaper: 'Белая книга',
       resources: 'Ресурсы',
       faq: 'FAQ',
+      competition: 'Сравнить',
     },
     hero: {
       tagline: 'Цифровая Основа Cetățuia',
@@ -309,6 +314,7 @@ const translations: Record<LangCode, Translations> = {
       whitepaper: 'Whitepaper',
       resources: 'Resurse',
       faq: 'Întrebări',
+      competition: 'Comparare',
     },
     hero: {
       tagline: 'Fundația Digitală a Cetățuiei',
@@ -368,6 +374,7 @@ const translations: Record<LangCode, Translations> = {
       whitepaper: 'White Paper',
       resources: 'Recursos',
       faq: 'FAQ',
+      competition: 'Comparar',
     },
     hero: {
       tagline: 'A Fundação Digital da Cetățuia',
@@ -427,6 +434,7 @@ const translations: Record<LangCode, Translations> = {
       whitepaper: 'Whitepaper',
       resources: 'Ressourcen',
       faq: 'FAQ',
+      competition: 'Vergleich',
     },
     hero: {
       tagline: 'Das digitale Fundament von Cetățuia',

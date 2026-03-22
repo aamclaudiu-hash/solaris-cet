@@ -7,6 +7,8 @@ import {
 import GlowOrbs from '../components/GlowOrbs';
 import AnimatedCounter from '../components/AnimatedCounter';
 import AgentBoard from '../components/AgentBoard';
+import LiveAgentStats from '../components/LiveAgentStats';
+import AgentDepartmentChart from '../components/AgentDepartmentChart';
 
 // Total: 48 000 + 34 000 + 27 000 + 21 000 + 18 000 + 17 000 + 13 000 + 10 000 + 7 000 + 5 000 = 200 000
 interface Department {
@@ -322,7 +324,16 @@ const AITeamSection = () => {
             <Brain className="w-4 h-4 text-solaris-gold" />
             <span className="hud-label text-solaris-gold">AGENTS TALKING · LEARNING · SOLVING — RIGHT NOW</span>
           </div>
+          {/* Live cumulative stats */}
+          <div className="mb-4">
+            <LiveAgentStats />
+          </div>
           <AgentBoard />
+        </div>
+
+        {/* Department distribution chart */}
+        <div className="mt-6">
+          <AgentDepartmentChart />
         </div>
 
         {/* Bottom comparison callout */}
