@@ -213,7 +213,7 @@ const EcosystemIndexSection = () => {
 
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
             The{' '}
-            <span className="text-solaris-gold">Crypto Landscape</span>{' '}
+            <span className="text-gradient-gold">Crypto Landscape</span>{' '}
             CET Operates In
           </h2>
 

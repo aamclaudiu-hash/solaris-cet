@@ -303,7 +303,7 @@ const ResourcesSection = () => {
                     href={res.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`resource-card glass-card p-5 border border-white/5 ${c.hoverBorder} flex flex-col gap-2 group transition-all duration-300`}
+                    className={`resource-card bento-card p-5 border border-white/5 ${c.hoverBorder} flex flex-col gap-2 group transition-all duration-300`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <span className="font-display font-semibold text-solaris-text group-hover:text-solaris-gold transition-colors">

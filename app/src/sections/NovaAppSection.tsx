@@ -201,7 +201,7 @@ const NovaAppSection = () => {
           </div>
 
           <h2 className="font-display font-bold text-[clamp(22px,2.5vw,36px)] text-solaris-text mb-4">
-            Solaris <span className="text-solaris-gold">CET</span> App
+            Solaris <span className="text-gradient-gold">CET</span> App
           </h2>
 
           <div className="space-y-4 mb-6">

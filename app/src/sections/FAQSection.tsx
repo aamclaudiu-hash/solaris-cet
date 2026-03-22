@@ -167,7 +167,7 @@ const FAQSection = () => {
 
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
             Common Questions{' '}
-            <span className="text-solaris-gold">Answered</span>
+            <span className="text-gradient-gold">Answered</span>
           </h2>
 
           <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
@@ -178,7 +178,7 @@ const FAQSection = () => {
         {/* FAQ accordion */}
         <div ref={listRef} className="flex flex-col gap-3" role="list">
           {faqs.map((faq, i) => (
-            <div key={i} className="faq-item glass-card border border-white/10 overflow-hidden" role="listitem">
+            <div key={i} className="faq-item bento-card border border-white/8 overflow-hidden" role="listitem">
               <button
                 id={`faq-btn-${i}`}
                 className="faq-trigger w-full flex items-center justify-between p-6 text-left group"

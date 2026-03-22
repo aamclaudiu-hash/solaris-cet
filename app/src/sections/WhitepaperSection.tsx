@@ -392,7 +392,7 @@ const WhitepaperSection = () => {
 
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
             Solaris CET —{' '}
-            <span className="text-solaris-gold">Technical Overview</span>
+            <span className="text-gradient-gold">Technical Overview</span>
           </h2>
 
           <p className="text-solaris-muted text-base lg:text-lg leading-relaxed mb-4">

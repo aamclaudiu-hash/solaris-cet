@@ -158,7 +158,7 @@ const HowToBuySection = () => {
           </div>
 
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
-            Get <span className="text-solaris-gold">Solaris CET</span>{' '}
+            Get <span className="text-gradient-gold">Solaris CET</span>{' '}
             in 3 Steps
           </h2>
 
@@ -180,7 +180,7 @@ const HowToBuySection = () => {
             return (
               <div
                 key={step.id}
-                className={`step-card glass-card p-6 border ${c.border} flex flex-col gap-4 group hover:border-opacity-60 transition-all duration-300`}
+                className={`step-card bento-card p-6 border ${c.border} flex flex-col gap-4 group transition-all duration-300`}
               >
                 {/* Step number */}
                 <span className={`font-mono font-bold text-3xl ${c.text} opacity-40`}>
