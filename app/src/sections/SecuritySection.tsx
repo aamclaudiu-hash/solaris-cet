@@ -119,11 +119,12 @@ const SecuritySection = () => {
       id="security"
       ref={sectionRef}
       aria-label="Security and Compliance"
-      className="relative bg-solaris-dark py-24 lg:py-32"
+      className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden"
     >
-      {/* Background grid */}
+      {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[40vh] grid-floor opacity-15" />
+        <div className="absolute inset-0 aurora-bg opacity-40" />
       </div>
 
       <div className="relative z-10 px-6 lg:px-12 max-w-7xl mx-auto">
@@ -139,7 +140,7 @@ const SecuritySection = () => {
             </div>
 
             <h2 className="font-display font-bold text-[clamp(28px,3.5vw,44px)] text-solaris-text mb-4">
-              Security <span className="text-emerald-400">First</span>
+              Security <span className="text-gradient-aurora">First</span>
             </h2>
 
             <p className="text-solaris-muted text-base lg:text-lg leading-relaxed mb-6">
@@ -198,7 +199,7 @@ const SecuritySection = () => {
             {auditBadges.map((badge) => (
               <div
                 key={badge.label}
-                className="audit-badge glass-card p-5 hover:border-solaris-gold/30 transition-all duration-300 group"
+                className="audit-badge bento-card p-5 hover:border-solaris-gold/30 transition-all duration-300 group"
               >
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${

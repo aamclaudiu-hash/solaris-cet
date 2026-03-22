@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { CheckCircle, XCircle, Minus, Trophy, Zap, Shield, Brain, Coins } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import GlowOrbs from '../components/GlowOrbs';
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -195,7 +196,7 @@ const CompetitionSection = () => {
       id="competition"
       ref={sectionRef}
       aria-label="Competitive Analysis"
-      className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden"
+      className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />
 
@@ -294,7 +295,7 @@ const CompetitionSection = () => {
             return (
               <div
                 key={adv.title}
-                className={`adv-card glass-card p-6 border ${adv.border} group hover:scale-[1.02] transition-transform duration-200`}
+                className={`adv-card bento-card p-6 border ${adv.border} group hover:scale-[1.02] transition-transform duration-200`}
               >
                 <div className={`w-10 h-10 rounded-xl ${adv.bg} flex items-center justify-center mb-4`}>
                   <Icon className={`w-5 h-5 ${adv.color}`} />
@@ -304,6 +305,95 @@ const CompetitionSection = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* TPS + Agents charts */}
+        <div className="mt-16 grid lg:grid-cols-2 gap-8">
+
+          {/* TPS chart */}
+          <div className="glass-card p-6 border border-white/10">
+            <div className="flex items-center gap-2 mb-6">
+              <Zap className="w-4 h-4 text-solaris-cyan" />
+              <span className="hud-label text-solaris-cyan">TRANSACTIONS PER SECOND (TPS)</span>
+            </div>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart
+                data={[
+                  { name: 'CET', value: 100_000, isCET: true },
+                  { name: 'FET', value: 1_000,   isCET: false },
+                  { name: 'TAO', value: 1_000,   isCET: false },
+                  { name: 'AGIX', value: 15,     isCET: false },
+                  { name: 'OCEAN', value: 15,    isCET: false },
+                ]}
+                margin={{ top: 0, right: 0, left: -20, bottom: 0 }}
+              >
+                <XAxis dataKey="name" tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => v >= 1000 ? `${v/1000}k` : String(v)} />
+                <Tooltip
+                  contentStyle={{ background: '#0D0E17', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, fontSize: 12 }}
+                  labelStyle={{ color: '#F4F6FF', fontFamily: 'monospace' }}
+                  formatter={(v) => [`${Number(v).toLocaleString()} TPS`, '']}
+                />
+                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  {[
+                    { name: 'CET', isCET: true },
+                    { name: 'FET', isCET: false },
+                    { name: 'TAO', isCET: false },
+                    { name: 'AGIX', isCET: false },
+                    { name: 'OCEAN', isCET: false },
+                  ].map((entry) => (
+                    <Cell key={entry.name} fill={entry.isCET ? '#F2C94C' : 'rgba(255,255,255,0.15)'} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+            <p className="text-solaris-muted/60 text-[11px] mt-2 font-mono text-center">
+              TON delivers 100× more throughput than closest AI-chain competitor
+            </p>
+          </div>
+
+          {/* Scarcity chart */}
+          <div className="glass-card p-6 border border-white/10">
+            <div className="flex items-center gap-2 mb-6">
+              <Coins className="w-4 h-4 text-solaris-gold" />
+              <span className="hud-label text-solaris-gold">TOKEN SCARCITY (log scale — lower = rarer)</span>
+            </div>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart
+                data={[
+                  { name: 'CET',   value: 9_000,         isCET: true  },
+                  { name: 'TAO',   value: 21_000_000,    isCET: false },
+                  { name: 'FET',   value: 1_150_000_000, isCET: false },
+                  { name: 'OCEAN', value: 1_410_000_000, isCET: false },
+                  { name: 'AGIX',  value: 2_000_000_000, isCET: false },
+                ]}
+                margin={{ top: 0, right: 0, left: -20, bottom: 0 }}
+              >
+                <XAxis dataKey="name" tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
+                <YAxis scale="log" domain={['auto', 'auto']} tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => v >= 1e9 ? `${(v/1e9).toFixed(0)}B` : v >= 1e6 ? `${(v/1e6).toFixed(0)}M` : v >= 1e3 ? `${(v/1e3).toFixed(0)}K` : String(v)} />
+                <Tooltip
+                  contentStyle={{ background: '#0D0E17', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, fontSize: 12 }}
+                  labelStyle={{ color: '#F4F6FF', fontFamily: 'monospace' }}
+                  formatter={(v) => [`${Number(v).toLocaleString()} tokens`, 'Total Supply']}
+                />
+                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  {[
+                    { name: 'CET',   isCET: true  },
+                    { name: 'TAO',   isCET: false },
+                    { name: 'FET',   isCET: false },
+                    { name: 'OCEAN', isCET: false },
+                    { name: 'AGIX',  isCET: false },
+                  ].map((entry) => (
+                    <Cell key={entry.name} fill={entry.isCET ? '#F2C94C' : 'rgba(255,255,255,0.15)'} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+            <p className="text-solaris-muted/60 text-[11px] mt-2 font-mono text-center">
+              9,000 CET vs 2,000,000,000 AGIX — scarcity is the ultimate store of value
+            </p>
+          </div>
+
         </div>
 
       </div>

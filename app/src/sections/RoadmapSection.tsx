@@ -195,7 +195,7 @@ const RoadmapSection = () => {
       id="roadmap"
       ref={sectionRef}
       aria-label="Project Roadmap"
-      className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden"
+      className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -216,7 +216,7 @@ const RoadmapSection = () => {
 
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
             The Path to{' '}
-            <span className="text-solaris-gold">Sustainable Growth</span>
+            <span className="text-gradient-gold">Sustainable Growth</span>
           </h2>
 
           <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
@@ -245,7 +245,7 @@ const RoadmapSection = () => {
             return (
               <div
                 key={phase.id}
-                className={`roadmap-card glass-card p-6 border ${cfg.borderClass} flex flex-col gap-4 group hover:border-opacity-60 transition-all duration-300`}
+                className={`roadmap-card bento-card p-6 border ${cfg.borderClass} flex flex-col gap-4 group hover:border-opacity-60 transition-all duration-300`}
               >
                 {/* Quarter + status badge */}
                 <div className="flex items-center justify-between">

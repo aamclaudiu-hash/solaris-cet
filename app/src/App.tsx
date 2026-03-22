@@ -11,6 +11,7 @@ import BackToTop from './components/BackToTop';
 // Pinned sections — loaded eagerly so the snap/scroll setup can find their ScrollTriggers
 import HeroSection from './sections/HeroSection';
 import HybridEngineSection from './sections/HybridEngineSection';
+import StatsBentoSection from './sections/StatsBentoSection';
 import IntelligenceCoreSection from './sections/IntelligenceCoreSection';
 import NovaAppSection from './sections/NovaAppSection';
 import TokenomicsSection from './sections/TokenomicsSection';
@@ -183,7 +184,14 @@ function AppContent() {
               <HeroSection />
             </ErrorBoundary>
           </div>
-          
+
+          {/* Section 1.5: Stats Bento — immediate impact numbers */}
+          <div className="relative z-[15]">
+            <LazyLoadWrapper>
+              <StatsBentoSection />
+            </LazyLoadWrapper>
+          </div>
+
           {/* Section 2: Hybrid Engine - pin: true */}
           <div className="relative z-20">
             <ErrorBoundary>

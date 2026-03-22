@@ -64,15 +64,21 @@ const Navigation = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ${
         isScrolled
-          ? 'bg-solaris-dark/85 backdrop-blur-xl border-b border-white/5'
+          ? 'bg-solaris-dark/90 backdrop-blur-2xl border-b border-white/6 shadow-[0_1px_0_rgba(242,201,76,0.06),0_8px_32px_rgba(0,0,0,0.4)]'
           : 'bg-transparent'
       }`}
     >
-      {/* Scroll progress bar */}
+      {/* Scroll progress bar — animated shimmer */}
       <div
         ref={progressBarRef}
-        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-solaris-gold via-solaris-cyan to-solaris-gold transition-none"
-        style={{ width: `${scrollProgress}%` }}
+        className="absolute bottom-0 left-0 h-[2px] transition-none"
+        style={{
+          width: `${scrollProgress}%`,
+          background: 'linear-gradient(90deg, #F2C94C, #2EE7FF, #a78bfa, #F2C94C)',
+          backgroundSize: '200% 100%',
+          animation: 'text-shimmer 3s linear infinite',
+          boxShadow: '0 0 8px rgba(242,201,76,0.6)',
+        }}
       />
 
       <div className="w-full px-6 xl:px-12">
