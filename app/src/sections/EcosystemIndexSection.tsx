@@ -245,7 +245,7 @@ const EcosystemIndexSection = () => {
             href="https://app.reserve.org/bsc/index-dtf/0x2f8a339b5889ffac4c5a956787cda593b3c36867/overview"
             target="_blank"
             rel="noopener noreferrer"
-            className="group glass-card p-6 lg:p-8 border border-solaris-gold/30 hover:border-solaris-gold/60 flex flex-col md:flex-row md:items-center gap-6 transition-all duration-300"
+            className="group bento-card p-6 lg:p-8 border border-solaris-gold/30 hover:border-solaris-gold/60 flex flex-col md:flex-row md:items-center gap-6 transition-all duration-300"
           >
             <div className="flex items-center gap-4 shrink-0">
               <div className="w-14 h-14 rounded-2xl bg-solaris-gold/10 border border-solaris-gold/20 flex items-center justify-center">

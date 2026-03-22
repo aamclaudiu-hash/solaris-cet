@@ -215,7 +215,7 @@ const HeroSection: React.FC = () => {
 
           {/* RIGHT COLUMN: TELEMETRY HUD */}
           <div ref={hudWrapperRef} className="lg:col-span-5 flex flex-col justify-center">
-            <div className="glass-card p-5 md:p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md">
+            <div className="bento-card p-5 md:p-8 rounded-3xl border border-white/10">
               <div className="flex items-center gap-2 mb-5 md:mb-8 text-yellow-500 font-mono text-xs md:text-sm tracking-widest">
                 <Activity size={14} /> NETWORK TELEMETRY
               </div>

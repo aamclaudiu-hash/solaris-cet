@@ -280,7 +280,7 @@ const AITeamSection = () => {
             return (
               <div
                 key={dept.id}
-                className={`team-card glass-card p-5 border ${dept.borderColor} flex flex-col gap-3 group hover:border-opacity-60 transition-all duration-300`}
+                className={`team-card bento-card p-5 border ${dept.borderColor} flex flex-col gap-3 group transition-all duration-300`}
               >
                 {/* Icon + department name */}
                 <div className="flex items-center gap-2">
@@ -337,7 +337,7 @@ const AITeamSection = () => {
         </div>
 
         {/* Bottom comparison callout */}
-        <div className="mt-10 glass-card p-6 border border-white/10 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+        <div className="mt-10 bento-card p-6 border border-white/10 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
           <div className="shrink-0 w-12 h-12 rounded-2xl bg-solaris-gold/10 flex items-center justify-center">
             <TrendingUp className="w-6 h-6 text-solaris-gold" />
           </div>

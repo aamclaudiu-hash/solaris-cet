@@ -139,7 +139,7 @@ const IntelligenceCoreSection = () => {
 
           <h2 className="font-display font-bold text-[clamp(22px,2.5vw,36px)] text-solaris-text mb-4">
             The Intelligence{' '}
-            <span className="text-gradient-animated">Core</span>
+            <span className="text-gradient-cyan">Core</span>
           </h2>
 
           <div className="space-y-4">

@@ -159,7 +159,7 @@ const HybridEngineSection = () => {
               className="font-display font-bold text-[clamp(24px,3vw,40px)] text-solaris-text"
             >
               <span className="word inline-block">The</span>{' '}
-              <span className="word inline-block text-gradient-animated">Hybrid</span>{' '}
+              <span className="word inline-block text-gradient-gold">Hybrid</span>{' '}
               <span className="word inline-block">Engine</span>
             </h2>
           </div>

@@ -345,7 +345,7 @@ const MiningCalculatorSection = () => {
         {/* Live Stats Row */}
         <div
           ref={statsRef}
-          className="glass-card p-5 lg:p-6"
+          className="bento-card p-5 lg:p-6"
         >
           <div className="hud-label mb-4">Live Network Stats</div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

@@ -174,7 +174,7 @@ const TokenomicsSection = () => {
               <Coins className="w-6 h-6 text-solaris-gold" />
             </div>
             <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text">
-              <span className="text-gradient-animated">{t.tokenomics.title}</span>
+              <span className="text-shimmer">{t.tokenomics.title}</span>
             </h2>
           </div>
 

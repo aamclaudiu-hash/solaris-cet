@@ -324,7 +324,7 @@ const CompetitionSection = () => {
         <div className="mt-16 grid lg:grid-cols-2 gap-8">
 
           {/* TPS chart */}
-          <div className="glass-card p-6 border border-white/10">
+          <div className="bento-card p-6 border border-white/10">
             <div className="flex items-center gap-2 mb-6">
               <Zap className="w-4 h-4 text-solaris-cyan" />
               <span className="hud-label text-solaris-cyan">TRANSACTIONS PER SECOND (TPS)</span>
@@ -366,7 +366,7 @@ const CompetitionSection = () => {
           </div>
 
           {/* Scarcity chart */}
-          <div className="glass-card p-6 border border-white/10">
+          <div className="bento-card p-6 border border-white/10">
             <div className="flex items-center gap-2 mb-6">
               <Coins className="w-4 h-4 text-solaris-gold" />
               <span className="hud-label text-solaris-gold">TOKEN SCARCITY (log scale — lower = rarer)</span>

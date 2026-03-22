@@ -240,7 +240,7 @@ const HowToBuySection = () => {
         {/* Contract address CTA */}
         <div
           ref={ctaRef}
-          className="glass-card p-6 lg:p-8 border border-solaris-gold/20"
+          className="bento-card p-6 lg:p-8 border border-solaris-gold/20"
         >
           <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8">
             {/* Warning label */}
