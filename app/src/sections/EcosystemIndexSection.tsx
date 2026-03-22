@@ -175,6 +175,7 @@ const EcosystemIndexSection = () => {
     <section
       id="ecosystem-index"
       ref={sectionRef}
+      aria-label="Ecosystem Index"
       className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden"
     >
       {/* Background decorations */}
@@ -205,6 +206,21 @@ const EcosystemIndexSection = () => {
             that define the market — from Layer-1 blockchains to stablecoins, DeFi protocols,
             and the CoinMarketCap 20 Index.
           </p>
+        </div>
+
+        {/* CET unique value callout */}
+        <div className="glass-card-gold p-5 mb-8 flex items-start gap-4">
+          <div className="shrink-0 w-10 h-10 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-solaris-gold" />
+          </div>
+          <div>
+            <div className="hud-label text-solaris-gold mb-1">UNIQUE POSITION</div>
+            <p className="text-solaris-muted text-sm leading-relaxed">
+              Unlike any other token in this index, <span className="text-solaris-text font-semibold">Solaris CET</span> combines
+              a fixed supply of 9,000 tokens, Real-World Asset backing, and a fully AI-native corporate structure —
+              making it the only token in the ecosystem that operates an autonomous workforce of 200,000 agents.
+            </p>
+          </div>
         </div>
 
         {/* CMC20 Index featured card */}
