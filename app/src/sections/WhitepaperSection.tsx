@@ -446,7 +446,7 @@ const WhitepaperSection = () => {
         </div>
 
         {/* CTA — IPFS archive */}
-        <div ref={ctaRef} className="glass-card p-6 lg:p-8 border border-solaris-gold/20">
+        <div ref={ctaRef} className="bento-card p-6 lg:p-8 border border-solaris-gold/20">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">

@@ -20,6 +20,7 @@ import ComplianceSection from './sections/ComplianceSection';
 const RoadmapSection = lazy(() => import('./sections/RoadmapSection'));
 const AITeamSection = lazy(() => import('./sections/AITeamSection'));
 const CompetitionSection = lazy(() => import('./sections/CompetitionSection'));
+const NetworkPulseSection = lazy(() => import('./sections/NetworkPulseSection'));
 const HowToBuySection = lazy(() => import('./sections/HowToBuySection'));
 const MiningCalculatorSection = lazy(() => import('./sections/MiningCalculatorSection'));
 const SecuritySection = lazy(() => import('./sections/SecuritySection'));
@@ -245,6 +246,13 @@ function AppContent() {
           <div className="relative z-[78]">
             <LazyLoadWrapper>
               <ErrorBoundary><CompetitionSection /></ErrorBoundary>
+            </LazyLoadWrapper>
+          </div>
+
+          {/* Section 9.5: Network Pulse — live TON + CET stats */}
+          <div className="relative z-[79]">
+            <LazyLoadWrapper>
+              <ErrorBoundary><NetworkPulseSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
 

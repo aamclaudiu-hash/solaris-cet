@@ -208,7 +208,7 @@ const MiningCalculatorSection = () => {
         {/* Calculator Grid */}
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 mb-12">
           {/* Input Card */}
-          <div ref={calculatorRef} className="glass-card p-6 lg:p-8">
+          <div ref={calculatorRef} className="bento-card p-6 lg:p-8">
             <h3 className="font-display font-semibold text-lg text-solaris-text mb-6">
               Configure Your Setup
             </h3>

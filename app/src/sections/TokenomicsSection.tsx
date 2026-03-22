@@ -130,7 +130,7 @@ const TokenomicsSection = () => {
 
       {/* Floating metric pills */}
       <div ref={pillsRef} className="absolute inset-0 pointer-events-none z-20">
-        <div className="metric-pill absolute left-[6vw] top-[20vh] glass-card px-5 py-3 flex items-center gap-3 animate-float">
+        <div className="metric-pill absolute left-[6vw] top-[20vh] bento-card px-5 py-3 flex items-center gap-3 animate-float shadow-depth">
           <Coins className="w-5 h-5 text-solaris-gold" />
           <div>
             <div className="hud-label text-[10px]">Max Supply</div>
@@ -138,7 +138,7 @@ const TokenomicsSection = () => {
           </div>
         </div>
         <div
-          className="metric-pill absolute right-[8vw] top-[24vh] glass-card px-5 py-3 flex items-center gap-3 animate-float"
+          className="metric-pill absolute right-[8vw] top-[24vh] bento-card px-5 py-3 flex items-center gap-3 animate-float shadow-depth"
           style={{ animationDelay: '0.5s' }}
         >
           <Pickaxe className="w-5 h-5 text-solaris-cyan" />
@@ -148,7 +148,7 @@ const TokenomicsSection = () => {
           </div>
         </div>
         <div
-          className="metric-pill absolute right-[10vw] top-[64vh] glass-card px-5 py-3 flex items-center gap-3 animate-float"
+          className="metric-pill absolute right-[10vw] top-[64vh] bento-card px-5 py-3 flex items-center gap-3 animate-float shadow-depth"
           style={{ animationDelay: '1s' }}
         >
           <Users className="w-5 h-5 text-emerald-400" />
@@ -164,7 +164,7 @@ const TokenomicsSection = () => {
         ref={cardRef}
         className="relative z-10 w-[min(80vw,1100px)]"
       >
-        <div className="glass-card-gold p-8 lg:p-12 relative overflow-hidden holo-card">
+        <div className="bento-card p-8 lg:p-12 relative overflow-hidden holo-card border border-solaris-gold/30 shadow-depth">
           {/* Shimmer border */}
           <div className="absolute inset-0 rounded-[18px] shimmer-border pointer-events-none" />
 

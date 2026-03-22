@@ -27,15 +27,20 @@ const APP_CONFIG = {
 } as const;
 
 const TICKER_DATA = [
-  { label: 'AI AGENTS', value: '200,000+' },
-  { label: 'SUPPLY', value: '9,000 CET' },
-  { label: 'NETWORK', value: 'TON' },
-  { label: 'MAX TPS', value: '100,000' },
-  { label: 'FINALITY', value: '2.0s' },
-  { label: 'POOL', value: 'DeDust' },
-  { label: 'MINING', value: '90 YEARS' },
-  { label: 'DEPARTMENTS', value: '10' },
-  { label: 'UPTIME', value: '24/7' },
+  { label: 'AI AGENTS',    value: '200,000+'    },
+  { label: 'SUPPLY',       value: '9,000 CET'   },
+  { label: 'NETWORK',      value: 'TON'          },
+  { label: 'MAX TPS',      value: '100,000'      },
+  { label: 'FINALITY',     value: '2.0s'         },
+  { label: 'POOL',         value: 'DeDust'       },
+  { label: 'MINING',       value: '90 YEARS'     },
+  { label: 'DEPARTMENTS',  value: '10'           },
+  { label: 'UPTIME',       value: '24/7'         },
+  { label: 'AUDIT',        value: 'CYBERSCOPE'   },
+  { label: 'CHAIN',        value: 'MAINNET'      },
+  { label: 'PROTOCOL',     value: 'RAV v3.0'     },
+  { label: 'DUAL-AI',      value: 'GROK × GEMINI'},
+  { label: 'RWA BACKING',  value: 'CETĂȚUIA, RO' },
 ];
 
 // --- SUB-COMPONENTS (Optimized via Memoization) ---
