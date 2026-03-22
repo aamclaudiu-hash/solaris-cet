@@ -202,7 +202,7 @@ const StatsBento = () => {
 
                     {/* Icon */}
                     <div className={`w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center mb-3`}>
-                      <Icon className={`w-4.5 h-4.5 ${stat.color}`} />
+                      <Icon className={`w-[18px] h-[18px] ${stat.color}`} />
                     </div>
 
                     {/* Number */}

@@ -27,6 +27,7 @@ const SecuritySection = lazy(() => import('./sections/SecuritySection'));
 const WhitepaperSection = lazy(() => import('./sections/WhitepaperSection'));
 const HighIntelligenceSection = lazy(() => import('./sections/HighIntelligenceSection'));
 const EcosystemIndexSection = lazy(() => import('./sections/EcosystemIndexSection'));
+const RwaSection = lazy(() => import('./sections/RwaSection'));
 const ResourcesSection = lazy(() => import('./sections/ResourcesSection'));
 const FAQSection = lazy(() => import('./sections/FAQSection'));
 const FooterSection = lazy(() => import('./sections/FooterSection'));
@@ -295,6 +296,13 @@ function AppContent() {
           <div className="relative z-[109]">
             <LazyLoadWrapper>
               <ErrorBoundary><EcosystemIndexSection /></ErrorBoundary>
+            </LazyLoadWrapper>
+          </div>
+
+          {/* Section 15.5: RWA — Real World Assets */}
+          <div className="relative z-[109.5]">
+            <LazyLoadWrapper>
+              <ErrorBoundary><RwaSection /></ErrorBoundary>
             </LazyLoadWrapper>
           </div>
 

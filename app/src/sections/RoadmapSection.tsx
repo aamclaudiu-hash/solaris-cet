@@ -224,8 +224,26 @@ const RoadmapSection = () => {
             ecosystem — every milestone is publicly trackable and immutably recorded.
           </p>
 
+          {/* Overall progress bar: 5 done + 1 active (0.5) of 7 = ~79% */}
+          <div className="mt-6 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-solaris-muted text-[11px] uppercase tracking-wider">Overall Progress</span>
+              <span className="font-mono text-solaris-gold text-xs font-bold">79%</span>
+            </div>
+            <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-solaris-gold to-solaris-cyan"
+                style={{ width: '79%', boxShadow: '0 0 12px rgba(242,201,76,0.4)' }}
+              />
+            </div>
+            <div className="flex items-center justify-between text-[10px] font-mono text-solaris-muted">
+              <span>5 phases complete</span>
+              <span>1 active · 1 upcoming</span>
+            </div>
+          </div>
+
           {/* Live progress indicator */}
-          <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-solaris-gold/10 border border-solaris-gold/30">
+          <div className="mt-4 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-solaris-gold/10 border border-solaris-gold/30">
             <span className="w-2 h-2 rounded-full bg-solaris-gold animate-pulse inline-block" />
             <span className="font-mono text-solaris-gold text-xs font-semibold">
               NOW: Q2 2026 — DAO &amp; Cross-Chain Bridge in Progress
