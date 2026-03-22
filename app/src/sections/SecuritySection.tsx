@@ -19,9 +19,6 @@ const auditBadges = [
     label: 'Freshcoins Verified',
     description: 'Project verification and due diligence',
     color: 'cyan',
-    link: undefined,
-    linkLabel: undefined,
-    linkColor: undefined,
   },
   {
     icon: UserCheck,
@@ -37,9 +34,6 @@ const auditBadges = [
     label: 'Open Source',
     description: 'Fully transparent codebase',
     color: 'purple',
-    link: undefined,
-    linkLabel: undefined,
-    linkColor: undefined,
   },
 ];
 
