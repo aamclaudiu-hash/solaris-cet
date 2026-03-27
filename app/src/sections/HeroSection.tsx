@@ -161,7 +161,7 @@ const HeroSection: React.FC = () => {
     <TooltipProvider>
       <section 
         ref={containerRef}
-        className="relative min-h-screen bg-[#020202] overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center"
+        className="relative min-h-screen bg-solaris-dark overflow-x-clip flex flex-col justify-center items-center"
       >
         {/* Background Layer (Hardware Accelerated) */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -169,35 +169,35 @@ const HeroSection: React.FC = () => {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(242,201,76,0.05),transparent)]" />
         </div>
 
-        <div className="w-full max-w-7xl mx-auto relative z-10 px-4 lg:px-8 flex flex-col gap-4 lg:gap-6 pb-16 lg:pb-0 pt-20 lg:pt-0">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-10 flex flex-col gap-6 lg:gap-8 pb-16 lg:pb-24 pt-20 lg:pt-10">
           {/* 3-column grid: title | coin | HUD */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 md:gap-6 lg:grid-cols-12 lg:gap-8 xl:gap-10 items-start lg:items-stretch gap-5">
           
           {/* LEFT COLUMN: ARCHITECTURE TITLE */}
-          <div ref={titleContainerRef} className="lg:col-span-5 flex flex-col justify-center">
-            <div className="glass-card-gold p-5 md:p-8 rounded-3xl border border-yellow-500/20 backdrop-blur-xl">
-              <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+          <div ref={titleContainerRef} className="lg:col-span-5 flex flex-col justify-center h-full">
+            <div className="glass-card-gold p-5 md:p-8 rounded-3xl border border-yellow-500/20 backdrop-blur-xl h-full">
+              <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-4 md:mb-6">
                 <img src={APP_CONFIG.LINKS.LOGO} className="w-12 h-12 md:w-16 md:h-16 rounded-2xl shadow-[0_0_30px_rgba(242,201,76,0.3)]" alt="Solaris" />
-                <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white">SOLARIS <span className="text-yellow-500">CET</span></h1>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-black tracking-tighter leading-none text-white">SOLARIS <span className="text-yellow-500">CET</span></h1>
               </div>
               
-              <p className="text-gray-400 text-sm md:text-lg leading-relaxed mb-5 md:mb-8">
+              <p className="max-w-[60ch] text-gray-300 text-sm md:text-base lg:text-lg leading-relaxed mb-5 md:mb-8">
                 {t.hero.description}
               </p>
 
-              <div ref={ctaGroupRef} className="flex flex-wrap gap-3 md:gap-4">
+              <div ref={ctaGroupRef} className="flex flex-col sm:flex-row sm:flex-wrap gap-3 md:gap-4">
                 <button 
                   onClick={handleMiningOperation}
                   aria-live="polite"
                   aria-busy={miningState === 'PROCESSING'}
                   aria-label={miningState === 'IDLE' ? 'Start mining' : miningState === 'PROCESSING' ? 'Processing mining operation' : 'Mining initiated successfully'}
-                  className="px-6 md:px-8 py-3 md:py-4 bg-yellow-500 text-black font-bold rounded-2xl hover:scale-105 transition-transform flex items-center gap-2 text-sm md:text-base"
+                  className="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-yellow-500 text-black font-bold rounded-2xl hover:scale-105 transition-transform flex items-center justify-center gap-2 text-sm md:text-base"
                 >
                   {miningState === 'IDLE' ? <><Zap size={18} /> {t.hero.startMining}</> : <Loader2 className="animate-spin" />}
                 </button>
                 <a
                   href="#whitepaper"
-                  className="px-6 md:px-8 py-3 md:py-4 border border-gray-700 text-white font-bold rounded-2xl hover:bg-white/5 transition-colors text-sm md:text-base"
+                  className="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 border border-gray-700 text-white font-bold rounded-2xl hover:bg-white/5 transition-colors text-sm md:text-base text-center"
                 >
                   {t.hero.docs}
                 </a>
@@ -205,17 +205,17 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* CENTER COLUMN: 3D ASSET — hidden on small mobile to save space */}
-          <div className="hidden sm:flex lg:col-span-2 justify-center items-center">
-             <div ref={coinWrapperRef} className="relative w-48 h-48 md:w-64 md:h-64 lg:w-96 lg:h-96">
+          {/* CENTER COLUMN: 3D ASSET */}
+          <div className="flex lg:col-span-2 justify-center items-center">
+             <div ref={coinWrapperRef} className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 lg:w-72 lg:h-72 xl:w-80 xl:h-80">
                 <img src={APP_CONFIG.LINKS.HERO_COIN} className="w-full h-full object-contain animate-pulse" alt="CET Token" />
                 <div className="absolute inset-0 bg-yellow-500/20 blur-[120px] rounded-full" />
              </div>
           </div>
 
           {/* RIGHT COLUMN: TELEMETRY HUD */}
-          <div ref={hudWrapperRef} className="lg:col-span-5 flex flex-col justify-center">
-            <div className="bento-card p-5 md:p-8 rounded-3xl border border-white/10">
+          <div ref={hudWrapperRef} className="lg:col-span-5 flex flex-col justify-center h-full">
+            <div className="bento-card p-5 md:p-8 rounded-3xl border border-white/10 h-full">
               <div className="flex items-center gap-2 mb-5 md:mb-8 text-yellow-500 font-mono text-xs md:text-sm tracking-widest">
                 <Activity size={14} /> NETWORK TELEMETRY
               </div>
@@ -257,10 +257,10 @@ const HeroSection: React.FC = () => {
         </div>
 
         {/* FOOTER TICKER — on mobile, position relative so it doesn't overlay AI oracle */}
-        <div ref={tickerContainerRef} className="lg:absolute lg:bottom-0 w-full py-4 md:py-6 border-t border-white/5 bg-black/80 backdrop-blur-lg mt-4 lg:mt-0">
-           <div className="flex animate-ticker whitespace-nowrap">
+        <div ref={tickerContainerRef} className="lg:absolute lg:bottom-0 w-full overflow-hidden py-4 md:py-6 border-t border-white/5 bg-black/80 backdrop-blur-lg mt-6 lg:mt-0">
+           <div className="flex min-w-max animate-ticker whitespace-nowrap">
               {[...TICKER_DATA, ...TICKER_DATA].map((item, i) => (
-                <div key={i} className="inline-flex items-center px-8 md:px-12 gap-3 md:gap-4">
+                <div key={i} className="inline-flex items-center px-6 sm:px-8 md:px-10 gap-3 md:gap-4">
                   <span className="text-[10px] text-gray-500 font-mono">{item.label}</span>
                   <span className="text-yellow-500 font-bold text-sm">{item.value}</span>
                 </div>
