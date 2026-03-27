@@ -171,7 +171,7 @@ function AppContent() {
       {/* Touch ripple effect (mobile) */}
       <TouchRipple />
 
-      <div ref={mainRef} className="relative bg-solaris-dark min-h-screen">
+      <div ref={mainRef} className="relative min-h-screen overflow-x-clip bg-solaris-dark">
         {/* Noise overlay */}
         <div className="noise-overlay" />
         
@@ -179,7 +179,7 @@ function AppContent() {
         <Navigation />
         
         {/* Main content */}
-        <main id="main-content" className="relative">
+        <main id="main-content" className="relative w-full overflow-x-clip">
           {/* Section 1: Hero - pin: true */}
           <div className="relative z-10">
             <ErrorBoundary>
