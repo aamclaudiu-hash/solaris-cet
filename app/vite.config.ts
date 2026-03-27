@@ -4,6 +4,18 @@ import { defineConfig } from "vite"
 import { compression } from "vite-plugin-compression2"
 import { VitePWA } from 'vite-plugin-pwa'
 
+/**
+ * Coolify / PaaS often set `PORT`. `0` is valid for Vite (pick a free port);
+ * avoid `||` so `0` is not replaced by the fallback.
+ */
+function resolvePreviewPort(fallback = 4173): number {
+  const raw = process.env.PORT
+  if (raw == null || raw === '') return fallback
+  const n = Number.parseInt(String(raw).trim(), 10)
+  if (!Number.isFinite(n) || n < 0) return fallback
+  return n
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
@@ -119,7 +131,7 @@ export default defineConfig({
   ],
   preview: {
     host: '0.0.0.0',
-    port: Number(process.env.PORT) || 4173,
+    port: resolvePreviewPort(),
   },
   build: {
     target: 'esnext',
