@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { TonConnectButton, useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 
 /**
@@ -13,6 +14,30 @@ import { TonConnectButton, useTonConnectUI, useTonWallet } from '@tonconnect/ui-
 const WalletConnect = () => {
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
+  const lastSyncedAddress = useRef<string | null>(null);
+
+  useEffect(() => {
+    const address = wallet?.account?.address?.trim();
+    if (!address || lastSyncedAddress.current === address) return;
+    lastSyncedAddress.current = address;
+
+    void (async () => {
+      try {
+        const res = await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ walletAddress: address }),
+        });
+        if (!res.ok && import.meta.env.DEV) {
+          console.warn('[WalletConnect] /api/auth failed:', res.status, await res.text());
+        }
+      } catch (e) {
+        if (import.meta.env.DEV) {
+          console.warn('[WalletConnect] /api/auth:', e);
+        }
+      }
+    })();
+  }, [wallet?.account?.address]);
 
   const handleTestTransaction = async () => {
     if (!tonConnectUI.connected) return;
