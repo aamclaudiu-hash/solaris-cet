@@ -1,18 +1,24 @@
 {
-  "name": "Solaris CET Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "$schema": "https://json.schemastore.org/devcontainer.json",
+  "name": "Solaris CET",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
+  "remoteUser": "node",
+  "workspaceFolder": "/workspaces/solaris-cet",
+  "postCreateCommand": "bash -lc 'cd app && npm ci && npx playwright install --with-deps chromium'",
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-vscode.vscode-typescript-next",
-        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-playwright.playwright",
+        "vitest.explorer",
+        "ms-vscode.vscode-typescript-next",
         "GitHub.copilot",
-        "GitHub.copilot-chat",
-        "dbaeumer.vscode-eslint"
+        "GitHub.copilot-chat"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -20,17 +26,27 @@
         "editor.codeActionsOnSave": {
           "source.fixAll.eslint": "explicit"
         },
-        "typescript.preferences.importModuleSpecifier": "relative"
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "typescript.enablePromptUseWorkspaceTsdk": true,
+        "typescript.tsdk": "app/node_modules/typescript/lib",
+        "eslint.workingDirectories": ["app"]
       }
     }
   },
-  "postCreateCommand": "cd app && npm install",
-  "forwardPorts": [5173],
+  "forwardPorts": [5173, 4173],
   "portsAttributes": {
     "5173": {
-      "label": "Vite Dev Server",
-      "onAutoForward": "openPreview"
+      "label": "Vite dev",
+      "onAutoForward": "notify"
+    },
+    "4173": {
+      "label": "Vite preview",
+      "onAutoForward": "silent"
     }
   },
-  "workspaceFolder": "/workspaces/solaris-cet"
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "16gb"
+  }
 }
