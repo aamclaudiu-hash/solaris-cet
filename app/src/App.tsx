@@ -68,6 +68,29 @@ function AppContent() {
     return () => clearTimeout(timer);
   }, []);
 
+  /** When the server serves `index.html` for `/mining`, scroll to the calculator after lazy sections mount. */
+  useEffect(() => {
+    if (!isLoaded) return;
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    if (path !== '/mining') return;
+
+    const maxWaitMs = 12_000;
+    const started = performance.now();
+    const id = window.setInterval(() => {
+      const el = document.getElementById('mining');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.clearInterval(id);
+        return;
+      }
+      if (performance.now() - started > maxWaitMs) {
+        window.clearInterval(id);
+      }
+    }, 120);
+
+    return () => window.clearInterval(id);
+  }, [isLoaded]);
+
   const buildSnapTo = useCallback((pinnedRanges: { start: number; end: number; center: number }[]) => {
     return (value: number) => {
       const inPinned = pinnedRanges.some(

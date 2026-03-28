@@ -180,6 +180,7 @@ const MiningCalculatorSection = () => {
 
   return (
     <section
+      id="mining"
       ref={sectionRef}
       className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden mesh-bg"
     >
