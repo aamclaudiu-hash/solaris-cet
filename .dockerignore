@@ -1,0 +1,15 @@
+.git
+.github
+node_modules
+**/node_modules
+**/dist
+**/.next
+**/.turbo
+**/.cache
+**/coverage
+**/.env*
+**/playwright-report
+**/test-results
+.DS_Store
+Thumbs.db
+*.log

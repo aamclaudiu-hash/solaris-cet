@@ -4,6 +4,22 @@ import { defineConfig } from "vite"
 import { compression } from "vite-plugin-compression2"
 import { VitePWA } from 'vite-plugin-pwa'
 
+/**
+ * Resolves `preview.port` for Coolify / `vite preview`.
+ * - Unset or empty `PORT` → `fallback` (default 4173).
+ * - `PORT=0` → kept (Vite may pick a free port); `||` would wrongly replace `0`.
+ * - Invalid values → `fallback` (`parseInt` + finite check).
+ * Note: `NaN` is falsy, so `Number(x) || fallback` would still pick the fallback when
+ * unset — but `Number(undefined) ?? fallback` is wrong (`NaN` is not nullish).
+ */
+function resolvePreviewPort(fallback = 4173): number {
+  const raw = process.env.PORT
+  if (raw == null || raw === '') return fallback
+  const n = Number.parseInt(String(raw).trim(), 10)
+  if (!Number.isFinite(n) || n < 0) return fallback
+  return n
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
@@ -117,6 +133,10 @@ export default defineConfig({
       },
     }),
   ],
+  preview: {
+    host: '0.0.0.0',
+    port: resolvePreviewPort(),
+  },
   build: {
     target: 'esnext',
     rollupOptions: {
