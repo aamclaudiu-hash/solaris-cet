@@ -119,7 +119,7 @@ const StatsBento = () => {
       id="stats"
       ref={sectionRef}
       aria-label="Solaris CET core statistics"
-      className="relative bg-solaris-dark py-20 lg:py-28 overflow-hidden mesh-bg"
+      className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       {/* Aurora + orbs background */}
       <div className="absolute inset-0 aurora-bg opacity-60 pointer-events-none" aria-hidden="true" />

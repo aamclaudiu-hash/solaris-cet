@@ -94,7 +94,7 @@ const ComplianceSection = () => {
     <section
       ref={sectionRef}
       aria-label="Compliance and Regulation"
-      className="section-pinned bg-solaris-dark flex items-center justify-center"
+      className="section-pinned section-glass flex items-center justify-center"
     >
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

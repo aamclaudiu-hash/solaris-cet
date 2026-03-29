@@ -65,7 +65,7 @@ const Navigation = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ${
         isScrolled
-          ? 'bg-solaris-dark/90 backdrop-blur-2xl border-b border-white/6 shadow-[0_1px_0_rgba(242,201,76,0.06),0_8px_32px_rgba(0,0,0,0.4)]'
+          ? 'bg-[#050505]/88 backdrop-blur-2xl border-b border-white/6 shadow-[0_1px_0_rgba(242,201,76,0.06),0_8px_32px_rgba(0,0,0,0.4)]'
           : 'bg-transparent'
       }`}
     >
@@ -143,7 +143,7 @@ const Navigation = () => {
       {/* Mobile / Tablet Menu — shown below xl (1280 px) */}
       <div
         id="mobile-menu"
-        className={`xl:hidden absolute top-full left-0 right-0 bg-solaris-dark/95 backdrop-blur-xl border-b border-white/5 transition-all duration-300 ${
+        className={`xl:hidden absolute top-full left-0 right-0 bg-[#050505]/92 backdrop-blur-xl border-b border-white/5 transition-all duration-300 ${
           isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
       >

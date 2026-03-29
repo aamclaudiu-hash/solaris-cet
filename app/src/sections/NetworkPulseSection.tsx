@@ -140,7 +140,7 @@ const NetworkPulseSection = () => {
       id="network-pulse"
       ref={sectionRef}
       aria-label="TON Network and CET Protocol Live Stats"
-      className="relative bg-solaris-dark py-20 lg:py-28 overflow-hidden mesh-bg"
+      className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="mixed" />
 

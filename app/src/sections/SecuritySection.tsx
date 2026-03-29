@@ -119,7 +119,7 @@ const SecuritySection = () => {
       id="security"
       ref={sectionRef}
       aria-label="Security and Compliance"
-      className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden"
+      className="relative section-glass py-24 lg:py-32 overflow-hidden"
     >
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

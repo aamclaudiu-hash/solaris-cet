@@ -209,7 +209,7 @@ const CompetitionSection = () => {
       id="competition"
       ref={sectionRef}
       aria-label="Competitive Analysis"
-      className="relative bg-solaris-dark py-24 lg:py-32 overflow-hidden mesh-bg"
+      className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />
 
