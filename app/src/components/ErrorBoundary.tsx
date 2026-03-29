@@ -1,4 +1,5 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
+import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
 interface Props {
   children: ReactNode;
@@ -70,6 +71,9 @@ export class ErrorBoundary extends Component<Props, State> {
             <h1 className="text-2xl font-bold mb-3">Something went wrong</h1>
             <p className="text-gray-400 mb-5 text-sm">
               {this.state.error?.message ?? 'An unexpected error occurred.'}
+            </p>
+            <p className="text-fuchsia-200/70 mb-5 text-[11px] font-mono leading-snug max-w-md mx-auto">
+              {shortSkillWhisper(skillSeedFromLabel('errorBoundary|recovery'))}
             </p>
             <div
               role="group"

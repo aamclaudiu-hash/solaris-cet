@@ -632,6 +632,11 @@ export default function AiOracleSearch() {
 
     schedule(() => {
       setPhase('complete');
+      addLog('INFO', `SESSION_MESH: ${deepLatticeLineForQuery(`${q}|sessionClose`)}`);
+      addLog(
+        'QUANTUM',
+        `LOOP_COMPLETE_BURST: ${standardSkillBurst(skillSeedFromLabel(`${q}|oracleComplete`))}`
+      );
     }, ORACLE_PHASE_MS[7]);
   }, [generateHash, addLog, t.oracle.knowledge]);
 
@@ -847,7 +852,9 @@ export default function AiOracleSearch() {
                             log.message.startsWith('CONSENSUS_BURST:') ||
                             log.message.startsWith('VALIDATE_MESH:') ||
                             log.message.startsWith('ACT_MESH:') ||
-                            log.message.startsWith('PARSE_MESH:');
+                            log.message.startsWith('PARSE_MESH:') ||
+                            log.message.startsWith('SESSION_MESH:') ||
+                            log.message.startsWith('LOOP_COMPLETE_BURST:');
                           return (
                             <div
                               key={log.id}

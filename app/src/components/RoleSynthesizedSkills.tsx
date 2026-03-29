@@ -6,6 +6,7 @@ import {
   formatBigSpace,
   SKILL_ALLELE_SPACE,
 } from '@/lib/skillGenome';
+import { skillCaptionForDept, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
 const SYNTH_STANDARD = 16;
 const SYNTH_DEEP = 12;
@@ -53,6 +54,9 @@ const RoleSynthesizedSkills = ({
             Standard: full templates + DNA-2 / DNA-3 crossover from your curated genes. Deep: compact epoch + locale
             shards for HUD-scale expression. Flash: ultra-compact allele bursts for tickers. Nothing is pre-stored —
             only deterministic draws.
+          </p>
+          <p className="mt-1.5 text-[8px] font-mono leading-snug text-fuchsia-200/65 border-t border-fuchsia-500/15 pt-1.5">
+            {skillCaptionForDept(deptId, skillSeedFromLabel(`${deptId}|${roleTitle}`))}
           </p>
         </div>
       </div>

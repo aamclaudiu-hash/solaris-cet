@@ -1,5 +1,6 @@
 import { Globe } from 'lucide-react';
 import { useLanguage, SUPPORTED_LANGS, type LangCode } from '../hooks/useLanguage';
+import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
 const LANG_LABELS: Record<LangCode, string> = {
   en: 'EN',
@@ -15,7 +16,10 @@ const LanguageSelector = () => {
   const { lang, setLang } = useLanguage();
 
   return (
-    <div className="flex items-center gap-1">
+    <div
+      className="flex items-center gap-1"
+      title={shortSkillWhisper(skillSeedFromLabel(`langSelector|${lang}`))}
+    >
       <Globe className="w-3.5 h-3.5 text-solaris-muted" />
       <div className="flex items-center gap-0.5">
         {SUPPORTED_LANGS.map((code) => (
