@@ -192,7 +192,7 @@ const HeroSection: React.FC = () => {
           
           {/* LEFT COLUMN: ARCHITECTURE TITLE */}
           <div ref={titleContainerRef} className="lg:col-span-5 flex flex-col justify-center h-full">
-            <div className="glass-card-gold p-5 md:p-8 rounded-3xl border border-yellow-500/20 backdrop-blur-xl h-full">
+            <div className="glass-card-gold p-5 md:p-8 rounded-3xl h-full">
               <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-4 md:mb-6">
                 <img src={APP_CONFIG.LINKS.LOGO} className="w-12 h-12 md:w-16 md:h-16 rounded-2xl shadow-[0_0_30px_rgba(242,201,76,0.3)]" alt="Solaris" />
                 <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-black tracking-tighter leading-none">

@@ -38,19 +38,24 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        /** Premium Crypto/AI brass — use with text-gold-500, border-gold-500/30, bg-gold-500/10, etc. */
+        /**
+         * Premium Crypto/AI gold scale — aurum / brass / champagne
+         * Use: text-gold, bg-gold-500/10, border-gold-500/25, ring-gold-500/20, from-gold-400 to-gold-600
+         */
         gold: {
-          50: "#fffdf7",
-          100: "#fff8e8",
-          200: "#ffeeb8",
-          300: "#fde047",
+          DEFAULT: "#f2c94c",
+          foreground: "#0a0a0b",
+          50: "#fffdf5",
+          100: "#fff7e0",
+          200: "#ffe9a8",
+          300: "#ffd54a",
           400: "#f5d76e",
           500: "#f2c94c",
           600: "#d4a017",
           700: "#b8860b",
           800: "#92400e",
           900: "#713f12",
-          950: "#3d1f0a",
+          950: "#2a1506",
         },
         solaris: {
           gold: "#F2C94C",
