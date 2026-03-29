@@ -23,14 +23,26 @@ export function ScrollFadeUp({
 }: ScrollFadeUpProps) {
   const prefersReducedMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
+  const prevRmRef = useRef(prefersReducedMotion);
   /** Intersection-driven visibility; ignored when `prefersReducedMotion` (always shown). */
   const [scrollVisible, setScrollVisible] = useState(false);
 
   useEffect(() => {
+    const wasReducedMotion = prevRmRef.current;
+    prevRmRef.current = prefersReducedMotion;
+
     if (prefersReducedMotion) return;
 
     const el = ref.current;
     if (!el) return;
+
+    // Leaving reduced-motion: clear stale intersection so fade-up can run again. Scheduled
+    // as a microtask so it runs before the observer's first callback (also async), and
+    // setState stays off the synchronous effect body (react-hooks/set-state-in-effect).
+    if (wasReducedMotion) {
+      const applyReset = () => setScrollVisible(false);
+      queueMicrotask(applyReset);
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
