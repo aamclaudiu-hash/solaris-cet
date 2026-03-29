@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
-import { Coins, Pickaxe, Users, TrendingDown } from 'lucide-react';
+import { Coins, Pickaxe, Users, TrendingDown, Lock, Cpu } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import LivePoolStats from '../components/LivePoolStats';
 import ChainStateWidget from '../components/ChainStateWidget';
@@ -17,6 +17,8 @@ const CET_MINED_SUPPLY = 9000; // 100% mined on launch - hyper-scarce supply
 const RING_RADIUS = 54;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
+const DEDUST_POOL =
+  'https://dedust.io/swap/TON/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
 
 const TokenomicsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -27,7 +29,6 @@ const TokenomicsSection = () => {
   const { t } = useLanguage();
   const prefersReducedMotion = useReducedMotion();
 
-  // Animate ring on mount
   useEffect(() => {
     const timer = setTimeout(() => setRingVisible(true), 300);
     return () => clearTimeout(timer);
@@ -59,7 +60,10 @@ const TokenomicsSection = () => {
     const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
     if (isMobile || prefersReducedMotion) {
       [cardRef.current, pillsRef.current].forEach(el => {
-        if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+        if (el) {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }
       });
       return;
     }
@@ -75,7 +79,6 @@ const TokenomicsSection = () => {
         },
       });
 
-      // ENTRANCE (0% - 30%)
       scrollTl.fromTo(
         cardRef.current,
         { scale: 0.78, y: '40vh', opacity: 0 },
@@ -93,9 +96,6 @@ const TokenomicsSection = () => {
         );
       }
 
-      // SETTLE (30% - 70%): Hold
-
-      // EXIT (70% - 100%)
       scrollTl.fromTo(
         cardRef.current,
         { scale: 1, y: 0, opacity: 1 },
@@ -104,12 +104,7 @@ const TokenomicsSection = () => {
       );
 
       if (pills) {
-        scrollTl.fromTo(
-          pills,
-          { opacity: 1 },
-          { opacity: 0, ease: 'power2.in' },
-          0.75
-        );
+        scrollTl.fromTo(pills, { opacity: 1 }, { opacity: 0, ease: 'power2.in' }, 0.75);
       }
     }, section);
 
@@ -122,24 +117,21 @@ const TokenomicsSection = () => {
       id="staking"
       className="section-pinned section-glass flex items-center justify-center overflow-hidden mesh-bg section-padding-x"
     >
-      {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[50vh] grid-floor opacity-20" />
         <div className="absolute inset-0 tech-grid opacity-30" />
       </div>
 
-      {/* Glow orbs */}
       <GlowOrbs variant="cyan" />
 
-      {/* Floating metric pills (pointer-events-auto per pill for hover) */}
       <div ref={pillsRef} className="absolute inset-0 z-20 pointer-events-none">
         <div
           className={`metric-pill pointer-events-auto absolute left-[6vw] top-[20vh] bento-card px-5 py-3 flex items-center gap-3 animate-float shadow-depth ${BENTO_TILE_INTERACTION}`}
         >
-          <Coins className="w-5 h-5 text-solaris-gold" />
+          <Coins className="w-5 h-5 text-amber-400" />
           <div>
-            <div className="hud-label text-[10px]">Max Supply</div>
-            <div className="font-mono text-solaris-gold font-semibold">21M BTC-S</div>
+            <div className="hud-label text-[10px]">{t.tokenomics.cetCapLabel}</div>
+            <div className="font-mono tabular-nums text-amber-300 font-semibold">9,000</div>
           </div>
         </div>
         <div
@@ -149,7 +141,7 @@ const TokenomicsSection = () => {
           <Pickaxe className="w-5 h-5 text-solaris-gold" />
           <div>
             <div className="hud-label text-[10px]">Mining</div>
-            <div className="font-mono text-solaris-gold font-semibold">66.66%</div>
+            <div className="font-mono tabular-nums text-solaris-gold font-semibold">66.66%</div>
           </div>
         </div>
         <div
@@ -159,109 +151,156 @@ const TokenomicsSection = () => {
           <Users className="w-5 h-5 text-solaris-gold" />
           <div>
             <div className="hud-label text-[10px]">Team</div>
-            <div className="font-mono text-solaris-gold font-semibold">0.33%</div>
+            <div className="font-mono tabular-nums text-solaris-gold font-semibold">0.33%</div>
           </div>
         </div>
       </div>
 
-      {/* Main tokenomics — Bento grid */}
       <div ref={cardRef} className="relative z-10 w-full max-w-[1100px]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5">
-          {/* Title tile */}
-          <div
-            className={`lg:col-span-12 bento-card p-6 lg:p-8 relative overflow-hidden holo-card border border-solaris-gold/30 shadow-depth ${BENTO_TILE_INTERACTION}`}
-          >
-            <div className="absolute inset-0 rounded-[18px] shimmer-border pointer-events-none" />
-            <div className="relative flex flex-col sm:flex-row sm:items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-solaris-gold/10 flex items-center justify-center animate-gold-pulse shrink-0">
-                <Coins className="w-6 h-6 text-solaris-gold" />
+        {/* Bank dashboard shell */}
+        <div className="rounded-2xl border border-white/[0.12] bg-[#05070a]/90 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] overflow-hidden">
+          {/* Header strip */}
+          <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-5 py-4 sm:px-6 border-b border-white/10 bg-black/50">
+            <div className="flex items-start gap-3">
+              <div className="w-11 h-11 rounded-lg bg-solaris-gold/10 flex items-center justify-center shrink-0 border border-solaris-gold/25">
+                <Coins className="w-5 h-5 text-solaris-gold" />
               </div>
-              <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text">
-                <span className="text-shimmer">{t.tokenomics.title}</span>
-              </h2>
-            </div>
-          </div>
-
-          {/* Ring tile */}
-          <div
-            className={`lg:col-span-4 bento-card p-6 lg:p-8 flex flex-col items-center justify-center border border-white/10 shadow-depth ${BENTO_TILE_INTERACTION}`}
-          >
-            <div className="relative w-36 h-36">
-              <svg className="w-full h-full" viewBox="0 0 128 128" style={{ transform: 'rotate(-90deg)' }}>
-                <circle
-                  cx="64"
-                  cy="64"
-                  r={RING_RADIUS}
-                  className="progress-ring-track"
-                  strokeWidth="8"
-                />
-                <circle
-                  ref={ringRef}
-                  cx="64"
-                  cy="64"
-                  r={RING_RADIUS}
-                  className="progress-ring-fill"
-                  strokeWidth="8"
-                  stroke="url(#tokenomicsRingGrad)"
-                  strokeDasharray={RING_CIRCUMFERENCE}
-                  strokeDashoffset={RING_CIRCUMFERENCE}
-                  strokeLinecap="round"
-                />
-                <defs>
-                  <linearGradient id="tokenomicsRingGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#F2C94C" />
-                    <stop offset="100%" stopColor="#2EE7FF" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="font-display font-bold text-2xl text-solaris-gold">100%</div>
-                <div className="hud-label text-[9px]">MINED</div>
+              <div>
+                <h2 className="font-display font-bold text-[clamp(22px,3vw,36px)] text-solaris-text leading-tight">
+                  <span className="text-shimmer">{t.tokenomics.title}</span>
+                </h2>
+                <p className="mt-1 text-xs text-solaris-muted max-w-xl">{t.tokenomics.subtitle}</p>
               </div>
             </div>
-            <div className="mt-3 text-center">
-              <div className="font-mono text-solaris-gold font-semibold">{CET_TOTAL_SUPPLY.toLocaleString()} CET</div>
-              <div className="hud-label text-[10px] mt-1">TOTAL SUPPLY ON TON NETWORK</div>
+            <div className="flex items-center gap-2 font-mono text-[11px] text-emerald-400/95 shrink-0">
+              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden />
+              ON-CHAIN
             </div>
-          </div>
+          </header>
 
-          {/* Supply + on-chain */}
-          <div
-            className={`lg:col-span-4 bento-card p-5 lg:p-6 border border-white/10 shadow-depth ${BENTO_TILE_INTERACTION}`}
-          >
-            <div className="hud-label mb-2">Fixed Supply</div>
-            <div className="font-display font-bold text-3xl text-solaris-gold mb-1">21,000,000</div>
-            <div className="text-solaris-muted text-sm">BTC-S Total Supply</div>
-            <div className="mt-3 pt-3 border-t border-white/10">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="hud-label text-[10px] mb-1">CET (TON Network)</div>
-                  <div className="font-display font-bold text-xl text-solaris-cyan">9,000</div>
-                </div>
-                <div className="text-right">
-                  <div className="hud-label text-[10px] mb-1">DeDust Pool</div>
-                  <a
-                    href="https://dedust.io/swap/TON/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="View CET token on DeDust exchange"
-                    className="font-mono text-[10px] text-solaris-cyan hover:text-solaris-gold transition-colors"
-                  >
-                    EQB5…lfnB ↗
-                  </a>
-                </div>
-              </div>
-            </div>
-            <LivePoolStats />
-            <div className="mt-4">
-              <ChainStateWidget />
-            </div>
-          </div>
-
-          {/* DCBM + mini stats column */}
-          <div className="lg:col-span-4 flex flex-col gap-4">
+          {/* Investor KPI row: Fixed Supply (amber) vs RAV (cyan/violet) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:divide-x lg:divide-white/10">
             <div
-              className={`bento-card p-5 lg:p-6 bg-solaris-gold/5 border border-solaris-gold/20 shadow-depth flex-1 ${BENTO_TILE_INTERACTION}`}
+              className={`p-5 sm:p-6 border-b lg:border-b-0 border-white/10 bg-gradient-to-br from-amber-950/50 via-[#0a0b0f] to-transparent ${BENTO_TILE_INTERACTION}`}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Lock className="w-4 h-4 text-amber-400" aria-hidden />
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-200/90">
+                  {t.tokenomics.fixedSupply}
+                </span>
+              </div>
+              <p className="text-[11px] text-solaris-muted mb-1">
+                {t.tokenomics.cetCapLabel}
+              </p>
+              <p className="font-mono tabular-nums text-4xl sm:text-5xl font-bold text-amber-300 tracking-tight">
+                {CET_TOTAL_SUPPLY.toLocaleString()}
+                <span className="text-lg sm:text-xl text-amber-400/80 ml-2">CET</span>
+              </p>
+              <div className="mt-5 pt-4 border-t border-amber-500/20">
+                <p className="text-[11px] text-solaris-muted mb-1">{t.tokenomics.btcSReference}</p>
+                <p className="font-mono tabular-nums text-xl text-amber-200/90">21,000,000</p>
+                <p className="text-[10px] text-solaris-muted mt-0.5">BTC-S</p>
+              </div>
+            </div>
+
+            <div
+              className={`p-5 sm:p-6 bg-gradient-to-br from-cyan-950/35 via-violet-950/20 to-[#0a0b0f] ${BENTO_TILE_INTERACTION}`}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Cpu className="w-4 h-4 text-cyan-300" aria-hidden />
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-cyan-200/90">
+                  {t.tokenomics.ravProtocol}
+                </span>
+              </div>
+              <p className="text-sm text-solaris-text leading-relaxed border-l-2 border-cyan-400/60 pl-3">
+                {t.tokenomics.ravStack}
+              </p>
+              <ul className="mt-4 space-y-2 font-mono text-[11px] text-cyan-100/85">
+                <li className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                  <span className="text-solaris-muted">REASON</span>
+                  <span className="text-cyan-300 tabular-nums">Gemini</span>
+                </li>
+                <li className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                  <span className="text-solaris-muted">ACT</span>
+                  <span className="text-violet-300 tabular-nums">Grok</span>
+                </li>
+                <li className="flex justify-between gap-4">
+                  <span className="text-solaris-muted">VERIFY</span>
+                  <span className="text-emerald-400/90 tabular-nums">IPFS</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Secondary row: emission ring · liquidity & chain · DCBM */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-0 border-t border-white/10">
+            <div
+              className={`lg:col-span-4 p-5 lg:p-6 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10 ${BENTO_TILE_INTERACTION}`}
+            >
+              <div className="relative w-36 h-36">
+                <svg className="w-full h-full" viewBox="0 0 128 128" style={{ transform: 'rotate(-90deg)' }}>
+                  <circle cx="64" cy="64" r={RING_RADIUS} className="progress-ring-track" strokeWidth="8" />
+                  <circle
+                    ref={ringRef}
+                    cx="64"
+                    cy="64"
+                    r={RING_RADIUS}
+                    className="progress-ring-fill"
+                    strokeWidth="8"
+                    stroke="url(#tokenomicsRingGrad)"
+                    strokeDasharray={RING_CIRCUMFERENCE}
+                    strokeDashoffset={RING_CIRCUMFERENCE}
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="tokenomicsRingGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#F2C94C" />
+                      <stop offset="100%" stopColor="#2EE7FF" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="font-mono tabular-nums font-bold text-2xl text-solaris-gold">100%</div>
+                  <div className="hud-label text-[9px]">MINED</div>
+                </div>
+              </div>
+              <div className="mt-3 text-center">
+                <div className="font-mono tabular-nums text-solaris-gold font-semibold">
+                  {CET_TOTAL_SUPPLY.toLocaleString()} CET
+                </div>
+                <div className="hud-label text-[10px] mt-1">{t.tokenomics.supply.toUpperCase()} · TON</div>
+              </div>
+            </div>
+
+            <div
+              className={`lg:col-span-4 p-5 lg:p-6 border-b lg:border-b-0 lg:border-r border-white/10 ${BENTO_TILE_INTERACTION}`}
+            >
+              <div className="hud-label mb-3">{t.tokenomics.poolAddress}</div>
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <div>
+                  <div className="hud-label text-[10px] mb-1">CET</div>
+                  <div className="font-mono tabular-nums font-bold text-lg text-cyan-300">
+                    {CET_TOTAL_SUPPLY.toLocaleString()}
+                  </div>
+                </div>
+                <a
+                  href={DEDUST_POOL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="View CET token on DeDust exchange"
+                  className="font-mono text-[10px] text-cyan-400 hover:text-amber-300 transition-colors text-right"
+                >
+                  EQB5…lfnB ↗
+                </a>
+              </div>
+              <LivePoolStats />
+              <div className="mt-4">
+                <ChainStateWidget />
+              </div>
+            </div>
+
+            <div
+              className={`lg:col-span-4 p-5 lg:p-6 bg-solaris-gold/[0.04] ${BENTO_TILE_INTERACTION}`}
             >
               <div className="flex items-center gap-3 mb-3">
                 <TrendingDown className="w-5 h-5 text-solaris-gold" />
@@ -270,7 +309,7 @@ const TokenomicsSection = () => {
               <p className="text-solaris-muted text-sm leading-relaxed mb-3">
                 <span className="text-solaris-text font-medium">Dynamic-Control Buyback Mechanism</span>{' '}
                 uses PID controllers to reduce volatility by{' '}
-                <span className="text-solaris-gold font-semibold">66%</span>.
+                <span className="font-mono tabular-nums text-solaris-gold font-semibold">66%</span>.
               </p>
               <div className="flex items-center gap-1 mb-2">
                 {[1.0, 1.4, 0.7, 1.2, 0.9, 1.5, 0.8, 1.1, 0.6, 1.3].map((h, i) => (
@@ -286,39 +325,38 @@ const TokenomicsSection = () => {
                 Scientific price stability
               </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { label: 'Launch Type', value: 'Fair Launch', valueClass: 'text-solaris-text' },
-                { label: 'Mining Period', value: '90 Years', valueClass: 'text-solaris-cyan' },
-                { label: 'Volatility ↓', value: '66%', valueClass: 'text-solaris-gold' },
-                { label: 'Target Val.', value: '€1B', valueClass: 'text-emerald-400' },
-              ].map((cell) => (
-                <div
-                  key={cell.label}
-                  className={`bento-card p-3 text-center border border-white/10 shadow-depth ${BENTO_TILE_INTERACTION}`}
-                >
-                  <div className="hud-label text-[9px] mb-1">{cell.label}</div>
-                  <div className={`font-display font-semibold text-sm ${cell.valueClass}`}>{cell.value}</div>
-                </div>
-              ))}
-            </div>
           </div>
 
-          {/* Distribution — full width row */}
-          <div
-            className={`lg:col-span-12 bento-card p-5 lg:p-6 border border-white/10 shadow-depth ${BENTO_TILE_INTERACTION}`}
-          >
+          {/* Mini metrics grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 border-t border-white/10">
+            {[
+              { label: 'Launch Type', value: 'Fair Launch', valueClass: 'text-solaris-text' },
+              { label: 'Mining Period', value: '90 Years', valueClass: 'text-cyan-300' },
+              { label: 'Volatility ↓', value: '66%', valueClass: 'text-amber-300' },
+              { label: 'Target Val.', value: '€1B', valueClass: 'text-emerald-400' },
+            ].map(cell => (
+              <div
+                key={cell.label}
+                className={`bg-[#080a0f] p-3 sm:p-4 text-center ${BENTO_TILE_INTERACTION}`}
+              >
+                <div className="hud-label text-[9px] mb-1">{cell.label}</div>
+                <div className={`font-mono tabular-nums text-sm font-semibold ${cell.valueClass}`}>{cell.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Distribution */}
+          <div className={`p-5 lg:p-6 border-t border-white/10 bg-black/20 ${BENTO_TILE_INTERACTION}`}>
             <div className="hud-label mb-3">Distribution</div>
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-solaris-muted text-sm">Mining (90 years)</span>
-                  <span className="font-mono text-solaris-cyan font-semibold text-sm">66.66%</span>
+                  <span className="font-mono tabular-nums text-cyan-300 font-semibold text-sm">66.66%</span>
                 </div>
                 <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-solaris-cyan to-solaris-gold rounded-full animate-gradient-shift"
+                    className="h-full bg-gradient-to-r from-cyan-400 to-amber-400 rounded-full animate-gradient-shift"
                     style={{ width: '66.66%' }}
                   />
                 </div>
@@ -326,7 +364,7 @@ const TokenomicsSection = () => {
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-solaris-muted text-sm">Team & Advisors</span>
-                  <span className="font-mono text-emerald-400 font-semibold text-sm">0.33%</span>
+                  <span className="font-mono tabular-nums text-emerald-400 font-semibold text-sm">0.33%</span>
                 </div>
                 <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                   <div className="h-full bg-emerald-400 rounded-full" style={{ width: '0.33%' }} />
@@ -335,7 +373,7 @@ const TokenomicsSection = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-12">
+          <div className="p-4 sm:p-5 border-t border-white/10 bg-black/30">
             <TokenomicsChart />
           </div>
         </div>

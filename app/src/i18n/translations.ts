@@ -46,6 +46,12 @@ export interface Translations {
     title: string;
     supply: string;
     poolAddress: string;
+    subtitle: string;
+    fixedSupply: string;
+    ravProtocol: string;
+    ravStack: string;
+    btcSReference: string;
+    cetCapLabel: string;
   };
   oracle: {
     title: string;
@@ -102,6 +108,12 @@ const translations: Record<LangCode, Translations> = {
       title: 'Tokenomics',
       supply: 'Total Supply',
       poolAddress: 'DeDust Pool Address',
+      subtitle: 'Investor dashboard · 9,000 CET hard cap',
+      fixedSupply: 'Fixed supply',
+      ravProtocol: 'RAV protocol',
+      ravStack: 'Reason · Act · Verify — Grok × Gemini · IPFS audit trail',
+      btcSReference: 'BTC-S reference supply',
+      cetCapLabel: 'CET hard cap (TON)',
     },
     oracle: {
       title: 'Solaris Oracle',
@@ -182,6 +194,12 @@ const translations: Record<LangCode, Translations> = {
       title: 'Tokenómica',
       supply: 'Suministro Total',
       poolAddress: 'Dirección del Pool DeDust',
+      subtitle: 'Panel inversores · tope fijo 9.000 CET',
+      fixedSupply: 'Oferta fija',
+      ravProtocol: 'Protocolo RAV',
+      ravStack: 'Razonar · Actuar · Verificar — Grok × Gemini · auditoría IPFS',
+      btcSReference: 'Suministro de referencia BTC-S',
+      cetCapLabel: 'Tope CET (TON)',
     },
     oracle: {
       title: 'Oráculo Solaris',
@@ -262,6 +280,12 @@ const translations: Record<LangCode, Translations> = {
       title: '代币经济学',
       supply: '总供应量',
       poolAddress: 'DeDust 池地址',
+      subtitle: '投资者看板 · 9,000 CET 硬顶',
+      fixedSupply: '固定供应',
+      ravProtocol: 'RAV 协议',
+      ravStack: '推理 · 执行 · 验证 — Grok × Gemini · IPFS 可审计',
+      btcSReference: 'BTC-S 参考供应量',
+      cetCapLabel: 'CET 硬顶（TON）',
     },
     oracle: {
       title: 'Solaris 预言机',
@@ -342,6 +366,12 @@ const translations: Record<LangCode, Translations> = {
       title: 'Токеномика',
       supply: 'Общий запас',
       poolAddress: 'Адрес пула DeDust',
+      subtitle: 'Панель инвестора · жёсткий потолок 9 000 CET',
+      fixedSupply: 'Фиксированная эмиссия',
+      ravProtocol: 'Протокол RAV',
+      ravStack: 'Reason · Act · Verify — Grok × Gemini · аудит IPFS',
+      btcSReference: 'Эталонное предложение BTC-S',
+      cetCapLabel: 'Потолок CET (TON)',
     },
     oracle: {
       title: 'Оракул Solaris',
@@ -422,6 +452,12 @@ const translations: Record<LangCode, Translations> = {
       title: 'Tokenomică',
       supply: 'Ofertă Totală',
       poolAddress: 'Adresa Pool-ului DeDust',
+      subtitle: 'Dashboard investitori · plafon dur 9.000 CET',
+      fixedSupply: 'Ofertă fixă',
+      ravProtocol: 'Protocol RAV',
+      ravStack: 'Reason · Act · Verify — Grok × Gemini · audit IPFS',
+      btcSReference: 'Ofertă de referință BTC-S',
+      cetCapLabel: 'Plafon CET (TON)',
     },
     oracle: {
       title: 'Oracolul Solaris',
@@ -502,6 +538,12 @@ const translations: Record<LangCode, Translations> = {
       title: 'Tokenomia',
       supply: 'Oferta Total',
       poolAddress: 'Endereço do Pool DeDust',
+      subtitle: 'Painel do investidor · teto fixo 9.000 CET',
+      fixedSupply: 'Oferta fixa',
+      ravProtocol: 'Protocolo RAV',
+      ravStack: 'Raciocinar · Agir · Verificar — Grok × Gemini · auditoria IPFS',
+      btcSReference: 'Oferta de referência BTC-S',
+      cetCapLabel: 'Teto CET (TON)',
     },
     oracle: {
       title: 'Oráculo Solaris',
@@ -582,6 +624,12 @@ const translations: Record<LangCode, Translations> = {
       title: 'Tokenomik',
       supply: 'Gesamtangebot',
       poolAddress: 'DeDust Pool-Adresse',
+      subtitle: 'Investoren-Dashboard · 9.000 CET Hard Cap',
+      fixedSupply: 'Festes Angebot',
+      ravProtocol: 'RAV-Protokoll',
+      ravStack: 'Reason · Act · Verify — Grok × Gemini · IPFS-Audit-Trail',
+      btcSReference: 'BTC-S Referenzangebot',
+      cetCapLabel: 'CET-Obergrenze (TON)',
     },
     oracle: {
       title: 'Solaris Orakel',

@@ -172,6 +172,12 @@ describe("translations — specific content", () => {
       "title",
       "supply",
       "poolAddress",
+      "subtitle",
+      "fixedSupply",
+      "ravProtocol",
+      "ravStack",
+      "btcSReference",
+      "cetCapLabel",
     ];
     for (const lang of SUPPORTED_LANGS) {
       for (const key of expectedTokenomicsKeys) {

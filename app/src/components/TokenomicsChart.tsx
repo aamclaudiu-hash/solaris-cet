@@ -73,8 +73,8 @@ const TokenomicsChart = () => {
           </ResponsiveContainer>
           {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <div className="font-display font-black text-xl text-gradient-gold">9,000</div>
-            <div className="text-solaris-muted text-[9px] font-mono">TOTAL CET</div>
+            <div className="font-mono tabular-nums font-black text-xl text-gradient-gold">9,000</div>
+            <div className="text-solaris-muted text-[9px] font-mono tracking-wide">TOTAL CET</div>
           </div>
         </div>
 
