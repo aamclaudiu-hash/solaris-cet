@@ -273,11 +273,11 @@ function AppContent() {
             </div>
           </section>
 
-          {/* 3. Soluția Solaris AI — aplicația & motorul */}
+          {/* 3. Soluția Solaris AI — aplicația & motorul (id matches nav #nova-app) */}
           <section
-            id="solution-solaris"
+            id="nova-app"
             aria-label="Soluția Solaris AI"
-            className="relative z-40 py-24"
+            className="relative z-40 scroll-mt-24 py-24"
           >
             <ErrorBoundary>
               <ScrollFadeUp>
@@ -286,10 +286,11 @@ function AppContent() {
             </ErrorBoundary>
           </section>
 
-          {/* 4. Tokenomics — 9,000 CET dashboard */}
+          {/* 4. Tokenomics — 9,000 CET dashboard (id matches nav #staking) */}
           <section
+            id="staking"
             aria-label="Tokenomics — 9,000 CET"
-            className="relative z-50 py-24"
+            className="relative z-50 scroll-mt-24 py-24"
           >
             <ErrorBoundary>
               <ScrollFadeUp>
@@ -310,10 +311,11 @@ function AppContent() {
             </LazyLoadWrapper>
           </section>
 
-          {/* 6. Roadmap */}
+          {/* 6. Roadmap (id matches nav #roadmap) */}
           <section
+            id="roadmap"
             aria-label="Roadmap"
-            className="relative z-[70] py-24"
+            className="relative z-[70] scroll-mt-24 py-24"
           >
             <LazyLoadWrapper>
               <ScrollFadeUp>

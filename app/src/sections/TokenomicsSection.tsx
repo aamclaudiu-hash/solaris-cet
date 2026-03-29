@@ -112,9 +112,8 @@ const TokenomicsSection = () => {
   }, [prefersReducedMotion]);
 
   return (
-    <section
+    <div
       ref={sectionRef}
-      id="staking"
       className="section-pinned section-glass flex items-center justify-center overflow-hidden mesh-bg section-padding-x"
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -378,7 +377,7 @@ const TokenomicsSection = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

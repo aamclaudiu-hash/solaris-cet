@@ -191,10 +191,8 @@ const RoadmapSection = () => {
   }, []);
 
   return (
-    <section
-      id="roadmap"
+    <div
       ref={sectionRef}
-      aria-label="Project Roadmap"
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       {/* Background decorations */}
@@ -293,7 +291,7 @@ const RoadmapSection = () => {
           })}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

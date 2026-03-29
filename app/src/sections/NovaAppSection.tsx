@@ -101,9 +101,8 @@ const NovaAppSection = () => {
   }, [prefersReducedMotion]);
 
   return (
-    <section
+    <div
       ref={sectionRef}
-      id="nova-app"
       className="section-pinned section-glass flex items-center justify-center overflow-hidden mesh-bg section-padding-x"
     >
       {/* Background grid */}
@@ -250,7 +249,7 @@ const NovaAppSection = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
