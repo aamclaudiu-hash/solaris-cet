@@ -19,7 +19,6 @@ interface Department {
   icon: typeof Crown;
   iconBg: string;
   iconColor: string;
-  borderColor: string;
   countColor: string;
 }
 
@@ -32,7 +31,6 @@ const departments: Department[] = [
     icon: Users,
     iconBg: 'bg-cyan-400/10',
     iconColor: 'text-cyan-400',
-    borderColor: 'border-cyan-400/20',
     countColor: 'text-cyan-400',
   },
   {
@@ -43,7 +41,6 @@ const departments: Department[] = [
     icon: Code2,
     iconBg: 'bg-blue-400/10',
     iconColor: 'text-blue-400',
-    borderColor: 'border-blue-400/20',
     countColor: 'text-blue-400',
   },
   {
@@ -54,7 +51,6 @@ const departments: Department[] = [
     icon: TrendingUp,
     iconBg: 'bg-emerald-400/10',
     iconColor: 'text-emerald-400',
-    borderColor: 'border-emerald-400/20',
     countColor: 'text-emerald-400',
   },
   {
@@ -65,7 +61,6 @@ const departments: Department[] = [
     icon: Brain,
     iconBg: 'bg-purple-400/10',
     iconColor: 'text-purple-400',
-    borderColor: 'border-purple-400/20',
     countColor: 'text-purple-400',
   },
   {
@@ -76,7 +71,6 @@ const departments: Department[] = [
     icon: Coins,
     iconBg: 'bg-solaris-gold/10',
     iconColor: 'text-solaris-gold',
-    borderColor: 'border-solaris-gold/20',
     countColor: 'text-solaris-gold',
   },
   {
@@ -87,7 +81,6 @@ const departments: Department[] = [
     icon: Globe,
     iconBg: 'bg-orange-400/10',
     iconColor: 'text-orange-400',
-    borderColor: 'border-orange-400/20',
     countColor: 'text-orange-400',
   },
   {
@@ -98,7 +91,6 @@ const departments: Department[] = [
     icon: Palette,
     iconBg: 'bg-pink-400/10',
     iconColor: 'text-pink-400',
-    borderColor: 'border-pink-400/20',
     countColor: 'text-pink-400',
   },
   {
@@ -109,7 +101,6 @@ const departments: Department[] = [
     icon: Shield,
     iconBg: 'bg-red-400/10',
     iconColor: 'text-red-400',
-    borderColor: 'border-red-400/20',
     countColor: 'text-red-400',
   },
   {
@@ -120,7 +111,6 @@ const departments: Department[] = [
     icon: FileCheck,
     iconBg: 'bg-amber-400/10',
     iconColor: 'text-amber-400',
-    borderColor: 'border-amber-400/20',
     countColor: 'text-amber-400',
   },
   {
@@ -131,7 +121,6 @@ const departments: Department[] = [
     icon: Crown,
     iconBg: 'bg-solaris-cyan/10',
     iconColor: 'text-solaris-cyan',
-    borderColor: 'border-solaris-cyan/20',
     countColor: 'text-solaris-cyan',
   },
 ];
@@ -269,7 +258,7 @@ const AITeamSection = () => {
           </div>
         </div>
 
-        {/* Department cards — 5 columns on large screens, 2 on small */}
+        {/* Department matrix — 1 col narrow phones, 2 cols sm+, 5 cols lg+; Lucide + gold frame + hover scale */}
         <div
           ref={cardsRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
@@ -277,17 +266,20 @@ const AITeamSection = () => {
           {departments.map((dept) => {
             const DeptIcon = dept.icon;
 
+            const titleId = `dept-title-${dept.id}`;
+
             return (
-              <div
+              <article
                 key={dept.id}
-                className={`team-card bento-card p-5 border ${dept.borderColor} flex flex-col gap-3 group transition-all duration-300`}
+                className="team-card bento-card p-4 sm:p-5 flex flex-col gap-3 group transition-all duration-300"
+                aria-labelledby={titleId}
               >
                 {/* Icon + department name */}
                 <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-lg ${dept.iconBg} flex items-center justify-center shrink-0`}>
+                  <div className={`w-8 h-8 rounded-lg ${dept.iconBg} flex items-center justify-center shrink-0`} aria-hidden>
                     <DeptIcon className={`w-4 h-4 ${dept.iconColor}`} />
                   </div>
-                  <span className={`hud-label text-[10px] leading-tight ${dept.iconColor}`}>
+                  <span id={titleId} className={`hud-label text-[10px] leading-tight ${dept.iconColor}`}>
                     {dept.name.toUpperCase()}
                   </span>
                 </div>
@@ -313,7 +305,7 @@ const AITeamSection = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </article>
             );
           })}
         </div>

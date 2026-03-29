@@ -1092,6 +1092,15 @@
   opacity: 1;
 }
 
+/* AI department matrix — thin gold frame, hover scale (informational cards, not controls) */
+.team-card.bento-card {
+  border: 1px solid rgba(242, 201, 76, 0.38);
+}
+.team-card.bento-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: rgba(242, 201, 76, 0.62);
+}
+
 /* ── Mesh grid background ────────────────────────────────────────────────── */
 .mesh-bg {
   background-image:
