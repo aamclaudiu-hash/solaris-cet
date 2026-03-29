@@ -168,7 +168,7 @@ const HeroSection: React.FC = () => {
     <TooltipProvider>
       <section
         ref={containerRef}
-        className="relative min-h-screen bg-[#0b1324] sm:bg-[#020202] overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center"
+        className="relative min-h-screen bg-[#050505] overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center"
       >
         {/* Background Layer (Hardware Accelerated) */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -177,13 +177,13 @@ const HeroSection: React.FC = () => {
             className="absolute inset-0 sm:hidden"
             style={{
               background:
-                'radial-gradient(circle at 20% 15%, rgba(46,231,255,0.18), transparent 45%), radial-gradient(circle at 80% 10%, rgba(242,201,76,0.20), transparent 42%), linear-gradient(180deg, #0f1a33 0%, #0b1324 45%, #070d1a 100%)',
+                'radial-gradient(ellipse 100% 55% at 50% -5%, rgba(255,215,140,0.22), transparent 52%), radial-gradient(circle at 18% 22%, rgba(46,231,255,0.1), transparent 46%), linear-gradient(180deg, #0a0a0a 0%, #050505 50%, #030303 100%)',
             }}
           />
           <Suspense fallback={null}>
             <ParticleCanvas count={120} className="hidden sm:block" />
           </Suspense>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(242,201,76,0.05),transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_50%_at_50%_0%,rgba(255,200,120,0.12),transparent_58%)]" />
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-10 flex flex-col gap-6 lg:gap-8 pb-16 lg:pb-24 pt-20 lg:pt-10">
@@ -195,7 +195,9 @@ const HeroSection: React.FC = () => {
             <div className="glass-card-gold p-5 md:p-8 rounded-3xl border border-yellow-500/20 backdrop-blur-xl h-full">
               <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-4 md:mb-6">
                 <img src={APP_CONFIG.LINKS.LOGO} className="w-12 h-12 md:w-16 md:h-16 rounded-2xl shadow-[0_0_30px_rgba(242,201,76,0.3)]" alt="Solaris" />
-                <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-black tracking-tighter leading-none text-white">SOLARIS <span className="text-yellow-500">CET</span></h1>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-black tracking-tighter leading-none">
+                  <span className="text-gradient-gold">SOLARIS CET</span>
+                </h1>
               </div>
               
               <p className="max-w-[60ch] text-gray-300 text-sm md:text-base lg:text-lg leading-relaxed mb-5 md:mb-8">
@@ -276,7 +278,7 @@ const HeroSection: React.FC = () => {
         {/* FOOTER TICKER — on mobile, position relative so it doesn't overlay AI oracle */}
         <div
           ref={tickerContainerRef}
-          className="lg:absolute lg:bottom-0 w-full overflow-hidden py-4 md:py-6 border-t border-white/5 bg-[#0b1324]/85 sm:bg-black/80 backdrop-blur-lg mt-4 lg:mt-0"
+          className="lg:absolute lg:bottom-0 w-full overflow-hidden py-4 md:py-6 border-t border-white/10 bg-[#050505]/72 backdrop-blur-2xl mt-4 lg:mt-0 shadow-[0_-20px_60px_-20px_rgba(255,200,100,0.06)]"
         >
           <div className="flex min-w-max animate-ticker whitespace-nowrap">
               {[...TICKER_DATA, ...TICKER_DATA].map((item, i) => (

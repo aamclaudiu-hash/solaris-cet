@@ -4,7 +4,7 @@
   "description": "The world's first AI-native corporate token on TON. 9,000 CET supply. 200,000 autonomous agents. Powered by BRAID Framework and RAV Protocol.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#05060B",
+  "background_color": "#050505",
   "theme_color": "#F2C94C",
   "orientation": "portrait-primary",
   "categories": ["finance", "business", "utilities"],
