@@ -10,8 +10,8 @@ const STATS = [
   {
     id: 'agents',
     value: 200_000,
-    label: 'Autonomous AI Agents',
-    sublabel: 'Across 10 enterprise departments · 24/7 · $0 marginal cost',
+    label: 'Task-specialist AI agents',
+    sublabel: '~200k narrow agents for routing, retrieval & validation · 10 departments · orchestrated for the Oracle',
     suffix: '',
     icon: Users,
     color: 'text-solaris-gold',

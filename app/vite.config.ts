@@ -36,7 +36,7 @@ export default defineConfig({
       manifest: {
         name: 'Solaris CET',
         short_name: 'Solaris',
-        description: 'Solaris CET — hyper-scarce RWA token on TON with 200,000 AI agents, 9,000 CET supply, 90-year mining, and the BRAID Framework.',
+        description: 'Solaris CET — hyper-scarce RWA on TON: 9,000 CET, 90-year mining, Grok×Gemini Oracle, ~200k task agents, BRAID + RAV.',
         theme_color: '#05060B',
         background_color: '#05060B',
         display: 'standalone',

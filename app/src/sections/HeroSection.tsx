@@ -1,9 +1,9 @@
-import React, { useRef, useLayoutEffect, useState, useCallback, memo } from 'react';
+import React, { useRef, useLayoutEffect, useState, useCallback, memo, lazy, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Zap, Activity, Loader2 } from 'lucide-react';
 
-import ParticleCanvas from '../components/ParticleCanvas';
+const ParticleCanvas = lazy(() => import('../components/ParticleCanvas'));
 import AiOracleSearch from '../components/AiOracleSearch';
 import {
   TooltipProvider
@@ -180,7 +180,9 @@ const HeroSection: React.FC = () => {
                 'radial-gradient(circle at 20% 15%, rgba(46,231,255,0.18), transparent 45%), radial-gradient(circle at 80% 10%, rgba(242,201,76,0.20), transparent 42%), linear-gradient(180deg, #0f1a33 0%, #0b1324 45%, #070d1a 100%)',
             }}
           />
-          <ParticleCanvas count={120} className="hidden sm:block" />
+          <Suspense fallback={null}>
+            <ParticleCanvas count={120} className="hidden sm:block" />
+          </Suspense>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(242,201,76,0.05),transparent)]" />
         </div>
 
@@ -236,7 +238,7 @@ const HeroSection: React.FC = () => {
               </div>
               
               <div className="space-y-4 md:space-y-6">
-                <StatRow label="AI AGENTS DEPLOYED" value="200,000+" colorClass="text-yellow-500" />
+                <StatRow label="TASK AGENTS (ROUTING)" value="200,000+" colorClass="text-yellow-500" />
                 <div className="h-px bg-white/5 w-full" />
                 <StatRow label="THROUGHPUT" value="~100,000 TPS" />
                 <div className="h-px bg-white/5 w-full" />

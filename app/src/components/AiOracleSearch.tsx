@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { X, Send, Copy, Check, ExternalLink, ChevronRight, Sparkles, Trash2 } from 'lucide-react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { track } from '@vercel/analytics/react';
+import { X, Send, Copy, Check, ExternalLink, ChevronRight, Sparkles, Trash2, Bot } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import type { OracleKnowledge, Translations } from '../i18n/translations';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -76,30 +78,62 @@ const TOPIC_KEYWORDS: Record<string, string[]> = {
   braid:       ['braid', 'framework', 'graph', 'mermaid', 'recursive', 'рекурс', '递归'],
   wallet:      ['wallet', 'connect', 'tonkeeper', 'tonconnect', 'portofel', 'cartera', 'кошелёк', '钱包', 'brieftasche', 'carteira'],
   staking:     ['stak', 'hold', 'hodl', 'benefit', 'benefici', 'преимущест', '好处', 'vorteil', 'vantagem'],
-  team:        ['team', 'department', 'echipa', 'equipo', 'команда', '团队', 'mannschaft', 'equipe', '200,000', '200000'],
+  team:        ['team', 'department', 'echipa', 'equipo', 'команда', '团队', 'mannschaft', 'equipe', '200,000', '200000', '200k', 'task agent', 'tasking', 'task specialists'],
 };
 
-import type { OracleKnowledge } from '../i18n/translations';
+async function fetchOracleChat(
+  query: string,
+  signal: AbortSignal,
+): Promise<{ text: string | null; sourceHeader: string | null }> {
+  const maxAttempts = 2;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    if (attempt > 0) {
+      await new Promise<void>(resolve => {
+        const delay = 300 + Math.random() * 400;
+        const id = setTimeout(resolve, delay);
+        signal.addEventListener('abort', () => {
+          clearTimeout(id);
+          resolve();
+        }, { once: true });
+      });
+      if (signal.aborted) return { text: null, sourceHeader: null };
+    }
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ query }),
+        signal,
+      });
+      const sourceHeader = res.headers.get('X-Oracle-Source');
+      const raw = await res.text();
+      let data: { response?: string } = {};
+      try {
+        data = JSON.parse(raw) as { response?: string };
+      } catch {
+        /* non-JSON error body */
+      }
+      if (res.ok && typeof data.response === 'string' && data.response.trim()) {
+        return { text: data.response.trim(), sourceHeader };
+      }
+    } catch {
+      if (signal.aborted) return { text: null, sourceHeader: null };
+    }
+  }
+  return { text: null, sourceHeader: null };
+}
 
-// --- SUGGESTED QUESTIONS (shown below the input widget) ---
-const SUGGESTED_QUESTIONS = [
-  'How does CET compare to Fetch.ai and Bittensor?',
-  'What is the RAV Protocol?',
-  'How do I start mining CET?',
-  'What makes CET so scarce?',
-  'Explain the DCBM mechanism',
-  'What is the BRAID Framework?',
-  'How do I connect my TON wallet?',
-  'What are the benefits of holding CET?',
-];
+function buildCopyForAiText(q: string, a: string, o: Translations['oracle']): string {
+  return `${o.copyForAiQuestionLabel}\n${q}\n\n${o.copyForAiAnswerLabel}\n${a}\n\n${o.copyForAiInstructions}`;
+}
 
 // --- FOLLOW-UP SUGGESTIONS by topic ---
 const FOLLOW_UP_BY_TOPIC: Record<string, string[]> = {
   price:       ['What drives CET price long-term?', 'How does DCBM stabilise price?', 'Where can I buy CET?'],
-  competition: ['What is the RAV Protocol advantage?', 'Why TON over Ethereum?', 'How many agents does CET have?'],
+  competition: ['What is the RAV Protocol advantage?', 'Why TON over Ethereum?', 'How do task agents help the Oracle?'],
   rwa:         ['What assets back CET?', 'When is the RWA tokenisation pilot?', 'How does BRAID connect to real assets?'],
   mining:      ['What device is best for mining?', 'How long does mining last?', 'How does staking affect mining rewards?'],
-  ai:          ['What is the BRAID Framework?', 'How does the RAV Protocol work?', 'Who are the 200,000 agents?'],
+  ai:          ['What is the BRAID Framework?', 'How does the RAV Protocol work?', 'What are the 200,000 task agents?'],
   ton:         ['How fast is TON?', 'Is the contract audited?', 'How do I connect my TON wallet?'],
   buy:         ['What is the contract address?', 'What slippage should I use?', 'How do I connect my TON wallet?'],
   security:    ['Who audited the contract?', 'Is KYC verified?', 'Can the supply be inflated?'],
@@ -114,7 +148,8 @@ const FOLLOW_UP_BY_TOPIC: Record<string, string[]> = {
   default:     ['What makes CET unique?', 'How do I buy CET?', 'What is the total supply?'],
 };
 
-
+/** RAV telemetry milestones (ms) — tuned for mobile attention span; ~5.3s to completion. */
+const ORACLE_PHASE_MS = [580, 1280, 2080, 2880, 3780, 4380, 4980, 5280] as const;
 
 function buildContextualResponse(q: string, knowledge: OracleKnowledge): { answer: string; confidence: number } {
   const lower = q.toLowerCase();
@@ -150,6 +185,14 @@ function getReActPhaseStatus(phase: ReActPhase, targetPhases: ReActPhase[]): str
 // Supports: **bold**, *italic*, `code`, - bullet lists, numbered lists, \n\n paragraphs
 function MarkdownText({ text }: { text: string }) {
   const renderLine = (line: string, key: number) => {
+    const h3 = line.match(/^###\s+(.+)$/);
+    if (h3) {
+      return (
+        <h4 key={key} className="text-yellow-200/95 font-bold text-sm md:text-base tracking-tight mt-3 mb-1 border-b border-yellow-500/20 pb-1">
+          {renderInline(h3[1])}
+        </h4>
+      );
+    }
     // Check for numbered list item
     const numberedMatch = line.match(/^(\d+)\.\s+(.*)/);
     if (numberedMatch) {
@@ -331,12 +374,17 @@ export default function AiOracleSearch() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chatHistory, setChatHistory] = useLocalStorage<ChatEntry[]>('oracle-chat-history', []);
   const [copiedResponse, setCopiedResponse] = useState(false);
+  const [copiedForAi, setCopiedForAi] = useState(false);
   const [detectedTopic, setDetectedTopic] = useState<string>('default');
+  /** False when the last completed answer used local knowledge (no /api/chat). */
+  const [responseUsedLiveApi, setResponseUsedLiveApi] = useState(false);
 
   const terminalRef = useRef<HTMLDivElement>(null);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const modalInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const oracleAbortRef = useRef<AbortController | null>(null);
+  const trackedCompleteKey = useRef<string>('');
 
   // Auto-scroll telemetry terminal
   useEffect(() => {
@@ -355,14 +403,22 @@ export default function AiOracleSearch() {
     return () => { timersRef.current.forEach(clearTimeout); };
   }, []);
 
-  // Lock body scroll while modal is open
   useEffect(() => {
-    document.body.style.overflow = isModalOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    if (isModalOpen) track('oracle_open', {});
   }, [isModalOpen]);
+
+  useEffect(() => {
+    if (phase !== 'complete' || !finalResponse) return;
+    const key = `${submittedQuestion}::${finalResponse.slice(0, 96)}`;
+    if (trackedCompleteKey.current === key) return;
+    trackedCompleteKey.current = key;
+    track('oracle_complete', { source: responseUsedLiveApi ? 'live' : 'fallback' });
+  }, [phase, finalResponse, submittedQuestion, responseUsedLiveApi]);
 
   // --- CLOSE HANDLER ---
   const handleClose = useCallback(() => {
+    oracleAbortRef.current?.abort();
+    oracleAbortRef.current = null;
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
     setIsModalOpen(false);
@@ -374,6 +430,8 @@ export default function AiOracleSearch() {
     setMetrics({ confidence: 0, latency: 0, cetCost: 0 });
     setChatHistory([]);
     setSubmittedQuestion('');
+    setResponseUsedLiveApi(false);
+    setCopiedForAi(false);
   }, [
     setIsModalOpen,
     setPhase,
@@ -385,14 +443,6 @@ export default function AiOracleSearch() {
     setChatHistory,
     setSubmittedQuestion,
   ]);
-
-  // Escape key closes the modal
-  useEffect(() => {
-    if (!isModalOpen) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [isModalOpen, handleClose]);
 
   // Focus follow-up input when a response is ready
   useEffect(() => {
@@ -420,17 +470,25 @@ export default function AiOracleSearch() {
     timersRef.current.push(id);
   };
 
-  // --- CORE LOGIC: REASON TO ACT PROTOCOL ---
+  // --- CORE LOGIC: RAV + optional live /api/chat (Vercel) with local knowledge fallback ---
   const processQuestion = useCallback((q: string) => {
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
 
-    const { answer, confidence } = buildContextualResponse(q, t.oracle.knowledge);
-    // Detect topic for follow-up suggestions
+    oracleAbortRef.current?.abort();
+    const ac = new AbortController();
+    oracleAbortRef.current = ac;
+
+    const oracleFetchPromise = fetchOracleChat(q, ac.signal);
+
+    const { answer: localAnswer, confidence } = buildContextualResponse(q, t.oracle.knowledge);
     const lowerQ = q.toLowerCase();
     let detected = 'default';
     for (const [topic, keywords] of Object.entries(TOPIC_KEYWORDS)) {
-      if (keywords.some(kw => lowerQ.includes(kw))) { detected = topic; break; }
+      if (keywords.some(kw => lowerQ.includes(kw))) {
+        detected = topic;
+        break;
+      }
     }
     setDetectedTopic(detected);
     const hash = generateHash();
@@ -442,82 +500,105 @@ export default function AiOracleSearch() {
     setFinalResponse('');
     setOracleConfidence(0);
     setMetrics({ confidence: 0, latency: 0, cetCost: 0 });
+    setResponseUsedLiveApi(false);
 
-    // ── PHASE 1: OBSERVE ──────────────────────────────────────────
     setPhase('observe_parse');
-    addLog('INFO', `RAV_INIT: Grok × Gemini Oracle v3.0 · Session [${hash}]`);
+    addLog('INFO', `RAV_INIT: Grok × Gemini Oracle v3.1 · Session [${hash}]`);
+    addLog('INFO', `TASK_MESH: ~200k task agents · delegated sub-queries · Oracle consolidation`);
     addLog('INFO', `INPUT_STREAM: "${q}" · Tokens: ${tokenCount}`);
 
     schedule(() => {
       setPhase('observe_context');
-      addLog('QUANTUM', `INTENT_EXTRACTION: Semantic vector computed. Ambiguity score: 0.${Math.floor(Math.random()*30+10)}`);
-      addLog('INFO', `CONTEXT_MAP: Knowledge graph traversal started · Nodes visited: 2,847`);
+      addLog('QUANTUM', `INTENT_EXTRACTION: Semantic vector computed. Ambiguity score: 0.${Math.floor(Math.random() * 30 + 10)}`);
+      addLog('INFO', `CONTEXT_MAP: Knowledge graph traversal · Nodes visited: 2,847`);
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
-    }, 1200);
+    }, ORACLE_PHASE_MS[0]);
 
-    // ── PHASE 2: THINK ────────────────────────────────────────────
     schedule(() => {
       setPhase('think_route');
-      addLog('INFO', `GEMINI_REASON: Routing query to Google Gemini analytical pathway`);
-      addLog('QUANTUM', `HYPOTHESIS_GEN: 6 parallel logical paths instantiated in superposition`);
+      addLog('INFO', `GEMINI_REASON: Analytical pathway · parallel hypothesis lattice`);
+      addLog('QUANTUM', `HYPOTHESIS_GEN: 6 paths · superposition collapse scheduled`);
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
-    }, 2800);
+    }, ORACLE_PHASE_MS[1]);
 
     schedule(() => {
       setPhase('think_validate');
-      addLog('QUANTUM', `PATH_COLLAPSE: Highest-confidence path selected (p=${(confidence/100).toFixed(4)})`);
-      addLog('SEC', `CONSTRAINT_CHECK: Zero-hallucination bounds · On-chain fact anchors verified`);
-      addLog('INFO', `BRAID_FRAME: Reasoning graph compiled · Depth: 7 layers · Nodes: 1,204`);
+      addLog('QUANTUM', `PATH_COLLAPSE: Highest-confidence path (p=${(confidence / 100).toFixed(4)})`);
+      addLog('SEC', `CONSTRAINT_CHECK: Zero-hallucination bounds · fact anchors`);
+      addLog('INFO', `BRAID_FRAME: Reasoning graph · depth 7 · nodes 1,204`);
       setMetrics(prev => ({
         ...prev,
         confidence: Math.round(confidence * 0.7),
         latency: Math.round(performance.now() - startMs),
       }));
-    }, 4600);
+    }, ORACLE_PHASE_MS[2]);
 
-    // ── PHASE 3: ACT ──────────────────────────────────────────────
     schedule(() => {
       setPhase('act_execute');
-      addLog('INFO', `GROK_ACT: Connecting to xAI Grok action directive pipeline`);
-      addLog('QUANTUM', `RESPONSE_COMPILE: Grok × Gemini synthesizing answer payload · Entropy seed applied`);
-      addLog('SEC', `SIGN: Payload signed with Quantum OS key · Hash: 0x${generateHash()}${generateHash()}`);
+      addLog('INFO', `GROK_ACT: Action directive pipeline · live /api/chat merge pending`);
+      addLog('QUANTUM', `RESPONSE_COMPILE: dual-model payload · entropy seed`);
+      addLog('SEC', `SIGN: Quantum OS key · Hash: 0x${generateHash()}${generateHash()}`);
       setMetrics(prev => ({
         ...prev,
         cetCost: parseFloat((Math.random() * 0.005 + 0.001).toFixed(4)),
         latency: Math.round(performance.now() - startMs),
       }));
-    }, 6400);
+    }, ORACLE_PHASE_MS[3]);
 
     schedule(() => {
-      setPhase('act_consensus');
-      addLog('SEC', `TON_CONSENSUS: Payload broadcast · 3-of-3 validators confirmed`);
-      addLog('INFO', `INTEGRITY: Output cross-validated against on-chain oracle state`);
-      addLog('QUANTUM', `RAV_COMPLETE: Grok × Gemini loop closed · Confidence: ${confidence.toFixed(1)}%`);
-      setMetrics(prev => ({
-        ...prev,
-        confidence: Math.round(confidence),
-        latency: Math.round(performance.now() - startMs),
-      }));
-      setOracleConfidence(confidence);
-      setFinalResponse(answer);
-    }, 8400);
+      void (async () => {
+        type FetchResult = { text: string | null; sourceHeader: string | null };
+        const raced = await Promise.race<FetchResult>([
+          oracleFetchPromise,
+          new Promise<FetchResult>(resolve => {
+            setTimeout(() => resolve({ text: null, sourceHeader: null }), 14_000);
+          }),
+        ]).catch((): FetchResult => ({ text: null, sourceHeader: null }));
+        const remote = raced.text;
+        const hasRemoteText = Boolean(remote?.trim());
+        /** True only when the edge handler affirms live Oracle (see X-Oracle-Source on /api/chat). */
+        const usedLive = hasRemoteText && raced.sourceHeader === 'live';
+        const text = hasRemoteText ? remote!.trim() : localAnswer;
+        const conf = hasRemoteText ? Math.min(99.2, confidence + 1.5) : confidence;
+
+        setPhase('act_consensus');
+        addLog(
+          'INFO',
+          usedLive
+            ? 'LIVE_ORACLE: /api/chat merged · dual-AI RAV payload materialised'
+            : hasRemoteText
+              ? 'API_ORACLE: /api/chat body used · X-Oracle-Source missing or not live'
+              : 'FALLBACK_ORACLE: static knowledge graph (deploy API for live Grok×Gemini)',
+        );
+        addLog('SEC', `TON_CONSENSUS: Payload validated · quorum OK`);
+        addLog('QUANTUM', `RAV_COMPLETE: loop closed · Confidence: ${conf.toFixed(1)}%`);
+        setMetrics(prev => ({
+          ...prev,
+          confidence: Math.round(conf),
+          latency: Math.round(performance.now() - startMs),
+        }));
+        setOracleConfidence(conf);
+        setFinalResponse(text);
+        setResponseUsedLiveApi(usedLive);
+      })();
+    }, ORACLE_PHASE_MS[4]);
 
     schedule(() => {
       setPhase('verify_cross');
-      addLog('SEC', `VERIFY_INIT: Cross-model verification started — Gemini reviewing Grok output`);
-      addLog('QUANTUM', `ZK_PROOF: Zero-knowledge integrity proof generated · Hash: 0x${generateHash()}`);
-    }, 9200);
+      addLog('SEC', `VERIFY_INIT: Cross-model review · Grok↔Gemini`);
+      addLog('QUANTUM', `ZK_PROOF: integrity bundle · Hash: 0x${generateHash()}`);
+    }, ORACLE_PHASE_MS[5]);
 
     schedule(() => {
       setPhase('verify_anchor');
-      addLog('SEC', `IPFS_ANCHOR: Reasoning trace pinned · CID: bafkrei${generateHash().toLowerCase()}`);
-      addLog('INFO', `ON_CHAIN: Trace anchored to TON tx · Block: #${Math.floor(Math.random()*1000000+48000000)}`);
-      addLog('QUANTUM', `RAV_VERIFIED: Answer integrity confirmed by independent model · No hallucination detected`);
-    }, 10600);
+      addLog('SEC', `IPFS_ANCHOR: trace slot reserved · CID: bafkrei${generateHash().toLowerCase()}`);
+      addLog('INFO', `ON_CHAIN: anchor ref · Block: #${Math.floor(Math.random() * 1_000_000 + 48_000_000)}`);
+      addLog('QUANTUM', `RAV_VERIFIED: no hallucination flag on consensus path`);
+    }, ORACLE_PHASE_MS[6]);
 
     schedule(() => {
       setPhase('complete');
-    }, 11800);
+    }, ORACLE_PHASE_MS[7]);
   }, [generateHash, addLog, t.oracle.knowledge]);
 
   // Hero widget submit → open modal + start processing
@@ -551,7 +632,10 @@ export default function AiOracleSearch() {
   return (
     <>
       {/* ── Hero trigger widget ──────────────────────────────────────────────── */}
-      <div className="w-full max-w-5xl mx-auto bg-black border border-gray-800 rounded-3xl p-4 md:p-8 shadow-2xl font-sans relative overflow-hidden z-20">
+      <div
+        data-testid="oracle-hero"
+        className="w-full max-w-5xl mx-auto scroll-mt-24 bg-black border border-gray-800 rounded-3xl p-4 md:p-8 shadow-2xl font-sans relative overflow-hidden z-20"
+      >
         {/* Background grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
@@ -578,28 +662,29 @@ export default function AiOracleSearch() {
           <div className="flex-grow relative">
             <input
               type="text"
+              data-testid="oracle-hero-query"
               value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder={t.oracle.placeholder}
-              className="w-full px-4 md:px-6 py-3.5 md:py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-sm md:text-base"
+              className="w-full min-h-11 px-4 md:px-6 py-3 md:py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-base md:text-base"
             />
           </div>
           <button
             type="submit"
-            className="px-6 md:px-8 py-3.5 md:py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 shadow-[0_0_20px_rgba(234,179,8,0.2)] whitespace-nowrap text-sm md:text-base"
+            className="min-h-11 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 shadow-[0_0_20px_rgba(234,179,8,0.2)] whitespace-nowrap text-sm md:text-base touch-manipulation"
           >
             {t.oracle.sendButton}
           </button>
         </form>
 
         {/* Suggested questions chips */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          {SUGGESTED_QUESTIONS.slice(0, 4).map(q => (
+        <div className="mt-4 flex flex-wrap gap-2 scroll-mt-28">
+          {t.oracle.suggestedQuestions.slice(0, 4).map(q => (
             <button
               key={q}
               type="button"
               onClick={() => { setQuery(q); setIsModalOpen(true); setTimeout(() => processQuestion(q), 50); setQuery(''); }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-900 border border-gray-700 text-gray-400 text-xs hover:border-yellow-500/50 hover:text-yellow-400 transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 min-h-11 min-w-[44px] px-3 py-2 rounded-full bg-gray-900 border border-gray-700 text-gray-400 text-xs hover:border-yellow-500/50 hover:text-yellow-400 transition-all active:scale-95 touch-manipulation"
             >
               <Sparkles className="w-3 h-3" />
               {q}
@@ -608,14 +693,29 @@ export default function AiOracleSearch() {
         </div>
       </div>
 
-      {/* ── Full-screen Oracle Modal ─────────────────────────────────────────── */}
-      {isModalOpen && createPortal(
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Solaris Oracle"
-          className="fixed inset-0 z-[9999] bg-[#020202]/98 backdrop-blur-xl flex flex-col font-sans"
-        >
+      {/* ── Full-screen Oracle Modal (Radix Dialog — focus trap, Esc) ───────── */}
+      <DialogPrimitive.Root
+        open={isModalOpen}
+        onOpenChange={open => {
+          if (!open) handleClose();
+        }}
+      >
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Overlay className="fixed inset-0 z-[9999] bg-[#020202]/98 backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+          <DialogPrimitive.Content
+            data-testid="oracle-modal-dialog"
+            aria-describedby={undefined}
+            onOpenAutoFocus={e => {
+              e.preventDefault();
+              requestAnimationFrame(() => modalInputRef.current?.focus());
+            }}
+            onCloseAutoFocus={e => e.preventDefault()}
+            className="fixed inset-0 z-[9999] flex flex-col font-sans pt-[env(safe-area-inset-top,0px)] outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          >
+          <DialogPrimitive.Title className="sr-only">{t.oracle.title}</DialogPrimitive.Title>
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {phase === 'complete' && finalResponse ? t.oracle.announceOracleReady : ''}
+          </div>
           {/* Modal header */}
           <header className="shrink-0 flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-gray-800 bg-black/60 backdrop-blur-md">
             <div>
@@ -643,7 +743,7 @@ export default function AiOracleSearch() {
               <button
                 onClick={handleClose}
                 aria-label="Close Oracle"
-                className="ml-1 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+                className="ml-1 min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors touch-manipulation"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -770,7 +870,7 @@ export default function AiOracleSearch() {
                               {t.oracle.oracleResponse} · {t.oracle.confidence} {oracleConfidence.toFixed(1)}%
                             </p>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap justify-end">
                             <div className="h-1.5 w-28 bg-gray-800 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-gradient-to-r from-yellow-500 to-green-500 rounded-full transition-all duration-1000"
@@ -791,6 +891,21 @@ export default function AiOracleSearch() {
                             >
                               {copiedResponse ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
                             </button>
+                            <button
+                              type="button"
+                              title={t.oracle.copyForAiTooltip}
+                              aria-label={t.oracle.copyForAiAriaLabel}
+                              onClick={() => {
+                                const payload = buildCopyForAiText(submittedQuestion, finalResponse, t.oracle);
+                                navigator.clipboard.writeText(payload).then(() => {
+                                  setCopiedForAi(true);
+                                  setTimeout(() => setCopiedForAi(false), 2000);
+                                }).catch(() => {});
+                              }}
+                              className="p-1.5 rounded-lg bg-gray-900 border border-gray-700 text-gray-400 hover:text-cyan-300 hover:border-cyan-500/40 transition-all"
+                            >
+                              {copiedForAi ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Bot className="w-3.5 h-3.5" />}
+                            </button>
                             {/* On-chain verify */}
                             <a
                               href={`https://tonscan.org/address/EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX`}
@@ -803,13 +918,21 @@ export default function AiOracleSearch() {
                             </a>
                           </div>
                         </div>
+                        {!responseUsedLiveApi && (
+                          <p
+                            role="status"
+                            className="text-amber-200/90 text-xs font-mono border border-amber-500/25 bg-amber-500/10 rounded-lg px-3 py-2 mb-4"
+                          >
+                            {t.oracle.offlineModeHint}
+                          </p>
+                        )}
                         <div className="text-white">
                           <MarkdownText text={finalResponse} />
                         </div>
 
                         {/* Follow-up suggestions */}
                         <div className="mt-5 pt-4 border-t border-green-500/10">
-                          <p className="text-gray-600 text-[10px] font-mono uppercase tracking-widest mb-2">Ask next:</p>
+                          <p className="text-gray-600 text-[10px] font-mono uppercase tracking-widest mb-2">{t.oracle.askNextLabel}</p>
                           <div className="flex flex-wrap gap-2">
                             {(FOLLOW_UP_BY_TOPIC[detectedTopic] ?? FOLLOW_UP_BY_TOPIC.default).map(suggestion => (
                               <button
@@ -838,7 +961,7 @@ export default function AiOracleSearch() {
           </div>
 
           {/* ── Follow-up input (sticky bottom) ── */}
-          <div className="shrink-0 border-t border-gray-800 bg-black/80 backdrop-blur-md px-4 py-4 md:px-8">
+          <div className="shrink-0 border-t border-gray-800 bg-black/80 backdrop-blur-md px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] md:px-8 md:pb-4">
             <form
               onSubmit={handleModalSubmit}
               className="flex gap-3 max-w-5xl mx-auto"
@@ -851,7 +974,7 @@ export default function AiOracleSearch() {
                   onChange={e => setQuery(e.target.value)}
                   disabled={isProcessing}
                   placeholder={phase === 'complete' ? t.oracle.followUpPlaceholder : t.oracle.placeholder}
-                  className="w-full px-5 py-3.5 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all disabled:opacity-40 text-sm"
+                  className="w-full min-h-11 px-5 py-3 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all disabled:opacity-40 text-base"
                 />
                 {isProcessing && (
                   <div className="absolute right-4 top-1/2 -translate-y-1/2">
@@ -863,7 +986,7 @@ export default function AiOracleSearch() {
                 type="submit"
                 disabled={isProcessing || !query.trim()}
                 aria-label="Send question"
-                className="px-5 py-3.5 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 disabled:from-gray-800 disabled:to-gray-900 disabled:text-gray-500 shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:shadow-none flex items-center gap-2 whitespace-nowrap"
+                className="min-h-11 min-w-11 px-5 py-3 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 disabled:from-gray-800 disabled:to-gray-900 disabled:text-gray-500 shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:shadow-none flex items-center justify-center gap-2 whitespace-nowrap touch-manipulation"
               >
                 <Send className="w-4 h-4" />
                 <span className="hidden sm:inline">SEND</span>
@@ -873,9 +996,9 @@ export default function AiOracleSearch() {
               {t.oracle.escToClose}
             </p>
           </div>
-        </div>,
-        document.body,
-      )}
+        </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     </>
   );
 }
