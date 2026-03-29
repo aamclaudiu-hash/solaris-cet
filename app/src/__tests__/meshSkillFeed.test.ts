@@ -3,6 +3,7 @@ import {
   expressMeshSkillForFeed,
   shortSkillWhisper,
   skillCaptionForDept,
+  standardSkillBurst,
 } from '@/lib/meshSkillFeed';
 
 describe('meshSkillFeed', () => {
@@ -23,6 +24,14 @@ describe('meshSkillFeed', () => {
 
   it('skillCaptionForDept returns empty for unknown id', () => {
     expect(skillCaptionForDept('no-such-dept', 0)).toBe('');
+  });
+
+  it('standardSkillBurst is deterministic and includes role prefix', () => {
+    const a = standardSkillBurst(44);
+    const b = standardSkillBurst(44);
+    expect(a).toBe(b);
+    expect(a).toContain(':');
+    expect(a.length).toBeLessThanOrEqual(118);
   });
 
   it('skillCaptionForDept changes with tick for same dept', () => {

@@ -38,3 +38,15 @@ export function skillCaptionForDept(deptId: string, tick: number): string {
   const synth = synthesizeMeshSkills(d.id, role.title, role.skills, 1, 'deep')[0] ?? '';
   return synth.length <= 84 ? synth : `${synth.slice(0, 83)}…`;
 }
+
+/**
+ * Standard-tier single line for one-shot UI bursts (e.g. unlock overlays).
+ * Deterministic for the same seq.
+ */
+export function standardSkillBurst(seq: number): string {
+  const d = solarisDepartments[seq % solarisDepartments.length]!;
+  const role = d.roles[(seq * 11) % d.roles.length]!;
+  const synth = synthesizeMeshSkills(d.id, role.title, role.skills, 1, 'standard')[0] ?? '';
+  const raw = `${role.title}: ${synth}`;
+  return raw.length <= 118 ? raw : `${raw.slice(0, 117)}…`;
+}

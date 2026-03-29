@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useKonamiState } from '@/hooks/useKonami';
+import { standardSkillBurst } from '@/lib/meshSkillFeed';
 
 interface AgenticSignalUnlockProps {
   /** Konami listener only while this is true (e.g. Agentic section intersecting). */
@@ -11,9 +12,13 @@ interface AgenticSignalUnlockProps {
  */
 const AgenticSignalUnlock = ({ active }: AgenticSignalUnlockProps) => {
   const { unlocked, reset } = useKonamiState(active);
+  const [skillBurst, setSkillBurst] = useState('');
+  const burstSeq = useRef(127);
 
   useEffect(() => {
     if (!unlocked) return;
+    burstSeq.current = (burstSeq.current + 47) % 900;
+    setSkillBurst(standardSkillBurst(burstSeq.current));
     const t = window.setTimeout(() => reset(), 5200);
     return () => window.clearTimeout(t);
   }, [unlocked, reset]);
@@ -49,6 +54,14 @@ const AgenticSignalUnlock = ({ active }: AgenticSignalUnlockProps) => {
           explorare.
         </p>
         <p className="mt-4 font-mono text-[10px] text-solaris-cyan/80">↑↑↓↓←→←→BA · mesh handshake OK</p>
+        {skillBurst ? (
+          <p
+            className="mt-3 font-mono text-[10px] leading-snug text-fuchsia-300/90 border-t border-white/10 pt-3 line-clamp-3"
+            title={skillBurst}
+          >
+            {skillBurst}
+          </p>
+        ) : null}
       </div>
       <style>{`
         @keyframes signal-ray {

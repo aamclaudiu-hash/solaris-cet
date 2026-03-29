@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { shortSkillWhisper } from '@/lib/meshSkillFeed';
 import { Globe2, Radio } from 'lucide-react';
 
 const NODES = [
@@ -24,6 +26,17 @@ function polar(angleDeg: number, r: number): { x: number; y: number } {
  */
 const RavInternetMesh = () => {
   const reduce = useReducedMotion();
+  const [ticker, setTicker] = useState(200);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = window.setInterval(() => {
+      setTicker((n) => (n + 23) % 500);
+    }, 4600);
+    return () => window.clearInterval(id);
+  }, [reduce]);
+
+  const ingressLine = shortSkillWhisper(ticker + 200);
 
   return (
     <div className="bento-card border border-solaris-gold/20 p-5 sm:p-6 overflow-hidden">
@@ -117,6 +130,19 @@ const RavInternetMesh = () => {
             );
           })}
         </div>
+      </div>
+
+      <div
+        className="mt-4 rounded-xl border border-fuchsia-500/15 bg-fuchsia-500/[0.04] px-3 py-2.5 mb-3"
+        aria-live="polite"
+        aria-label="Simulated skill ingress from open retrieval"
+      >
+        <div className="text-[8px] font-mono uppercase tracking-[0.18em] text-fuchsia-400/85 mb-1">
+          RAV · skill ingress (sim)
+        </div>
+        <p className="text-[10px] font-mono text-fuchsia-200/80 leading-snug line-clamp-2" title={ingressLine}>
+          {ingressLine}
+        </p>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2 text-[10px] text-solaris-muted">

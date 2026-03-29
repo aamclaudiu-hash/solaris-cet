@@ -16,6 +16,7 @@ const rows = [
   { metric: 'Dual verification', solaris: 100, standard: 12, marketplace: 42 },
   { metric: 'Chain + RWA synergy', solaris: 100, standard: 2, marketplace: 18 },
   { metric: 'Open-web reach', solaris: 100, standard: 22, marketplace: 48 },
+  { metric: 'Recombinant skill depth', solaris: 100, standard: 5, marketplace: 24 },
   { metric: 'Effective throughput', solaris: 100, standard: 6, marketplace: 10 },
   { metric: 'Supply scarcity (inv.)', solaris: 100, standard: 8, marketplace: 8 },
 ];
@@ -45,7 +46,7 @@ const AgenticBenchmarkDashboard = () => (
           <YAxis
             type="category"
             dataKey="metric"
-            width={118}
+            width={126}
             tick={{ fill: '#e8eaf2', fontSize: 10 }}
             axisLine={false}
             tickLine={false}
