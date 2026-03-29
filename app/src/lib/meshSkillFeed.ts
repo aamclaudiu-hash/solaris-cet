@@ -180,3 +180,39 @@ export function meshWhisperForAiTeamSynth(
 ): string {
   return meshWhisperFromKey(aiTeamSynthKey(deptId, roleTitle, tier, index));
 }
+
+// ─── Live AgentBoard: numeric instance id + dept + kind (+ role when known) ───
+
+/** Stable key for one simulated agent row (e.g. CX-00423 + Customer Ops + learned). */
+export function agentBoardLiveAgentKey(
+  agentId: string,
+  deptDisplayName: string,
+  kind: string,
+  roleTitle?: string
+): string {
+  const role = roleTitle ?? '—';
+  return `agentBoard|liveAgent|${agentId}|${deptDisplayName}|${kind}|${role}`;
+}
+
+export function meshWhisperForBoardLiveAgent(
+  agentId: string,
+  deptDisplayName: string,
+  kind: string,
+  roleTitle?: string
+): string {
+  return meshWhisperFromKey(agentBoardLiveAgentKey(agentId, deptDisplayName, kind, roleTitle));
+}
+
+export function meshStandardBurstForBoardLiveAgent(
+  agentId: string,
+  deptDisplayName: string,
+  kind: string,
+  roleTitle?: string
+): string {
+  return meshStandardBurstFromKey(agentBoardLiveAgentKey(agentId, deptDisplayName, kind, roleTitle));
+}
+
+/** Peer agent in learned/collab lines — second identity stream. */
+export function meshWhisperForBoardCollab(peerAgentId: string): string {
+  return meshWhisperFromKey(`agentBoard|collab|${peerAgentId}`);
+}

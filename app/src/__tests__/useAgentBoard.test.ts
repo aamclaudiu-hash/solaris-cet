@@ -112,4 +112,13 @@ describe('defaultGenerateEvent', () => {
     const ids = new Set(Array.from({ length: 20 }, () => defaultGenerateEvent().id));
     expect(ids.size).toBe(20);
   });
+
+  it('skill events attach roleTitle for mesh identity', () => {
+    const skills = Array.from({ length: 200 }, () => defaultGenerateEvent()).filter(e => e.kind === 'skill');
+    expect(skills.length).toBeGreaterThan(0);
+    skills.forEach(e => {
+      expect(e.roleTitle).toBeTruthy();
+      expect(typeof e.roleTitle).toBe('string');
+    });
+  });
 });

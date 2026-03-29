@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { buildSkillLatticeLine } from '@/lib/agentBoardSkillMix';
+import { buildSkillLatticePayload } from '@/lib/agentBoardSkillMix';
 
 // ─── Types (shared with AgentBoard component) ─────────────────────────────
 
@@ -10,6 +10,8 @@ export interface AgentEvent {
   kind: EventKind;
   dept: string;
   agentId: string;
+  /** Set for `skill` events — ties this instance to AI Team role-agent mesh keys. */
+  roleTitle?: string;
   collab?: string;
   message: string;
   ts: number;
@@ -105,14 +107,15 @@ let boardSkillSeq = 0;
 export function defaultGenerateEvent(): AgentEvent {
   if (Math.random() < 0.28) {
     const dept = randomDept();
-    const message = buildSkillLatticeLine(dept.name, boardSkillSeq++);
-    if (message) {
+    const payload = buildSkillLatticePayload(dept.name, boardSkillSeq++);
+    if (payload) {
       return {
         id: `skill-${Date.now()}-${Math.random()}`,
         kind: 'skill',
         dept: dept.name,
         agentId: randomAgentId(dept),
-        message,
+        roleTitle: payload.roleTitle,
+        message: payload.line,
         ts: Date.now(),
       };
     }

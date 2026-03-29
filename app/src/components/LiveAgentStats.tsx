@@ -1,6 +1,10 @@
 import { useState, useEffect, useSyncExternalStore } from 'react';
 import { Brain, CheckCircle, MessageCircle, Lightbulb, AlertTriangle, Dna } from 'lucide-react';
-import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
+import {
+  shortSkillWhisper,
+  skillSeedFromLabel,
+  meshStandardBurstFromKey,
+} from '@/lib/meshSkillFeed';
 
 // ─── Live counters that increment naturally over time ─────────────────────
 
@@ -67,6 +71,7 @@ const LiveAgentStats = () => {
           <div
             key={counter.label}
             className="bento-card p-4 border border-white/8 text-center shadow-depth"
+            title={meshStandardBurstFromKey(`liveAgentStats|aggregate|${counter.label}`)}
           >
             <div className={`w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-2`}>
               <Icon className={`w-4 h-4 ${counter.color}`} />

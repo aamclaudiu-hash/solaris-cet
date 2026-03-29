@@ -1,6 +1,11 @@
 import { RadialBarChart, RadialBar, Tooltip, ResponsiveContainer } from 'recharts';
 import { Brain } from 'lucide-react';
-import { skillFlashForBoardDept, skillSeedFromLabel } from '@/lib/meshSkillFeed';
+import {
+  skillFlashForBoardDept,
+  skillSeedFromLabel,
+  meshWhisperFromKey,
+  meshStandardBurstFromKey,
+} from '@/lib/meshSkillFeed';
 
 // ─── Department data ──────────────────────────────────────────────────────
 
@@ -97,7 +102,11 @@ const AgentDepartmentChart = () => {
         {/* Legend */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-1.5 w-full">
           {DEPT_DATA.map(dept => (
-            <div key={dept.name} className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg hover:bg-white/3 transition-colors">
+            <div
+              key={dept.name}
+              className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg hover:bg-white/3 transition-colors"
+              title={`${meshStandardBurstFromKey(`agentChart|dept|${dept.name}`)}\n—\n${meshWhisperFromKey(`agentChart|whisper|${dept.name}`)}`}
+            >
               <div className="flex items-center gap-2 min-w-0">
                 <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: dept.fill }} />
                 <span className="text-solaris-muted text-[11px] truncate">{dept.name}</span>

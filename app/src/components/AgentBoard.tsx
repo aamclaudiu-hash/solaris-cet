@@ -5,7 +5,14 @@ import {
   MessageCircle, Lightbulb, CheckCircle, AlertTriangle, Dna,
 } from 'lucide-react';
 import { useAgentBoard, type EventKind } from '../hooks/useAgentBoard';
-import { shortSkillWhisper, meshWhisperFromKey } from '@/lib/meshSkillFeed';
+import { AGENT_BOARD_DEPT_TO_MESH_ID } from '@/lib/agentBoardSkillMix';
+import {
+  shortSkillWhisper,
+  meshWhisperForAiTeamRoleAgent,
+  meshWhisperForBoardLiveAgent,
+  meshStandardBurstForBoardLiveAgent,
+  meshWhisperForBoardCollab,
+} from '@/lib/meshSkillFeed';
 
 // ─── Department display config ───────────────────────────────────────────
 
@@ -94,12 +101,30 @@ const AgentBoard = () => {
           const DeptIcon = dept.icon;
           const kc = KIND_CONFIG[ev.kind];
           const KindIcon = kc.icon;
+          const meshDeptId = AGENT_BOARD_DEPT_TO_MESH_ID[ev.dept];
+          const instanceBurst = meshStandardBurstForBoardLiveAgent(
+            ev.agentId,
+            ev.dept,
+            ev.kind,
+            ev.roleTitle
+          );
+          const rowTitle = [
+            ev.message,
+            instanceBurst,
+            ev.collab ? `↔ ${ev.collab}: ${meshWhisperForBoardCollab(ev.collab)}` : '',
+          ]
+            .filter(Boolean)
+            .join('\n—\n');
+          const agentBadgeTitle =
+            ev.roleTitle && meshDeptId
+              ? meshWhisperForAiTeamRoleAgent(meshDeptId, ev.roleTitle)
+              : meshWhisperForBoardLiveAgent(ev.agentId, ev.dept, ev.kind, ev.roleTitle);
 
           return (
             <li
               key={ev.id}
               className="flex items-stretch gap-0 group hover:bg-white/2 transition-colors duration-150"
-              title={`${ev.message}\n—\n${meshWhisperFromKey(`agentBoard|event|${ev.agentId}|${ev.kind}|${ev.id}`)}`}
+              title={rowTitle}
             >
               {/* Dept colour bar */}
               <div className={`w-0.5 shrink-0 ${dept.bar} opacity-60`} />
@@ -113,7 +138,10 @@ const AgentBoard = () => {
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`font-mono text-[10px] font-bold ${dept.color}`}>
+                    <span
+                      className={`font-mono text-[10px] font-bold ${dept.color}`}
+                      title={agentBadgeTitle}
+                    >
                       {ev.agentId}
                     </span>
                     <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md ${kc.bg} text-[9px] font-bold ${kc.color}`}>

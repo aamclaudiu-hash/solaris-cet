@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   AGENT_BOARD_DEPT_TO_MESH_ID,
   buildSkillLatticeLine,
+  buildSkillLatticePayload,
   truncateBoardSkillMessage,
 } from '@/lib/agentBoardSkillMix';
 
@@ -15,6 +16,14 @@ describe('agentBoardSkillMix', () => {
     const b = buildSkillLatticeLine('Engineering', 7);
     expect(a).toBe(b);
     expect(a).toMatch(/^[^:]+:/);
+  });
+
+  it('buildSkillLatticePayload line matches buildSkillLatticeLine and includes roleTitle', () => {
+    const p = buildSkillLatticePayload('Engineering', 4);
+    expect(p).not.toBeNull();
+    expect(p!.line).toBe(buildSkillLatticeLine('Engineering', 4));
+    expect(p!.roleTitle.length).toBeGreaterThan(2);
+    expect(p!.meshDeptId).toBe('engineering');
   });
 
   it('different seq yields different lines for same dept', () => {

@@ -19,6 +19,10 @@ import {
   meshStandardBurstForAiTeamRoleAgent,
   meshWhisperForAiTeamRoleGene,
   meshWhisperForAiTeamSynth,
+  agentBoardLiveAgentKey,
+  meshWhisperForBoardLiveAgent,
+  meshStandardBurstForBoardLiveAgent,
+  meshWhisperForBoardCollab,
 } from '@/lib/meshSkillFeed';
 
 function stripFeedTimestamp(line: string): string {
@@ -134,6 +138,24 @@ describe('meshSkillFeed', () => {
     );
     expect(meshWhisperForAiTeamSynth('marketing', 'Growth', 'flash', 0)).toBe(
       meshWhisperFromKey(aiTeamSynthKey('marketing', 'Growth', 'flash', 0))
+    );
+  });
+
+  it('agentBoard live-agent keys encode instance + dept + kind + role', () => {
+    expect(agentBoardLiveAgentKey('CX-00042', 'Customer Ops', 'skill', 'Tier-1 Support')).toBe(
+      'agentBoard|liveAgent|CX-00042|Customer Ops|skill|Tier-1 Support'
+    );
+    expect(agentBoardLiveAgentKey('ENG-00001', 'Engineering', 'solved')).toBe(
+      'agentBoard|liveAgent|ENG-00001|Engineering|solved|—'
+    );
+    expect(meshWhisperForBoardLiveAgent('AI-00003', 'Data & AI', 'learned')).toBe(
+      meshWhisperFromKey(agentBoardLiveAgentKey('AI-00003', 'Data & AI', 'learned'))
+    );
+    expect(meshStandardBurstForBoardLiveAgent('FIN-00999', 'Finance', 'alert')).toBe(
+      meshStandardBurstFromKey(agentBoardLiveAgentKey('FIN-00999', 'Finance', 'alert'))
+    );
+    expect(meshWhisperForBoardCollab('SEC-00001')).toBe(
+      meshWhisperFromKey('agentBoard|collab|SEC-00001')
     );
   });
 });

@@ -21,10 +21,16 @@ export function truncateBoardSkillMessage(s: string): string {
   return s.length <= MAX_BOARD_LEN ? s : `${s.slice(0, MAX_BOARD_LEN - 1)}…`;
 }
 
+export interface SkillLatticePayload {
+  line: string;
+  roleTitle: string;
+  meshDeptId: string;
+}
+
 /**
- * One recombinant skill line for the live agent board, keyed by dept + monotonic seq.
+ * Recombinant skill payload for the live board — includes role id for per-agent mesh keys.
  */
-export function buildSkillLatticeLine(deptName: string, seq: number): string | null {
+export function buildSkillLatticePayload(deptName: string, seq: number): SkillLatticePayload | null {
   const meshId = AGENT_BOARD_DEPT_TO_MESH_ID[deptName];
   const dept = solarisDepartments.find((d) => d.id === meshId);
   if (!dept) return null;
@@ -38,5 +44,16 @@ export function buildSkillLatticeLine(deptName: string, seq: number): string | n
   if (!line) return null;
 
   const raw = `${role.title}: ${line}`;
-  return truncateBoardSkillMessage(raw);
+  return {
+    line: truncateBoardSkillMessage(raw),
+    roleTitle: role.title,
+    meshDeptId: meshId,
+  };
+}
+
+/**
+ * One recombinant skill line for the live agent board, keyed by dept + monotonic seq.
+ */
+export function buildSkillLatticeLine(deptName: string, seq: number): string | null {
+  return buildSkillLatticePayload(deptName, seq)?.line ?? null;
 }
