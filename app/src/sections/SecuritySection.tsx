@@ -1,6 +1,16 @@
 import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
-import { Shield, CheckCircle, FileSearch, UserCheck, Code, Lock } from 'lucide-react';
+import {
+  Shield,
+  CheckCircle,
+  FileSearch,
+  UserCheck,
+  Code,
+  Lock,
+  Sparkles,
+  BadgeCheck,
+  Anchor,
+} from 'lucide-react';
 
 
 // Static data defined outside component to avoid re-creation on every render
@@ -42,6 +52,13 @@ const securityFeatures = [
   { icon: Shield, text: 'No hidden proxies' },
   { icon: Code, text: 'Code is law—published and reproducible' },
 ];
+
+/** Compact trust signals for audit & security — reduces perceived risk for new investors */
+const trustSignalBadges = [
+  { icon: Sparkles, label: 'AI Audited', ring: 'ring-solaris-gold/25', iconClass: 'text-solaris-gold' },
+  { icon: BadgeCheck, label: 'TON Verified', ring: 'ring-solaris-cyan/25', iconClass: 'text-solaris-cyan' },
+  { icon: Anchor, label: 'RWA Anchored', ring: 'ring-emerald-400/25', iconClass: 'text-emerald-400' },
+] as const;
 
 const SecuritySection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -89,7 +106,26 @@ const SecuritySection = () => {
         }
       );
 
-      // Badge grid animation
+      // Trust signal pills + audit badge grid
+      const trustSignals = badgeGridRef.current?.querySelectorAll('.trust-signal-badge');
+      if (trustSignals) {
+        gsap.fromTo(
+          trustSignals,
+          { y: 16, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.07,
+            duration: 0.5,
+            scrollTrigger: {
+              trigger: badgeGridRef.current,
+              start: 'top 80%',
+              end: 'top 50%',
+              scrub: true,
+            },
+          }
+        );
+      }
       const badges = badgeGridRef.current?.querySelectorAll('.audit-badge');
       if (badges) {
         gsap.fromTo(
@@ -169,6 +205,28 @@ const SecuritySection = () => {
 
           {/* Right Column - Badge Grid */}
           <div ref={badgeGridRef}>
+            {/* Trust signals — audit & security */}
+            <div
+              className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 backdrop-blur-sm"
+              role="group"
+              aria-label="Trust signals"
+            >
+              <span className="text-solaris-muted text-[10px] font-mono uppercase tracking-[0.2em] shrink-0">
+                Trust signals
+              </span>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 sm:justify-end">
+                {trustSignalBadges.map(({ icon: Icon, label, ring, iconClass }) => (
+                  <div
+                    key={label}
+                    className={`trust-signal-badge inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-solaris-text shadow-depth ring-1 ${ring} transition-colors hover:border-white/20`}
+                  >
+                    <Icon className={`h-3.5 w-3.5 shrink-0 ${iconClass}`} aria-hidden />
+                    <span>{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Security Score Banner */}
             <div className="bento-card p-6 mb-10 flex flex-col md:flex-row items-center gap-6 border border-solaris-gold/30">
               <div className="shrink-0 text-center">

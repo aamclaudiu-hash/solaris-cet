@@ -67,6 +67,11 @@ module.exports = {
           muted: "#A6A9B6",
         },
       },
+      /** Ring accents for trust badges / focus rings; `<alpha-value>` enables `/25`, `/40`, … */
+      ringColor: {
+        "solaris-gold": "rgb(242 201 76 / <alpha-value>)",
+        "solaris-cyan": "rgb(46 231 255 / <alpha-value>)",
+      },
       fontFamily: {
         sans: ['"Space Grotesk"', "system-ui", "sans-serif"],
         display: ['"Space Grotesk"', "system-ui", "sans-serif"],
