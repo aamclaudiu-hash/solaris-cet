@@ -9,6 +9,11 @@ import AgentDepartmentChart from '../components/AgentDepartmentChart';
 import { solarisDepartments } from '@/data/solarisDepartments';
 import RoleSynthesizedSkills from '@/components/RoleSynthesizedSkills';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import {
+  meshWhisperFromKey,
+  meshStandardBurstForAiTeamRoleAgent,
+  meshWhisperForAiTeamRoleGene,
+} from '@/lib/meshSkillFeed';
 
 const departments = solarisDepartments;
 
@@ -168,7 +173,11 @@ const AITeamSection = () => {
                   <div className={`w-8 h-8 rounded-lg ${dept.iconBg} flex items-center justify-center shrink-0`} aria-hidden>
                     <DeptIcon className={`w-4 h-4 ${dept.iconColor}`} />
                   </div>
-                  <span id={titleId} className={`hud-label text-[10px] leading-tight ${dept.iconColor}`}>
+                  <span
+                    id={titleId}
+                    className={`hud-label text-[10px] leading-tight ${dept.iconColor}`}
+                    title={meshWhisperFromKey(`aiTeam|dept|${dept.id}`)}
+                  >
                     {dept.name.toUpperCase()}
                   </span>
                 </div>
@@ -191,7 +200,10 @@ const AITeamSection = () => {
                   {dept.roles.map((role) => (
                     <li key={role.title}>
                       <details className="group rounded-lg border border-white/[0.06] bg-black/20 open:border-white/12 open:bg-white/[0.03] transition-colors">
-                        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 py-1.5 px-2 select-none [&::-webkit-details-marker]:hidden">
+                        <summary
+                          className="flex cursor-pointer list-none items-center justify-between gap-2 py-1.5 px-2 select-none [&::-webkit-details-marker]:hidden"
+                          title={meshStandardBurstForAiTeamRoleAgent(dept.id, role.title)}
+                        >
                           <span className="flex min-w-0 items-center gap-1.5">
                             <span className={`h-1 w-1 shrink-0 rounded-full bg-current ${dept.iconColor}`} />
                             <span className="text-xs font-medium leading-tight text-solaris-text truncate">
@@ -210,11 +222,11 @@ const AITeamSection = () => {
                             Curated genes
                           </div>
                           <div className="flex flex-wrap gap-1">
-                            {role.skills.map((skill) => (
+                            {role.skills.map((skill, geneIdx) => (
                               <span
                                 key={skill}
                                 className="max-w-full rounded border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[8px] sm:text-[9px] leading-snug text-solaris-muted"
-                                title={skill}
+                                title={`${skill}\n—\n${meshWhisperForAiTeamRoleGene(dept.id, role.title, geneIdx)}`}
                               >
                                 {skill}
                               </span>

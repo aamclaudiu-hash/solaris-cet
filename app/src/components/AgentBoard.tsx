@@ -5,7 +5,7 @@ import {
   MessageCircle, Lightbulb, CheckCircle, AlertTriangle, Dna,
 } from 'lucide-react';
 import { useAgentBoard, type EventKind } from '../hooks/useAgentBoard';
-import { shortSkillWhisper } from '@/lib/meshSkillFeed';
+import { shortSkillWhisper, meshWhisperFromKey } from '@/lib/meshSkillFeed';
 
 // ─── Department display config ───────────────────────────────────────────
 
@@ -99,6 +99,7 @@ const AgentBoard = () => {
             <li
               key={ev.id}
               className="flex items-stretch gap-0 group hover:bg-white/2 transition-colors duration-150"
+              title={`${ev.message}\n—\n${meshWhisperFromKey(`agentBoard|event|${ev.agentId}|${ev.kind}|${ev.id}`)}`}
             >
               {/* Dept colour bar */}
               <div className={`w-0.5 shrink-0 ${dept.bar} opacity-60`} />

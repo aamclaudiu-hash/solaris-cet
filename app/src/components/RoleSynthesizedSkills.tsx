@@ -6,7 +6,11 @@ import {
   formatBigSpace,
   SKILL_ALLELE_SPACE,
 } from '@/lib/skillGenome';
-import { skillCaptionForDept, skillSeedFromLabel } from '@/lib/meshSkillFeed';
+import {
+  skillCaptionForDept,
+  skillSeedFromLabel,
+  meshWhisperForAiTeamSynth,
+} from '@/lib/meshSkillFeed';
 
 const SYNTH_STANDARD = 16;
 const SYNTH_DEEP = 12;
@@ -70,7 +74,7 @@ const RoleSynthesizedSkills = ({
             <span
               key={`${deptId}-${roleTitle}-a-${i}`}
               className="max-w-full rounded border border-purple-500/25 bg-purple-500/[0.06] px-1.5 py-0.5 text-[8px] sm:text-[9px] leading-snug text-purple-100/85"
-              title={s}
+              title={`${s}\n—\n${meshWhisperForAiTeamSynth(deptId, roleTitle, 'standard', i)}`}
             >
               {s}
             </span>
@@ -87,7 +91,7 @@ const RoleSynthesizedSkills = ({
             <span
               key={`${deptId}-${roleTitle}-b-${i}`}
               className="max-w-full rounded border border-cyan-500/20 bg-cyan-500/[0.05] px-1.5 py-0.5 text-[8px] sm:text-[9px] leading-snug text-cyan-100/80"
-              title={s}
+              title={`${s}\n—\n${meshWhisperForAiTeamSynth(deptId, roleTitle, 'deep', i)}`}
             >
               {s}
             </span>
@@ -104,7 +108,7 @@ const RoleSynthesizedSkills = ({
             <span
               key={`${deptId}-${roleTitle}-c-${i}`}
               className="max-w-full rounded border border-fuchsia-500/25 bg-fuchsia-500/[0.06] px-1.5 py-0.5 text-[8px] sm:text-[9px] leading-snug text-fuchsia-100/85"
-              title={s}
+              title={`${s}\n—\n${meshWhisperForAiTeamSynth(deptId, roleTitle, 'flash', i)}`}
             >
               {s}
             </span>

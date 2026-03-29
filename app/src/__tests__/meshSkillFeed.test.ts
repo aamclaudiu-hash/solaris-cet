@@ -12,6 +12,13 @@ import {
   observeLocusClip,
   meshWhisperFromKey,
   meshStandardBurstFromKey,
+  aiTeamRoleAgentKey,
+  aiTeamRoleGeneKey,
+  aiTeamSynthKey,
+  meshWhisperForAiTeamRoleAgent,
+  meshStandardBurstForAiTeamRoleAgent,
+  meshWhisperForAiTeamRoleGene,
+  meshWhisperForAiTeamSynth,
 } from '@/lib/meshSkillFeed';
 
 function stripFeedTimestamp(line: string): string {
@@ -107,5 +114,26 @@ describe('meshSkillFeed', () => {
   it('meshStandardBurstFromKey matches standardSkillBurst ∘ skillSeedFromLabel', () => {
     const k = 'miningCalc|device|node';
     expect(meshStandardBurstFromKey(k)).toBe(standardSkillBurst(skillSeedFromLabel(k)));
+  });
+
+  it('aiTeam scene keys are stable strings', () => {
+    expect(aiTeamRoleAgentKey('engineering', 'SRE')).toBe('aiTeam|roleAgent|engineering|SRE');
+    expect(aiTeamRoleGeneKey('legal', 'Counsel', 3)).toBe('aiTeam|roleGene|legal|3|Counsel');
+    expect(aiTeamSynthKey('sales', 'AE', 'deep', 2)).toBe('aiTeam|synth|sales|deep|2|AE');
+  });
+
+  it('AI team mesh wrappers delegate to keyed whispers / bursts', () => {
+    expect(meshWhisperForAiTeamRoleAgent('engineering', 'SRE')).toBe(
+      meshWhisperFromKey(aiTeamRoleAgentKey('engineering', 'SRE'))
+    );
+    expect(meshStandardBurstForAiTeamRoleAgent('engineering', 'SRE')).toBe(
+      meshStandardBurstFromKey(aiTeamRoleAgentKey('engineering', 'SRE'))
+    );
+    expect(meshWhisperForAiTeamRoleGene('legal', 'Counsel', 1)).toBe(
+      meshWhisperFromKey(aiTeamRoleGeneKey('legal', 'Counsel', 1))
+    );
+    expect(meshWhisperForAiTeamSynth('marketing', 'Growth', 'flash', 0)).toBe(
+      meshWhisperFromKey(aiTeamSynthKey('marketing', 'Growth', 'flash', 0))
+    );
   });
 });

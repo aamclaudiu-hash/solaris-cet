@@ -129,3 +129,54 @@ export function meshWhisperFromKey(sceneKey: string): string {
 export function meshStandardBurstFromKey(sceneKey: string): string {
   return standardSkillBurst(skillSeedFromLabel(sceneKey));
 }
+
+// ─── AI Team: one mesh stream per unique role-agent + gene + synth slot ───
+
+/** Scene key for a single department role-type agent (200k workforce slice). */
+export function aiTeamRoleAgentKey(deptId: string, roleTitle: string): string {
+  return `aiTeam|roleAgent|${deptId}|${roleTitle}`;
+}
+
+/** Scene key for one curated gene index under that role. */
+export function aiTeamRoleGeneKey(deptId: string, roleTitle: string, geneIndex: number): string {
+  return `aiTeam|roleGene|${deptId}|${geneIndex}|${roleTitle}`;
+}
+
+/** Scene key for one recombinant synth chip (tier A/B/C in RoleSynthesizedSkills). */
+export function aiTeamSynthKey(
+  deptId: string,
+  roleTitle: string,
+  tier: SynthesisTier,
+  index: number
+): string {
+  return `aiTeam|synth|${deptId}|${tier}|${index}|${roleTitle}`;
+}
+
+/** Flash whisper tied to that role agent identity. */
+export function meshWhisperForAiTeamRoleAgent(deptId: string, roleTitle: string): string {
+  return meshWhisperFromKey(aiTeamRoleAgentKey(deptId, roleTitle));
+}
+
+/** Standard burst for role row tooltips (summary / hover). */
+export function meshStandardBurstForAiTeamRoleAgent(deptId: string, roleTitle: string): string {
+  return meshStandardBurstFromKey(aiTeamRoleAgentKey(deptId, roleTitle));
+}
+
+/** Flash whisper per curated gene chip. */
+export function meshWhisperForAiTeamRoleGene(
+  deptId: string,
+  roleTitle: string,
+  geneIndex: number
+): string {
+  return meshWhisperFromKey(aiTeamRoleGeneKey(deptId, roleTitle, geneIndex));
+}
+
+/** Flash whisper per synthesized expressome / deep / flash chip. */
+export function meshWhisperForAiTeamSynth(
+  deptId: string,
+  roleTitle: string,
+  tier: SynthesisTier,
+  index: number
+): string {
+  return meshWhisperFromKey(aiTeamSynthKey(deptId, roleTitle, tier, index));
+}
