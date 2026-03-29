@@ -61,7 +61,7 @@ function hexToRgba(hex: string, alpha: number): string {
  * `ResizeObserver` and the animation loop is cleaned up on unmount.
  *
  * @param props - {@link ParticleCanvasProps}
- * @returns A `<canvas>` element.
+ * @returns Wrapper with `<canvas>` plus decorative mesh caption.
  */
 const ParticleCanvas = ({
   count = 80,
