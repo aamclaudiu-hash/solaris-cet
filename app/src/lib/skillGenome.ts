@@ -232,6 +232,16 @@ function composeDeepPhrase(seed: number): string {
   return `${j} · ${a} ${b} · ${c} · ${i} · ${g}`;
 }
 
+/** Ultra-compact allele burst for ticker / badges. */
+function composeFlashPhrase(seed: number): string {
+  const rng = mulberry32(seed ^ 0xf00dcafe);
+  const j = pick(LOCUS_J, rng);
+  const i = pick(LOCUS_I, rng);
+  const a = pick(LOCUS_A, rng);
+  const h = pick(LOCUS_H, rng);
+  return `${j} ⌁ ${i} ⌁ ${a} ⌁ ${h}`;
+}
+
 function tokensFromSkill(s: string): string[] {
   return s
     .split(/[\s·,;]+/)
@@ -265,7 +275,7 @@ function tripleCrossover(a: string, b: string, c: string, seed: number): string 
   return `DNA-3 ${wa}|${wb}|${wc} · ${h} · ${i} · seal ${pick(LOCUS_G, rng)}`;
 }
 
-export type SynthesisTier = 'standard' | 'deep';
+export type SynthesisTier = 'standard' | 'deep' | 'flash';
 
 /**
  * Stable sample of recombinant skills for one role.
@@ -282,14 +292,17 @@ export function synthesizeMeshSkills(
   const seen = new Set<string>();
   let attempt = 0;
   const maxAttempts = count * 32;
-  const tierSalt = tier === 'deep' ? '|deep-v1' : '|std-v4';
+  const tierSalt =
+    tier === 'deep' ? '|deep-v1' : tier === 'flash' ? '|flash-v1' : '|std-v4';
 
   while (out.length < count && attempt < maxAttempts) {
     const base = `${deptId}|${roleTitle}|${attempt}${tierSalt}`;
     const seed = hash32(base);
 
     let line: string;
-    if (tier === 'deep') {
+    if (tier === 'flash') {
+      line = composeFlashPhrase(seed ^ (attempt * 0x9e3779b9));
+    } else if (tier === 'deep') {
       line = composeDeepPhrase(seed ^ (attempt * 0x9e3779b9));
     } else if (canonicalSkills.length >= 3 && attempt % 13 === 0) {
       const i0 = seed % canonicalSkills.length;

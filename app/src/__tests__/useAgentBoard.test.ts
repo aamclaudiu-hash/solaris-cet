@@ -39,7 +39,7 @@ describe('useAgentBoard', () => {
       expect(ev).toHaveProperty('ts');
       expect(typeof ev.id).toBe('string');
       expect(typeof ev.ts).toBe('number');
-      expect(['solved', 'learned', 'talking', 'alert']).toContain(ev.kind);
+      expect(['solved', 'learned', 'talking', 'alert', 'skill']).toContain(ev.kind);
     }
     await unmount();
   });
@@ -90,7 +90,7 @@ describe('defaultGenerateEvent', () => {
   it('returns a valid AgentEvent', () => {
     const ev = defaultGenerateEvent();
     expect(ev.id).toBeTruthy();
-    expect(['solved', 'learned', 'talking', 'alert']).toContain(ev.kind);
+    expect(['solved', 'learned', 'talking', 'alert', 'skill']).toContain(ev.kind);
     expect(ev.dept).toBeTruthy();
     expect(ev.agentId).toMatch(/^[A-Z&]+-\d{5}$/);
     expect(ev.message.length).toBeGreaterThan(5);

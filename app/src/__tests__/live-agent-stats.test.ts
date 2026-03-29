@@ -8,6 +8,7 @@ const COUNTERS = [
   { label: 'Lessons Learned', base: 892_441,   perSecond: 2.1  },
   { label: 'Conversations',   base: 3_294_817, perSecond: 8.3  },
   { label: 'Alerts Resolved', base: 241_087,   perSecond: 0.9  },
+  { label: 'Skill Loci Live', base: 1_203_884, perSecond: 5.2  },
 ];
 
 function formatNum(n: number): string {
@@ -54,8 +55,8 @@ describe('LiveAgentStats — counter increments', () => {
     COUNTERS.forEach(c => expect(c.perSecond).toBeGreaterThan(0));
   });
 
-  it('4 counters defined', () => {
-    expect(COUNTERS).toHaveLength(4);
+  it('5 counters defined', () => {
+    expect(COUNTERS).toHaveLength(5);
   });
 
   it('after 1 second each counter increases by its perSecond rate', () => {

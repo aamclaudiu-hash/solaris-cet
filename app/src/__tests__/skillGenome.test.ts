@@ -30,6 +30,10 @@ describe('skillGenome', () => {
     const d2 = synthesizeMeshSkills('eng', 'Backend', c, 12, 'deep');
     expect(d1).toEqual(d2);
     expect(d1[0]).not.toBe(a[0]);
+    const f1 = synthesizeMeshSkills('eng', 'Backend', c, 8, 'flash');
+    const f2 = synthesizeMeshSkills('eng', 'Backend', c, 8, 'flash');
+    expect(f1).toEqual(f2);
+    expect(f1[0]).toContain('⌁');
   });
 
   it('synthesized lines are unique within one sample', () => {

@@ -9,6 +9,7 @@ import {
 
 const SYNTH_STANDARD = 16;
 const SYNTH_DEEP = 12;
+const SYNTH_FLASH = 8;
 
 interface RoleSynthesizedSkillsProps {
   deptId: string;
@@ -17,7 +18,7 @@ interface RoleSynthesizedSkillsProps {
 }
 
 /**
- * Runtime-recombined “skill DNA” — standard + deep tier; nominal universe in UI caption.
+ * Runtime-recombined “skill DNA” — standard, deep, and flash tiers; nominal universe in UI caption.
  */
 const RoleSynthesizedSkills = ({
   deptId,
@@ -34,6 +35,11 @@ const RoleSynthesizedSkills = ({
     [deptId, roleTitle, canonicalSkills]
   );
 
+  const flash = useMemo(
+    () => synthesizeMeshSkills(deptId, roleTitle, canonicalSkills, SYNTH_FLASH, 'flash'),
+    [deptId, roleTitle, canonicalSkills]
+  );
+
   return (
     <div className="mt-2 border-t border-purple-500/20 pt-2 space-y-3">
       <div className="flex items-start gap-1.5">
@@ -45,7 +51,8 @@ const RoleSynthesizedSkills = ({
           </div>
           <p className="mt-1 text-[8px] leading-snug text-solaris-muted/70">
             Standard: full templates + DNA-2 / DNA-3 crossover from your curated genes. Deep: compact epoch + locale
-            shards for HUD-scale expression. Nothing is pre-stored — only deterministic draws.
+            shards for HUD-scale expression. Flash: ultra-compact allele bursts for tickers. Nothing is pre-stored —
+            only deterministic draws.
           </p>
         </div>
       </div>
@@ -76,6 +83,23 @@ const RoleSynthesizedSkills = ({
             <span
               key={`${deptId}-${roleTitle}-b-${i}`}
               className="max-w-full rounded border border-cyan-500/20 bg-cyan-500/[0.05] px-1.5 py-0.5 text-[8px] sm:text-[9px] leading-snug text-cyan-100/80"
+              title={s}
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <div className="mb-1 text-[8px] font-mono uppercase tracking-wider text-fuchsia-400/75">
+          Tier C — flash / ticker
+        </div>
+        <div className="flex flex-wrap gap-1">
+          {flash.map((s, i) => (
+            <span
+              key={`${deptId}-${roleTitle}-c-${i}`}
+              className="max-w-full rounded border border-fuchsia-500/25 bg-fuchsia-500/[0.06] px-1.5 py-0.5 text-[8px] sm:text-[9px] leading-snug text-fuchsia-100/85"
               title={s}
             >
               {s}

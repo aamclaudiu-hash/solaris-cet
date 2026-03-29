@@ -1,5 +1,5 @@
 import { useState, useEffect, useSyncExternalStore } from 'react';
-import { Brain, CheckCircle, MessageCircle, Lightbulb, AlertTriangle } from 'lucide-react';
+import { Brain, CheckCircle, MessageCircle, Lightbulb, AlertTriangle, Dna } from 'lucide-react';
 
 // ─── Live counters that increment naturally over time ─────────────────────
 
@@ -16,6 +16,7 @@ const COUNTERS: Counter[] = [
   { label: 'Lessons Learned', base: 892_441,   perSecond: 2.1,  icon: Lightbulb,     color: 'text-solaris-gold' },
   { label: 'Conversations',   base: 3_294_817, perSecond: 8.3,  icon: MessageCircle, color: 'text-solaris-cyan' },
   { label: 'Alerts Resolved', base: 241_087,   perSecond: 0.9,  icon: AlertTriangle, color: 'text-purple-400' },
+  { label: 'Skill Loci Live', base: 1_203_884, perSecond: 5.2,  icon: Dna,           color: 'text-fuchsia-400' },
 ];
 
 function formatNum(n: number): string {
@@ -39,7 +40,7 @@ function useIsClient(): boolean {
 }
 
 /**
- * LiveAgentStats — four live-incrementing counters showing cumulative
+ * LiveAgentStats — live-incrementing counters showing cumulative
  * Solaris CET agent activity since network genesis.
  * Values start from realistic baselines and increment each second.
  */
@@ -58,7 +59,7 @@ const LiveAgentStats = () => {
   if (!isClient) return null;
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
       {COUNTERS.map((counter, i) => {
         const Icon = counter.icon;
         return (

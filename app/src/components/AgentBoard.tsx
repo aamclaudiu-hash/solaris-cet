@@ -1,7 +1,7 @@
 import {
   Users, Code2, TrendingUp, Brain, Coins,
   Globe, Palette, Shield, FileCheck, Crown,
-  MessageCircle, Lightbulb, CheckCircle, AlertTriangle,
+  MessageCircle, Lightbulb, CheckCircle, AlertTriangle, Dna,
 } from 'lucide-react';
 import { useAgentBoard, type EventKind } from '../hooks/useAgentBoard';
 
@@ -34,6 +34,7 @@ const KIND_CONFIG: Record<EventKind, { icon: typeof MessageCircle; label: string
   learned: { icon: Lightbulb,     label: 'LEARNED', color: 'text-solaris-gold', bg: 'bg-solaris-gold/10' },
   talking: { icon: MessageCircle, label: 'TALKING', color: 'text-solaris-cyan', bg: 'bg-solaris-cyan/10' },
   alert:   { icon: AlertTriangle, label: 'ALERT',   color: 'text-red-400',     bg: 'bg-red-400/10' },
+  skill:   { icon: Dna,           label: 'SKILL',   color: 'text-fuchsia-300', bg: 'bg-fuchsia-500/15' },
 };
 
 function timeSince(ts: number): string {
@@ -63,7 +64,7 @@ const AgentBoard = () => {
         <div className="flex items-center gap-3">
           <span className="font-mono text-solaris-muted text-[10px]">200,000 ONLINE</span>
           <div className="flex gap-1">
-            {(['solved', 'learned', 'talking', 'alert'] as EventKind[]).map(k => {
+            {(['solved', 'learned', 'talking', 'alert', 'skill'] as EventKind[]).map(k => {
               const kc = KIND_CONFIG[k];
               const KindIcon = kc.icon;
               return (

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { buildSkillLatticeLine } from '@/lib/agentBoardSkillMix';
 
 // ─── Types (shared with AgentBoard component) ─────────────────────────────
 
-export type EventKind = 'solved' | 'learned' | 'talking' | 'alert';
+export type EventKind = 'solved' | 'learned' | 'talking' | 'alert' | 'skill';
 
 export interface AgentEvent {
   id: string;
@@ -38,7 +39,9 @@ const DEPARTMENTS = [
   { name: 'Research',     short: 'R&D', agents:  5_000 },
 ] as const;
 
-const TEMPLATES: Array<{ kind: EventKind; messages: string[]; collab?: true }> = [
+type TemplateKind = Exclude<EventKind, 'skill'>;
+
+const TEMPLATES: Array<{ kind: TemplateKind; messages: string[]; collab?: true }> = [
   {
     kind: 'solved',
     messages: [
@@ -96,7 +99,25 @@ function randomAgentId(dept: (typeof DEPARTMENTS)[number]): string {
   return `${dept.short}-${String(id).padStart(5, '0')}`;
 }
 
+/** Monotonic seq for deterministic skill lattice lines across ticks. */
+let boardSkillSeq = 0;
+
 export function defaultGenerateEvent(): AgentEvent {
+  if (Math.random() < 0.28) {
+    const dept = randomDept();
+    const message = buildSkillLatticeLine(dept.name, boardSkillSeq++);
+    if (message) {
+      return {
+        id: `skill-${Date.now()}-${Math.random()}`,
+        kind: 'skill',
+        dept: dept.name,
+        agentId: randomAgentId(dept),
+        message,
+        ts: Date.now(),
+      };
+    }
+  }
+
   const tpl = TEMPLATES[Math.floor(Math.random() * TEMPLATES.length)];
   const dept = randomDept();
   const agentId = randomAgentId(dept);
