@@ -7,7 +7,12 @@ import { X, Send, Copy, Check, ExternalLink, ChevronRight, Sparkles, Trash2, Bot
 import { useLanguage } from '../hooks/useLanguage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import type { OracleKnowledge, Translations } from '../i18n/translations';
-import { observeLocusBranchFromTopic, observeLocusClip } from '@/lib/meshSkillFeed';
+import {
+  observeLocusBranchFromTopic,
+  observeLocusClip,
+  skillSeedFromLabel,
+  standardSkillBurst,
+} from '@/lib/meshSkillFeed';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -531,6 +536,10 @@ export default function AiOracleSearch() {
       addLog('QUANTUM', `PATH_COLLAPSE: Highest-confidence path (p=${(confidence / 100).toFixed(4)})`);
       addLog('SEC', `CONSTRAINT_CHECK: Zero-hallucination bounds · fact anchors`);
       addLog('INFO', `BRAID_FRAME: Reasoning graph · depth 7 · nodes 1,204`);
+      addLog(
+        'QUANTUM',
+        `EXPRESSOME_BURST: ${standardSkillBurst(skillSeedFromLabel(`${q}|expressome`))}`
+      );
       setMetrics(prev => ({
         ...prev,
         confidence: Math.round(confidence * 0.7),
@@ -806,20 +815,47 @@ export default function AiOracleSearch() {
                         </span>
                       </div>
                       <div ref={terminalRef} className="flex-1 overflow-y-auto space-y-1 pr-1">
-                        {logs.map(log => (
-                          <div key={log.id} className="flex gap-3 hover:bg-gray-900/50 p-0.5 rounded">
-                            <span className="text-gray-600 min-w-[88px] shrink-0">[{log.timestamp}]</span>
-                            <span className={`min-w-[68px] font-bold shrink-0 ${
-                              log.type === 'INFO' ? 'text-blue-400'
-                              : log.type === 'WARN' ? 'text-yellow-400'
-                              : log.type === 'SEC' ? 'text-green-400'
-                              : 'text-purple-400'
-                            }`}>
-                              [{log.type}]
-                            </span>
-                            <span className="text-gray-300 break-all">{log.message}</span>
-                          </div>
-                        ))}
+                        {logs.map(log => {
+                          const isSkillLine =
+                            log.message.startsWith('SKILL_LOCUS:') ||
+                            log.message.startsWith('EXPRESSOME_BURST:');
+                          return (
+                            <div
+                              key={log.id}
+                              className={`flex gap-3 p-0.5 rounded ${
+                                isSkillLine
+                                  ? 'bg-fuchsia-950/25 hover:bg-fuchsia-950/35 border border-fuchsia-500/15'
+                                  : 'hover:bg-gray-900/50'
+                              }`}
+                            >
+                              <span className="text-gray-600 min-w-[88px] shrink-0">[{log.timestamp}]</span>
+                              <span
+                                className={`min-w-[68px] font-bold shrink-0 ${
+                                  isSkillLine
+                                    ? 'text-fuchsia-400'
+                                    : log.type === 'INFO'
+                                      ? 'text-blue-400'
+                                      : log.type === 'WARN'
+                                        ? 'text-yellow-400'
+                                        : log.type === 'SEC'
+                                          ? 'text-green-400'
+                                          : 'text-purple-400'
+                                }`}
+                              >
+                                [{isSkillLine ? 'SKILL' : log.type}]
+                              </span>
+                              <span
+                                className={`break-all ${
+                                  isSkillLine
+                                    ? 'text-fuchsia-200/90 drop-shadow-[0_0_8px_rgba(217,70,239,0.12)]'
+                                    : 'text-gray-300'
+                                }`}
+                              >
+                                {log.message}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
 
