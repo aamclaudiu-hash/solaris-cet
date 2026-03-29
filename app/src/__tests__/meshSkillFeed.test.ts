@@ -11,6 +11,7 @@ import {
   observeLocusBranchFromTopic,
   observeLocusClip,
   meshWhisperFromKey,
+  meshStandardBurstFromKey,
 } from '@/lib/meshSkillFeed';
 
 function stripFeedTimestamp(line: string): string {
@@ -101,5 +102,10 @@ describe('meshSkillFeed', () => {
   it('meshWhisperFromKey matches shortSkillWhisper ∘ skillSeedFromLabel', () => {
     const k = 'statsBento|agents';
     expect(meshWhisperFromKey(k)).toBe(shortSkillWhisper(skillSeedFromLabel(k)));
+  });
+
+  it('meshStandardBurstFromKey matches standardSkillBurst ∘ skillSeedFromLabel', () => {
+    const k = 'miningCalc|device|node';
+    expect(meshStandardBurstFromKey(k)).toBe(standardSkillBurst(skillSeedFromLabel(k)));
   });
 });

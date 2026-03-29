@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { Calculator, Smartphone, Laptop, Monitor, Server, TrendingUp } from 'lucide-react';
 import type { MiningInput, MiningResult } from '../lib/mining-math';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
+import { meshStandardBurstFromKey, meshWhisperFromKey } from '@/lib/meshSkillFeed';
 
 
 type DeviceType = 'smartphone' | 'laptop' | 'desktop' | 'node';
@@ -226,6 +227,7 @@ const MiningCalculatorSection = () => {
                       key={deviceType}
                       onClick={() => handleDeviceChange(deviceType)}
                       aria-pressed={device === deviceType}
+                      title={meshStandardBurstFromKey(`miningCalc|device|${deviceType}`)}
                       className={`p-3 rounded-xl border transition-all duration-300 flex flex-col items-center gap-2 ${
                         device === deviceType
                           ? 'bg-solaris-gold/10 border-solaris-gold'
@@ -253,7 +255,13 @@ const MiningCalculatorSection = () => {
             {/* Hashrate Slider */}
             <div className="mb-6">
               <div className="flex justify-between items-center mb-3">
-                <label htmlFor="hashrate-slider" className="hud-label">Hashrate (TH/s)</label>
+                <label
+                  htmlFor="hashrate-slider"
+                  className="hud-label"
+                  title={meshWhisperFromKey('miningCalc|slider|hashrate')}
+                >
+                  Hashrate (TH/s)
+                </label>
                 <span className="font-mono text-solaris-gold">{hashrate.toFixed(1)}</span>
               </div>
               <input
@@ -271,7 +279,13 @@ const MiningCalculatorSection = () => {
             {/* Stake Slider */}
             <div>
               <div className="flex justify-between items-center mb-3">
-                <label htmlFor="stake-slider" className="hud-label">Stake (BTC-S)</label>
+                <label
+                  htmlFor="stake-slider"
+                  className="hud-label"
+                  title={meshWhisperFromKey('miningCalc|slider|stake')}
+                >
+                  Stake (BTC-S)
+                </label>
                 <span className="font-mono text-solaris-cyan">{stake}</span>
               </div>
               <input
@@ -302,6 +316,12 @@ const MiningCalculatorSection = () => {
                   </span>
                   <span className="text-solaris-muted">BTC-S</span>
                 </div>
+                <p
+                  className="mt-3 text-[9px] font-mono text-fuchsia-200/60 leading-snug line-clamp-2 border-t border-fuchsia-500/10 pt-2"
+                  title={meshWhisperFromKey('miningCalc|yield|daily')}
+                >
+                  {meshWhisperFromKey('miningCalc|yield|daily')}
+                </p>
               </div>
 
               <div className="p-5 rounded-xl bg-white/5">
@@ -312,6 +332,12 @@ const MiningCalculatorSection = () => {
                   </span>
                   <span className="text-solaris-muted">BTC-S</span>
                 </div>
+                <p
+                  className="mt-3 text-[9px] font-mono text-fuchsia-200/60 leading-snug line-clamp-2 border-t border-fuchsia-500/10 pt-2"
+                  title={meshWhisperFromKey('miningCalc|yield|monthly')}
+                >
+                  {meshWhisperFromKey('miningCalc|yield|monthly')}
+                </p>
               </div>
 
               <div className="p-5 rounded-xl bg-emerald-400/5 border border-emerald-400/20">
@@ -322,6 +348,12 @@ const MiningCalculatorSection = () => {
                   </span>
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
                 </div>
+                <p
+                  className="mt-3 text-[9px] font-mono text-fuchsia-200/60 leading-snug line-clamp-2 border-t border-fuchsia-500/10 pt-2"
+                  title={meshWhisperFromKey('miningCalc|yield|apy')}
+                >
+                  {meshWhisperFromKey('miningCalc|yield|apy')}
+                </p>
               </div>
 
               {/* Mining Efficiency Tier */}
@@ -368,12 +400,18 @@ const MiningCalculatorSection = () => {
                     {stat.change}
                   </span>
                 </div>
+                <p
+                  className="mt-2 text-[9px] font-mono text-fuchsia-200/55 leading-snug line-clamp-2 border-t border-fuchsia-500/10 pt-2"
+                  title={meshWhisperFromKey(`miningCalc|live|${stat.label}`)}
+                >
+                  {meshWhisperFromKey(`miningCalc|live|${stat.label}`)}
+                </p>
               </div>
             ))}
           </div>
           <MeshSkillRibbon
             variant="compact"
-            saltOffset={480}
+            saltOffset={2410}
             className="mt-4 border-t border-white/8 rounded-none border-x-0 border-b-0 bg-fuchsia-500/[0.03] pt-3"
           />
         </div>

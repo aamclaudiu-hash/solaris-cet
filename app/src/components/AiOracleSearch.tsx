@@ -518,6 +518,7 @@ export default function AiOracleSearch() {
     );
     addLog('INFO', `TASK_MESH: ~200k task agents · delegated sub-queries · Oracle consolidation`);
     addLog('INFO', `INPUT_STREAM: "${q}" · Tokens: ${tokenCount}`);
+    addLog('INFO', `INPUT_MESH: ${deepLatticeLineForQuery(`${q}|inputStream`)}`);
     addLog(
       'INFO',
       `SKILL_LOCUS: ${observeLocusClip(q, observeLocusBranchFromTopic(detected))} · topic=${detected}`
@@ -532,6 +533,7 @@ export default function AiOracleSearch() {
         `FLASH_GLINT: ${shortSkillWhisper(skillSeedFromLabel(`${q}|observeCtx`))}`
       );
       addLog('INFO', `CONTEXT_MAP: Knowledge graph traversal · Nodes visited: 2,847`);
+      addLog('INFO', `CONTEXT_MESH: ${deepLatticeLineForQuery(`${q}|observeContext`)}`);
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
     }, ORACLE_PHASE_MS[0]);
 
@@ -847,6 +849,8 @@ export default function AiOracleSearch() {
                         {logs.map(log => {
                           const isSkillLine =
                             log.message.startsWith('RAV_BURST:') ||
+                            log.message.startsWith('INPUT_MESH:') ||
+                            log.message.startsWith('CONTEXT_MESH:') ||
                             log.message.startsWith('TASK_MESH:') ||
                             log.message.startsWith('SKILL_LOCUS:') ||
                             log.message.startsWith('EXPRESSOME_BURST:') ||

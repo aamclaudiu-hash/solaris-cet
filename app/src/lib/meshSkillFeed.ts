@@ -124,3 +124,8 @@ export function deepLatticeLineForQuery(q: string): string {
 export function meshWhisperFromKey(sceneKey: string): string {
   return shortSkillWhisper(skillSeedFromLabel(sceneKey));
 }
+
+/** Standard-tier burst from a stable scene key — longer tooltips and panels. */
+export function meshStandardBurstFromKey(sceneKey: string): string {
+  return standardSkillBurst(skillSeedFromLabel(sceneKey));
+}
