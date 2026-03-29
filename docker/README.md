@@ -1,0 +1,19 @@
+# Docker / static hosting
+
+## `nginx.conf`
+
+Example **SPA** config for serving a Vite production build (e.g. `app/dist` copied into the image as `/usr/share/nginx/html`):
+
+- `try_files` fallback to `index.html` for client-side routing
+- **Gzip** for text assets
+- Long cache for hashed static files (`immutable`)
+
+### Sample usage
+
+```dockerfile
+FROM nginx:alpine
+COPY app/dist/ /usr/share/nginx/html/
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+```
+
+Tune `server_name`, TLS (reverse proxy or `nginx:alpine` + cert mount), and cache headers for your CDN.
