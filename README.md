@@ -76,8 +76,9 @@ solaris-cet/
 │   │   ├── workers/            # Web Workers (AI inference, mining)
 │   │   ├── App.tsx             # Root component; GSAP ScrollTrigger registration
 │   │   └── main.tsx            # Entry point
-│   ├── api/                    # App-level API routes (Node.js runtime)
-│   │   └── chat/route.ts       # OpenAI-powered chat endpoint
+│   ├── api/                    # Vercel routes (Edge chat + Node auth)
+│   │   ├── chat/route.ts       # Oracle (Grok × Gemini) + DeDust context
+│   │   └── auth/route.ts       # Wallet sync (Postgres)
 │   ├── public/                 # Static assets (icons, images, state JSON)
 │   ├── tests/                  # Playwright E2E tests
 │   ├── index.html
@@ -98,6 +99,18 @@ solaris-cet/
 ├── SECURITY.md
 └── WHITEPAPER.md
 ```
+
+### Package / folder guides
+
+| Path | Quick link |
+|------|------------|
+| `app/` | [app/README.md](./app/README.md) |
+| `api/` | [api/README.md](./api/README.md) |
+| `contracts/` | [contracts/README.md](./contracts/README.md) |
+| `docs/` | [docs/README.md](./docs/README.md) |
+| `docker/` | [docker/README.md](./docker/README.md) |
+| `scripts/` | [scripts/README.md](./scripts/README.md) |
+| `simulations/` | [simulations/README.md](./simulations/README.md) |
 
 ---
 
@@ -121,7 +134,7 @@ solaris-cet/
 
 ### Prerequisites
 
-- **Node.js** ≥ 20 ([download](https://nodejs.org/))
+- **Node.js** ≥ 22 ([download](https://nodejs.org/)) — matches CI
 - **npm** ≥ 10 (bundled with Node.js)
 
 ### Setup
