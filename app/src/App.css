@@ -24,7 +24,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #09090b;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -118,8 +118,8 @@ button, .btn-gold, .btn-filled-gold {
 
 /* Glass card hover enhancement */
 .glass-card:hover {
-  background: rgba(244, 246, 255, 0.06);
-  border-color: rgba(244, 246, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
@@ -182,9 +182,10 @@ button, .btn-gold, .btn-filled-gold {
 ───────────────────────────────────────────── */
 
 .glass-card-deep {
-  background: rgba(5, 6, 11, 0.7);
-  border: 1px solid rgba(244, 246, 255, 0.08);
-  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-radius: 18px;
 }
 

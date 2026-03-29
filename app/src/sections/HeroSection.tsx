@@ -168,7 +168,7 @@ const HeroSection: React.FC = () => {
     <TooltipProvider>
       <section
         ref={containerRef}
-        className="relative min-h-screen bg-[#050505] overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center"
+        className="relative min-h-screen bg-zinc-950 overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center"
       >
         {/* Background Layer (Hardware Accelerated) */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -177,7 +177,7 @@ const HeroSection: React.FC = () => {
             className="absolute inset-0 sm:hidden"
             style={{
               background:
-                'radial-gradient(ellipse 100% 55% at 50% -5%, rgba(255,215,140,0.22), transparent 52%), radial-gradient(circle at 18% 22%, rgba(46,231,255,0.1), transparent 46%), linear-gradient(180deg, #0a0a0a 0%, #050505 50%, #030303 100%)',
+                'radial-gradient(ellipse 100% 55% at 50% -5%, rgba(255,215,140,0.22), transparent 52%), radial-gradient(circle at 18% 22%, rgba(46,231,255,0.1), transparent 46%), linear-gradient(180deg, #0a0a0b 0%, #09090b 50%, #030305 100%)',
             }}
           />
           <Suspense fallback={null}>
@@ -278,7 +278,7 @@ const HeroSection: React.FC = () => {
         {/* FOOTER TICKER — on mobile, position relative so it doesn't overlay AI oracle */}
         <div
           ref={tickerContainerRef}
-          className="lg:absolute lg:bottom-0 w-full overflow-hidden py-4 md:py-6 border-t border-white/10 bg-[#050505]/72 backdrop-blur-2xl mt-4 lg:mt-0 shadow-[0_-20px_60px_-20px_rgba(255,200,100,0.06)]"
+          className="lg:absolute lg:bottom-0 w-full overflow-hidden py-4 md:py-6 border-t border-white/10 bg-zinc-950/72 backdrop-blur-2xl mt-4 lg:mt-0 shadow-[0_-20px_60px_-20px_rgba(255,200,100,0.06)]"
         >
           <div className="flex min-w-max animate-ticker whitespace-nowrap">
               {[...TICKER_DATA, ...TICKER_DATA].map((item, i) => (
