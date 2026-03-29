@@ -1,8 +1,8 @@
 import { solarisDepartments } from '@/data/solarisDepartments';
 import { synthesizeMeshSkills, type SynthesisTier } from '@/lib/skillGenome';
 
-/** AgentBoard `dept.name` → `solarisDepartments.id` */
-const BOARD_DEPT_TO_MESH_ID: Record<string, string> = {
+/** AgentBoard / charts: display `dept.name` → `solarisDepartments.id` */
+export const AGENT_BOARD_DEPT_TO_MESH_ID: Record<string, string> = {
   'Customer Ops': 'customer-ops',
   Engineering: 'engineering',
   Sales: 'sales',
@@ -25,7 +25,7 @@ export function truncateBoardSkillMessage(s: string): string {
  * One recombinant skill line for the live agent board, keyed by dept + monotonic seq.
  */
 export function buildSkillLatticeLine(deptName: string, seq: number): string | null {
-  const meshId = BOARD_DEPT_TO_MESH_ID[deptName];
+  const meshId = AGENT_BOARD_DEPT_TO_MESH_ID[deptName];
   const dept = solarisDepartments.find((d) => d.id === meshId);
   if (!dept) return null;
 

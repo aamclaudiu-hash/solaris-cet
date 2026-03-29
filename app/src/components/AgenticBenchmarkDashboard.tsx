@@ -8,7 +8,48 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import type { TooltipContentProps, TooltipPayloadEntry } from 'recharts';
 import { Gauge, Sparkles } from 'lucide-react';
+import { standardSkillBurst, skillSeedFromLabel } from '@/lib/meshSkillFeed';
+
+const SERIES_PRETTY: Record<string, string> = {
+  solaris: 'Solaris (200k + RAV)',
+  standard: 'Standard AI app',
+  marketplace: 'Agent marketplace',
+};
+
+function BenchmarkTooltip({ active, payload, label }: TooltipContentProps<number, string>) {
+  if (!active || !payload?.length) return null;
+  const metric = typeof label === 'string' ? label : String(label ?? '');
+  const skill = standardSkillBurst(skillSeedFromLabel(metric));
+  return (
+    <div className="rounded-xl border border-white/12 bg-[#0D0E17] px-3 py-2.5 text-xs shadow-depth max-w-[min(100vw-24px,320px)]">
+      <div className="font-semibold text-solaris-text mb-1.5">{metric}</div>
+      <ul className="space-y-1 font-mono text-[10px]">
+        {payload.map((entry: TooltipPayloadEntry) => {
+          const key = String(entry.dataKey ?? entry.name ?? '');
+          const seriesName = String(entry.name ?? entry.dataKey ?? '');
+          return (
+            <li key={key} className="flex justify-between gap-4">
+              <span className="text-solaris-muted shrink-0">
+                {SERIES_PRETTY[seriesName] ?? seriesName}
+              </span>
+              <span className="tabular-nums font-bold" style={{ color: entry.color }}>
+                {entry.value}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <p
+        className="mt-2 pt-2 border-t border-fuchsia-500/20 font-mono text-[10px] leading-snug text-fuchsia-200/85 line-clamp-3"
+        title={skill}
+      >
+        {skill}
+      </p>
+    </div>
+  );
+}
 
 /** Normalised 0–100 scores for narrative comparison (illustrative). */
 const rows = [
@@ -52,13 +93,10 @@ const AgenticBenchmarkDashboard = () => (
             tickLine={false}
           />
           <Tooltip
-            contentStyle={{
-              background: '#0D0E17',
-              border: '1px solid rgba(255,255,255,0.12)',
-              borderRadius: 8,
-              fontSize: 11,
-            }}
-            formatter={(value) => [`${value ?? ''}`, '']}
+            content={(props) => (
+              <BenchmarkTooltip {...(props as TooltipContentProps<number, string>)} />
+            )}
+            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
           />
           <Legend
             wrapperStyle={{ fontSize: 11, paddingTop: 8 }}

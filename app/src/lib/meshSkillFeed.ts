@@ -1,4 +1,5 @@
 import { solarisDepartments } from '@/data/solarisDepartments';
+import { AGENT_BOARD_DEPT_TO_MESH_ID } from '@/lib/agentBoardSkillMix';
 import { synthesizeMeshSkills, type SynthesisTier } from '@/lib/skillGenome';
 
 const FEED_TIERS: SynthesisTier[] = ['flash', 'deep', 'standard'];
@@ -49,4 +50,27 @@ export function standardSkillBurst(seq: number): string {
   const synth = synthesizeMeshSkills(d.id, role.title, role.skills, 1, 'standard')[0] ?? '';
   const raw = `${role.title}: ${synth}`;
   return raw.length <= 118 ? raw : `${raw.slice(0, 117)}…`;
+}
+
+/**
+ * Flash-tier sample for UI tooltips keyed by the same display names as AgentBoard / radial chart.
+ */
+export function skillFlashForBoardDept(deptDisplayName: string, salt: number): string | null {
+  const meshId = AGENT_BOARD_DEPT_TO_MESH_ID[deptDisplayName];
+  if (!meshId) return null;
+  const dept = solarisDepartments.find((d) => d.id === meshId);
+  if (!dept) return null;
+  const role = dept.roles[Math.abs(salt) % dept.roles.length]!;
+  const line = synthesizeMeshSkills(meshId, role.title, role.skills, 1, 'flash')[0] ?? '';
+  const raw = `${role.title}: ${line}`;
+  return raw.length <= 96 ? raw : `${raw.slice(0, 95)}…`;
+}
+
+/** Stable small integer from a metric label (for benchmark tooltip skill lines). */
+export function skillSeedFromLabel(label: string): number {
+  let h = 0;
+  for (let i = 0; i < label.length; i++) {
+    h = (h * 33 + label.charCodeAt(i)) >>> 0;
+  }
+  return h % 900;
 }

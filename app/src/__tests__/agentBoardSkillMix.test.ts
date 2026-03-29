@@ -1,7 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { buildSkillLatticeLine, truncateBoardSkillMessage } from '@/lib/agentBoardSkillMix';
+import {
+  AGENT_BOARD_DEPT_TO_MESH_ID,
+  buildSkillLatticeLine,
+  truncateBoardSkillMessage,
+} from '@/lib/agentBoardSkillMix';
 
 describe('agentBoardSkillMix', () => {
+  it('AGENT_BOARD_DEPT_TO_MESH_ID covers 10 display departments', () => {
+    expect(Object.keys(AGENT_BOARD_DEPT_TO_MESH_ID)).toHaveLength(10);
+  });
+
   it('buildSkillLatticeLine is deterministic for fixed dept + seq', () => {
     const a = buildSkillLatticeLine('Engineering', 7);
     const b = buildSkillLatticeLine('Engineering', 7);

@@ -4,6 +4,8 @@ import {
   shortSkillWhisper,
   skillCaptionForDept,
   standardSkillBurst,
+  skillFlashForBoardDept,
+  skillSeedFromLabel,
 } from '@/lib/meshSkillFeed';
 
 describe('meshSkillFeed', () => {
@@ -24,6 +26,22 @@ describe('meshSkillFeed', () => {
 
   it('skillCaptionForDept returns empty for unknown id', () => {
     expect(skillCaptionForDept('no-such-dept', 0)).toBe('');
+  });
+
+  it('skillSeedFromLabel is stable per string', () => {
+    expect(skillSeedFromLabel('Parallel agents')).toBe(skillSeedFromLabel('Parallel agents'));
+    expect(skillSeedFromLabel('metric-aaa')).not.toBe(skillSeedFromLabel('metric-bbb'));
+  });
+
+  it('skillFlashForBoardDept returns flash line for chart dept names', () => {
+    const s = skillFlashForBoardDept('Engineering', 3);
+    expect(s).toBeTruthy();
+    expect(s!.length).toBeLessThanOrEqual(96);
+    expect(s).toContain(':');
+  });
+
+  it('skillFlashForBoardDept returns null for unknown display name', () => {
+    expect(skillFlashForBoardDept('Mars Colony', 0)).toBeNull();
   });
 
   it('standardSkillBurst is deterministic and includes role prefix', () => {

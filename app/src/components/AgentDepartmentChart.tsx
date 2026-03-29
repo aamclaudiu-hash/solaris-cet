@@ -1,5 +1,6 @@
 import { RadialBarChart, RadialBar, Tooltip, ResponsiveContainer } from 'recharts';
 import { Brain } from 'lucide-react';
+import { skillFlashForBoardDept, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
 // ─── Department data ──────────────────────────────────────────────────────
 
@@ -34,11 +35,21 @@ interface TooltipPayload {
 const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: TooltipPayload[] }) => {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
+  const skillSalt = skillSeedFromLabel(d.name);
+  const skillLine = skillFlashForBoardDept(d.name, skillSalt);
   return (
-    <div className="bg-[#0D0E17] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth">
+    <div className="bg-[#0D0E17] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth max-w-[min(100vw-24px,280px)]">
       <div className="font-bold mb-1" style={{ color: d.fill }}>{d.name}</div>
       <div className="text-solaris-text">{d.agents.toLocaleString()} agents</div>
       <div className="text-solaris-muted">{d.pct}% of total</div>
+      {skillLine ? (
+        <div
+          className="mt-2 pt-2 border-t border-fuchsia-500/20 text-[9px] leading-snug text-fuchsia-200/85 line-clamp-2"
+          title={skillLine}
+        >
+          {skillLine}
+        </div>
+      ) : null}
     </div>
   );
 };
