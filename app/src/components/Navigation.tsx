@@ -11,6 +11,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { standardSkillBurst, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
 /** Official CET/TON pool on DeDust — same target as HowToBuySection / Footer. */
 const DEDUST_POOL_ADDRESS = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
@@ -143,7 +144,10 @@ const Navigation = () => {
             <div className="hidden xl:flex items-center gap-3">
               <LanguageSelector />
               <WalletConnect />
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/20">
+              <div
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/20"
+                title={standardSkillBurst(skillSeedFromLabel('navHeader|liveMesh'))}
+              >
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="font-mono text-[11px] text-emerald-400">LIVE</span>
               </div>
@@ -231,7 +235,10 @@ const Navigation = () => {
                 <LanguageSelector />
                 <WalletConnect />
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-400/10 border border-emerald-400/20">
+              <div
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-400/10 border border-emerald-400/20"
+                title={standardSkillBurst(skillSeedFromLabel('navSheet|liveMesh'))}
+              >
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="font-mono text-[11px] text-emerald-400">LIVE</span>
               </div>

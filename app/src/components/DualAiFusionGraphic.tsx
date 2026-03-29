@@ -1,4 +1,5 @@
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
 /**
  * Visual diagram: Grok × Gemini converging on Solaris with RAV (Reason · Act · Verify)
@@ -114,6 +115,12 @@ export default function DualAiFusionGraphic() {
       {/* Fusion caption — competitive positioning */}
       <p className="mt-3 text-center font-mono text-[8px] uppercase tracking-[0.2em] text-solaris-muted/70 sm:text-[9px]">
         Dual-AI fusion · single RAV orchestration
+      </p>
+      <p
+        className="mt-2 px-2 text-center font-mono text-[7px] leading-snug text-fuchsia-200/50 line-clamp-2 sm:text-[8px]"
+        title={shortSkillWhisper(skillSeedFromLabel('dualAiFusion|ravCore'))}
+      >
+        {shortSkillWhisper(skillSeedFromLabel('dualAiFusion|ravCore'))}
       </p>
     </div>
   );

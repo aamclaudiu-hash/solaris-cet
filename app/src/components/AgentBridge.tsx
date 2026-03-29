@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Brain, Coins, Zap } from 'lucide-react';
+import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
 /**
  * AgentBridge — animated signal bridge showing the data flow from
@@ -38,6 +40,12 @@ const AgentBridge = () => {
           <div className="hud-label text-cyan-400 text-[9px]">AGENTS</div>
           <div className="font-display font-bold text-sm text-gradient-cyan">200,000</div>
           <div className="text-solaris-muted text-[10px]">Autonomous AI</div>
+          <p
+            className="text-[8px] font-mono text-fuchsia-200/60 leading-tight line-clamp-2 mt-1 pt-1 border-t border-fuchsia-500/10"
+            title={shortSkillWhisper(skillSeedFromLabel('agentBridge|agents'))}
+          >
+            {shortSkillWhisper(skillSeedFromLabel('agentBridge|agents'))}
+          </p>
         </div>
 
         {/* ── Bridge left ── */}
@@ -72,6 +80,12 @@ const AgentBridge = () => {
           <div className="hud-label text-solaris-gold text-[9px]">SOLARIS CET</div>
           <div className="font-display font-bold text-sm text-gradient-gold">9,000</div>
           <div className="text-solaris-muted text-[10px]">Fixed supply · TON</div>
+          <p
+            className="text-[8px] font-mono text-fuchsia-200/60 leading-tight line-clamp-2 mt-1 pt-1 border-t border-fuchsia-500/10"
+            title={shortSkillWhisper(skillSeedFromLabel('agentBridge|rav'))}
+          >
+            {shortSkillWhisper(skillSeedFromLabel('agentBridge|rav'))}
+          </p>
         </div>
 
         {/* ── Bridge right ── */}
@@ -103,8 +117,18 @@ const AgentBridge = () => {
           <div className="hud-label text-purple-400 text-[9px]">OUTCOMES</div>
           <div className="font-display font-bold text-sm text-gradient-aurora">∞</div>
           <div className="text-solaris-muted text-[10px]">Real-world value</div>
+          <p
+            className="text-[8px] font-mono text-fuchsia-200/60 leading-tight line-clamp-2 mt-1 pt-1 border-t border-fuchsia-500/10"
+            title={shortSkillWhisper(skillSeedFromLabel('agentBridge|outcomes'))}
+          >
+            {shortSkillWhisper(skillSeedFromLabel('agentBridge|outcomes'))}
+          </p>
         </div>
 
+      </div>
+
+      <div className="max-w-3xl mx-auto mt-4 px-2">
+        <MeshSkillRibbon variant="compact" saltOffset={2250} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />
       </div>
     </div>
   );
