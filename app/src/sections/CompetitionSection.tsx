@@ -3,6 +3,44 @@ import { gsap } from 'gsap';
 import { CheckCircle, XCircle, Minus, Trophy, Zap, Shield, Brain, Coins } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import GlowOrbs from '../components/GlowOrbs';
+import { skillSeedFromLabel, standardSkillBurst } from '@/lib/meshSkillFeed';
+
+interface CompetitionBarTooltipPayload {
+  value?: number;
+  name?: string;
+}
+
+function CompetitionBarTooltip({
+  active,
+  payload,
+  label,
+  valueLabel,
+}: {
+  active?: boolean;
+  payload?: readonly CompetitionBarTooltipPayload[];
+  label?: string | number;
+  valueLabel: string;
+}) {
+  if (!active || !payload?.length) return null;
+  const p = payload[0];
+  const name = String(label ?? p?.name ?? '');
+  const v = p?.value;
+  const skill = standardSkillBurst(skillSeedFromLabel(`competition|${valueLabel}|${name}`));
+  return (
+    <div className="rounded-lg border border-white/12 bg-[#0D0E17] px-3 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.4)] max-w-[min(90vw,280px)]">
+      <p className="font-mono text-sm font-bold text-solaris-text">{name}</p>
+      <p className="text-xs text-solaris-muted mt-1 tabular-nums">
+        {typeof v === 'number' ? v.toLocaleString() : String(v)} {valueLabel}
+      </p>
+      <p
+        className="mt-2 pt-2 border-t border-fuchsia-500/20 text-[10px] font-mono text-fuchsia-200/85 leading-snug line-clamp-3"
+        title={skill}
+      >
+        {skill}
+      </p>
+    </div>
+  );
+}
 
 // ─── Shared chart Y-axis formatters ──────────────────────────────────────
 
@@ -343,9 +381,14 @@ const CompetitionSection = () => {
                 <XAxis dataKey="name" tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} tickFormatter={formatTpsAxis} />
                 <Tooltip
-                  contentStyle={{ background: '#0D0E17', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, fontSize: 12 }}
-                  labelStyle={{ color: '#F4F6FF', fontFamily: 'monospace' }}
-                  formatter={(v) => [`${Number(v).toLocaleString()} TPS`, '']}
+                  content={(props) => (
+                    <CompetitionBarTooltip
+                      active={props.active}
+                      payload={props.payload as readonly CompetitionBarTooltipPayload[] | undefined}
+                      label={props.label}
+                      valueLabel="TPS"
+                    />
+                  )}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                   {[
@@ -385,9 +428,14 @@ const CompetitionSection = () => {
                 <XAxis dataKey="name" tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
                 <YAxis scale="log" domain={['auto', 'auto']} tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} tickFormatter={formatSupplyAxis} />
                 <Tooltip
-                  contentStyle={{ background: '#0D0E17', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, fontSize: 12 }}
-                  labelStyle={{ color: '#F4F6FF', fontFamily: 'monospace' }}
-                  formatter={(v) => [`${Number(v).toLocaleString()} tokens`, 'Total Supply']}
+                  content={(props) => (
+                    <CompetitionBarTooltip
+                      active={props.active}
+                      payload={props.payload as readonly CompetitionBarTooltipPayload[] | undefined}
+                      label={props.label}
+                      valueLabel="tokens supply"
+                    />
+                  )}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                   {[

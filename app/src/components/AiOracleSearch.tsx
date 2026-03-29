@@ -534,6 +534,7 @@ export default function AiOracleSearch() {
       setPhase('think_route');
       addLog('INFO', `GEMINI_REASON: Analytical pathway · parallel hypothesis lattice`);
       addLog('QUANTUM', `HYPOTHESIS_GEN: 6 paths · superposition collapse scheduled`);
+      addLog('INFO', `ROUTE_MESH: ${deepLatticeLineForQuery(`${q}|thinkRoute`)}`);
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
     }, ORACLE_PHASE_MS[1]);
 
@@ -832,7 +833,8 @@ export default function AiOracleSearch() {
                             log.message.startsWith('EXPRESSOME_BURST:') ||
                             log.message.startsWith('DEEP_LATTICE:') ||
                             log.message.startsWith('MESH_SEAL:') ||
-                            log.message.startsWith('FLASH_GLINT:');
+                            log.message.startsWith('FLASH_GLINT:') ||
+                            log.message.startsWith('ROUTE_MESH:');
                           return (
                             <div
                               key={log.id}

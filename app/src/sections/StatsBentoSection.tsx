@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { Users, Coins, Zap, Clock, Shield, TrendingUp, Globe, ArrowRight } from 'lucide-react';
 import AnimatedCounter from '../components/AnimatedCounter';
 import GlowOrbs from '../components/GlowOrbs';
+import MeshSkillRibbon from '../components/MeshSkillRibbon';
 
 /** Overrides global `.bento-card:hover` (translate/scale/shadow) with the bento gold glow spec. */
 const BENTO_TILE_INTERACTION =
@@ -246,6 +247,10 @@ const StatsBento = () => {
             </div>
           </div>
 
+        </div>
+
+        <div className="mt-8 max-w-3xl mx-auto w-full">
+          <MeshSkillRibbon variant="compact" saltOffset={1020} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />
         </div>
       </div>
     </section>
