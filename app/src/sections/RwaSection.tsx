@@ -33,7 +33,7 @@ const RWA_PILLARS = [
   },
   {
     title: 'AI-Optimised Yield',
-    description: 'Solaris CET\'s 200,000 AI agents actively manage the agricultural operations — soil analysis, crop rotation planning, weather prediction, and autonomous irrigation scheduling — maximising yield sustainably.',
+    description: 'Solaris CET\'s ~200,000 task-specialist AI agents coordinate agricultural operations — soil analysis, crop rotation planning, weather prediction, and irrigation scheduling — with Oracle-orchestrated validation, maximising yield sustainably.',
     icon: Sun,
     color: 'text-solaris-gold',
     bg: 'bg-solaris-gold/10',

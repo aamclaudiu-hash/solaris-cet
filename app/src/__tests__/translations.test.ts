@@ -82,10 +82,17 @@ describe("translations — key completeness", () => {
         expect(empty).toEqual([]);
       });
 
-      it("all values are strings", () => {
+      it("all values are strings (or string arrays for chip lists)", () => {
         for (const key of referenceKeys) {
           const value = getValueByPath(entry, key);
-          expect(typeof value, `'${lang}.${key}' should be a string`).toBe("string");
+          if (Array.isArray(value)) {
+            expect(
+              value.every((v) => typeof v === "string" && v.trim().length > 0),
+              `'${lang}.${key}' should be a non-empty string[]`
+            ).toBe(true);
+          } else {
+            expect(typeof value, `'${lang}.${key}' should be a string`).toBe("string");
+          }
         }
       });
     });

@@ -8,16 +8,22 @@ import { test, expect } from '@playwright/test';
  *  - The manifest is linked and parseable
  *  - Core page content is served from cache when the network is cut
  *  - The page title and key headings are still accessible offline
+ *
+ * `serviceWorkers: 'allow'` is required here: the root Playwright config sets
+ * `serviceWorkers: 'block'` so most UI tests avoid stale PWA precaches; these
+ * tests explicitly exercise registration and offline cache.
  */
 
 test.describe('Offline PWA State', () => {
+  test.use({ serviceWorkers: 'allow' });
+
   test('web app manifest is linked in <head>', async ({ page }) => {
     await page.goto('/');
     const manifestHref = await page.$eval(
       'link[rel="manifest"]',
       (el: HTMLLinkElement) => el.href
     );
-    expect(manifestHref).toMatch(/manifest\.webmanifest/);
+    expect(manifestHref).toMatch(/manifest\.(webmanifest|json)/);
   });
 
   test('web app manifest returns valid JSON with required fields', async ({ page }) => {

@@ -74,6 +74,23 @@ const detectLanguage = (): LangCode => {
   }
 };
 
+/** `?lang=xx` wins over stored/browser for shareable links and E2E (initializer avoids effect setState lint). */
+function resolveInitialLang(): LangCode {
+  if (typeof window !== 'undefined') {
+    try {
+      const code = new URLSearchParams(window.location.search).get('lang');
+      if (code && (SUPPORTED_LANGS as readonly string[]).includes(code)) {
+        const next = code as LangCode;
+        localStorage.setItem('solaris_lang', next);
+        return next;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  return detectLanguage();
+}
+
 export const LanguageContext = createContext<LanguageContextValue>({
   lang: 'en',
   setLang: () => undefined,
@@ -83,7 +100,7 @@ export const LanguageContext = createContext<LanguageContextValue>({
 export const useLanguage = () => useContext(LanguageContext);
 
 export const useLanguageState = (): LanguageContextValue => {
-  const [lang, setLangState] = useState<LangCode>(detectLanguage);
+  const [lang, setLangState] = useState<LangCode>(resolveInitialLang);
 
   const setLang = useCallback((newLang: LangCode) => {
     setLangState(newLang);
