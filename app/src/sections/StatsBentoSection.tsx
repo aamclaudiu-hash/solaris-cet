@@ -185,7 +185,7 @@ const StatsBento = () => {
 
           {/* ── 3 stats + trust — right stack ── */}
           <div className="lg:col-span-6 flex flex-col gap-4 lg:gap-5">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
               {smallStats.map(stat => {
                 const Icon = stat.icon;
                 return (
@@ -228,7 +228,7 @@ const StatsBento = () => {
 
             {/* Trust bar */}
             <div
-              className={`bento-stat bento-card p-5 border border-white/5 shadow-depth flex flex-col sm:flex-row items-center gap-5 ${BENTO_TILE_INTERACTION}`}
+              className={`bento-stat bento-card p-5 border border-white/5 shadow-depth flex flex-col md:flex-row items-center gap-5 ${BENTO_TILE_INTERACTION}`}
             >
               <p className="text-solaris-muted text-xs font-mono uppercase tracking-widest shrink-0">Verified by</p>
               <div className="flex flex-wrap items-center gap-4 flex-1">

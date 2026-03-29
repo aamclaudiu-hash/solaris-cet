@@ -587,7 +587,7 @@ const HighIntelligenceSection = () => {
 
         {/* Bottom explainer */}
         <div className="mt-12 bento-card p-6 lg:p-8 border border-solaris-gold/20">
-          <div className="grid sm:grid-cols-3 gap-6 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             {[
               {
                 icon: Brain,

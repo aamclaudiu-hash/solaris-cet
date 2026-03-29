@@ -254,7 +254,7 @@ const ResourcesSection = () => {
         </div>
 
         {/* Quick Links bar */}
-        <div className="bento-card p-4 mb-10 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="bento-card p-4 mb-10 grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: 'Buy CET', href: 'https://dedust.io/swap/TON/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB', color: 'text-solaris-gold' },
             { label: 'Whitepaper', href: 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a', color: 'text-solaris-cyan' },

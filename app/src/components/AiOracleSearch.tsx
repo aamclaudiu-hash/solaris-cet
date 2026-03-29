@@ -657,7 +657,7 @@ export default function AiOracleSearch() {
         {/* Input */}
         <form
           onSubmit={handleHeroSubmit}
-          className="relative z-10 flex flex-col sm:flex-row w-full gap-3 md:gap-4"
+          className="relative z-10 flex flex-col md:flex-row w-full gap-3 md:gap-4"
         >
           <div className="flex-grow relative">
             <input

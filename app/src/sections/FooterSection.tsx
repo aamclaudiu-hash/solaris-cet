@@ -130,12 +130,12 @@ const FooterSection = () => {
         </div>
 
         {/* Founder Card */}
-        <div className="bento-card p-6 mb-6 flex flex-col sm:flex-row items-center gap-5">
+        <div className="bento-card p-6 mb-6 flex flex-col md:flex-row items-center gap-5">
           <div className="shrink-0 w-16 h-16 rounded-2xl overflow-hidden border-2 border-solaris-gold/30 bg-solaris-gold/10 flex items-center justify-center">
             {/* Founder avatar — LinkedIn profile */}
             <span className="font-display font-bold text-2xl text-solaris-gold">CB</span>
           </div>
-          <div className="flex-1 text-center sm:text-left">
+          <div className="flex-1 text-center md:text-left">
             <div className="hud-label text-solaris-gold text-[10px] mb-1">FOUNDER &amp; CREATOR</div>
             <h3 className="font-display font-semibold text-solaris-text text-lg leading-tight mb-0.5">
               Claudiu Ciprian Balaban
@@ -213,7 +213,7 @@ const FooterSection = () => {
               <p className="text-solaris-text">Get live updates, talk to the team, and follow the 200,000-agent build in real time.</p>
               <p className="text-solaris-muted text-xs mt-1">Telegram · Free · No spam · Instant access</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+            <div className="flex flex-col md:flex-row gap-3 shrink-0">
               <a
                 href="https://t.me/SolarisCET"
                 target="_blank"
@@ -279,14 +279,14 @@ const FooterSection = () => {
             <p className="text-solaris-muted text-sm">
               © {new Date().getFullYear()} Solaris CET. AI Bridge to High Intelligence. All rights reserved.
             </p>
-          <div className="flex flex-col sm:flex-row items-center gap-3">
+          <div className="flex flex-col md:flex-row items-center gap-3">
               <SocialShare />
-              <div className="hidden sm:block w-px h-4 bg-white/10" />
+              <div className="hidden md:block w-px h-4 bg-white/10" />
               <div className="flex items-center gap-2">
                 <span className="font-mono text-[11px] text-solaris-gold font-semibold">₿</span>
                 <span className="font-mono text-[11px] text-solaris-gold">POWERED BY BITCOIN</span>
               </div>
-              <div className="hidden sm:block w-px h-4 bg-white/10" />
+              <div className="hidden md:block w-px h-4 bg-white/10" />
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="font-mono text-[11px] text-emerald-400">LIVE ON TON MAINNET</span>

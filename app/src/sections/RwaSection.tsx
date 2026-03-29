@@ -221,7 +221,7 @@ const RwaSection = () => {
         </div>
 
         {/* Four pillars */}
-        <div ref={pillarsRef} className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div ref={pillarsRef} className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {RWA_PILLARS.map(pillar => {
             const Icon = pillar.icon;
             return (
@@ -237,7 +237,7 @@ const RwaSection = () => {
         </div>
 
         {/* IPFS proof CTA */}
-        <div className="mt-10 bento-card p-6 border border-solaris-gold/20 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+        <div className="mt-10 bento-card p-6 border border-solaris-gold/20 flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
           <div className="shrink-0 w-12 h-12 rounded-2xl bg-solaris-gold/10 flex items-center justify-center">
             <Shield className="w-6 h-6 text-solaris-gold" />
           </div>

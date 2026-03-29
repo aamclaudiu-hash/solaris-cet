@@ -160,7 +160,7 @@ const TokenomicsSection = () => {
         {/* Bank dashboard shell */}
         <div className="rounded-2xl border border-white/[0.12] bg-[#05070a]/90 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] overflow-hidden">
           {/* Header strip */}
-          <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-5 py-4 sm:px-6 border-b border-white/10 bg-black/50">
+          <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between px-5 py-4 md:px-6 border-b border-white/10 bg-black/50">
             <div className="flex items-start gap-3">
               <div className="w-11 h-11 rounded-lg bg-solaris-gold/10 flex items-center justify-center shrink-0 border border-solaris-gold/25">
                 <Coins className="w-5 h-5 text-solaris-gold" />
@@ -328,7 +328,7 @@ const TokenomicsSection = () => {
           </div>
 
           {/* Mini metrics grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 border-t border-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border-t border-white/10">
             {[
               { label: 'Launch Type', value: 'Fair Launch', valueClass: 'text-solaris-text' },
               { label: 'Mining Period', value: '90 Years', valueClass: 'text-cyan-300' },
@@ -337,7 +337,7 @@ const TokenomicsSection = () => {
             ].map(cell => (
               <div
                 key={cell.label}
-                className={`bg-[#080a0f] p-3 sm:p-4 text-center ${BENTO_TILE_INTERACTION}`}
+                className={`bg-[#080a0f] p-3 md:p-4 text-center ${BENTO_TILE_INTERACTION}`}
               >
                 <div className="hud-label text-[9px] mb-1">{cell.label}</div>
                 <div className={`font-mono tabular-nums text-sm font-semibold ${cell.valueClass}`}>{cell.value}</div>
@@ -348,7 +348,7 @@ const TokenomicsSection = () => {
           {/* Distribution */}
           <div className={`p-5 lg:p-6 border-t border-white/10 bg-black/20 ${BENTO_TILE_INTERACTION}`}>
             <div className="hud-label mb-3">Distribution</div>
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-solaris-muted text-sm">Mining (90 years)</span>

@@ -172,7 +172,7 @@ const HowToBuySection = () => {
         {/* Step cards */}
         <div
           ref={stepsRef}
-          className="grid sm:grid-cols-3 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
         >
           {steps.map((step) => {
             const Icon = step.icon;

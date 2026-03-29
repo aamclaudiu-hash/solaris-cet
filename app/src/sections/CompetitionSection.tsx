@@ -302,7 +302,7 @@ const CompetitionSection = () => {
         </div>
 
         {/* Advantage cards */}
-        <div ref={cardsRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {advantages.map(adv => {
             const Icon = adv.icon;
             return (

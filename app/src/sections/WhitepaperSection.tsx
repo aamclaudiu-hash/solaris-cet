@@ -271,7 +271,7 @@ const WPSectionCard = ({ section }: { section: WPSection }) => {
 
           {/* Stats grid */}
           {section.stats && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
               {section.stats.map(stat => (
                 <div key={stat.label} className="p-3 rounded-xl bg-white/5 text-center">
                   <div className={`font-mono font-bold text-base ${c.text}`}>{stat.value}</div>
@@ -412,7 +412,7 @@ const WhitepaperSection = () => {
         </div>
 
         {/* Table of Contents */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
           {wpSections.map(section => {
             const Icon = section.icon;
             const c = colorMap[section.color];
@@ -447,7 +447,7 @@ const WhitepaperSection = () => {
 
         {/* CTA — IPFS archive */}
         <div ref={ctaRef} className="bento-card p-6 lg:p-8 border border-solaris-gold/20">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Lock className="w-4 h-4 text-solaris-gold" />

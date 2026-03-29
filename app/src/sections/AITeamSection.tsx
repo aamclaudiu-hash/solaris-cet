@@ -234,7 +234,7 @@ const AITeamSection = () => {
         </div>
 
         {/* Grand-total stat bar */}
-        <div ref={statsRef} className="glass-card-gold p-6 mb-12 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+        <div ref={statsRef} className="glass-card-gold p-6 mb-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           <div>
             <div className="hud-label text-solaris-gold mb-1">TOTAL WORKFORCE</div>
             <div className="font-display font-black text-4xl lg:text-5xl text-solaris-gold">
@@ -261,7 +261,7 @@ const AITeamSection = () => {
         {/* Department matrix — 1 col narrow phones, 2 cols sm+, 5 cols lg+; Lucide + gold frame + hover scale */}
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4"
         >
           {departments.map((dept) => {
             const DeptIcon = dept.icon;
@@ -329,7 +329,7 @@ const AITeamSection = () => {
         </div>
 
         {/* Bottom comparison callout */}
-        <div className="mt-10 bento-card p-6 border border-white/10 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+        <div className="mt-10 bento-card p-6 border border-white/10 flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
           <div className="shrink-0 w-12 h-12 rounded-2xl bg-solaris-gold/10 flex items-center justify-center">
             <TrendingUp className="w-6 h-6 text-solaris-gold" />
           </div>

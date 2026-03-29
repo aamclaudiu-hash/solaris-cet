@@ -84,7 +84,7 @@ const AgentDepartmentChart = () => {
         </div>
 
         {/* Legend */}
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-1.5 w-full">
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-1.5 w-full">
           {DEPT_DATA.map(dept => (
             <div key={dept.name} className="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg hover:bg-white/3 transition-colors">
               <div className="flex items-center gap-2 min-w-0">

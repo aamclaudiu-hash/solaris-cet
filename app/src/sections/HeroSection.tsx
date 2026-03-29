@@ -223,7 +223,7 @@ const HeroSection: React.FC = () => {
               <div className="mt-8 md:mt-10 w-full max-w-xl mx-auto lg:mx-0">
                 <div
                   ref={ctaGroupRef}
-                  className="rounded-2xl sm:rounded-3xl border border-white/15 bg-white/[0.04] backdrop-blur-2xl shadow-[0_8px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)] p-4 sm:p-6 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start ring-1 ring-white/5"
+                  className="rounded-2xl md:rounded-3xl border border-white/15 bg-white/[0.04] backdrop-blur-2xl shadow-[0_8px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)] p-4 md:p-6 flex flex-col md:flex-row flex-wrap gap-3 md:gap-4 justify-center lg:justify-start ring-1 ring-white/5"
                 >
                   <button
                     type="button"
@@ -237,7 +237,7 @@ const HeroSection: React.FC = () => {
                           ? 'Processing mining operation'
                           : 'Mining initiated successfully'
                     }
-                    className="group relative w-full sm:w-auto min-h-[52px] px-8 py-4 rounded-2xl bg-yellow-500 text-zinc-950 font-bold text-sm sm:text-base tracking-wide shadow-[0_0_28px_rgba(234,179,8,0.35)] transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-[0_0_50px_rgba(250,204,21,0.55),0_0_100px_rgba(234,179,8,0.28)] hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2.5 overflow-hidden"
+                    className="group relative w-full md:w-auto min-h-[52px] px-8 py-4 rounded-2xl bg-yellow-500 text-zinc-950 font-bold text-sm md:text-base tracking-wide shadow-[0_0_28px_rgba(234,179,8,0.35)] transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-[0_0_50px_rgba(250,204,21,0.55),0_0_100px_rgba(234,179,8,0.28)] hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2.5 overflow-hidden"
                   >
                     <span className="absolute inset-0 rounded-2xl bg-gradient-to-t from-yellow-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                     {miningState === 'IDLE' ? (
@@ -252,7 +252,7 @@ const HeroSection: React.FC = () => {
 
                   <a
                     href="#whitepaper"
-                    className="w-full sm:w-auto min-h-[52px] px-8 py-4 rounded-2xl border border-white/20 bg-white/[0.06] text-white font-semibold text-sm sm:text-base text-center backdrop-blur-md transition-all duration-300 hover:bg-white/[0.1] hover:border-yellow-500/40 hover:text-white"
+                    className="w-full md:w-auto min-h-[52px] px-8 py-4 rounded-2xl border border-white/20 bg-white/[0.06] text-white font-semibold text-sm md:text-base text-center backdrop-blur-md transition-all duration-300 hover:bg-white/[0.1] hover:border-yellow-500/40 hover:text-white"
                   >
                     {t.hero.docs}
                   </a>
