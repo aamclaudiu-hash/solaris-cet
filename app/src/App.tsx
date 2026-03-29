@@ -194,7 +194,34 @@ function AppContent() {
       {/* Touch ripple effect (mobile) */}
       <TouchRipple />
 
-      <div ref={mainRef} className="relative min-h-screen overflow-x-clip bg-solaris-dark">
+      <div ref={mainRef} className="relative min-h-screen overflow-x-clip bg-[#050505]">
+        {/* Ambient solar glow — fixed, behind sections */}
+        <div
+          className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
+          aria-hidden
+        >
+          <div
+            className="absolute -top-[28%] left-1/2 h-[min(58vh,520px)] w-[min(140vw,960px)] -translate-x-1/2 rounded-full opacity-[0.38] blur-[100px]"
+            style={{
+              background:
+                'radial-gradient(ellipse 75% 65% at 50% 42%, rgba(255,220,165,0.5) 0%, rgba(240,185,70,0.14) 48%, transparent 74%)',
+            }}
+          />
+          <div
+            className="absolute top-[12%] right-[4%] h-[min(42vw,400px)] w-[min(42vw,400px)] rounded-full opacity-[0.2] blur-[110px]"
+            style={{
+              background:
+                'radial-gradient(circle, rgba(255,205,130,0.55) 0%, rgba(242,180,60,0.08) 50%, transparent 72%)',
+            }}
+          />
+          <div
+            className="absolute bottom-[8%] left-[6%] h-[300px] w-[300px] rounded-full opacity-[0.14] blur-[90px]"
+            style={{
+              background:
+                'radial-gradient(circle, rgba(46,231,255,0.4) 0%, transparent 70%)',
+            }}
+          />
+        </div>
         {/* Noise overlay */}
         <div className="noise-overlay" />
         

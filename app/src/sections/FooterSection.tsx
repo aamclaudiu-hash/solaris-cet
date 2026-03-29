@@ -84,7 +84,7 @@ const FooterSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative bg-solaris-dark pt-16 pb-8">
+    <section ref={sectionRef} className="relative section-glass pt-16 pb-8">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[30vh] grid-floor opacity-10" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-solaris-gold/20 to-transparent" />

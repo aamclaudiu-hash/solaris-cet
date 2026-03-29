@@ -97,7 +97,7 @@ const RwaSection = () => {
       id="rwa"
       ref={sectionRef}
       aria-label="Real World Assets — Cetățuia Agricultural Land"
-      className="relative bg-solaris-dark py-20 lg:py-28 overflow-hidden mesh-bg"
+      className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />
       <div className="scan-overlay absolute inset-0 pointer-events-none" aria-hidden="true" />
