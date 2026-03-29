@@ -110,3 +110,12 @@ export function observeLocusBranchFromTopic(topic: string): ObserveLocusBranch {
   if (topic === 'ai' || topic === 'rav' || topic === 'braid' || topic === 'team') return 'ai';
   return 'default';
 }
+
+/** Deep lattice fragment: mesh dept (by query hash) + deep-tier caption — Oracle / verify lines. */
+export function deepLatticeLineForQuery(q: string): string {
+  const dept = solarisDepartments[skillSaltFromQuery(q) % solarisDepartments.length]!;
+  const tick = skillSeedFromLabel(`${q}|deepLattice`);
+  const inner = skillCaptionForDept(dept.id, tick);
+  const raw = `${dept.id} · ${inner}`;
+  return raw.length <= 102 ? raw : `${raw.slice(0, 99)}…`;
+}

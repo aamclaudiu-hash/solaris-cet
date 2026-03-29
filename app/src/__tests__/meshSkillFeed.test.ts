@@ -7,6 +7,7 @@ import {
   skillFlashForBoardDept,
   skillSaltFromQuery,
   skillSeedFromLabel,
+  deepLatticeLineForQuery,
   observeLocusBranchFromTopic,
   observeLocusClip,
 } from '@/lib/meshSkillFeed';
@@ -34,6 +35,14 @@ describe('meshSkillFeed', () => {
 
   it('skillCaptionForDept returns empty for unknown id', () => {
     expect(skillCaptionForDept('no-such-dept', 0)).toBe('');
+  });
+
+  it('deepLatticeLineForQuery is deterministic and names a mesh dept', () => {
+    const a = deepLatticeLineForQuery('oracle deep test');
+    const b = deepLatticeLineForQuery('oracle deep test');
+    expect(a).toBe(b);
+    expect(a).toMatch(/ · /);
+    expect(a.length).toBeLessThanOrEqual(102);
   });
 
   it('observeLocusBranchFromTopic maps oracle topics', () => {
