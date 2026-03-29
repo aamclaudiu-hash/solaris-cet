@@ -119,3 +119,8 @@ export function deepLatticeLineForQuery(q: string): string {
   const raw = `${dept.id} · ${inner}`;
   return raw.length <= 102 ? raw : `${raw.slice(0, 99)}…`;
 }
+
+/** Flash whisper from a stable scene key — counter tooltips and ambient hooks. */
+export function meshWhisperFromKey(sceneKey: string): string {
+  return shortSkillWhisper(skillSeedFromLabel(sceneKey));
+}

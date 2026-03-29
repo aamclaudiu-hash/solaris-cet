@@ -10,6 +10,7 @@ import {
   deepLatticeLineForQuery,
   observeLocusBranchFromTopic,
   observeLocusClip,
+  meshWhisperFromKey,
 } from '@/lib/meshSkillFeed';
 
 function stripFeedTimestamp(line: string): string {
@@ -95,5 +96,10 @@ describe('meshSkillFeed', () => {
     expect(a.length).toBeGreaterThan(5);
     expect(b.length).toBeGreaterThan(5);
     expect(a).not.toBe(b);
+  });
+
+  it('meshWhisperFromKey matches shortSkillWhisper ∘ skillSeedFromLabel', () => {
+    const k = 'statsBento|agents';
+    expect(meshWhisperFromKey(k)).toBe(shortSkillWhisper(skillSeedFromLabel(k)));
   });
 });

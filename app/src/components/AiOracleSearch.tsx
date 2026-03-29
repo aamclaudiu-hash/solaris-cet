@@ -512,6 +512,10 @@ export default function AiOracleSearch() {
 
     setPhase('observe_parse');
     addLog('INFO', `RAV_INIT: Grok × Gemini Oracle v3.1 · Session [${hash}]`);
+    addLog(
+      'QUANTUM',
+      `RAV_BURST: ${standardSkillBurst(skillSeedFromLabel(`${q}|ravInit`))}`
+    );
     addLog('INFO', `TASK_MESH: ~200k task agents · delegated sub-queries · Oracle consolidation`);
     addLog('INFO', `INPUT_STREAM: "${q}" · Tokens: ${tokenCount}`);
     addLog(
@@ -842,6 +846,7 @@ export default function AiOracleSearch() {
                       <div ref={terminalRef} className="flex-1 overflow-y-auto space-y-1 pr-1">
                         {logs.map(log => {
                           const isSkillLine =
+                            log.message.startsWith('RAV_BURST:') ||
                             log.message.startsWith('TASK_MESH:') ||
                             log.message.startsWith('SKILL_LOCUS:') ||
                             log.message.startsWith('EXPRESSOME_BURST:') ||

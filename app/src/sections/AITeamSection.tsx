@@ -127,14 +127,14 @@ const AITeamSection = () => {
           <div>
             <div className="hud-label text-solaris-gold mb-1">TOTAL WORKFORCE</div>
             <div className="font-display font-black text-4xl lg:text-5xl text-solaris-gold">
-              <AnimatedCounter end={TOTAL_AGENTS} className="tabular-nums" />
+              <AnimatedCounter end={TOTAL_AGENTS} className="tabular-nums" meshTitleKey="aiTeam|counter|totalAgents" />
             </div>
             <div className="text-solaris-muted text-xs mt-1">Autonomous Agents Deployed</div>
           </div>
           <div>
             <div className="hud-label text-solaris-cyan mb-1">DEPARTMENTS</div>
             <div className="font-display font-black text-4xl lg:text-5xl text-solaris-cyan">
-              <AnimatedCounter end={10} className="tabular-nums" />
+              <AnimatedCounter end={10} className="tabular-nums" meshTitleKey="aiTeam|counter|departments" />
             </div>
             <div className="text-solaris-muted text-xs mt-1">Enterprise Divisions</div>
           </div>
@@ -180,6 +180,7 @@ const AITeamSection = () => {
                       end={dept.agentCount}
                       suffix="+"
                       className="tabular-nums"
+                      meshTitleKey={`aiTeam|counter|dept|${dept.id}`}
                     />
                   </div>
                   <div className="hud-label text-[10px] mt-0.5">AGENTS</div>

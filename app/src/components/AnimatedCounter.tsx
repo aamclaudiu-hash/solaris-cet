@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { meshWhisperFromKey } from '@/lib/meshSkillFeed';
 
 /**
  * Props accepted by {@link AnimatedCounter}.
@@ -22,6 +23,8 @@ interface AnimatedCounterProps {
    * for the element to enter the viewport (default: `false`).
    */
   triggerOnMount?: boolean;
+  /** When set, adds a deterministic mesh skill line as the native `title` tooltip. */
+  meshTitleKey?: string;
 }
 
 /**
@@ -52,6 +55,7 @@ const AnimatedCounter = ({
   decimals = 0,
   className = '',
   triggerOnMount = false,
+  meshTitleKey,
 }: AnimatedCounterProps) => {
   const ref = useRef<HTMLSpanElement>(null);
   const proxy = useRef({ val: 0 });
@@ -96,7 +100,11 @@ const AnimatedCounter = ({
   }, [isVisible, end, duration, suffix, prefix, decimals]);
 
   return (
-    <span ref={ref} className={className}>
+    <span
+      ref={ref}
+      className={className}
+      title={meshTitleKey ? meshWhisperFromKey(meshTitleKey) : undefined}
+    >
       {prefix}0{suffix}
     </span>
   );

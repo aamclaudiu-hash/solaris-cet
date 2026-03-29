@@ -168,6 +168,7 @@ const StatsBento = () => {
                 end={agentStat.value}
                 duration={2.5}
                 className="text-shimmer"
+                meshTitleKey={`statsBento|${agentStat.id}`}
               />
             </div>
 
@@ -217,6 +218,7 @@ const StatsBento = () => {
                         duration={2}
                         suffix={stat.suffix}
                         className={stat.accentClass || stat.color}
+                        meshTitleKey={`statsBento|${stat.id}`}
                       />
                     </div>
 
