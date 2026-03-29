@@ -28,16 +28,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: contracts/package-lock.json
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci
 
-      - name: Compile Tact contract
-        run: npx blueprint build MultiSigWrapper
+      - name: Typecheck (build + tsc)
+        run: npm run typecheck
 
       - name: Run test suite
-        run: npm test -- --ci --forceExit
+        run: npm run test:ci
 
       - name: Upload build artifacts
         if: always()

@@ -4,8 +4,12 @@
   "version": "1.0.0",
   "description": "TON blockchain indexer for Solaris CET token and DeDust pool state",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "index": "npx tsx ton-indexer.ts"
+    "index": "npx tsx ton-indexer.ts",
+    "typecheck": "npx tsc --noEmit"
   },
   "dependencies": {
     "@dedust/sdk": "^0.8.7",

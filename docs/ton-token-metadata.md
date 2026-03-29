@@ -12,13 +12,13 @@ Add the following block inside the top-level array in `jettons.json`:
 
 ```json
 {
-  "address": "EQBbUfeILp3M1LpUj0K2Z-V7Nl4G0_6_1_u3xxypWX",
+  "address": "EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX",
   "name": "Solaris CET",
   "symbol": "CET",
   "description": "Official utility and governance token for the Solaris Ecosystem.",
-  "image": "https://aamclaudiu-hash.github.io/solaris-cet/logo.png",
+  "image": "https://Solaris-CET.github.io/solaris-cet/logo.png",
   "websites": [
-    "https://aamclaudiu-hash.github.io/solaris-cet/"
+    "https://Solaris-CET.github.io/solaris-cet/"
   ],
   "social": [
     "https://t.me/solaris_cet_channel"
@@ -26,7 +26,7 @@ Add the following block inside the top-level array in `jettons.json`:
 }
 ```
 
-> **Image URL verification:** `https://aamclaudiu-hash.github.io/solaris-cet/logo.png`
+> **Image URL verification:** `https://Solaris-CET.github.io/solaris-cet/logo.png`
 > resolves to `app/public/logo.png` in this repository, which is deployed to GitHub Pages
 > on every push to `main` via the `.github/workflows/deploy-pages.yml` workflow.
 
@@ -91,11 +91,11 @@ feat: add Solaris CET (CET) jetton
 
 | Field       | Value |
 |-------------|-------|
-| Address     | EQBbUfeILp3M1LpUj0K2Z-V7Nl4G0_6_1_u3xxypWX |
+| Address     | EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX |
 | Name        | Solaris CET |
 | Symbol      | CET |
-| Website     | https://aamclaudiu-hash.github.io/solaris-cet/ |
-| Logo        | https://aamclaudiu-hash.github.io/solaris-cet/logo.png |
+| Website     | https://Solaris-CET.github.io/solaris-cet/ |
+| Logo        | https://Solaris-CET.github.io/solaris-cet/logo.png |
 
 Verified that the image URL resolves correctly and the website is live.
 ```
@@ -104,7 +104,7 @@ Verified that the image URL resolves correctly and the website is live.
 
 ## Notes
 
-- The Jetton Master address `EQBbUfeILp3M1LpUj0K2Z-V7Nl4G0_6_1_u3xxypWX` is the
+- The Jetton Master address `EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX` is the
   on-chain contract address for CET on the TON mainnet.
 - The DeDust pool address for the CET/TON pair is
   `EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB`.
