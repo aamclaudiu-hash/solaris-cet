@@ -13,6 +13,15 @@
     />
     <title>Solaris CET — Sovereign static node</title>
     <style>
+      /* JetBrains Mono — SIL Open Font License 1.1 (self-hosted woff2, no CDN) */
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("fonts/jetbrains-mono-400.woff2") format("woff2");
+      }
+
       :root {
         --bg-void: #020617;
         --bg-elevation-1: #0f172a;
@@ -126,7 +135,7 @@
       }
 
       .data-mono {
-        font-family: ui-monospace, "Cascadia Code", monospace;
+        font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
         font-variant-numeric: tabular-nums;
         color: var(--text-mono);
       }
@@ -214,13 +223,13 @@
         <details>
           <summary>Operational notes</summary>
           <ul>
-            <li>Serve this file from your edge or Coolify as a secondary route when migrating off SPA-only delivery.</li>
-            <li>Prefer local fonts under <span class="data-mono">/fonts/</span> and a built Tailwind bundle for production parity with OMEGA spec.</li>
+            <li>Production: <span class="data-mono">npm run build</span> copies this tree into the Vite app as <span class="data-mono">/sovereign/</span>.</li>
+            <li>JetBrains Mono is self-hosted under <span class="data-mono">/sovereign/fonts/</span> (no third-party font CDNs).</li>
           </ul>
         </details>
       </article>
       <footer role="contentinfo">
-        <p class="data-mono">solaris-cet.com · static/sovereign/</p>
+        <p class="data-mono">solaris-cet.com/sovereign/</p>
       </footer>
     </main>
   </body>

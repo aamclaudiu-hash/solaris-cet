@@ -1,6 +1,8 @@
 node_modules/
 app/node_modules/
 app/dist/
+# Copied from static/sovereign by prebuild / predev (source of truth: static/sovereign/)
+app/public/sovereign/
 app/coverage/
 app/test-results/
 app/coverage/

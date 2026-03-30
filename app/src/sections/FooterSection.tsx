@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect, useState } from 'react';
 import { gsap } from 'gsap';
-import { Download, FileText, ArrowRight, Sun, Globe, X, Send, Copy, CheckCircle, Zap } from 'lucide-react';
+import { Download, FileText, ArrowRight, Sun, Globe, X, Send, Copy, CheckCircle, Zap, Shield } from 'lucide-react';
 import SocialShare from '../components/SocialShare';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { useLanguage } from '../hooks/useLanguage';
@@ -18,6 +18,7 @@ const footerLinks = [
   { label: 'Privacy', href: WHITEPAPER_URL, icon: undefined },
   { label: 'Terms', href: WHITEPAPER_URL, icon: undefined },
   { label: 'Contact', href: 'https://t.me/SolarisCET', icon: undefined },
+  { label: 'Sovereign (no JS)', href: '/sovereign/', icon: Shield },
   { label: 'GitHub', href: GITHUB_URL, icon: Globe },
 ];
 
