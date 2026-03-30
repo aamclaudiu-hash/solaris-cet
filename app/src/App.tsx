@@ -158,13 +158,29 @@ function AppContent() {
 
   return (
     <LanguageContext.Provider value={langState}>
-      {/* Loading overlay */}
-      <div ref={loadingRef} className="loading-overlay">
-        <div className="flex flex-col items-center gap-6">
+      {/* Loading overlay — blocks interaction with page until warm-up; shell uses inert + aria-hidden */}
+      <div
+        ref={loadingRef}
+        className="loading-overlay"
+        aria-busy={!isLoaded}
+        aria-hidden={isLoaded}
+        aria-live="polite"
+      >
+        <span className="sr-only" role="status">
+          {langState.t.appLoader.brandLine}
+          {' — '}
+          {langState.t.appLoader.statusLine}
+        </span>
+        <div className="flex flex-col items-center gap-6" aria-hidden>
           {/* Animated logo */}
           <div className="relative">
             <div className="w-16 h-16 rounded-2xl bg-solaris-gold/10 flex items-center justify-center animate-gold-pulse">
-              <svg viewBox="0 0 32 32" className="solaris-icon-glow w-8 h-8 text-solaris-gold" fill="currentColor">
+              <svg
+                viewBox="0 0 32 32"
+                className="solaris-icon-glow w-8 h-8 text-solaris-gold"
+                fill="currentColor"
+                aria-hidden
+              >
                 <circle cx="16" cy="16" r="6" opacity="0.9" />
                 <path d="M16 4 L17.2 12 L16 10 L14.8 12 Z" opacity="0.7" />
                 <path d="M16 28 L17.2 20 L16 22 L14.8 20 Z" opacity="0.7" />
@@ -182,14 +198,17 @@ function AppContent() {
             <div className="font-display font-semibold text-lg text-solaris-text mb-1">
               Solaris <span className="text-solaris-gold">CET</span>
             </div>
-            <div className="hud-label text-[10px]">INITIALIZING BRIDGE</div>
+            <div className="hud-label text-[10px]">{langState.t.appLoader.statusLine}</div>
           </div>
           
-          <div className="loading-bar-track">
+          <div className="loading-bar-track" aria-hidden>
             <div className="loading-bar-fill" />
           </div>
 
-          <p className="max-w-[min(92vw,320px)] text-center text-[9px] font-mono text-fuchsia-200/40 leading-snug line-clamp-2 px-2">
+          <p
+            className="max-w-[min(92vw,320px)] text-center text-[9px] font-mono text-fuchsia-200/40 leading-snug line-clamp-2 px-2"
+            aria-hidden
+          >
             {shortSkillWhisper(skillSeedFromLabel('appLoader|meshWarm'))}
           </p>
         </div>
@@ -201,7 +220,12 @@ function AppContent() {
       {/* Touch ripple effect (mobile) */}
       <TouchRipple />
 
-      <div ref={mainRef} className="relative min-h-screen overflow-x-clip bg-slate-950 text-white/90">
+      <div
+        ref={mainRef}
+        className="relative min-h-screen overflow-x-clip bg-slate-950 text-white/90"
+        aria-hidden={!isLoaded}
+        inert={!isLoaded ? true : undefined}
+      >
         {/* Ambient solar glow — fixed, behind sections */}
         <div
           className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"

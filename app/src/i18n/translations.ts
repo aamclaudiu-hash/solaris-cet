@@ -21,6 +21,13 @@ export interface OracleKnowledge {
 }
 
 export interface Translations {
+  /** First-paint loading overlay (before full content). */
+  appLoader: {
+    /** Brand line for screen readers (matches visible title). */
+    brandLine: string;
+    /** HUD line under the logo (e.g. bridge warm-up). */
+    statusLine: string;
+  };
   nav: {
     home: string;
     cetApp: string;
@@ -84,6 +91,10 @@ export interface Translations {
 
 const translations: Record<LangCode, Translations> = {
   en: {
+    appLoader: {
+      brandLine: 'Solaris CET',
+      statusLine: 'INITIALIZING BRIDGE',
+    },
     nav: {
       home: 'Home',
       cetApp: 'CET App',
@@ -171,6 +182,10 @@ const translations: Record<LangCode, Translations> = {
     },
   },
   es: {
+    appLoader: {
+      brandLine: 'Solaris CET',
+      statusLine: 'INICIANDO PUENTE',
+    },
     nav: {
       home: 'Inicio',
       cetApp: 'App CET',
@@ -258,6 +273,10 @@ const translations: Record<LangCode, Translations> = {
     },
   },
   zh: {
+    appLoader: {
+      brandLine: 'Solaris CET',
+      statusLine: '正在初始化桥接',
+    },
     nav: {
       home: '首页',
       cetApp: 'CET 应用',
@@ -345,6 +364,10 @@ const translations: Record<LangCode, Translations> = {
     },
   },
   ru: {
+    appLoader: {
+      brandLine: 'Solaris CET',
+      statusLine: 'ИНИЦИАЛИЗАЦИЯ МОСТА',
+    },
     nav: {
       home: 'Главная',
       cetApp: 'Приложение CET',
@@ -432,6 +455,10 @@ const translations: Record<LangCode, Translations> = {
     },
   },
   ro: {
+    appLoader: {
+      brandLine: 'Solaris CET',
+      statusLine: 'INIȚIALIZARE POD',
+    },
     nav: {
       home: 'Acasă',
       cetApp: 'Aplicație CET',
@@ -519,6 +546,10 @@ const translations: Record<LangCode, Translations> = {
     },
   },
   pt: {
+    appLoader: {
+      brandLine: 'Solaris CET',
+      statusLine: 'INICIANDO A PONTE',
+    },
     nav: {
       home: 'Início',
       cetApp: 'App CET',
@@ -606,6 +637,10 @@ const translations: Record<LangCode, Translations> = {
     },
   },
   de: {
+    appLoader: {
+      brandLine: 'Solaris CET',
+      statusLine: 'BRÜCKE WIRD INITIALISIERT',
+    },
     nav: {
       home: 'Startseite',
       cetApp: 'CET App',
