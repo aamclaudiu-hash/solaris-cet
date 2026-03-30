@@ -8,20 +8,19 @@ import { useLanguage } from '../hooks/useLanguage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import type { OracleKnowledge, Translations } from '../i18n/translations';
 import {
+  ORACLE_TASK_MESH_LINE,
   buildAgentPoolMeshLogMessage,
   buildTeamAgentMeshLogMessage,
   buildDeepLatticeMeshLogMessage,
   buildDeepLatticeMeshLogMessageRawQuery,
   buildSkillLocusLogMessage,
   ORACLE_LATTICE_PHASE,
-} from '@/lib/oracleMeshLines';
-import {
   buildRavBurstLogMessage,
   buildFlashGlintLogMessage,
   buildExpressomeBurstLogMessage,
   buildConsensusBurstLogMessage,
   buildLoopCompleteBurstLogMessage,
-} from '@/lib/oracleBurstLines';
+} from '@/lib/oracleTelemetry';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -520,7 +519,7 @@ export default function AiOracleSearch() {
     setPhase('observe_parse');
     addLog('INFO', `RAV_INIT: Grok × Gemini Oracle v3.1 · Session [${hash}]`);
     addLog('QUANTUM', buildRavBurstLogMessage(q));
-    addLog('INFO', `TASK_MESH: ~200k task agents · delegated sub-queries · Oracle consolidation`);
+    addLog('INFO', ORACLE_TASK_MESH_LINE);
     addLog('INFO', buildAgentPoolMeshLogMessage(detected, q));
     if (detected === 'team' || detected === 'ai') {
       addLog('INFO', buildTeamAgentMeshLogMessage(q, detected));
