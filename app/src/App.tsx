@@ -472,9 +472,10 @@ function AppContent() {
             </LazyLoadWrapper>
           </div>
 
-          {/* 7. Footer */}
+          {/* 7. Footer — landmark lives here; FooterSection is nested inside LazyLoadWrapper */}
           <section
             aria-label={langState.t.landmarks.footer}
+            data-testid="footer-landmark-section"
             className="relative z-[113] py-24"
           >
             <LazyLoadWrapper>
