@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { buildAgentPoolMeshLogMessage, buildTeamAgentMeshLogMessage } from '@/lib/oracleMeshLines';
+import {
+  buildAgentPoolMeshLogMessage,
+  buildTeamAgentMeshLogMessage,
+  buildDeepLatticeMeshLogMessage,
+  buildDeepLatticeMeshLogMessageRawQuery,
+  buildSkillLocusLogMessage,
+  ORACLE_LATTICE_PHASE,
+} from '@/lib/oracleMeshLines';
 
 describe('oracleMeshLines', () => {
   it('buildAgentPoolMeshLogMessage has fixed prefix and stable burst', () => {
@@ -22,5 +29,45 @@ describe('oracleMeshLines', () => {
     const x = buildAgentPoolMeshLogMessage('default', 'aaa');
     const y = buildAgentPoolMeshLogMessage('default', 'bbb');
     expect(x).not.toBe(y);
+  });
+
+  it('buildDeepLatticeMeshLogMessage matches prior INPUT_MESH / PARSE shape', () => {
+    const q = 'test oracle lattice';
+    const input = buildDeepLatticeMeshLogMessage('INPUT_MESH', q, ORACLE_LATTICE_PHASE.inputStream);
+    expect(input.startsWith('INPUT_MESH: ')).toBe(true);
+    expect(input).toContain(' · ');
+    const parse = buildDeepLatticeMeshLogMessage('PARSE_MESH', q, ORACLE_LATTICE_PHASE.observeParse);
+    expect(parse.startsWith('PARSE_MESH: ')).toBe(true);
+    expect(input).toBe(buildDeepLatticeMeshLogMessage('INPUT_MESH', q, 'inputStream'));
+  });
+
+  it('buildDeepLatticeMeshLogMessageRawQuery is stable for DEEP_LATTICE', () => {
+    const q = 'raw lattice query';
+    const a = buildDeepLatticeMeshLogMessageRawQuery('DEEP_LATTICE', q);
+    const b = buildDeepLatticeMeshLogMessageRawQuery('DEEP_LATTICE', q);
+    expect(a).toBe(b);
+    expect(a.startsWith('DEEP_LATTICE: ')).toBe(true);
+  });
+
+  it('buildSkillLocusLogMessage includes topic and locus clip', () => {
+    const line = buildSkillLocusLogMessage('What is mining?', 'mining');
+    expect(line.startsWith('SKILL_LOCUS: ')).toBe(true);
+    expect(line).toContain('topic=mining');
+  });
+
+  it('ORACLE_LATTICE_PHASE keys cover all deep-lattice telemetry phases', () => {
+    expect(Object.keys(ORACLE_LATTICE_PHASE).sort()).toEqual(
+      [
+        'actExecute',
+        'inputStream',
+        'meshSeal',
+        'observeContext',
+        'observeParse',
+        'sessionClose',
+        'thinkRoute',
+        'thinkValidate',
+        'verifyCross',
+      ].sort()
+    );
   });
 });

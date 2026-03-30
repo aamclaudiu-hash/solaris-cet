@@ -7,15 +7,15 @@ import { X, Send, Copy, Check, ExternalLink, ChevronRight, Sparkles, Trash2, Bot
 import { useLanguage } from '../hooks/useLanguage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import type { OracleKnowledge, Translations } from '../i18n/translations';
+import { shortSkillWhisper, skillSeedFromLabel, standardSkillBurst } from '@/lib/meshSkillFeed';
 import {
-  deepLatticeLineForQuery,
-  observeLocusBranchFromTopic,
-  observeLocusClip,
-  shortSkillWhisper,
-  skillSeedFromLabel,
-  standardSkillBurst,
-} from '@/lib/meshSkillFeed';
-import { buildAgentPoolMeshLogMessage, buildTeamAgentMeshLogMessage } from '@/lib/oracleMeshLines';
+  buildAgentPoolMeshLogMessage,
+  buildTeamAgentMeshLogMessage,
+  buildDeepLatticeMeshLogMessage,
+  buildDeepLatticeMeshLogMessageRawQuery,
+  buildSkillLocusLogMessage,
+  ORACLE_LATTICE_PHASE,
+} from '@/lib/oracleMeshLines';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -523,12 +523,9 @@ export default function AiOracleSearch() {
       addLog('INFO', buildTeamAgentMeshLogMessage(q, detected));
     }
     addLog('INFO', `INPUT_STREAM: "${q}" · Tokens: ${tokenCount}`);
-    addLog('INFO', `INPUT_MESH: ${deepLatticeLineForQuery(`${q}|inputStream`)}`);
-    addLog(
-      'INFO',
-      `SKILL_LOCUS: ${observeLocusClip(q, observeLocusBranchFromTopic(detected))} · topic=${detected}`
-    );
-    addLog('INFO', `PARSE_MESH: ${deepLatticeLineForQuery(`${q}|observeParse`)}`);
+    addLog('INFO', buildDeepLatticeMeshLogMessage('INPUT_MESH', q, ORACLE_LATTICE_PHASE.inputStream));
+    addLog('INFO', buildSkillLocusLogMessage(q, detected));
+    addLog('INFO', buildDeepLatticeMeshLogMessage('PARSE_MESH', q, ORACLE_LATTICE_PHASE.observeParse));
 
     schedule(() => {
       setPhase('observe_context');
@@ -538,7 +535,7 @@ export default function AiOracleSearch() {
         `FLASH_GLINT: ${shortSkillWhisper(skillSeedFromLabel(`${q}|observeCtx`))}`
       );
       addLog('INFO', `CONTEXT_MAP: Knowledge graph traversal · Nodes visited: 2,847`);
-      addLog('INFO', `CONTEXT_MESH: ${deepLatticeLineForQuery(`${q}|observeContext`)}`);
+      addLog('INFO', buildDeepLatticeMeshLogMessage('CONTEXT_MESH', q, ORACLE_LATTICE_PHASE.observeContext));
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
     }, ORACLE_PHASE_MS[0]);
 
@@ -546,7 +543,7 @@ export default function AiOracleSearch() {
       setPhase('think_route');
       addLog('INFO', `GEMINI_REASON: Analytical pathway · parallel hypothesis lattice`);
       addLog('QUANTUM', `HYPOTHESIS_GEN: 6 paths · superposition collapse scheduled`);
-      addLog('INFO', `ROUTE_MESH: ${deepLatticeLineForQuery(`${q}|thinkRoute`)}`);
+      addLog('INFO', buildDeepLatticeMeshLogMessage('ROUTE_MESH', q, ORACLE_LATTICE_PHASE.thinkRoute));
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
     }, ORACLE_PHASE_MS[1]);
 
@@ -555,7 +552,7 @@ export default function AiOracleSearch() {
       addLog('QUANTUM', `PATH_COLLAPSE: Highest-confidence path (p=${(confidence / 100).toFixed(4)})`);
       addLog('SEC', `CONSTRAINT_CHECK: Zero-hallucination bounds · fact anchors`);
       addLog('INFO', `BRAID_FRAME: Reasoning graph · depth 7 · nodes 1,204`);
-      addLog('INFO', `VALIDATE_MESH: ${deepLatticeLineForQuery(`${q}|thinkValidate`)}`);
+      addLog('INFO', buildDeepLatticeMeshLogMessage('VALIDATE_MESH', q, ORACLE_LATTICE_PHASE.thinkValidate));
       addLog(
         'QUANTUM',
         `EXPRESSOME_BURST: ${standardSkillBurst(skillSeedFromLabel(`${q}|expressome`))}`
@@ -571,8 +568,8 @@ export default function AiOracleSearch() {
       setPhase('act_execute');
       addLog('INFO', `GROK_ACT: Action directive pipeline · live /api/chat merge pending`);
       addLog('QUANTUM', `RESPONSE_COMPILE: dual-model payload · entropy seed`);
-      addLog('INFO', `ACT_MESH: ${deepLatticeLineForQuery(`${q}|actExecute`)}`);
-      addLog('INFO', `DEEP_LATTICE: ${deepLatticeLineForQuery(q)}`);
+      addLog('INFO', buildDeepLatticeMeshLogMessage('ACT_MESH', q, ORACLE_LATTICE_PHASE.actExecute));
+      addLog('INFO', buildDeepLatticeMeshLogMessageRawQuery('DEEP_LATTICE', q));
       addLog('SEC', `SIGN: Quantum OS key · Hash: 0x${generateHash()}${generateHash()}`);
       setMetrics(prev => ({
         ...prev,
@@ -627,23 +624,20 @@ export default function AiOracleSearch() {
       setPhase('verify_cross');
       addLog('SEC', `VERIFY_INIT: Cross-model review · Grok↔Gemini`);
       addLog('QUANTUM', `ZK_PROOF: integrity bundle · Hash: 0x${generateHash()}`);
-      addLog('INFO', `CROSS_MESH: ${deepLatticeLineForQuery(`${q}|verifyCross`)}`);
+      addLog('INFO', buildDeepLatticeMeshLogMessage('CROSS_MESH', q, ORACLE_LATTICE_PHASE.verifyCross));
     }, ORACLE_PHASE_MS[5]);
 
     schedule(() => {
       setPhase('verify_anchor');
       addLog('SEC', `IPFS_ANCHOR: trace slot reserved · CID: bafkrei${generateHash().toLowerCase()}`);
       addLog('INFO', `ON_CHAIN: anchor ref · Block: #${Math.floor(Math.random() * 1_000_000 + 48_000_000)}`);
-      addLog(
-        'QUANTUM',
-        `MESH_SEAL: ${deepLatticeLineForQuery(`${q}|meshSeal`)}`
-      );
+      addLog('QUANTUM', buildDeepLatticeMeshLogMessage('MESH_SEAL', q, ORACLE_LATTICE_PHASE.meshSeal));
       addLog('QUANTUM', `RAV_VERIFIED: no hallucination flag on consensus path`);
     }, ORACLE_PHASE_MS[6]);
 
     schedule(() => {
       setPhase('complete');
-      addLog('INFO', `SESSION_MESH: ${deepLatticeLineForQuery(`${q}|sessionClose`)}`);
+      addLog('INFO', buildDeepLatticeMeshLogMessage('SESSION_MESH', q, ORACLE_LATTICE_PHASE.sessionClose));
       addLog(
         'QUANTUM',
         `LOOP_COMPLETE_BURST: ${standardSkillBurst(skillSeedFromLabel(`${q}|oracleComplete`))}`
