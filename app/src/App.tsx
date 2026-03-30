@@ -264,7 +264,7 @@ function AppContent() {
           {/* 1. Hero — Atenție */}
           <section
             id="hero"
-            aria-label="Hero"
+            aria-label={langState.t.landmarks.hero}
             className="relative z-10 py-24"
           >
             <ErrorBoundary>
@@ -277,7 +277,7 @@ function AppContent() {
           {/* 2. Problema agriculturii — impact, gap AI, infrastructură hibridă */}
           <section
             id="problem-agriculture"
-            aria-label="Problema agriculturii"
+            aria-label={langState.t.landmarks.problemAgriculture}
             className="relative z-[15] py-24"
           >
             <div className="relative z-[15]">
@@ -315,7 +315,7 @@ function AppContent() {
           {/* 3. Soluția Solaris AI — aplicația & motorul (id matches nav #nova-app) */}
           <section
             id="nova-app"
-            aria-label="Soluția Solaris AI"
+            aria-label={langState.t.landmarks.novaApp}
             className="relative z-40 scroll-mt-24 py-24"
           >
             <ErrorBoundary>
@@ -328,7 +328,7 @@ function AppContent() {
           {/* 4. Tokenomics — 9,000 CET dashboard (id matches nav #staking) */}
           <section
             id="staking"
-            aria-label="Tokenomics — 9,000 CET"
+            aria-label={langState.t.landmarks.tokenomics}
             className="relative z-50 scroll-mt-24 py-24"
           >
             <ErrorBoundary>
@@ -340,7 +340,7 @@ function AppContent() {
 
           {/* 5. RWA — Cetățuia, real estate */}
           <section
-            aria-label="RWA — Cetățuia"
+            aria-label={langState.t.landmarks.rwa}
             className="relative z-[55] py-24"
           >
             <LazyLoadWrapper>
@@ -353,7 +353,7 @@ function AppContent() {
           {/* 6. Roadmap (id matches nav #roadmap) */}
           <section
             id="roadmap"
-            aria-label="Roadmap"
+            aria-label={langState.t.landmarks.roadmap}
             className="relative z-[70] scroll-mt-24 py-24"
           >
             <LazyLoadWrapper>
@@ -474,7 +474,7 @@ function AppContent() {
 
           {/* 7. Footer */}
           <section
-            aria-label="Footer"
+            aria-label={langState.t.landmarks.footer}
             className="relative z-[113] py-24"
           >
             <LazyLoadWrapper>

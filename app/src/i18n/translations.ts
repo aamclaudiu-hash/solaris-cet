@@ -93,6 +93,16 @@ export interface Translations {
     tryAgain: string;
     reloadPage: string;
   };
+  /** Main `<section>` region labels for page outline (screen readers). */
+  landmarks: {
+    hero: string;
+    problemAgriculture: string;
+    novaApp: string;
+    tokenomics: string;
+    rwa: string;
+    roadmap: string;
+    footer: string;
+  };
   hero: {
     tagline: string;
     subtitle: string;
@@ -207,6 +217,15 @@ const translations: Record<LangCode, Translations> = {
       recoveryGroupAria: 'Error recovery options',
       tryAgain: 'Try Again',
       reloadPage: 'Reload Page',
+    },
+    landmarks: {
+      hero: 'Hero',
+      problemAgriculture: 'The agriculture challenge',
+      novaApp: 'Solaris AI solution',
+      tokenomics: 'Tokenomics — 9,000 CET',
+      rwa: 'RWA — Cetățuia',
+      roadmap: 'Roadmap',
+      footer: 'Site footer',
     },
     hero: {
       tagline: 'The Digital Foundation of Cetățuia',
@@ -347,6 +366,15 @@ const translations: Record<LangCode, Translations> = {
       tryAgain: 'Reintentar',
       reloadPage: 'Recargar página',
     },
+    landmarks: {
+      hero: 'Hero',
+      problemAgriculture: 'El desafío agrícola',
+      novaApp: 'Solución Solaris AI',
+      tokenomics: 'Tokenómica — 9.000 CET',
+      rwa: 'RWA — Cetățuia',
+      roadmap: 'Hoja de ruta',
+      footer: 'Pie de página',
+    },
     hero: {
       tagline: 'La Base Digital de Cetățuia',
       subtitle: 'Un token de escasez extrema con 9.000 CET en la blockchain TON',
@@ -485,6 +513,15 @@ const translations: Record<LangCode, Translations> = {
       recoveryGroupAria: '恢复选项',
       tryAgain: '重试',
       reloadPage: '刷新页面',
+    },
+    landmarks: {
+      hero: '首屏',
+      problemAgriculture: '农业挑战',
+      novaApp: 'Solaris AI 解决方案',
+      tokenomics: '代币经济学 — 9,000 CET',
+      rwa: 'RWA — Cetățuia',
+      roadmap: '路线图',
+      footer: '页脚',
     },
     hero: {
       tagline: 'Cetățuia 的数字基础',
@@ -625,6 +662,15 @@ const translations: Record<LangCode, Translations> = {
       tryAgain: 'Повторить',
       reloadPage: 'Перезагрузить страницу',
     },
+    landmarks: {
+      hero: 'Герой',
+      problemAgriculture: 'Проблема сельского хозяйства',
+      novaApp: 'Решение Solaris AI',
+      tokenomics: 'Токеномика — 9 000 CET',
+      rwa: 'RWA — Cetățuia',
+      roadmap: 'Дорожная карта',
+      footer: 'Подвал сайта',
+    },
     hero: {
       tagline: 'Цифровая Основа Cetățuia',
       subtitle: 'Гиперредкий токен с запасом 9 000 CET на блокчейне TON',
@@ -763,6 +809,15 @@ const translations: Record<LangCode, Translations> = {
       recoveryGroupAria: 'Opțiuni de recuperare',
       tryAgain: 'Încearcă din nou',
       reloadPage: 'Reîncarcă pagina',
+    },
+    landmarks: {
+      hero: 'Hero',
+      problemAgriculture: 'Problema agriculturii',
+      novaApp: 'Soluția Solaris AI',
+      tokenomics: 'Tokenomics — 9.000 CET',
+      rwa: 'RWA — Cetățuia',
+      roadmap: 'Foaie de parcurs',
+      footer: 'Subsol site',
     },
     hero: {
       tagline: 'Fundația Digitală a Cetățuiei',
@@ -903,6 +958,15 @@ const translations: Record<LangCode, Translations> = {
       tryAgain: 'Tentar novamente',
       reloadPage: 'Recarregar página',
     },
+    landmarks: {
+      hero: 'Hero',
+      problemAgriculture: 'O desafio agrícola',
+      novaApp: 'Solução Solaris AI',
+      tokenomics: 'Tokenomia — 9.000 CET',
+      rwa: 'RWA — Cetățuia',
+      roadmap: 'Roteiro',
+      footer: 'Rodapé',
+    },
     hero: {
       tagline: 'A Fundação Digital da Cetățuia',
       subtitle: 'Um token ultra-escasso com oferta de 9.000 CET na blockchain TON',
@@ -1041,6 +1105,15 @@ const translations: Record<LangCode, Translations> = {
       recoveryGroupAria: 'Wiederherstellungsoptionen',
       tryAgain: 'Erneut versuchen',
       reloadPage: 'Seite neu laden',
+    },
+    landmarks: {
+      hero: 'Hero',
+      problemAgriculture: 'Die Herausforderung der Landwirtschaft',
+      novaApp: 'Solaris-KI-Lösung',
+      tokenomics: 'Tokenomik — 9.000 CET',
+      rwa: 'RWA — Cetățuia',
+      roadmap: 'Fahrplan',
+      footer: 'Seitenfuß',
     },
     hero: {
       tagline: 'Das digitale Fundament von Cetățuia',
