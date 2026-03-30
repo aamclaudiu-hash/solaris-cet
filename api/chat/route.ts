@@ -1,7 +1,7 @@
 /**
  * Edge — POST `/api/chat` (OpenAI-only fallback path).
  *
- * **Production Oracle** (Grok × Gemini, RAV, DeDust context) lives in
+ * **Production CET AI** (Grok × Gemini, RAV, DeDust context) lives in
  * `app/api/chat/route.ts`. Prefer deploying with **`app/` as the build root**
  * (Coolify, Vercel, etc.) so that route ships. This file exists for deployments
  * that use the **repository root** as the deploy root; see `api/README.md`.

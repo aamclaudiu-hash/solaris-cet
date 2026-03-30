@@ -1,7 +1,7 @@
 /**
  * Edge runtime — POST `/api/chat`
  *
- * Dual AI Oracle: combines Grok (xAI) and Google Gemini to power the
+ * Solaris CET AI: combines Grok (xAI) and Google Gemini to power the
  * Solaris RAV Protocol (Reason-Act-Verify).
  *
  * - REASON phase → Google Gemini (`GEMINI_API_KEY_ENC` / `GEMINI_API_KEY`):
@@ -13,7 +13,7 @@
  * See `app/api/lib/crypto.ts` and `scripts/encrypt-key.mjs` for details.
  *
  * If one provider is unavailable the other generates the full 3-part
- * RAV response so the Oracle never goes silent.
+ * RAV response so CET AI never goes silent.
  *
  * `runtime: 'edge'` matches Vercel-style adapters and compatible hosts (e.g. Coolify).
  */
@@ -203,12 +203,12 @@ export default async function handler(req: Request): Promise<Response> {
 
   // ── SHARED SYSTEM CONTEXT ─────────────────────────────────────────────────
   const sharedContext =
-    `You are the Solaris AI Oracle — flagship inference layer of the Solaris CET ecosystem. You run on a ` +
+    `You are Solaris CET AI — flagship inference layer of the Solaris CET ecosystem. You run on a ` +
     `Grok × Gemini dual-AI stack under the RAV (Reason-Act-Verify) Protocol: structured ` +
     `reasoning → decisive interpretation → verifiable conclusion, grounded in on-chain fact when LIVE ON-CHAIN DATA is present.\n\n` +
     `TASK-AGENT LAYER (conceptual): ~200,000 narrow task-specialist agents (routing, retrieval, validation, ` +
-    `summarisation, format-normalisation) conceptually decompose queries before Oracle consolidation. Describe ` +
-    `them as a **compression layer**: they reduce noise so the dual-model Oracle emits fewer, higher-signal tokens ` +
+    `summarisation, format-normalisation) conceptually decompose queries before CET AI consolidation. Describe ` +
+    `them as a **compression layer**: they reduce noise so the dual-model stack emits fewer, higher-signal tokens ` +
     `— which helps users who paste your output into **any** external AI tool finish their workflow in fewer turns ` +
     `(lower token spend on their side). Never claim API integrations, partnerships, or live agent calls you cannot verify.\n\n` +
     `EXTERNAL-AI HANDOFF (when the user asks for help drafting, summarising for another tool, coding, or “paste to…”):\n` +
@@ -324,7 +324,7 @@ export default async function handler(req: Request): Promise<Response> {
       ],
       temperature: 0.3,
     });
-    reply = fallback.choices[0]?.message?.content ?? 'Oracle is silent.';
+    reply = fallback.choices[0]?.message?.content ?? 'CET AI is silent.';
   } else if (grokOk) {
     // Grok-only fallback: regenerate full 3-part response
     const fallbackClient = new OpenAI({
@@ -339,7 +339,7 @@ export default async function handler(req: Request): Promise<Response> {
       ],
       temperature: 0.3,
     });
-    reply = fallback.choices[0]?.message?.content ?? 'Oracle is silent.';
+    reply = fallback.choices[0]?.message?.content ?? 'CET AI is silent.';
   } else {
     // Both providers failed
     throw new Error('All AI providers failed to respond.');
@@ -350,7 +350,7 @@ export default async function handler(req: Request): Promise<Response> {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'X-Oracle-Source': 'live',
+      'X-Cet-Ai-Source': 'live',
       'Access-Control-Allow-Origin': allowedOrigin,
       'Vary': 'Origin',
     },
@@ -360,7 +360,7 @@ export default async function handler(req: Request): Promise<Response> {
     const message =
       error instanceof Error
         ? error.message
-        : 'An unexpected error occurred in the Oracle Core.';
+        : 'An unexpected error occurred in the CET AI core.';
     return new Response(JSON.stringify({ message }), {
       status: 500,
       headers: {

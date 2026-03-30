@@ -1,37 +1,38 @@
 import { describe, it, expect } from 'vitest';
 import {
-  ORACLE_TASK_MESH_LINE,
-  buildOracleObserveParseSequence,
+  CET_AI_TASK_MESH_LINE,
+  buildCetAiObserveParse,
   buildDeepLatticeMeshLogMessage,
   buildDeepLatticeMeshLogMessageRawQuery,
   buildSkillLocusLogMessage,
-  ORACLE_LATTICE_PHASE,
-} from '@/lib/oracleTelemetry';
+  CET_AI_LATTICE_PHASE,
+} from '@/lib/cetAiTelemetry';
 
-describe('oracleTelemetry barrel', () => {
+describe('cetAiTelemetry barrel', () => {
   it('re-exports TASK_MESH line for SKILL terminal styling', () => {
-    expect(ORACLE_TASK_MESH_LINE.startsWith('TASK_MESH:')).toBe(true);
-    expect(ORACLE_TASK_MESH_LINE).toContain('200k');
+    expect(CET_AI_TASK_MESH_LINE.startsWith('TASK_MESH:')).toBe(true);
+    expect(CET_AI_TASK_MESH_LINE).toContain('200k');
+    expect(CET_AI_TASK_MESH_LINE).toContain('CET AI');
   });
 
-  it('observe_parse sequence matches buildOracleObserveParseSequence (snapshot)', () => {
+  it('observe_parse sequence matches buildCetAiObserveParse (snapshot)', () => {
     const q = 'How do 200k agents route tasks?';
     const detected = 'team';
     const tokenCount = q.split(/\s+/).length;
-    const seq = buildOracleObserveParseSequence(q, detected, tokenCount);
+    const seq = buildCetAiObserveParse(q, detected, tokenCount);
     expect(seq[0]).toMatch(/^RAV_BURST: /);
-    expect(seq[1]).toBe(ORACLE_TASK_MESH_LINE);
+    expect(seq[1]).toBe(CET_AI_TASK_MESH_LINE);
     expect(seq.some((l) => l.startsWith('INPUT_STREAM:'))).toBe(true);
     expect(seq).toMatchSnapshot();
   });
 
   it('deep lattice + act phase lines stay stable', () => {
-    const q = 'oracle snapshot';
+    const q = 'cet ai snapshot';
     const detected = 'default';
     expect(buildDeepLatticeMeshLogMessageRawQuery('DEEP_LATTICE', q)).toBe(
       buildDeepLatticeMeshLogMessageRawQuery('DEEP_LATTICE', q)
     );
-    expect(buildDeepLatticeMeshLogMessage('ACT_MESH', q, ORACLE_LATTICE_PHASE.actExecute)).toContain(
+    expect(buildDeepLatticeMeshLogMessage('ACT_MESH', q, CET_AI_LATTICE_PHASE.actExecute)).toContain(
       'ACT_MESH:'
     );
     expect(buildSkillLocusLogMessage(q, detected)).toContain('topic=default');

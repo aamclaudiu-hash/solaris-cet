@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import {
-  ORACLE_BURST_SALT,
+  CET_AI_BURST_SALT,
   buildRavBurstLogMessage,
   buildFlashGlintLogMessage,
   buildExpressomeBurstLogMessage,
   buildConsensusBurstLogMessage,
   buildLoopCompleteBurstLogMessage,
-} from '@/lib/oracleBurstLines';
+} from '@/lib/cetAiBurstLines';
 
-describe('oracleBurstLines', () => {
+describe('cetAiBurstLines', () => {
   const q = 'What is the RAV Protocol?';
 
   it.each([
@@ -32,9 +32,9 @@ describe('oracleBurstLines', () => {
     expect(buildFlashGlintLogMessage(q)).toContain('—');
   });
 
-  it('ORACLE_BURST_SALT has five lifecycle keys', () => {
-    expect(Object.keys(ORACLE_BURST_SALT).sort()).toEqual(
-      ['consensus', 'expressome', 'observeCtx', 'oracleComplete', 'ravInit'].sort()
+  it('CET_AI_BURST_SALT has five lifecycle keys', () => {
+    expect(Object.keys(CET_AI_BURST_SALT).sort()).toEqual(
+      ['cetAiComplete', 'consensus', 'expressome', 'observeCtx', 'ravInit'].sort()
     );
   });
 });

@@ -32,10 +32,10 @@
       "icons": [{ "src": "./hero-coin.png", "sizes": "96x96" }]
     },
     {
-      "name": "AI Oracle",
-      "short_name": "Oracle",
-      "description": "Ask the Solaris AI Oracle anything",
-      "url": "./#oracle",
+      "name": "CET AI",
+      "short_name": "CET AI",
+      "description": "Ask Solaris CET AI (Grok × Gemini RAV)",
+      "url": "./#cet-ai",
       "icons": [{ "src": "./hero-coin.png", "sizes": "96x96" }]
     }
   ]

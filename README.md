@@ -77,8 +77,8 @@ solaris-cet/
 │   │   ├── workers/            # Web Workers (AI inference, mining)
 │   │   ├── App.tsx             # Root component; GSAP ScrollTrigger registration
 │   │   └── main.tsx            # Entry point
-│   ├── api/                    # Oracle chat (Edge) + auth (Node); deploy with app on Coolify or similar
-│   │   ├── chat/route.ts       # Oracle (Grok × Gemini) + DeDust context
+│   ├── api/                    # CET AI chat (Edge) + auth (Node); deploy with app on Coolify or similar
+│   │   ├── chat/route.ts       # CET AI (Grok × Gemini) + DeDust context
 │   │   └── auth/route.ts       # Wallet sync (Postgres)
 │   ├── public/                 # Static assets (icons, images, state JSON)
 │   ├── tests/                  # Playwright E2E tests

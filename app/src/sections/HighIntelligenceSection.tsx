@@ -274,7 +274,7 @@ const NeuralReasoningEngine = () => {
   );
 };
 
-// ─── Quantum OS Entropy Oracle ───────────────────────────────────────────────
+// ─── Quantum OS entropy (CET AI demo surface) ────────────────────────────────
 
 interface QubitState {
   id: number;
@@ -296,7 +296,7 @@ function initQubits(): QubitState[] {
   }));
 }
 
-const QuantumEntropyOracle = () => {
+const QuantumEntropyCetAi = () => {
   const { t } = useLanguage();
   const [qubits, setQubits] = useState<QubitState[]>(initQubits);
   const [collapsed, setCollapsed] = useState(false);
@@ -380,7 +380,7 @@ const QuantumEntropyOracle = () => {
         <div>
           <span className="hud-label text-solaris-cyan block">DEMO #2</span>
           <h3 className="font-display font-bold text-solaris-text text-lg leading-none">
-            Quantum OS Entropy Oracle
+            Quantum OS Entropy · CET AI
           </h3>
         </div>
         <div className="ml-auto flex items-center gap-1.5">
@@ -597,7 +597,7 @@ const HighIntelligenceSection = () => {
             <NeuralReasoningEngine />
           </div>
           <div className="hi-card">
-            <QuantumEntropyOracle />
+            <QuantumEntropyCetAi />
           </div>
         </div>
 

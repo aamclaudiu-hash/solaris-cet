@@ -4,17 +4,17 @@ import { track } from '@vercel/analytics/react';
 import { X, Send, Copy, Check, ExternalLink, ChevronRight, Sparkles, Trash2, Bot } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import type { OracleKnowledge, Translations } from '../i18n/translations';
+import type { CetAiKnowledge, Translations } from '../i18n/translations';
 import {
-  buildOracleObserveParseSequence,
+  buildCetAiObserveParse,
   buildDeepLatticeMeshLogMessage,
   buildDeepLatticeMeshLogMessageRawQuery,
-  ORACLE_LATTICE_PHASE,
+  CET_AI_LATTICE_PHASE,
   buildFlashGlintLogMessage,
   buildExpressomeBurstLogMessage,
   buildConsensusBurstLogMessage,
   buildLoopCompleteBurstLogMessage,
-} from '@/lib/oracleTelemetry';
+} from '@/lib/cetAiTelemetry';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -89,7 +89,7 @@ const TOPIC_KEYWORDS: Record<string, string[]> = {
   team:        ['team', 'department', 'echipa', 'equipo', 'команда', '团队', 'mannschaft', 'equipe', '200,000', '200000', '200k', 'task agent', 'tasking', 'task specialists'],
 };
 
-async function fetchOracleChat(
+async function fetchCetAiChat(
   query: string,
   signal: AbortSignal,
 ): Promise<{ text: string | null; sourceHeader: string | null }> {
@@ -113,7 +113,7 @@ async function fetchOracleChat(
         body: JSON.stringify({ query }),
         signal,
       });
-      const sourceHeader = res.headers.get('X-Oracle-Source');
+      const sourceHeader = res.headers.get('X-Cet-Ai-Source');
       const raw = await res.text();
       let data: { response?: string } = {};
       try {
@@ -131,14 +131,14 @@ async function fetchOracleChat(
   return { text: null, sourceHeader: null };
 }
 
-function buildCopyForAiText(q: string, a: string, o: Translations['oracle']): string {
+function buildCopyForAiText(q: string, a: string, o: Translations['cetAi']): string {
   return `${o.copyForAiQuestionLabel}\n${q}\n\n${o.copyForAiAnswerLabel}\n${a}\n\n${o.copyForAiInstructions}`;
 }
 
 // --- FOLLOW-UP SUGGESTIONS by topic ---
 const FOLLOW_UP_BY_TOPIC: Record<string, string[]> = {
   price:       ['What drives CET price long-term?', 'How does DCBM stabilise price?', 'Where can I buy CET?'],
-  competition: ['What is the RAV Protocol advantage?', 'Why TON over Ethereum?', 'How do task agents help the Oracle?'],
+  competition: ['What is the RAV Protocol advantage?', 'Why TON over Ethereum?', 'How do task agents help CET AI?'],
   rwa:         ['What assets back CET?', 'When is the RWA tokenisation pilot?', 'How does BRAID connect to real assets?'],
   mining:      ['What device is best for mining?', 'How long does mining last?', 'How does staking affect mining rewards?'],
   ai:          ['What is the BRAID Framework?', 'How does the RAV Protocol work?', 'What are the 200,000 task agents?'],
@@ -157,13 +157,13 @@ const FOLLOW_UP_BY_TOPIC: Record<string, string[]> = {
 };
 
 /** RAV telemetry milestones (ms) — tuned for mobile attention span; ~5.3s to completion. */
-const ORACLE_PHASE_MS = [580, 1280, 2080, 2880, 3780, 4380, 4980, 5280] as const;
+const CET_AI_PHASE_MS = [580, 1280, 2080, 2880, 3780, 4380, 4980, 5280] as const;
 
-function buildContextualResponse(q: string, knowledge: OracleKnowledge): { answer: string; confidence: number } {
+function buildContextualResponse(q: string, knowledge: CetAiKnowledge): { answer: string; confidence: number } {
   const lower = q.toLowerCase();
   for (const [topic, keywords] of Object.entries(TOPIC_KEYWORDS)) {
     if (keywords.some(kw => lower.includes(kw))) {
-      return { answer: knowledge[topic as keyof OracleKnowledge], confidence: CONFIDENCE_SCORES[topic] };
+      return { answer: knowledge[topic as keyof CetAiKnowledge], confidence: CONFIDENCE_SCORES[topic] };
     }
   }
   return { answer: knowledge.default, confidence: CONFIDENCE_SCORES.default };
@@ -199,7 +199,7 @@ function phaseOrderIndex(currentPhase: string): number {
   return phases.indexOf(currentPhase as ReActPhase);
 }
 
-// --- Markdown renderer for oracle responses ---
+// --- Markdown renderer for CET AI responses ---
 // Supports: **bold**, *italic*, `code`, - bullet lists, numbered lists, \n\n paragraphs
 function MarkdownText({ text }: { text: string }) {
   const renderLine = (line: string, key: number) => {
@@ -377,7 +377,7 @@ function ReActPanels({ phase }: { phase: ReActPhase }) {
 }
 
 
-export default function AiOracleSearch() {
+export default function CetAiSearch() {
   // --- LANGUAGE ---
   const { t } = useLanguage();
 
@@ -388,9 +388,9 @@ export default function AiOracleSearch() {
   const [logs, setLogs] = useState<TelemetryLog[]>([]);
   const [metrics, setMetrics] = useState<MetricsData>({ confidence: 0, latency: 0, cetCost: 0 });
   const [finalResponse, setFinalResponse] = useState('');
-  const [oracleConfidence, setOracleConfidence] = useState(0);
+  const [cetAiConfidence, setCetAiConfidence] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [chatHistory, setChatHistory] = useLocalStorage<ChatEntry[]>('oracle-chat-history', []);
+  const [chatHistory, setChatHistory] = useLocalStorage<ChatEntry[]>('cet-ai-chat-history', []);
   const [copiedResponse, setCopiedResponse] = useState(false);
   const [copiedForAi, setCopiedForAi] = useState(false);
   const [detectedTopic, setDetectedTopic] = useState<string>('default');
@@ -401,7 +401,7 @@ export default function AiOracleSearch() {
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const modalInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const oracleAbortRef = useRef<AbortController | null>(null);
+  const cetAiAbortRef = useRef<AbortController | null>(null);
   const trackedCompleteKey = useRef<string>('');
 
   // Auto-scroll telemetry terminal
@@ -422,7 +422,7 @@ export default function AiOracleSearch() {
   }, []);
 
   useEffect(() => {
-    if (isModalOpen) track('oracle_open', {});
+    if (isModalOpen) track('cet_ai_open', {});
   }, [isModalOpen]);
 
   useEffect(() => {
@@ -430,13 +430,13 @@ export default function AiOracleSearch() {
     const key = `${submittedQuestion}::${finalResponse.slice(0, 96)}`;
     if (trackedCompleteKey.current === key) return;
     trackedCompleteKey.current = key;
-    track('oracle_complete', { source: responseUsedLiveApi ? 'live' : 'fallback' });
+    track('cet_ai_complete', { source: responseUsedLiveApi ? 'live' : 'fallback' });
   }, [phase, finalResponse, submittedQuestion, responseUsedLiveApi]);
 
   // --- CLOSE HANDLER ---
   const handleClose = useCallback(() => {
-    oracleAbortRef.current?.abort();
-    oracleAbortRef.current = null;
+    cetAiAbortRef.current?.abort();
+    cetAiAbortRef.current = null;
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
     setIsModalOpen(false);
@@ -444,7 +444,7 @@ export default function AiOracleSearch() {
     setQuery('');
     setLogs([]);
     setFinalResponse('');
-    setOracleConfidence(0);
+    setCetAiConfidence(0);
     setMetrics({ confidence: 0, latency: 0, cetCost: 0 });
     setChatHistory([]);
     setSubmittedQuestion('');
@@ -456,7 +456,7 @@ export default function AiOracleSearch() {
     setQuery,
     setLogs,
     setFinalResponse,
-    setOracleConfidence,
+    setCetAiConfidence,
     setMetrics,
     setChatHistory,
     setSubmittedQuestion,
@@ -493,13 +493,13 @@ export default function AiOracleSearch() {
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
 
-    oracleAbortRef.current?.abort();
+    cetAiAbortRef.current?.abort();
     const ac = new AbortController();
-    oracleAbortRef.current = ac;
+    cetAiAbortRef.current = ac;
 
-    const oracleFetchPromise = fetchOracleChat(q, ac.signal);
+    const cetAiFetchPromise = fetchCetAiChat(q, ac.signal);
 
-    const { answer: localAnswer, confidence } = buildContextualResponse(q, t.oracle.knowledge);
+    const { answer: localAnswer, confidence } = buildContextualResponse(q, t.cetAi.knowledge);
     const lowerQ = q.toLowerCase();
     let detected = 'default';
     for (const [topic, keywords] of Object.entries(TOPIC_KEYWORDS)) {
@@ -516,13 +516,13 @@ export default function AiOracleSearch() {
     setSubmittedQuestion(q);
     setLogs([]);
     setFinalResponse('');
-    setOracleConfidence(0);
+    setCetAiConfidence(0);
     setMetrics({ confidence: 0, latency: 0, cetCost: 0 });
     setResponseUsedLiveApi(false);
 
     setPhase('observe_parse');
-    addLog('INFO', `RAV_INIT: Grok × Gemini Oracle v3.1 · Session [${hash}]`);
-    const observeParseSeq = buildOracleObserveParseSequence(q, detected, tokenCount);
+    addLog('INFO', `RAV_INIT: Grok × Gemini CET AI v3.1 · Session [${hash}]`);
+    const observeParseSeq = buildCetAiObserveParse(q, detected, tokenCount);
     addLog('QUANTUM', observeParseSeq[0]!);
     for (const line of observeParseSeq.slice(1)) {
       addLog('INFO', line);
@@ -533,37 +533,37 @@ export default function AiOracleSearch() {
       addLog('QUANTUM', `INTENT_EXTRACTION: Semantic vector computed. Ambiguity score: 0.${Math.floor(Math.random() * 30 + 10)}`);
       addLog('QUANTUM', buildFlashGlintLogMessage(q));
       addLog('INFO', `CONTEXT_MAP: Knowledge graph traversal · Nodes visited: 2,847`);
-      addLog('INFO', buildDeepLatticeMeshLogMessage('CONTEXT_MESH', q, ORACLE_LATTICE_PHASE.observeContext));
+      addLog('INFO', buildDeepLatticeMeshLogMessage('CONTEXT_MESH', q, CET_AI_LATTICE_PHASE.observeContext));
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
-    }, ORACLE_PHASE_MS[0]);
+    }, CET_AI_PHASE_MS[0]);
 
     schedule(() => {
       setPhase('think_route');
       addLog('INFO', `GEMINI_REASON: Analytical pathway · parallel hypothesis lattice`);
       addLog('QUANTUM', `HYPOTHESIS_GEN: 6 paths · superposition collapse scheduled`);
-      addLog('INFO', buildDeepLatticeMeshLogMessage('ROUTE_MESH', q, ORACLE_LATTICE_PHASE.thinkRoute));
+      addLog('INFO', buildDeepLatticeMeshLogMessage('ROUTE_MESH', q, CET_AI_LATTICE_PHASE.thinkRoute));
       setMetrics(prev => ({ ...prev, latency: Math.round(performance.now() - startMs) }));
-    }, ORACLE_PHASE_MS[1]);
+    }, CET_AI_PHASE_MS[1]);
 
     schedule(() => {
       setPhase('think_validate');
       addLog('QUANTUM', `PATH_COLLAPSE: Highest-confidence path (p=${(confidence / 100).toFixed(4)})`);
       addLog('SEC', `CONSTRAINT_CHECK: Zero-hallucination bounds · fact anchors`);
       addLog('INFO', `BRAID_FRAME: Reasoning graph · depth 7 · nodes 1,204`);
-      addLog('INFO', buildDeepLatticeMeshLogMessage('VALIDATE_MESH', q, ORACLE_LATTICE_PHASE.thinkValidate));
+      addLog('INFO', buildDeepLatticeMeshLogMessage('VALIDATE_MESH', q, CET_AI_LATTICE_PHASE.thinkValidate));
       addLog('QUANTUM', buildExpressomeBurstLogMessage(q));
       setMetrics(prev => ({
         ...prev,
         confidence: Math.round(confidence * 0.7),
         latency: Math.round(performance.now() - startMs),
       }));
-    }, ORACLE_PHASE_MS[2]);
+    }, CET_AI_PHASE_MS[2]);
 
     schedule(() => {
       setPhase('act_execute');
       addLog('INFO', `GROK_ACT: Action directive pipeline · live /api/chat merge pending`);
       addLog('QUANTUM', `RESPONSE_COMPILE: dual-model payload · entropy seed`);
-      addLog('INFO', buildDeepLatticeMeshLogMessage('ACT_MESH', q, ORACLE_LATTICE_PHASE.actExecute));
+      addLog('INFO', buildDeepLatticeMeshLogMessage('ACT_MESH', q, CET_AI_LATTICE_PHASE.actExecute));
       addLog('INFO', buildDeepLatticeMeshLogMessageRawQuery('DEEP_LATTICE', q));
       addLog('SEC', `SIGN: Quantum OS key · Hash: 0x${generateHash()}${generateHash()}`);
       setMetrics(prev => ({
@@ -571,20 +571,20 @@ export default function AiOracleSearch() {
         cetCost: parseFloat((Math.random() * 0.005 + 0.001).toFixed(4)),
         latency: Math.round(performance.now() - startMs),
       }));
-    }, ORACLE_PHASE_MS[3]);
+    }, CET_AI_PHASE_MS[3]);
 
     schedule(() => {
       void (async () => {
         type FetchResult = { text: string | null; sourceHeader: string | null };
         const raced = await Promise.race<FetchResult>([
-          oracleFetchPromise,
+          cetAiFetchPromise,
           new Promise<FetchResult>(resolve => {
             setTimeout(() => resolve({ text: null, sourceHeader: null }), 14_000);
           }),
         ]).catch((): FetchResult => ({ text: null, sourceHeader: null }));
         const remote = raced.text;
         const hasRemoteText = Boolean(remote?.trim());
-        /** True only when the edge handler affirms live Oracle (see X-Oracle-Source on /api/chat). */
+        /** True only when the edge handler affirms live CET AI (see X-Cet-Ai-Source on /api/chat). */
         const usedLive = hasRemoteText && raced.sourceHeader === 'live';
         const text = hasRemoteText ? remote!.trim() : localAnswer;
         const conf = hasRemoteText ? Math.min(99.2, confidence + 1.5) : confidence;
@@ -593,10 +593,10 @@ export default function AiOracleSearch() {
         addLog(
           'INFO',
           usedLive
-            ? 'LIVE_ORACLE: /api/chat merged · dual-AI RAV payload materialised'
+            ? 'LIVE_CET_AI: /api/chat merged · dual-AI RAV payload materialised'
             : hasRemoteText
-              ? 'API_ORACLE: /api/chat body used · X-Oracle-Source missing or not live'
-              : 'FALLBACK_ORACLE: static knowledge graph (deploy API for live Grok×Gemini)',
+              ? 'API_CET_AI: /api/chat body used · X-Cet-Ai-Source missing or not live'
+              : 'FALLBACK_CET_AI: static knowledge graph (deploy API for live Grok×Gemini)',
         );
         addLog('SEC', `TON_CONSENSUS: Payload validated · quorum OK`);
         addLog('QUANTUM', `RAV_COMPLETE: loop closed · Confidence: ${conf.toFixed(1)}%`);
@@ -606,33 +606,33 @@ export default function AiOracleSearch() {
           confidence: Math.round(conf),
           latency: Math.round(performance.now() - startMs),
         }));
-        setOracleConfidence(conf);
+        setCetAiConfidence(conf);
         setFinalResponse(text);
         setResponseUsedLiveApi(usedLive);
       })();
-    }, ORACLE_PHASE_MS[4]);
+    }, CET_AI_PHASE_MS[4]);
 
     schedule(() => {
       setPhase('verify_cross');
       addLog('SEC', `VERIFY_INIT: Cross-model review · Grok↔Gemini`);
       addLog('QUANTUM', `ZK_PROOF: integrity bundle · Hash: 0x${generateHash()}`);
-      addLog('INFO', buildDeepLatticeMeshLogMessage('CROSS_MESH', q, ORACLE_LATTICE_PHASE.verifyCross));
-    }, ORACLE_PHASE_MS[5]);
+      addLog('INFO', buildDeepLatticeMeshLogMessage('CROSS_MESH', q, CET_AI_LATTICE_PHASE.verifyCross));
+    }, CET_AI_PHASE_MS[5]);
 
     schedule(() => {
       setPhase('verify_anchor');
       addLog('SEC', `IPFS_ANCHOR: trace slot reserved · CID: bafkrei${generateHash().toLowerCase()}`);
       addLog('INFO', `ON_CHAIN: anchor ref · Block: #${Math.floor(Math.random() * 1_000_000 + 48_000_000)}`);
-      addLog('QUANTUM', buildDeepLatticeMeshLogMessage('MESH_SEAL', q, ORACLE_LATTICE_PHASE.meshSeal));
+      addLog('QUANTUM', buildDeepLatticeMeshLogMessage('MESH_SEAL', q, CET_AI_LATTICE_PHASE.meshSeal));
       addLog('QUANTUM', `RAV_VERIFIED: no hallucination flag on consensus path`);
-    }, ORACLE_PHASE_MS[6]);
+    }, CET_AI_PHASE_MS[6]);
 
     schedule(() => {
       setPhase('complete');
-      addLog('INFO', buildDeepLatticeMeshLogMessage('SESSION_MESH', q, ORACLE_LATTICE_PHASE.sessionClose));
+      addLog('INFO', buildDeepLatticeMeshLogMessage('SESSION_MESH', q, CET_AI_LATTICE_PHASE.sessionClose));
       addLog('QUANTUM', buildLoopCompleteBurstLogMessage(q));
-    }, ORACLE_PHASE_MS[7]);
-  }, [generateHash, addLog, t.oracle.knowledge]);
+    }, CET_AI_PHASE_MS[7]);
+  }, [generateHash, addLog, t.cetAi.knowledge]);
 
   // Hero widget submit → open modal + start processing
   const handleHeroSubmit = (e: React.FormEvent) => {
@@ -651,7 +651,7 @@ export default function AiOracleSearch() {
     if (finalResponse) {
       setChatHistory(prev => [
         ...prev,
-        { question: submittedQuestion, answer: finalResponse, confidence: oracleConfidence },
+        { question: submittedQuestion, answer: finalResponse, confidence: cetAiConfidence },
       ]);
     }
     const q = query.trim();
@@ -666,7 +666,7 @@ export default function AiOracleSearch() {
     <>
       {/* ── Hero trigger widget ──────────────────────────────────────────────── */}
       <div
-        data-testid="oracle-hero"
+        data-testid="cet-ai-hero"
         className="w-full max-w-5xl mx-auto scroll-mt-24 bg-black border border-gray-800 rounded-3xl p-4 md:p-8 shadow-2xl font-sans relative overflow-hidden z-20"
       >
         {/* Background grid */}
@@ -675,10 +675,10 @@ export default function AiOracleSearch() {
         {/* Header */}
         <div className="relative z-10 flex flex-col items-center mb-6 md:mb-8">
           <h2 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
-            {t.oracle.title}
+            {t.cetAi.title}
           </h2>
           <p className="text-gray-400 text-xs md:text-sm mt-1 tracking-widest uppercase">
-            {t.oracle.subtitle}
+            {t.cetAi.subtitle}
           </p>
           <div className="flex items-center gap-2 mt-2">
             <span className="text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>
@@ -695,10 +695,10 @@ export default function AiOracleSearch() {
           <div className="flex-grow relative">
             <input
               type="text"
-              data-testid="oracle-hero-query"
+              data-testid="cet-ai-hero-query"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder={t.oracle.placeholder}
+              placeholder={t.cetAi.placeholder}
               className="w-full min-h-11 px-4 md:px-6 py-3 md:py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-base md:text-base"
             />
           </div>
@@ -706,13 +706,13 @@ export default function AiOracleSearch() {
             type="submit"
             className="min-h-11 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 shadow-[0_0_20px_rgba(234,179,8,0.2)] whitespace-nowrap text-sm md:text-base touch-manipulation"
           >
-            {t.oracle.sendButton}
+            {t.cetAi.sendButton}
           </button>
         </form>
 
         {/* Suggested questions chips */}
         <div className="mt-4 flex flex-wrap gap-2 scroll-mt-28">
-          {t.oracle.suggestedQuestions.slice(0, 4).map(q => (
+          {t.cetAi.suggestedQuestions.slice(0, 4).map(q => (
             <button
               key={q}
               type="button"
@@ -726,7 +726,7 @@ export default function AiOracleSearch() {
         </div>
       </div>
 
-      {/* ── Full-screen Oracle Modal (Radix Dialog — focus trap, Esc) ───────── */}
+      {/* ── Full-screen CET AI modal (Radix Dialog — focus trap, Esc) ───────── */}
       <DialogPrimitive.Root
         open={isModalOpen}
         onOpenChange={open => {
@@ -736,7 +736,7 @@ export default function AiOracleSearch() {
         <DialogPrimitive.Portal>
           <DialogPrimitive.Overlay className="fixed inset-0 z-[9999] bg-[#020202]/98 backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
           <DialogPrimitive.Content
-            data-testid="oracle-modal-dialog"
+            data-testid="cet-ai-modal-dialog"
             aria-describedby={undefined}
             onOpenAutoFocus={e => {
               e.preventDefault();
@@ -745,18 +745,18 @@ export default function AiOracleSearch() {
             onCloseAutoFocus={e => e.preventDefault()}
             className="fixed inset-0 z-[9999] flex flex-col font-sans pt-[env(safe-area-inset-top,0px)] outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
           >
-          <DialogPrimitive.Title className="sr-only">{t.oracle.title}</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="sr-only">{t.cetAi.title}</DialogPrimitive.Title>
           <div aria-live="polite" aria-atomic="true" className="sr-only">
-            {phase === 'complete' && finalResponse ? t.oracle.announceOracleReady : ''}
+            {phase === 'complete' && finalResponse ? t.cetAi.announceCetAiReady : ''}
           </div>
           {/* Modal header */}
           <header className="shrink-0 flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-gray-800 bg-black/60 backdrop-blur-md">
             <div>
               <h2 className="text-lg md:text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 uppercase tracking-widest">
-                {t.oracle.title}
+                {t.cetAi.title}
               </h2>
               <p className="text-gray-500 text-xs tracking-widest uppercase mt-0.5">
-                {t.oracle.subtitle}
+                {t.cetAi.subtitle}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -766,8 +766,8 @@ export default function AiOracleSearch() {
               {chatHistory.length > 0 && (
                 <button
                   onClick={() => setChatHistory([])}
-                  aria-label={t.oracle.clearChatAria}
-                  title={t.oracle.clearChatTitle}
+                  aria-label={t.cetAi.clearChatAria}
+                  title={t.cetAi.clearChatTitle}
                   className="p-2 rounded-lg text-gray-600 hover:text-red-400 hover:bg-gray-800 transition-all duration-200"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -775,7 +775,7 @@ export default function AiOracleSearch() {
               )}
               <button
                 onClick={handleClose}
-                aria-label={t.oracle.closeOracleAria}
+                aria-label={t.cetAi.closeCetAiAria}
                 className="ml-1 min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-200 touch-manipulation"
               >
                 <X className="w-5 h-5" />
@@ -796,11 +796,11 @@ export default function AiOracleSearch() {
                       <p className="text-gray-300 text-sm">{entry.question}</p>
                     </div>
                   </div>
-                  {/* Oracle bubble */}
+                  {/* CET AI bubble */}
                   <div className="flex justify-start">
                     <div className="bg-green-950/40 border border-green-500/20 rounded-2xl rounded-tl-sm px-5 py-4 max-w-2xl w-full">
                       <p className="text-green-400 text-xs font-mono mb-2 uppercase tracking-widest">
-                        {t.oracle.oracleResponse} · {entry.confidence.toFixed(1)}% {t.oracle.confidence}
+                        {t.cetAi.cetAiResponse} · {entry.confidence.toFixed(1)}% {t.cetAi.confidence}
                       </p>
                       <div className="text-white">
                         <MarkdownText text={entry.answer} />
@@ -830,7 +830,7 @@ export default function AiOracleSearch() {
                       <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-800 text-gray-500">
                         <span>&gt;_ RAV_TERMINAL · Grok × Gemini v3.0</span>
                         <span className={isProcessing ? 'text-yellow-500 animate-pulse' : 'text-green-500'}>
-                          {isProcessing ? t.oracle.processing : `● ${t.oracle.done}`}
+                          {isProcessing ? t.cetAi.processing : `● ${t.cetAi.done}`}
                         </span>
                       </div>
                       <div ref={terminalRef} className="flex-1 overflow-y-auto space-y-1 pr-1">
@@ -928,7 +928,7 @@ export default function AiOracleSearch() {
                     </div>
                   </div>
 
-                  {/* Oracle final response */}
+                  {/* CET AI final response */}
                   {phase === 'complete' && finalResponse && (
                     <div className="flex justify-start">
                       <div className="bg-gradient-to-br from-green-950/80 to-black border border-green-500/30 rounded-2xl rounded-tl-sm p-5 md:p-6 w-full">
@@ -944,20 +944,20 @@ export default function AiOracleSearch() {
                               </svg>
                             </div>
                             <p className="text-green-400 text-xs font-mono font-bold uppercase tracking-widest">
-                              {t.oracle.oracleResponse} · {t.oracle.confidence} {oracleConfidence.toFixed(1)}%
+                              {t.cetAi.cetAiResponse} · {t.cetAi.confidence} {cetAiConfidence.toFixed(1)}%
                             </p>
                           </div>
                           <div className="flex items-center gap-2 flex-wrap justify-end">
                             <div className="h-1.5 w-28 bg-gray-800 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-gradient-to-r from-yellow-500 to-green-500 rounded-full transition-all duration-1000"
-                                style={{ width: `${oracleConfidence}%` }}
+                                style={{ width: `${cetAiConfidence}%` }}
                               />
                             </div>
                             {/* Copy response */}
                             <button
                               type="button"
-                              aria-label={t.oracle.copyResponseAria}
+                              aria-label={t.cetAi.copyResponseAria}
                               onClick={() => {
                                 navigator.clipboard.writeText(finalResponse).then(() => {
                                   setCopiedResponse(true);
@@ -970,10 +970,10 @@ export default function AiOracleSearch() {
                             </button>
                             <button
                               type="button"
-                              title={t.oracle.copyForAiTooltip}
-                              aria-label={t.oracle.copyForAiAriaLabel}
+                              title={t.cetAi.copyForAiTooltip}
+                              aria-label={t.cetAi.copyForAiAriaLabel}
                               onClick={() => {
-                                const payload = buildCopyForAiText(submittedQuestion, finalResponse, t.oracle);
+                                const payload = buildCopyForAiText(submittedQuestion, finalResponse, t.cetAi);
                                 navigator.clipboard.writeText(payload).then(() => {
                                   setCopiedForAi(true);
                                   setTimeout(() => setCopiedForAi(false), 2000);
@@ -988,7 +988,7 @@ export default function AiOracleSearch() {
                               href={`https://tonscan.org/address/EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              title={t.oracle.verifyOnTonscanTitle}
+                              title={t.cetAi.verifyOnTonscanTitle}
                               className="p-1.5 rounded-lg bg-gray-900 border border-gray-700 text-gray-400 hover:text-cyan-400 hover:border-cyan-500/40 transition-all"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -1000,7 +1000,7 @@ export default function AiOracleSearch() {
                             role="status"
                             className="text-amber-200/90 text-xs font-mono border border-amber-500/25 bg-amber-500/10 rounded-lg px-3 py-2 mb-4"
                           >
-                            {t.oracle.offlineModeHint}
+                            {t.cetAi.offlineModeHint}
                           </p>
                         )}
                         <div className="text-white">
@@ -1009,14 +1009,14 @@ export default function AiOracleSearch() {
 
                         {/* Follow-up suggestions */}
                         <div className="mt-5 pt-4 border-t border-green-500/10">
-                          <p className="text-gray-600 text-[10px] font-mono uppercase tracking-widest mb-2">{t.oracle.askNextLabel}</p>
+                          <p className="text-gray-600 text-[10px] font-mono uppercase tracking-widest mb-2">{t.cetAi.askNextLabel}</p>
                           <div className="flex flex-wrap gap-2">
                             {(FOLLOW_UP_BY_TOPIC[detectedTopic] ?? FOLLOW_UP_BY_TOPIC.default).map(suggestion => (
                               <button
                                 key={suggestion}
                                 type="button"
                                 onClick={() => {
-                                  setChatHistory(prev => [...prev, { question: submittedQuestion, answer: finalResponse, confidence: oracleConfidence }]);
+                                  setChatHistory(prev => [...prev, { question: submittedQuestion, answer: finalResponse, confidence: cetAiConfidence }]);
                                   processQuestion(suggestion);
                                 }}
                                 className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-900 border border-gray-700 text-gray-400 text-xs hover:border-yellow-500/50 hover:text-yellow-400 transition-all active:scale-95"
@@ -1050,7 +1050,7 @@ export default function AiOracleSearch() {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   disabled={isProcessing}
-                  placeholder={phase === 'complete' ? t.oracle.followUpPlaceholder : t.oracle.placeholder}
+                  placeholder={phase === 'complete' ? t.cetAi.followUpPlaceholder : t.cetAi.placeholder}
                   className="w-full min-h-11 px-5 py-3 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all disabled:opacity-40 text-base"
                 />
                 {isProcessing && (
@@ -1062,15 +1062,15 @@ export default function AiOracleSearch() {
               <button
                 type="submit"
                 disabled={isProcessing || !query.trim()}
-                aria-label={t.oracle.sendQuestionAria}
+                aria-label={t.cetAi.sendQuestionAria}
                 className="min-h-11 min-w-11 px-5 py-3 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold rounded-xl hover:from-yellow-500 hover:to-yellow-400 transition-all active:scale-95 disabled:from-gray-800 disabled:to-gray-900 disabled:text-gray-500 shadow-[0_0_20px_rgba(234,179,8,0.2)] disabled:shadow-none flex items-center justify-center gap-2 whitespace-nowrap touch-manipulation"
               >
                 <Send className="w-4 h-4" />
-                <span className="hidden sm:inline">{t.oracle.sendCompact}</span>
+                <span className="hidden sm:inline">{t.cetAi.sendCompact}</span>
               </button>
             </form>
             <p className="text-center text-gray-700 text-xs mt-2 font-mono">
-              {t.oracle.escToClose}
+              {t.cetAi.escToClose}
             </p>
           </div>
         </DialogPrimitive.Content>

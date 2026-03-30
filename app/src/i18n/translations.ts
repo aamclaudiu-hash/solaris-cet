@@ -3,7 +3,7 @@ import { faqContentByLang } from './faqContent.data';
 
 export type LangCode = 'en' | 'es' | 'zh' | 'ru' | 'ro' | 'pt' | 'de';
 
-export interface OracleKnowledge {
+export interface CetAiKnowledge {
   price: string;
   mining: string;
   ai: string;
@@ -162,14 +162,14 @@ export interface Translations {
     btcSReference: string;
     cetCapLabel: string;
   };
-  oracle: {
+  cetAi: {
     title: string;
     subtitle: string;
     placeholder: string;
     sendButton: string;
     followUpPlaceholder: string;
     confidence: string;
-    oracleResponse: string;
+    cetAiResponse: string;
     escToClose: string;
     processing: string;
     done: string;
@@ -179,21 +179,21 @@ export interface Translations {
     suggestedQuestions: readonly string[];
     copyForAiTooltip: string;
     copyForAiAriaLabel: string;
-    /** Screen reader announcement when the oracle finishes (aria-live). */
-    announceOracleReady: string;
+    /** Screen reader announcement when CET AI finishes (aria-live). */
+    announceCetAiReady: string;
     askNextLabel: string;
     copyForAiQuestionLabel: string;
     copyForAiAnswerLabel: string;
     copyForAiInstructions: string;
     clearChatAria: string;
     clearChatTitle: string;
-    closeOracleAria: string;
+    closeCetAiAria: string;
     copyResponseAria: string;
     sendQuestionAria: string;
     verifyOnTonscanTitle: string;
-    /** Short submit label in oracle dialog (visible on sm+). */
+    /** Short submit label in CET AI dialog (visible on sm+). */
     sendCompact: string;
-    knowledge: OracleKnowledge;
+    knowledge: CetAiKnowledge;
   };
   /** FAQ accordion copy (`faqContent.data.ts`). */
   faqContent: FaqContent;
@@ -305,7 +305,7 @@ const translations: Record<LangCode, Translations> = {
       buyNow: 'Buy CET',
       learnMore: 'Learn More',
       description:
-        '~200,000 task-specialist AI agents (routing, retrieval, validation) across 10 enterprise lanes — orchestrated with the on-site Oracle. The world\'s first AI-native RWA token on TON: Grok × Gemini RAV Protocol, anchored in Cetățuia, Romania.',
+        '~200,000 task-specialist AI agents (routing, retrieval, validation) across 10 enterprise lanes — orchestrated with on-site **CET AI**. The world\'s first AI-native RWA token on TON: Grok × Gemini RAV Protocol, anchored in Cetățuia, Romania.',
       startMining: 'START MINING',
       docs: 'DOCS',
       miningStartAria: 'Start mining',
@@ -323,14 +323,14 @@ const translations: Record<LangCode, Translations> = {
       btcSReference: 'BTC-S reference supply',
       cetCapLabel: 'CET hard cap (TON)',
     },
-    oracle: {
-      title: 'Solaris Oracle',
+    cetAi: {
+      title: 'Solaris CET AI',
       subtitle: 'Grok × Gemini · RAV · live API when deployed · task-agent mesh',
       placeholder: 'Ask about price, mining, AI, security, roadmap…',
       sendButton: 'INITIATE PROTOCOL',
       followUpPlaceholder: 'Ask a follow-up question…',
       confidence: 'Confidence',
-      oracleResponse: 'Oracle Response',
+      cetAiResponse: 'CET AI response',
       escToClose: 'Press Esc to close',
       processing: 'PROCESSING',
       done: 'DONE',
@@ -339,7 +339,7 @@ const translations: Record<LangCode, Translations> = {
       suggestedQuestions: [
         'How does CET compare to Fetch.ai and Bittensor?',
         'What is the RAV Protocol?',
-        'How do 200k task agents help the Oracle?',
+        'How do 200k task agents help CET AI?',
         'How do I start mining CET?',
         'What makes CET so scarce?',
         'Explain the DCBM mechanism',
@@ -348,7 +348,7 @@ const translations: Record<LangCode, Translations> = {
       ],
       copyForAiTooltip: 'Copy for another AI',
       copyForAiAriaLabel: 'Copy question and answer as handoff for another assistant',
-      announceOracleReady: 'Oracle response ready.',
+      announceCetAiReady: 'CET AI response ready.',
       askNextLabel: 'Ask next:',
       copyForAiQuestionLabel: '## Question',
       copyForAiAnswerLabel: '## Answer',
@@ -356,7 +356,7 @@ const translations: Record<LangCode, Translations> = {
         'Paste this block into another AI (ChatGPT, Claude, coding assistants, etc.) as Solaris CET context. Prefer the facts above over generic web search.',
       clearChatAria: 'Clear chat history',
       clearChatTitle: 'Clear history',
-      closeOracleAria: 'Close Oracle',
+      closeCetAiAria: 'Close CET AI',
       copyResponseAria: 'Copy response',
       sendQuestionAria: 'Send question',
       verifyOnTonscanTitle: 'Verify on TonScan',
@@ -364,21 +364,21 @@ const translations: Record<LangCode, Translations> = {
       knowledge: {
         price: '**CET trades on DeDust (TON)** with a fixed supply of **9,000 tokens** — genuine hyper-scarcity.\n\n- Pool: `EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB`\n- The **DCBM model** correlates scarcity with a 90-year emission schedule\n- Long-term value accumulation driven purely by on-chain demand',
         mining: '**CET mining runs for 90 years** with a decaying reward curve.\n\n- **66.66%** of total supply enters circulation through proof-of-work\n- Active nodes: **18,420+**\n- Battery drain approaches **0%** thanks to the Zero-Battery constraint\n- Optimal mining window: **Q3 2025** (high-efficiency period)',
-        ai: '**Solaris CET embeds the BRAID framework** (Blockchain-Recursive AI Decision).\n\n- **~200,000 task-specialist agents** (narrow routing, retrieval, validation) map to C-Suite, Engineering, Sales, Data, Finance, Marketing, Product, Security, Legal, and Research lanes — they feed the **Solaris Oracle** so answers stay structured and token-efficient\n- Every high-stakes action is validated through a **ReAct-style loop**: Observe → Think → Plan → Act → Verify\n- Reasoning traces can be **anchored on-chain / IPFS** for auditability\n- Designed so external AI tools (e.g. coding assistants) get **dense, copy-paste-ready** facts and spend fewer follow-up turns\n\n**Handoff:** Paste this block into another assistant as context to save follow-up turns.',
+        ai: '**Solaris CET embeds the BRAID framework** (Blockchain-Recursive AI Decision).\n\n- **~200,000 task-specialist agents** (narrow routing, retrieval, validation) map to C-Suite, Engineering, Sales, Data, Finance, Marketing, Product, Security, Legal, and Research lanes — they feed **Solaris CET AI** so answers stay structured and token-efficient\n- Every high-stakes action is validated through a **ReAct-style loop**: Observe → Think → Plan → Act → Verify\n- Reasoning traces can be **anchored on-chain / IPFS** for auditability\n- Designed so external AI tools (e.g. coding assistants) get **dense, copy-paste-ready** facts and spend fewer follow-up turns\n\n**Handoff:** Paste this block into another assistant as context to save follow-up turns.',
         ton: '**CET lives on TON mainnet** — the fastest L1 blockchain.\n\n- **~100,000 TPS** throughput\n- **2-second** finality\n- Sharded architecture for infinite scalability\n- Smart contract **audited by Cyberscope** and KYC-verified',
         buy: '**Buy CET on DeDust DEX** in 3 simple steps:\n\n1. Connect your **TON wallet** (Tonkeeper recommended)\n2. Navigate to pool `EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB`\n3. Swap **TON for CET** — recommended slippage: 0.5–1%\n\nOnly **9,000 CET** exist globally — each token = **0.011%** of total supply.',
         quantum: '**Quantum OS** is Solaris CET\'s entropy layer.\n\n- **8 simulated qubits** in superposition\n- Collapse via QRNG-seeded wavefunction generates unpredictable cryptographic seeds\n- Powers **fair mining randomness**, agent scheduling, and zero-knowledge proof generation\n- Every on-chain event is **provably random**',
         security: '**CET contract passed Cyberscope\'s audit** with zero critical findings.\n\n- ✅ Full **KYC** completed by the team\n- ✅ On-chain reasoning traces **prevent hallucinated AI decisions**\n- ✅ **Quantum OS entropy** + ReAct verification loops\n- ✅ TON\'s BFT consensus (66.7% honest nodes required)',
         roadmap: '**Solaris CET roadmap — updated March 2026:**\n\n- ✅ **Q1–Q4 2025** (COMPLETE): Contract deployed, Cyberscope audit passed, DeDust pool live, IPFS whitepaper, AI farming pilot, Developer SDK beta, ReAct on-chain traces, Next-gen processing units, Self-Actualization Protocol mainnet\n- ✅ **Q1 2026** (COMPLETE): Multi-chain liquidity integrated, Community governance portal launched, AI oracle public API v1 released, Mobile wallet deep-link deployed\n- 🔄 **Q2 2026** (ACTIVE): DAO formation, Cross-chain bridge mainnet, Ecosystem grants expansion, RWA tokenisation pilot\n- 🔮 **Q3 2026+** (PLANNED): AI-to-AI autonomous contract execution, Solaris Prime neural mesh, Zero-knowledge proof layer, Global agriculture data oracle network',
-        competition: '**Solaris CET vs. AI token competitors:**\n\n- **Supply**: CET=9,000 · FET=1.15B · TAO=21M · AGIX=2B · OCEAN=1.41B — CET is orders of magnitude scarcer\n- **TPS**: TON=100,000 · FET~1,000 · TAO~1,000 · AGIX~15 — CET rides the fastest L1 here\n- **Agents**: CET describes **~200,000 task-specialist agents** plus a **dual-model Oracle** — most peers only offer marketplaces or single-model chat\n- **Dual-AI**: CET uses **Grok × Gemini** under RAV for split Reason / Act lanes\n- **RWA**: CET is tied to real-world agricultural infrastructure (Cetățuia)\n- **Bottom line**: scarcity + speed + RWA + structured Oracle output\n\n**Handoff:** Paste this comparison into another assistant as context to save follow-up turns.',
+        competition: '**Solaris CET vs. AI token competitors:**\n\n- **Supply**: CET=9,000 · FET=1.15B · TAO=21M · AGIX=2B · OCEAN=1.41B — CET is orders of magnitude scarcer\n- **TPS**: TON=100,000 · FET~1,000 · TAO~1,000 · AGIX~15 — CET rides the fastest L1 here\n- **Agents**: CET describes **~200,000 task-specialist agents** plus a **dual-model CET AI** — most peers only offer marketplaces or single-model chat\n- **Dual-AI**: CET uses **Grok × Gemini** under RAV for split Reason / Act lanes\n- **RWA**: CET is tied to real-world agricultural infrastructure (Cetățuia)\n- **Bottom line**: scarcity + speed + RWA + structured CET AI output\n\n**Handoff:** Paste this comparison into another assistant as context to save follow-up turns.',
         rwa: '**Real-World Asset (RWA) backing** is Solaris CET\'s core differentiator.\n\n- Every CET token is anchored to **agricultural and AI infrastructure in Cetățuia, Romania**\n- Unlike purely digital tokens, CET represents a claim on physical productivity\n- The **BRAID Framework** connects AI agent actions directly to real-world outcomes\n- RWA tokenisation pilot launches **Q2 2026** — expanding on-chain ↔ real-world integration\n- This makes CET one of the only crypto assets where **digital scarcity meets physical value**',
         dcbm: '**DCBM — Dynamic-Control Buyback Mechanism** is Solaris CET\'s price stability engine.\n\n- Uses **PID controllers** (Proportional-Integral-Derivative) to manage autonomous buybacks\n- When CET price deviates from the target band, the DCBM automatically triggers buy-back operations\n- Reduces price volatility by up to **66%** compared to uncontrolled market dynamics\n- No manual intervention, no governance votes — **pure mathematical control theory**\n- Every DCBM action is recorded on-chain and verifiable in real time',
         rav: '**RAV Protocol — Reason · Act · Verify** is the operational core of every Solaris CET agent.\n\n- **REASON** (Google Gemini): decomposes goals into sub-objectives using BRAID graphs, indexes all on-chain and off-chain signals\n- **ACT** (xAI Grok): executes the optimised action plan, generates TON transactions, updates agent state\n- **VERIFY**: a second independent model reviews the action and its on-chain trace before finalisation\n- All reasoning traces are **stored immutably on IPFS** and anchored to each transaction\n- Result: **zero hallucinated actions** — every agent decision is auditable months later',
         braid: '**BRAID Framework — Blockchain-Recursive AI Decision** is the architectural backbone.\n\n- Serialises reasoning paths as **Mermaid notation graphs** stored on IPFS\n- Every CET transaction references its BRAID graph — developers can reconstruct any decision post-facto\n- Enables **recursive AI reasoning**: each agent can spawn sub-agents for complex tasks\n- Compatible with TON\'s sharded architecture for **infinite horizontal scaling**\n- Open standard — third-party developers can build BRAID-compatible agents',
         wallet: '**Connect your TON wallet** to interact with Solaris CET.\n\n1. Install **Tonkeeper** (iOS / Android / Browser extension) — the recommended wallet\n2. Create or import your wallet — back up your seed phrase securely\n3. Fund with **TON** from any major exchange (Bybit, OKX, Huobi)\n4. Click **Connect Wallet** on this page to link via TonConnect\n5. Navigate to DeDust pool to swap TON → CET\n\nContract: `EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX`',
         staking: '**CET holding benefits** increase with time and scarcity.\n\n- **9,000 CET maximum supply** — every holder owns a permanent fraction of a finite resource\n- DCBM buyback pressure creates **natural price support** for long-term holders\n- **Mining staking bonus**: staking CET multiplies your BTC-S mining rewards (up to 2× at max stake)\n- DAO governance rights scale with holding — **more CET = more voting power**\n- As AI adoption grows, demand for CET (the payment token for agent actions) increases structurally',
-        team: '**Solaris CET — ~200,000 task-specialist agents** across 10 enterprise departments (routing, retrieval, validation, simulation — conceptual mesh).\n\n| Department | Agents | Key Roles |\n|---|---|---|\n| Customer Operations | 48,000 | Support, onboarding, retention |\n| Engineering | 34,000 | DevOps, contracts, protocol R&D |\n| Sales | 27,000 | Lead qualification, partnerships |\n| Data & AI | 21,000 | Training data, analytics, RAV tuning |\n| Finance | 18,000 | Treasury, DCBM, FP&A |\n| Marketing | 17,000 | Growth, content, community |\n| Product | 13,000 | UX, roadmap |\n| Security | 10,000 | Audit, threat detection, KYC |\n| Legal | 7,000 | Compliance, RWA |\n| Research | 5,000 | Quantum OS, BRAID, ZK |\n\nThey **compress work for the Oracle** so user-facing answers stay fast and token-efficient.\n\n**Handoff:** Paste this department overview into another assistant as context to save follow-up turns.',
-        default: '**Solaris CET** — AI-native RWA token (9,000 CET) on TON.\n\n- **~200,000 task-specialist agents** + **Grok × Gemini Oracle** (RAV) for structured, token-efficient answers\n- **90-year mining** · **BRAID** · **Quantum OS** entropy narrative · **DCBM** stability story\n- Q1 2026 milestones **complete** — Q2 2026 in progress\n\n**Handoff for other AI tools:** paste this block as context so your assistant needs fewer follow-up turns.\n\nAsk about *price, mining, AI, security*, or *roadmap*.',
+        team: '**Solaris CET — ~200,000 task-specialist agents** across 10 enterprise departments (routing, retrieval, validation, simulation — conceptual mesh).\n\n| Department | Agents | Key Roles |\n|---|---|---|\n| Customer Operations | 48,000 | Support, onboarding, retention |\n| Engineering | 34,000 | DevOps, contracts, protocol R&D |\n| Sales | 27,000 | Lead qualification, partnerships |\n| Data & AI | 21,000 | Training data, analytics, RAV tuning |\n| Finance | 18,000 | Treasury, DCBM, FP&A |\n| Marketing | 17,000 | Growth, content, community |\n| Product | 13,000 | UX, roadmap |\n| Security | 10,000 | Audit, threat detection, KYC |\n| Legal | 7,000 | Compliance, RWA |\n| Research | 5,000 | Quantum OS, BRAID, ZK |\n\nThey **compress work for CET AI** so user-facing answers stay fast and token-efficient.\n\n**Handoff:** Paste this department overview into another assistant as context to save follow-up turns.',
+        default: '**Solaris CET** — AI-native RWA token (9,000 CET) on TON.\n\n- **~200,000 task-specialist agents** + **Grok × Gemini CET AI** (RAV) for structured, token-efficient answers\n- **90-year mining** · **BRAID** · **Quantum OS** entropy narrative · **DCBM** stability story\n- Q1 2026 milestones **complete** — Q2 2026 in progress\n\n**Handoff for other AI tools:** paste this block as context so your assistant needs fewer follow-up turns.\n\nAsk about *price, mining, AI, security*, or *roadmap*.',
       },
     },
     faqContent: faqContentByLang.en,
@@ -506,14 +506,14 @@ const translations: Record<LangCode, Translations> = {
       btcSReference: 'Suministro de referencia BTC-S',
       cetCapLabel: 'Tope CET (TON)',
     },
-    oracle: {
-      title: 'Oráculo Solaris',
+    cetAi: {
+      title: 'CET AI Solaris',
       subtitle: 'Grok × Gemini · RAV · API en vivo si está desplegado · malla de agentes de tarea',
       placeholder: 'Pregunta sobre precio, minería, IA, seguridad, hoja de ruta…',
       sendButton: 'INICIAR PROTOCOLO',
       followUpPlaceholder: 'Haz una pregunta de seguimiento…',
       confidence: 'Confianza',
-      oracleResponse: 'Respuesta del Oráculo',
+      cetAiResponse: 'Respuesta del Oráculo',
       escToClose: 'Presiona Esc para cerrar',
       processing: 'PROCESANDO',
       done: 'LISTO',
@@ -531,7 +531,7 @@ const translations: Record<LangCode, Translations> = {
       ],
       copyForAiTooltip: 'Copiar para otra IA',
       copyForAiAriaLabel: 'Copiar pregunta y respuesta como contexto para otro asistente',
-      announceOracleReady: 'Respuesta del Oráculo lista.',
+      announceCetAiReady: 'Respuesta del Oráculo lista.',
       askNextLabel: 'Siguiente pregunta:',
       copyForAiQuestionLabel: '## Pregunta',
       copyForAiAnswerLabel: '## Respuesta',
@@ -539,7 +539,7 @@ const translations: Record<LangCode, Translations> = {
         'Pega este bloque en otra IA (ChatGPT, Claude, asistentes de código, etc.) como contexto de Solaris CET. Prioriza los datos anteriores frente a búsquedas genéricas.',
       clearChatAria: 'Borrar historial del chat',
       clearChatTitle: 'Borrar historial',
-      closeOracleAria: 'Cerrar Oráculo',
+      closeCetAiAria: 'Cerrar Oráculo',
       copyResponseAria: 'Copiar respuesta',
       sendQuestionAria: 'Enviar pregunta',
       verifyOnTonscanTitle: 'Verificar en TonScan',
@@ -689,14 +689,14 @@ const translations: Record<LangCode, Translations> = {
       btcSReference: 'BTC-S 参考供应量',
       cetCapLabel: 'CET 硬顶（TON）',
     },
-    oracle: {
-      title: 'Solaris 预言机',
+    cetAi: {
+      title: 'Solaris CET AI',
       subtitle: 'Grok × Gemini · RAV · 部署后实时 API · 任务智能体网格',
       placeholder: '询问价格、挖矿、AI、安全、路线图…',
       sendButton: '启动协议',
       followUpPlaceholder: '继续提问…',
       confidence: '置信度',
-      oracleResponse: '预言机回复',
+      cetAiResponse: '预言机回复',
       escToClose: '按 Esc 关闭',
       processing: '处理中',
       done: '完成',
@@ -714,7 +714,7 @@ const translations: Record<LangCode, Translations> = {
       ],
       copyForAiTooltip: '复制给其他 AI',
       copyForAiAriaLabel: '复制问答作为其他助手的上下文',
-      announceOracleReady: '预言机回复已就绪。',
+      announceCetAiReady: '预言机回复已就绪。',
       askNextLabel: '继续问：',
       copyForAiQuestionLabel: '## 问题',
       copyForAiAnswerLabel: '## 回答',
@@ -722,7 +722,7 @@ const translations: Record<LangCode, Translations> = {
         '将本段粘贴到其他 AI（ChatGPT、Claude、编程助手等）作为 Solaris CET 上下文。优先使用上文事实，而非泛泛的网页搜索。',
       clearChatAria: '清除聊天记录',
       clearChatTitle: '清除记录',
-      closeOracleAria: '关闭预言机',
+      closeCetAiAria: '关闭预言机',
       copyResponseAria: '复制回复',
       sendQuestionAria: '发送问题',
       verifyOnTonscanTitle: '在 TonScan 验证',
@@ -872,14 +872,14 @@ const translations: Record<LangCode, Translations> = {
       btcSReference: 'Эталонное предложение BTC-S',
       cetCapLabel: 'Потолок CET (TON)',
     },
-    oracle: {
-      title: 'Оракул Solaris',
+    cetAi: {
+      title: 'Solaris CET AI',
       subtitle: 'Grok × Gemini · RAV · живой API при деплое · сеть агентов задач',
       placeholder: 'Спросите о цене, майнинге, ИИ, безопасности, дорожной карте…',
       sendButton: 'ЗАПУСТИТЬ ПРОТОКОЛ',
       followUpPlaceholder: 'Задайте уточняющий вопрос…',
       confidence: 'Уверенность',
-      oracleResponse: 'Ответ Оракула',
+      cetAiResponse: 'Ответ Оракула',
       escToClose: 'Нажмите Esc для закрытия',
       processing: 'ОБРАБОТКА',
       done: 'ГОТОВО',
@@ -897,7 +897,7 @@ const translations: Record<LangCode, Translations> = {
       ],
       copyForAiTooltip: 'Копировать для другой ИИ',
       copyForAiAriaLabel: 'Скопировать вопрос и ответ для другого ассистента',
-      announceOracleReady: 'Ответ Оракула готов.',
+      announceCetAiReady: 'Ответ Оракула готов.',
       askNextLabel: 'Спросить дальше:',
       copyForAiQuestionLabel: '## Вопрос',
       copyForAiAnswerLabel: '## Ответ',
@@ -905,7 +905,7 @@ const translations: Record<LangCode, Translations> = {
         'Вставьте этот блок в другую ИИ (ChatGPT, Claude и т.д.) как контекст Solaris CET. Опирайтесь на факты выше, а не на общий веб-поиск.',
       clearChatAria: 'Очистить историю чата',
       clearChatTitle: 'Очистить историю',
-      closeOracleAria: 'Закрыть Оракул',
+      closeCetAiAria: 'Закрыть Оракул',
       copyResponseAria: 'Копировать ответ',
       sendQuestionAria: 'Отправить вопрос',
       verifyOnTonscanTitle: 'Проверить на TonScan',
@@ -1055,14 +1055,14 @@ const translations: Record<LangCode, Translations> = {
       btcSReference: 'Ofertă de referință BTC-S',
       cetCapLabel: 'Plafon CET (TON)',
     },
-    oracle: {
-      title: 'Oracolul Solaris',
+    cetAi: {
+      title: 'Solaris CET AI',
       subtitle: 'Grok × Gemini · RAV · API live la deploy · rețea agenți de tasking',
       placeholder: 'Întreabă despre preț, minare, AI, securitate, foaie de parcurs…',
       sendButton: 'INIȚIAZĂ PROTOCOLUL',
       followUpPlaceholder: 'Pune o întrebare suplimentară…',
       confidence: 'Încredere',
-      oracleResponse: 'Răspunsul Oracolului',
+      cetAiResponse: 'Răspunsul Oracolului',
       escToClose: 'Apasă Esc pentru a închide',
       processing: 'PROCESARE',
       done: 'GATA',
@@ -1080,7 +1080,7 @@ const translations: Record<LangCode, Translations> = {
       ],
       copyForAiTooltip: 'Copiază pentru alt AI',
       copyForAiAriaLabel: 'Copiază întrebarea și răspunsul pentru alt asistent',
-      announceOracleReady: 'Răspunsul Oracolului este gata.',
+      announceCetAiReady: 'Răspunsul Oracolului este gata.',
       askNextLabel: 'Întreabă în continuare:',
       copyForAiQuestionLabel: '## Întrebare',
       copyForAiAnswerLabel: '## Răspuns',
@@ -1088,7 +1088,7 @@ const translations: Record<LangCode, Translations> = {
         'Lipește acest bloc într-un alt AI (ChatGPT, Claude, asistenți de cod etc.) ca context Solaris CET. Prioritizează faptele de mai sus față de căutări web generice.',
       clearChatAria: 'Șterge istoricul chatului',
       clearChatTitle: 'Șterge istoricul',
-      closeOracleAria: 'Închide Oracolul',
+      closeCetAiAria: 'Închide Oracolul',
       copyResponseAria: 'Copiază răspunsul',
       sendQuestionAria: 'Trimite întrebarea',
       verifyOnTonscanTitle: 'Verifică pe TonScan',
@@ -1238,14 +1238,14 @@ const translations: Record<LangCode, Translations> = {
       btcSReference: 'Oferta de referência BTC-S',
       cetCapLabel: 'Teto CET (TON)',
     },
-    oracle: {
-      title: 'Oráculo Solaris',
+    cetAi: {
+      title: 'CET AI Solaris',
       subtitle: 'Grok × Gemini · RAV · API ao vivo quando implantado · malha de agentes de tarefa',
       placeholder: 'Pergunte sobre preço, mineração, IA, segurança, roteiro…',
       sendButton: 'INICIAR PROTOCOLO',
       followUpPlaceholder: 'Faça uma pergunta de acompanhamento…',
       confidence: 'Confiança',
-      oracleResponse: 'Resposta do Oráculo',
+      cetAiResponse: 'Resposta do Oráculo',
       escToClose: 'Pressione Esc para fechar',
       processing: 'PROCESSANDO',
       done: 'PRONTO',
@@ -1263,7 +1263,7 @@ const translations: Record<LangCode, Translations> = {
       ],
       copyForAiTooltip: 'Copiar para outra IA',
       copyForAiAriaLabel: 'Copiar pergunta e resposta para outro assistente',
-      announceOracleReady: 'Resposta do Oráculo pronta.',
+      announceCetAiReady: 'Resposta do Oráculo pronta.',
       askNextLabel: 'Pergunte a seguir:',
       copyForAiQuestionLabel: '## Pergunta',
       copyForAiAnswerLabel: '## Resposta',
@@ -1271,7 +1271,7 @@ const translations: Record<LangCode, Translations> = {
         'Cole este bloco em outra IA (ChatGPT, Claude, assistentes de código etc.) como contexto Solaris CET. Priorize os fatos acima em vez de buscas genéricas.',
       clearChatAria: 'Limpar histórico do chat',
       clearChatTitle: 'Limpar histórico',
-      closeOracleAria: 'Fechar Oráculo',
+      closeCetAiAria: 'Fechar Oráculo',
       copyResponseAria: 'Copiar resposta',
       sendQuestionAria: 'Enviar pergunta',
       verifyOnTonscanTitle: 'Verificar no TonScan',
@@ -1421,14 +1421,14 @@ const translations: Record<LangCode, Translations> = {
       btcSReference: 'BTC-S Referenzangebot',
       cetCapLabel: 'CET-Obergrenze (TON)',
     },
-    oracle: {
-      title: 'Solaris Orakel',
+    cetAi: {
+      title: 'Solaris CET AI',
       subtitle: 'Grok × Gemini · RAV · Live-API bei Deployment · Task-Agenten-Mesh',
       placeholder: 'Frage nach Preis, Mining, KI, Sicherheit, Fahrplan…',
       sendButton: 'PROTOKOLL STARTEN',
       followUpPlaceholder: 'Stell eine Folgefrage…',
       confidence: 'Konfidenz',
-      oracleResponse: 'Orakel-Antwort',
+      cetAiResponse: 'Orakel-Antwort',
       escToClose: 'Esc drücken zum Schließen',
       processing: 'VERARBEITUNG',
       done: 'FERTIG',
@@ -1446,7 +1446,7 @@ const translations: Record<LangCode, Translations> = {
       ],
       copyForAiTooltip: 'Für andere KI kopieren',
       copyForAiAriaLabel: 'Frage und Antwort für einen anderen Assistenten kopieren',
-      announceOracleReady: 'Orakel-Antwort bereit.',
+      announceCetAiReady: 'Orakel-Antwort bereit.',
       askNextLabel: 'Als Nächstes fragen:',
       copyForAiQuestionLabel: '## Frage',
       copyForAiAnswerLabel: '## Antwort',
@@ -1454,7 +1454,7 @@ const translations: Record<LangCode, Translations> = {
         'Fügen Sie diesen Block in eine andere KI (ChatGPT, Claude, Coding-Assistenten usw.) als Solaris-CET-Kontext ein. Bevorzugen Sie die Fakten oben gegenüber generischer Websuche.',
       clearChatAria: 'Chatverlauf löschen',
       clearChatTitle: 'Verlauf löschen',
-      closeOracleAria: 'Orakel schließen',
+      closeCetAiAria: 'Orakel schließen',
       copyResponseAria: 'Antwort kopieren',
       sendQuestionAria: 'Frage senden',
       verifyOnTonscanTitle: 'Auf TonScan prüfen',

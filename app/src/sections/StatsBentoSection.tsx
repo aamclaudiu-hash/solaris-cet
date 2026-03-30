@@ -18,7 +18,7 @@ const STATS = [
     id: 'agents',
     value: 200_000,
     label: 'Task-specialist AI agents',
-    sublabel: '~200k narrow agents for routing, retrieval & validation · 10 departments · orchestrated for the Oracle',
+    sublabel: '~200k narrow agents for routing, retrieval & validation · 10 departments · orchestrated for CET AI',
     suffix: '',
     icon: Users,
     color: 'text-solaris-gold',

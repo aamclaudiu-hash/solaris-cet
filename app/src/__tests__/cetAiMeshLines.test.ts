@@ -5,10 +5,10 @@ import {
   buildDeepLatticeMeshLogMessage,
   buildDeepLatticeMeshLogMessageRawQuery,
   buildSkillLocusLogMessage,
-  ORACLE_LATTICE_PHASE,
-} from '@/lib/oracleMeshLines';
+  CET_AI_LATTICE_PHASE,
+} from '@/lib/cetAiMeshLines';
 
-describe('oracleMeshLines', () => {
+describe('cetAiMeshLines', () => {
   it('buildAgentPoolMeshLogMessage has fixed prefix and stable burst', () => {
     const a = buildAgentPoolMeshLogMessage('team', 'How do agents collaborate?');
     const b = buildAgentPoolMeshLogMessage('team', 'How do agents collaborate?');
@@ -32,11 +32,11 @@ describe('oracleMeshLines', () => {
   });
 
   it('buildDeepLatticeMeshLogMessage matches prior INPUT_MESH / PARSE shape', () => {
-    const q = 'test oracle lattice';
-    const input = buildDeepLatticeMeshLogMessage('INPUT_MESH', q, ORACLE_LATTICE_PHASE.inputStream);
+    const q = 'test cet ai lattice';
+    const input = buildDeepLatticeMeshLogMessage('INPUT_MESH', q, CET_AI_LATTICE_PHASE.inputStream);
     expect(input.startsWith('INPUT_MESH: ')).toBe(true);
     expect(input).toContain(' · ');
-    const parse = buildDeepLatticeMeshLogMessage('PARSE_MESH', q, ORACLE_LATTICE_PHASE.observeParse);
+    const parse = buildDeepLatticeMeshLogMessage('PARSE_MESH', q, CET_AI_LATTICE_PHASE.observeParse);
     expect(parse.startsWith('PARSE_MESH: ')).toBe(true);
     expect(input).toBe(buildDeepLatticeMeshLogMessage('INPUT_MESH', q, 'inputStream'));
   });
@@ -55,8 +55,8 @@ describe('oracleMeshLines', () => {
     expect(line).toContain('topic=mining');
   });
 
-  it('ORACLE_LATTICE_PHASE keys cover all deep-lattice telemetry phases', () => {
-    expect(Object.keys(ORACLE_LATTICE_PHASE).sort()).toEqual(
+  it('CET_AI_LATTICE_PHASE keys cover all deep-lattice telemetry phases', () => {
+    expect(Object.keys(CET_AI_LATTICE_PHASE).sort()).toEqual(
       [
         'actExecute',
         'inputStream',

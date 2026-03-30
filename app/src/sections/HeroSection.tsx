@@ -5,7 +5,7 @@ import { Zap, Activity, Loader2 } from 'lucide-react';
 
 const ParticleCanvas = lazy(() => import('../components/ParticleCanvas'));
 import GlowOrbs from '../components/GlowOrbs';
-import AiOracleSearch from '../components/AiOracleSearch';
+import CetAiSearch from '../components/CetAiSearch';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { TooltipProvider } from '../components/ui/tooltip';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -63,7 +63,7 @@ const HeroSection: React.FC = () => {
   const titleContainerRef = useRef<HTMLDivElement>(null);
   const hudWrapperRef = useRef<HTMLDivElement>(null);
   const ctaGroupRef = useRef<HTMLDivElement>(null);
-  const oracleWrapperRef = useRef<HTMLDivElement>(null);
+  const cetAiWrapperRef = useRef<HTMLDivElement>(null);
   const tickerContainerRef = useRef<HTMLDivElement>(null);
 
   const [miningState, setMiningState] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
@@ -103,9 +103,9 @@ const HeroSection: React.FC = () => {
           el.style.transform = 'none';
         }
       });
-      if (oracleWrapperRef.current) {
-        oracleWrapperRef.current.style.opacity = '1';
-        oracleWrapperRef.current.style.width = '100%';
+      if (cetAiWrapperRef.current) {
+        cetAiWrapperRef.current.style.opacity = '1';
+        cetAiWrapperRef.current.style.width = '100%';
       }
       return;
     }
@@ -116,7 +116,7 @@ const HeroSection: React.FC = () => {
       mainTl
         .fromTo(coinWrapperRef.current, { scale: 0.5, rotateY: -45 }, { scale: 1, rotateY: 0, duration: 1.5 })
         .fromTo([titleContainerRef.current, hudWrapperRef.current], { y: 50 }, { y: 0, stagger: 0.2 }, '-=1')
-        .fromTo(oracleWrapperRef.current, { width: '0%' }, { width: '100%', duration: 0.8 }, '-=0.5')
+        .fromTo(cetAiWrapperRef.current, { width: '0%' }, { width: '100%', duration: 0.8 }, '-=0.5')
         .fromTo(tickerContainerRef.current, { y: 100 }, { y: 0 }, '-=0.5');
 
       ScrollTrigger.create({
@@ -130,7 +130,7 @@ const HeroSection: React.FC = () => {
           .fromTo(coinWrapperRef.current, { opacity: 1 }, { x: '-25vw', rotateY: 90, opacity: 0 })
           .fromTo(titleContainerRef.current, { opacity: 1 }, { x: '-100%', opacity: 0 }, 0)
           .fromTo(hudWrapperRef.current, { opacity: 1 }, { x: '100%', opacity: 0 }, 0)
-          .fromTo(oracleWrapperRef.current, { opacity: 1 }, { y: 40, opacity: 0 }, 0),
+          .fromTo(cetAiWrapperRef.current, { opacity: 1 }, { y: 40, opacity: 0 }, 0),
       });
     }, containerRef);
 
@@ -322,8 +322,8 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          <div ref={oracleWrapperRef} className="w-full transform-gpu overflow-hidden">
-            <AiOracleSearch />
+          <div id="cet-ai" ref={cetAiWrapperRef} className="w-full transform-gpu overflow-hidden scroll-mt-24">
+            <CetAiSearch />
           </div>
         </div>
 

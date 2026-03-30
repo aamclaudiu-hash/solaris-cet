@@ -60,6 +60,7 @@ Use this token set unless an existing file already defines tokens—then **exten
 ## Repository reality (fusion with current tree)
 
 - **Reference zero-JS surface:** `static/sovereign/index.html` — semantic HTML, embedded CSS (no CDN), CSP meta, glass tokens aligned with OMEGA; extend with local fonts + built Tailwind when ready.
+- **Branded AI surface:** use **`cetAi` / `CET_AI_*` / `X-Cet-Ai-Source`** in code (not generic “oracle”) — see `app/src/lib/cetAi*.ts`, `CetAiSearch.tsx`, `docs/PRODUCTION_LAYOUT.md`.
 - Today, **`app/`** is **Vite + React + TypeScript** (see root `README.md`) and is what Coolify typically builds. Treat edits there as **high blast radius** for production.
 - **Directive alignment strategy:**
   - For **new** OMEGA-compliant public pages, prefer **static HTML + CSS** (e.g. dedicated `*.html` + built CSS) as the **source of truth** for no-JS requirements; do not add frameworks to those files.

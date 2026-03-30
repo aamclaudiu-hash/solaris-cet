@@ -11,7 +11,7 @@ const LOCUS_A = [
   'Cetățuia-grounded', 'Dual-AI entangled', 'Merkle-sealed', 'Gradient-stabilised',
   'Topology-aware', 'Quorum-weighted', 'Eigenspace-smoothed', 'Policy-saturated',
   'Context-compacted', 'Token-budgeted', 'Graph-diffused', 'Bayesianly tempered',
-  'Causal-masked', 'Invariant-locked', 'Shard-homomorphic', 'Oracle-synchronised',
+  'Causal-masked', 'Invariant-locked', 'Shard-homomorphic', 'CetAi-synchronised',
   'Nash-stable', 'Pareto-sliced', 'Kolmogorov-compressed', 'Lyapunov-bounded',
   'Differentially private', 'Homotopy-continuous', 'Manifold-projected', 'Symplectic-respecting',
   'Meta-learned', 'Self-play forged', 'Contrastive-aligned', 'Sparse-activated',
@@ -63,7 +63,7 @@ const LOCUS_D = [
   'for contract ambiguity collapse', 'for IP contamination avoidance', 'for quantum-readiness hedging',
   'for carbon-intensity trade-offs', 'for sovereign-cloud portability', 'for edge-case fertility',
   'for narrative coherence at scale', 'for synthetic-data fidelity', 'for human dignity defaults',
-  'for mesh-wide kill switches', 'for cross-chain message hygiene', 'for oracle manipulation immunity',
+  'for mesh-wide kill switches', 'for cross-chain message hygiene', 'for CET AI manipulation immunity',
   'for payroll edge-case justice', 'for brand-trust velocity', 'for scientific reproducibility',
 ] as const;
 
@@ -91,7 +91,7 @@ const LOCUS_G = [
   'no singleton-LLM twin', 'non-exportable outside mesh', 'requires dual-model witness',
   'TON-settlement aware', 'Cetățuia-telemetry optional', 'RAV-enforced reasoning trace',
   'IPFS-anchor capable', 'agent-count scaled', 'department-island specific', 'epoch-rotating nonce',
-  'cross-shard coherent', 'oracle-staked metaphorically', 'ZK-ready narrative', 'MEV-immune intent',
+  'cross-shard coherent', 'cet-ai-staked metaphorically', 'ZK-ready narrative', 'MEV-immune intent',
   'SOC2-flavoured control', 'GDPR-flavoured minimisation', 'MiCA-flavoured disclosure', 'HIPAA-flavoured caution',
 ] as const;
 

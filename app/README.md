@@ -1,6 +1,6 @@
 # Solaris CET — frontend (`app/`)
 
-Vite + React 19 + TypeScript landing for Solaris CET on TON (RAV Oracle UI, TON Connect, PWA). **Production URL:** [https://solaris-cet.com](https://solaris-cet.com) (VPS + Coolify auto-deploy from `main`). Parent repo docs: [../README.md](../README.md), [../CONTRIBUTING.md](../CONTRIBUTING.md).
+Vite + React 19 + TypeScript landing for Solaris CET on TON (RAV CET AI UI, TON Connect, PWA). **Production URL:** [https://solaris-cet.com](https://solaris-cet.com) (VPS + Coolify auto-deploy from `main`). Parent repo docs: [../README.md](../README.md), [../CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Commands
 
@@ -20,14 +20,14 @@ E2E (Chromium): from `app/`, `npx playwright test` (install browsers once: `npx 
 | Path | Purpose |
 |------|---------|
 | `src/` | UI, hooks, workers, i18n |
-| `api/` | Oracle `chat` (Edge) + `auth` (Node + Postgres) — run beside the static build on Coolify/VPS or any Node host |
+| `api/` | CET AI `chat` (Edge) + `auth` (Node + Postgres) — run beside the static build on Coolify/VPS or any Node host |
 | `db/` | Drizzle schema / client (used by `api/auth`) |
 | `public/` | Static assets; `public/api/state.json` for client state |
 | `tests/` | Playwright specs |
 
 ## Env (Coolify / production / local)
 
-- **Oracle:** `GROK_API_KEY` / `GEMINI_API_KEY` (or `*_ENC` + `ENCRYPTION_SECRET`) — see `api/lib/crypto.ts` and `scripts/encrypt-key.mjs` in the repo root.
+- **CET AI:** `GROK_API_KEY` / `GEMINI_API_KEY` (or `*_ENC` + `ENCRYPTION_SECRET`) — see `api/lib/crypto.ts` and `scripts/encrypt-key.mjs` in the repo root.
 - **Auth API:** database URL expected by `db/client` (see Drizzle config).
 
 ## Deploy notes

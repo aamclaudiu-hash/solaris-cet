@@ -6,7 +6,7 @@ The app’s API lives under **`app/api/`**:
 
 | Route | Runtime | Role |
 |-------|---------|------|
-| `app/api/chat/route.ts` | Edge | Oracle (Grok × Gemini, RAV, DeDust context) |
+| `app/api/chat/route.ts` | Edge | CET AI (Grok × Gemini, RAV, DeDust context) |
 | `app/api/auth/route.ts` | Node | TON wallet → Postgres |
 | `app/api/lib/crypto.ts` | — | AES-GCM key resolution for Edge |
 
