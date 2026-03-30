@@ -3,6 +3,7 @@
  * Mirrors the allowlist in `app/api/chat/route.ts` and `app/api/auth/route.ts`.
  */
 
+/** Canonical production: solaris-cet.com. Extra origins = legacy previews / mirrors. */
 const ALLOWED_ORIGINS = new Set([
   'https://solaris-cet.com',
   'https://www.solaris-cet.com',

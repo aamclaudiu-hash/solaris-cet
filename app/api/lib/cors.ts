@@ -3,6 +3,7 @@
  * Keep in sync with deployment origins (solaris-cet.com, previews, local dev).
  */
 
+/** Canonical production: solaris-cet.com. Extra origins = legacy previews / mirrors. */
 const ALLOWED_ORIGINS = new Set([
   'https://solaris-cet.com',
   'https://www.solaris-cet.com',

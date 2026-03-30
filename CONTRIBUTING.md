@@ -50,7 +50,7 @@ Contribuțiile sunt binevenite în mai multe forme:
 
 ```bash
 # 1. Clonează repository-ul
-git clone https://github.com/aamclaudiu-hash/solaris-cet.git
+git clone https://github.com/Solaris-CET/solaris-cet.git
 cd solaris-cet/app
 
 # 2. Instalează dependențele

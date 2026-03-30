@@ -94,20 +94,20 @@ describe('HowToBuySection — contract addresses', () => {
 // ─── Sitemap integrity ────────────────────────────────────────────────────
 
 const SITEMAP_URLS = [
-  'https://solaris-cet.vercel.app/',
-  'https://solaris-cet.vercel.app/#nova-app',
-  'https://solaris-cet.vercel.app/#staking',
-  'https://solaris-cet.vercel.app/#roadmap',
-  'https://solaris-cet.vercel.app/#team',
-  'https://solaris-cet.vercel.app/#competition',
-  'https://solaris-cet.vercel.app/#network-pulse',
-  'https://solaris-cet.vercel.app/#how-to-buy',
-  'https://solaris-cet.vercel.app/#stats',
-  'https://solaris-cet.vercel.app/#ecosystem-index',
-  'https://solaris-cet.vercel.app/#security',
-  'https://solaris-cet.vercel.app/#whitepaper',
-  'https://solaris-cet.vercel.app/#resources',
-  'https://solaris-cet.vercel.app/#faq',
+  'https://solaris-cet.com/',
+  'https://solaris-cet.com/#nova-app',
+  'https://solaris-cet.com/#staking',
+  'https://solaris-cet.com/#roadmap',
+  'https://solaris-cet.com/#team',
+  'https://solaris-cet.com/#competition',
+  'https://solaris-cet.com/#network-pulse',
+  'https://solaris-cet.com/#how-to-buy',
+  'https://solaris-cet.com/#stats',
+  'https://solaris-cet.com/#ecosystem-index',
+  'https://solaris-cet.com/#security',
+  'https://solaris-cet.com/#whitepaper',
+  'https://solaris-cet.com/#resources',
+  'https://solaris-cet.com/#faq',
 ];
 
 describe('Sitemap — URL integrity', () => {
@@ -124,15 +124,15 @@ describe('Sitemap — URL integrity', () => {
   });
 
   it('competition section is in sitemap', () => {
-    expect(SITEMAP_URLS).toContain('https://solaris-cet.vercel.app/#competition');
+    expect(SITEMAP_URLS).toContain('https://solaris-cet.com/#competition');
   });
 
   it('network-pulse section is in sitemap', () => {
-    expect(SITEMAP_URLS).toContain('https://solaris-cet.vercel.app/#network-pulse');
+    expect(SITEMAP_URLS).toContain('https://solaris-cet.com/#network-pulse');
   });
 
   it('root URL has no hash', () => {
-    expect(SITEMAP_URLS[0]).toBe('https://solaris-cet.vercel.app/');
+    expect(SITEMAP_URLS[0]).toBe('https://solaris-cet.com/');
     expect(SITEMAP_URLS[0]).not.toContain('#');
   });
 });

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://solaris-cet.vercel.app/sitemap.xml
+Sitemap: https://solaris-cet.com/sitemap.xml

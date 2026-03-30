@@ -10,7 +10,7 @@
 
 If you discover a security vulnerability in this project, please **do not** open a public GitHub issue. Instead:
 
-1. Open a [GitHub Security Advisory](https://github.com/aamclaudiu-hash/solaris-cet/security/advisories/new) directly in this repository.
+1. Open a [GitHub Security Advisory](https://github.com/Solaris-CET/solaris-cet/security/advisories/new) directly in this repository.
 2. Provide a clear description of the vulnerability, including steps to reproduce, potential impact, and any suggested fixes.
 
 We will acknowledge your report within **72 hours** and aim to release a fix within **7 days** for critical issues.

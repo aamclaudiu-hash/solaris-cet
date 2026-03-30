@@ -1,18 +1,22 @@
 # Solaris CET
 
-[![CI](https://github.com/aamclaudiu-hash/solaris-cet/actions/workflows/ci.yml/badge.svg)](https://github.com/aamclaudiu-hash/solaris-cet/actions/workflows/ci.yml)
-[![Deploy to GitHub Pages](https://github.com/aamclaudiu-hash/solaris-cet/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/aamclaudiu-hash/solaris-cet/actions/workflows/deploy-pages.yml)
+[![CI](https://github.com/Solaris-CET/solaris-cet/actions/workflows/ci.yml/badge.svg)](https://github.com/Solaris-CET/solaris-cet/actions/workflows/ci.yml)
+[![Deploy to GitHub Pages](https://github.com/Solaris-CET/solaris-cet/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Solaris-CET/solaris-cet/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Patents](https://img.shields.io/badge/Patents-None%20Reserved-blue.svg)](./PATENTS)
 
 **Solaris CET** is a Real-World Asset (RWA) token on **TON** with a fixed supply of **9,000 CET**, anchored in **Cetățuia, Romania**. This repository contains the official landing — a **Vite** + **React 19** + **TypeScript** app styled with **Tailwind CSS** and **GSAP**.
 
-### Production (authoritative)
+### Production (single source of truth)
 
-- **Live site:** [https://solaris-cet.com](https://solaris-cet.com)
-- **CI/CD:** pushes to `origin` **`main`** trigger **Coolify** (self-hosted) to build and deploy the **`app/`** bundle to the project **VPS** (Debian/Ubuntu). Broken builds affect production — treat `main` as release-ready.
+| | |
+|--:|--|
+| **URL** | [https://solaris-cet.com](https://solaris-cet.com) |
+| **Repo** | [github.com/Solaris-CET/solaris-cet](https://github.com/Solaris-CET/solaris-cet) · branch **`main`** |
+| **Server** | Project **VPS** (Debian/Ubuntu) |
+| **Deploy** | **Coolify** (self-hosted) — build `app/` → serve `dist/`; push to **`main`** triggers deploy |
 
-Optional **GitHub Pages** (workflow `deploy-pages.yml`) remains available for **forks** or mirrors; it does not replace the production domain above.
+Treat **`main` as production**: a broken build breaks the live site. Optional **GitHub Pages** (`deploy-pages.yml`) is only for **forks** / mirrors — not the canonical host.
 
 ---
 
@@ -22,7 +26,7 @@ You can host a read-only mirror from a fork using **GitHub Actions** → **GitHu
 
 ### Step 1 — Fork this repository
 
-Click **Fork** (top-right): **[https://github.com/aamclaudiu-hash/solaris-cet/fork](https://github.com/aamclaudiu-hash/solaris-cet/fork)**
+Click **Fork** (top-right): **[https://github.com/Solaris-CET/solaris-cet/fork](https://github.com/Solaris-CET/solaris-cet/fork)**
 
 ### Step 2 — Enable GitHub Pages in your fork
 
@@ -138,7 +142,7 @@ solaris-cet/
 
 ```bash
 # 1. Clone the repository (or your fork)
-git clone https://github.com/aamclaudiu-hash/solaris-cet.git
+git clone https://github.com/Solaris-CET/solaris-cet.git
 cd solaris-cet/app
 
 # 2. Install dependencies

@@ -492,7 +492,7 @@ function AppContent() {
 
 function App() {
   return (
-    <TonConnectUIProvider manifestUrl="https://solaris-cet.vercel.app/tonconnect-manifest.json">
+    <TonConnectUIProvider manifestUrl="https://solaris-cet.com/tonconnect-manifest.json">
       <AppContent />
       <Analytics />
     </TonConnectUIProvider>

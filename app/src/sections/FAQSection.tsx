@@ -60,8 +60,8 @@ function buildFaqs(f: FaqContent): FAQ[] {
 }
 
 const FAQSection = () => {
-  const { t, lang } = useLanguage();
-  const faqs = useMemo(() => buildFaqs(t.faqContent), [lang]);
+  const { t } = useLanguage();
+  const faqs = useMemo(() => buildFaqs(t.faqContent), [t.faqContent]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
