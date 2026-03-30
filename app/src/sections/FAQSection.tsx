@@ -1,9 +1,10 @@
-import { useState, useRef, useLayoutEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { useLanguage } from '../hooks/useLanguage';
+import type { FaqContent } from '../i18n/faqContent.types';
 
 interface FAQLink {
   label: string;
@@ -17,93 +18,50 @@ interface FAQ {
   links?: FAQLink[];
 }
 
-const faqs: FAQ[] = [
-  {
-    question: 'What is Solaris CET?',
-    answer:
-      'Solaris CET (CET) is a hyper-scarce Real-World Asset token on the TON blockchain with a fixed supply of 9,000 CET. It bridges AI agents to on-chain execution through the BRAID Framework and the RAV Protocol, anchored in the agricultural and AI infrastructure of Cetățuia, Romania.',
-  },
-  {
-    question: 'What is the total supply of CET?',
-    answer:
-      'The total supply is fixed at 9,000 CET — permanently. No minting, no admin keys, no inflation. This makes each token represent 0.011% of the entire global supply.',
-  },
-  {
-    question: 'How do I buy CET?',
-    answer:
-      'CET trades on DeDust DEX on the TON network. Connect a TON wallet (Tonkeeper recommended), fund it with TON, then swap TON → CET at the official DeDust pool. Always verify the contract address: EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
-  },
-  {
-    question: 'Is the smart contract audited?',
-    answer:
-      'Yes. The CET smart contract was fully audited by Cyberscope with zero critical findings. The core team has also completed KYC verification and the project is listed on Freshcoins. The full audit report is linked in the whitepaper.',
-  },
-  {
-    question: 'How does CET mining work?',
-    answer:
-      "66.66% of the BTC-S supply (the broader ecosystem token) enters circulation via Proof-of-Work mining over a 90-year schedule with a decaying reward curve — similar to Bitcoin's halving model. The Zero-Battery constraint ensures mining approaches 0% battery drain on participating devices.",
-  },
-  {
-    question: 'What is the DCBM mechanism?',
-    answer:
-      'DCBM (Dynamic-Control Buyback Mechanism) uses PID controllers to autonomously manage buy-back operations when price deviates from the target band. It reduces token price volatility by up to 66%, providing scientific price stability without manual intervention.',
-  },
-  {
-    question: 'What blockchain does CET run on?',
-    answer:
-      "CET is deployed on the TON (The Open Network) mainnet — one of the fastest L1 blockchains, with ~100,000 TPS throughput and 2-second transaction finality. TON's sharded architecture provides virtually unlimited scalability.",
-  },
-  {
-    question: 'What is the ReAct Protocol?',
-    answer:
-      "ReAct (Reasoning + Acting) is Solaris CET's on-chain AI reasoning standard. Every AI agent action goes through a 5-phase loop: Observe → Think → Plan → Act → Verify. All reasoning traces are anchored on-chain, making every AI decision transparent, auditable, and hallucination-resistant.",
-  },
-  {
-    question: 'Where can I find the whitepaper?',
-    answer:
-      'The whitepaper is permanently published on IPFS — immutable and censorship-resistant.',
-    link: {
-      label: 'Open Whitepaper on IPFS ↗',
-      href: 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a',
+/** Canonical URLs — labels come from `t.faqContent`. */
+const FAQ_HREF_WHITEPAPER =
+  'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a';
+const FAQ_HREF_TELEGRAM = 'https://t.me/SolarisCET';
+const FAQ_HREF_GITHUB = 'https://github.com/Solaris-CET/solaris-cet';
+const FAQ_HREF_COMPARISON = '#competition';
+
+function buildFaqs(f: FaqContent): FAQ[] {
+  return [
+    { question: f.q1, answer: f.a1 },
+    { question: f.q2, answer: f.a2 },
+    { question: f.q3, answer: f.a3 },
+    { question: f.q4, answer: f.a4 },
+    { question: f.q5, answer: f.a5 },
+    { question: f.q6, answer: f.a6 },
+    { question: f.q7, answer: f.a7 },
+    { question: f.q8, answer: f.a8 },
+    {
+      question: f.q9,
+      answer: f.a9,
+      link: { label: f.linkWhitepaper, href: FAQ_HREF_WHITEPAPER },
     },
-  },
-  {
-    question: 'How do I join the Solaris CET community?',
-    answer:
-      'Join the official Telegram community for news, updates, and direct communication with the team. The source code is also open on GitHub.',
-    links: [
-      { label: 'Join Telegram ↗', href: 'https://t.me/SolarisCET' },
-      { label: 'View on GitHub ↗', href: 'https://github.com/Solaris-CET/solaris-cet' },
-    ],
-  },
-  {
-    question: 'How does Solaris CET compare to Fetch.ai, Bittensor and SingularityNET?',
-    answer:
-      'CET has 9,000 total supply vs billions for competitors. TON delivers 100,000 TPS vs under 1,000 for Fetch.ai and Bittensor. CET operates 200,000 deployed autonomous agents — not just a marketplace. Only CET uses Grok × Gemini dual-AI simultaneously. And only CET is backed by real-world agricultural assets in Romania.',
-    links: [{ label: 'Full comparison ↗', href: '#competition' }],
-  },
-  {
-    question: 'What is the BRAID Framework?',
-    answer:
-      'BRAID (Blockchain-Recursive AI Decision) serialises agent reasoning paths as Mermaid notation graphs, stores them on IPFS, and anchors them in every CET transaction. This means any decision made by any agent can be reconstructed and audited months or years later — with complete traceability and zero trust assumptions.',
-    links: [],
-  },
-  {
-    question: 'What are the RAV Protocol phases?',
-    answer:
-      'RAV = Reason · Act · Verify. Phase 1 (REASON): Google Gemini decomposes the goal into sub-objectives using a BRAID graph. Phase 2 (ACT): xAI Grok executes the optimised action plan and generates TON transactions. Phase 3 (VERIFY): An independent model reviews the action and its on-chain trace before finalisation. Every phase is timestamped and stored immutably on IPFS.',
-    links: [],
-  },
-  {
-    question: 'What is the Zero-Battery Constraint?',
-    answer:
-      'CET mining is engineered to approach zero battery drain on mobile devices. Unlike Bitcoin mining, CET\'s Zero-Battery Constraint limits CPU utilisation to background-idle levels, meaning mining can run passively without heating your device or reducing battery life measurably.',
-    links: [],
-  },
-];
+    {
+      question: f.q10,
+      answer: f.a10,
+      links: [
+        { label: f.linkTelegram, href: FAQ_HREF_TELEGRAM },
+        { label: f.linkGithub, href: FAQ_HREF_GITHUB },
+      ],
+    },
+    {
+      question: f.q11,
+      answer: f.a11,
+      links: [{ label: f.linkComparison, href: FAQ_HREF_COMPARISON }],
+    },
+    { question: f.q12, answer: f.a12 },
+    { question: f.q13, answer: f.a13 },
+    { question: f.q14, answer: f.a14 },
+  ];
+}
 
 const FAQSection = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const faqs = useMemo(() => buildFaqs(t.faqContent), [lang]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
@@ -189,16 +147,16 @@ const FAQSection = () => {
             <div className="w-10 h-10 rounded-xl bg-cyan-400/10 flex items-center justify-center">
               <HelpCircle className="w-5 h-5 text-cyan-400" />
             </div>
-            <span className="hud-label text-cyan-400">FAQ</span>
+            <span className="hud-label text-cyan-400">{t.faqContent.headingBadge}</span>
           </div>
 
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
-            Common Questions{' '}
-            <span className="text-gradient-gold">Answered</span>
+            {t.faqContent.titleBefore}{' '}
+            <span className="text-gradient-gold">{t.faqContent.titleHighlight}</span>
           </h2>
 
           <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
-            Everything you need to know about Solaris CET, from token economics to technical architecture.
+            {t.faqContent.subtitle}
           </p>
         </div>
 
@@ -245,17 +203,21 @@ const FAQSection = () => {
                   )}
                   {faq.links && (
                     <div className="flex flex-wrap gap-4">
-                      {faq.links.map((l) => (
-                        <a
-                          key={l.href}
-                          href={l.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center text-sm font-semibold text-solaris-cyan hover:opacity-80 transition-opacity"
-                        >
-                          {l.label}
-                        </a>
-                      ))}
+                      {faq.links.map((l) => {
+                        const isInPage = l.href.startsWith('#');
+                        return (
+                          <a
+                            key={l.href}
+                            href={l.href}
+                            {...(isInPage
+                              ? {}
+                              : { target: '_blank', rel: 'noopener noreferrer' })}
+                            className="inline-flex items-center text-sm font-semibold text-solaris-cyan hover:opacity-80 transition-opacity"
+                          >
+                            {l.label}
+                          </a>
+                        );
+                      })}
                     </div>
                   )}
                 </div>

@@ -1,69 +1,71 @@
 import { describe, it, expect } from 'vitest';
+import translations from '../i18n/translations';
 
-// ─── FAQ data integrity tests ─────────────────────────────────────────────
+const en = translations.en.faqContent;
 
-const FAQ_ITEMS = [
-  { question: 'What is Solaris CET?', hasLinks: true },
-  { question: 'What is the total supply of CET?', hasLinks: false },
-  { question: 'How do I buy CET?', hasLinks: true },
-  { question: 'Is the smart contract audited?', hasLinks: true },
-  { question: 'How does CET mining work?', hasLinks: false },
-  { question: 'What is the DCBM mechanism?', hasLinks: false },
-  { question: 'What blockchain does CET run on?', hasLinks: false },
-  { question: 'What is the ReAct Protocol?', hasLinks: false },
-  { question: 'Where can I find the whitepaper?', hasLinks: true },
-  { question: 'How do I join the Solaris CET community?', hasLinks: true },
-  { question: 'How does Solaris CET compare to Fetch.ai, Bittensor and SingularityNET?', hasLinks: true },
-  { question: 'What is the BRAID Framework?', hasLinks: false },
-  { question: 'What are the RAV Protocol phases?', hasLinks: false },
-  { question: 'What is the Zero-Battery Constraint?', hasLinks: false },
-];
+const QUESTION_KEYS = [
+  'q1',
+  'q2',
+  'q3',
+  'q4',
+  'q5',
+  'q6',
+  'q7',
+  'q8',
+  'q9',
+  'q10',
+  'q11',
+  'q12',
+  'q13',
+  'q14',
+] as const;
 
 describe('FAQSection — data integrity', () => {
-  it('has 14 FAQ items after expansion', () => {
-    expect(FAQ_ITEMS).toHaveLength(14);
+  it('has 14 FAQ question keys', () => {
+    expect(QUESTION_KEYS).toHaveLength(14);
   });
 
   it('all questions are non-empty strings', () => {
-    FAQ_ITEMS.forEach(item => {
-      expect(typeof item.question).toBe('string');
-      expect(item.question.length).toBeGreaterThan(10);
+    QUESTION_KEYS.forEach((qk) => {
+      const q = en[qk];
+      expect(typeof q).toBe('string');
+      expect(q.length).toBeGreaterThan(10);
     });
   });
 
   it('all questions end with a question mark', () => {
-    FAQ_ITEMS.forEach(item => {
-      expect(item.question.endsWith('?')).toBe(true);
+    QUESTION_KEYS.forEach((qk) => {
+      expect(en[qk].endsWith('?')).toBe(true);
     });
   });
 
   it('questions are unique', () => {
-    const questions = FAQ_ITEMS.map(i => i.question);
+    const questions = QUESTION_KEYS.map((qk) => en[qk]);
     const unique = new Set(questions);
-    expect(unique.size).toBe(FAQ_ITEMS.length);
+    expect(unique.size).toBe(QUESTION_KEYS.length);
   });
 
-  it('competition comparison question exists', () => {
-    const found = FAQ_ITEMS.some(i =>
-      i.question.toLowerCase().includes('fetch') ||
-      i.question.toLowerCase().includes('compare')
-    );
-    expect(found).toBe(true);
+  it('competition comparison question exists (q11)', () => {
+    expect(en.q11.toLowerCase()).toMatch(/fetch|bittensor|singularity/);
   });
 
-  it('BRAID Framework question exists', () => {
-    const found = FAQ_ITEMS.some(i => i.question.includes('BRAID'));
-    expect(found).toBe(true);
+  it('BRAID Framework question exists (q12)', () => {
+    expect(en.q12).toContain('BRAID');
   });
 
-  it('RAV Protocol question exists', () => {
-    const found = FAQ_ITEMS.some(i => i.question.includes('RAV'));
-    expect(found).toBe(true);
+  it('RAV Protocol question exists (q13)', () => {
+    expect(en.q13).toContain('RAV');
   });
 
-  it('Zero-Battery Constraint question exists', () => {
-    const found = FAQ_ITEMS.some(i => i.question.includes('Zero-Battery'));
-    expect(found).toBe(true);
+  it('Zero-Battery Constraint question exists (q14)', () => {
+    expect(en.q14).toContain('Zero-Battery');
+  });
+
+  it('link labels for FAQ CTAs are present', () => {
+    expect(en.linkWhitepaper.length).toBeGreaterThan(3);
+    expect(en.linkTelegram.length).toBeGreaterThan(3);
+    expect(en.linkGithub.length).toBeGreaterThan(3);
+    expect(en.linkComparison.length).toBeGreaterThan(3);
   });
 });
 

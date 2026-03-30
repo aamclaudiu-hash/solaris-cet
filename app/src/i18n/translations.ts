@@ -1,3 +1,6 @@
+import type { FaqContent } from './faqContent.types';
+import { faqContentByLang } from './faqContent.data';
+
 export type LangCode = 'en' | 'es' | 'zh' | 'ru' | 'ro' | 'pt' | 'de';
 
 export interface OracleKnowledge {
@@ -192,6 +195,8 @@ export interface Translations {
     sendCompact: string;
     knowledge: OracleKnowledge;
   };
+  /** FAQ accordion copy (`faqContent.data.ts`). */
+  faqContent: FaqContent;
 }
 
 const translations: Record<LangCode, Translations> = {
@@ -376,6 +381,7 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — AI-native RWA token (9,000 CET) on TON.\n\n- **~200,000 task-specialist agents** + **Grok × Gemini Oracle** (RAV) for structured, token-efficient answers\n- **90-year mining** · **BRAID** · **Quantum OS** entropy narrative · **DCBM** stability story\n- Q1 2026 milestones **complete** — Q2 2026 in progress\n\n**Handoff for other AI tools:** paste this block as context so your assistant needs fewer follow-up turns.\n\nAsk about *price, mining, AI, security*, or *roadmap*.',
       },
     },
+    faqContent: faqContentByLang.en,
   },
   es: {
     appLoader: {
@@ -558,6 +564,7 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — token RWA nativo de IA (9.000 CET) en TON.\n\n- **~200.000 agentes especializados en tareas** + **Oráculo Grok × Gemini** (RAV) para respuestas estructuradas y eficientes en tokens\n- **Minería 90 años** · **BRAID** · narrativa **Quantum OS** · historia **DCBM**\n- Hitos Q1 2026 **completados** — Q2 2026 en curso\n\n**Transferencia a otras herramientas de IA:** pega este bloque como contexto para que tu asistente necesite menos turnos de seguimiento.\n\nPregunta por *precio, minería, IA, seguridad* u *hoja de ruta*.',
       },
     },
+    faqContent: faqContentByLang.es,
   },
   zh: {
     appLoader: {
@@ -740,6 +747,7 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — TON 上的 AI 原生 RWA 代币（9,000 CET）。\n\n- **约20万任务型智能体** + **Grok × Gemini 预言机**（RAV），结构化、省 token 的回答\n- **90 年挖矿** · **BRAID** · **Quantum OS** 叙事 · **DCBM** 稳定机制\n- 2026 Q1 里程碑 **已完成** — Q2 进行中\n\n**交接给其他 AI 工具：** 将本段粘贴为上下文，可减少后续追问轮次。\n\n可问 *价格、挖矿、AI、安全* 或 *路线图*。',
       },
     },
+    faqContent: faqContentByLang.zh,
   },
   ru: {
     appLoader: {
@@ -922,6 +930,7 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — AI-нативный RWA-токен (9 000 CET) на TON.\n\n- **~200 000 агентов задач** + **Оракул Grok × Gemini** (RAV) для структурированных ответов\n- **90 лет майнинга** · **BRAID** · **Quantum OS** · **DCBM**\n- Вехи Q1 2026 **выполнены** — Q2 2026 в работе\n\n**Передача другим ИИ-инструментам:** вставьте этот блок как контекст — меньше уточняющих запросов.\n\nСпросите о *цене, майнинге, ИИ, безопасности* или *дорожной карте*.',
       },
     },
+    faqContent: faqContentByLang.ru,
   },
   ro: {
     appLoader: {
@@ -1104,6 +1113,7 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — token RWA nativ-AI (9.000 CET) pe TON.\n\n- **~200.000 agenți de tasking** + **Oracol Grok × Gemini** (RAV) pentru răspunsuri structurate, eficiente la tokeni\n- **Minare 90 ani** · **BRAID** · narațiune **Quantum OS** · poveste **DCBM**\n- Repere Q1 2026 **finalizate** — Q2 2026 în desfășurare\n\n**Pentru alte unelte AI:** lipește acest bloc ca context ca asistentul tău să aibă nevoie de mai puține runde de clarificare.\n\nÎntreabă despre *preț, minare, AI, securitate* sau *foaie de parcurs*.',
       },
     },
+    faqContent: faqContentByLang.ro,
   },
   pt: {
     appLoader: {
@@ -1286,6 +1296,7 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — token RWA nativo de IA (9.000 CET) na TON.\n\n- **~200.000 agentes de tarefa** + **Oráculo Grok × Gemini** (RAV) para respostas estruturadas e eficientes em tokens\n- **Mineração 90 anos** · **BRAID** · narrativa **Quantum OS** · história **DCBM**\n- Marcos Q1 2026 **concluídos** — Q2 2026 em curso\n\n**Handoff para outras ferramentas de IA:** cole este bloco como contexto para seu assistente precisar de menos voltas de esclarecimento.\n\nPergunte sobre *preço, mineração, IA, segurança* ou *roteiro*.',
       },
     },
+    faqContent: faqContentByLang.pt,
   },
   de: {
     appLoader: {
@@ -1468,6 +1479,7 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — KI-natives RWA-Token (9.000 CET) auf TON.\n\n- **~200.000 Task-Agenten** + **Grok × Gemini-Orakel** (RAV) für strukturierte, token-effiziente Antworten\n- **90 Jahre Mining** · **BRAID** · **Quantum-OS**-Erzählung · **DCBM**-Stabilität\n- Q1-2026-Meilensteine **abgeschlossen** — Q2 2026 aktiv\n\n**Übergabe an andere KI-Tools:** diesen Block als Kontext einfügen — weniger Nachfrage-Runden.\n\nFrage nach *Preis, Mining, KI, Sicherheit* oder *Fahrplan*.',
       },
     },
+    faqContent: faqContentByLang.de,
   },
 };
 
