@@ -85,7 +85,7 @@ export interface Translations {
     followSuffix: string;
     updatedPrefix: string;
   };
-  /** Default fallback UI for `ErrorBoundary` (class component reads via `getLang()` + map). */
+  /** Default fallback UI for `ErrorBoundary` (class component reads via `getActiveLangSync()` + map). */
   errorBoundary: {
     title: string;
     unexpectedMessage: string;

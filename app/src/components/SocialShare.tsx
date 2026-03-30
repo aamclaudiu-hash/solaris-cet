@@ -3,7 +3,12 @@ import { useLanguage } from '../hooks/useLanguage';
 import { useTelegram } from '../hooks/useTelegram';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 
-const SITE_URL = 'https://solaris-cet.vercel.app/';
+/** Canonical link in shares — matches `index.html`; override in Coolify / `.env` via `VITE_PUBLIC_SITE_URL`. */
+const SITE_URL = (() => {
+  const raw = import.meta.env.VITE_PUBLIC_SITE_URL as string | undefined;
+  if (raw?.trim()) return raw.trim().replace(/\/?$/, '/');
+  return 'https://solaris-cet.com/';
+})();
 
 const SocialShare = () => {
   const { t } = useLanguage();
