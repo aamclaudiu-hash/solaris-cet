@@ -106,6 +106,15 @@ export interface Translations {
     roadmap: string;
     footer: string;
   };
+  /** Footer bottom nav links (legal, sovereign static, GitHub). */
+  footerNav: {
+    privacy: string;
+    terms: string;
+    contact: string;
+    /** `/sovereign/` — OMEGA zero-JS surface. */
+    sovereignNoJs: string;
+    github: string;
+  };
   /** Section/component `aria-label` strings (lazy sections, mesh, copy buttons). */
   sectionAria: {
     liveNeuralFeed: string;
@@ -267,6 +276,13 @@ const translations: Record<LangCode, Translations> = {
       rwa: 'RWA — Cetățuia',
       roadmap: 'Roadmap',
       footer: 'Site footer',
+    },
+    footerNav: {
+      privacy: 'Privacy',
+      terms: 'Terms',
+      contact: 'Contact',
+      sovereignNoJs: 'Sovereign (no JS)',
+      github: 'GitHub',
     },
     sectionAria: {
       liveNeuralFeed: 'Live neural feed simulation',
@@ -451,6 +467,13 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Hoja de ruta',
       footer: 'Pie de página',
     },
+    footerNav: {
+      privacy: 'Privacidad',
+      terms: 'Términos',
+      contact: 'Contacto',
+      sovereignNoJs: 'Soberano (sin JS)',
+      github: 'GitHub',
+    },
     sectionAria: {
       liveNeuralFeed: 'Simulación de feed neuronal en vivo',
       agentBoardFeed: 'Feed de actividad de agentes en vivo',
@@ -633,6 +656,13 @@ const translations: Record<LangCode, Translations> = {
       rwa: 'RWA — Cetățuia',
       roadmap: '路线图',
       footer: '页脚',
+    },
+    footerNav: {
+      privacy: '隐私',
+      terms: '条款',
+      contact: '联系',
+      sovereignNoJs: '主权（无 JS）',
+      github: 'GitHub',
     },
     sectionAria: {
       liveNeuralFeed: '实时神经流模拟',
@@ -817,6 +847,13 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Дорожная карта',
       footer: 'Подвал сайта',
     },
+    footerNav: {
+      privacy: 'Конфиденциальность',
+      terms: 'Условия',
+      contact: 'Контакт',
+      sovereignNoJs: 'Суверенный (без JS)',
+      github: 'GitHub',
+    },
     sectionAria: {
       liveNeuralFeed: 'Симуляция живого нейропотока',
       agentBoardFeed: 'Лента активности агентов в реальном времени',
@@ -999,6 +1036,13 @@ const translations: Record<LangCode, Translations> = {
       rwa: 'RWA — Cetățuia',
       roadmap: 'Foaie de parcurs',
       footer: 'Subsol site',
+    },
+    footerNav: {
+      privacy: 'Confidențialitate',
+      terms: 'Termeni',
+      contact: 'Contact',
+      sovereignNoJs: 'Suveran (fără JS)',
+      github: 'GitHub',
     },
     sectionAria: {
       liveNeuralFeed: 'Simulare feed neural în timp real',
@@ -1183,6 +1227,13 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Roteiro',
       footer: 'Rodapé',
     },
+    footerNav: {
+      privacy: 'Privacidade',
+      terms: 'Termos',
+      contact: 'Contato',
+      sovereignNoJs: 'Soberano (sem JS)',
+      github: 'GitHub',
+    },
     sectionAria: {
       liveNeuralFeed: 'Simulação de feed neural em tempo real',
       agentBoardFeed: 'Feed de atividade dos agentes em tempo real',
@@ -1365,6 +1416,13 @@ const translations: Record<LangCode, Translations> = {
       rwa: 'RWA — Cetățuia',
       roadmap: 'Fahrplan',
       footer: 'Seitenfuß',
+    },
+    footerNav: {
+      privacy: 'Datenschutz',
+      terms: 'AGB',
+      contact: 'Kontakt',
+      sovereignNoJs: 'Souverän (ohne JS)',
+      github: 'GitHub',
     },
     sectionAria: {
       liveNeuralFeed: 'Live-Neural-Feed-Simulation',

@@ -13,15 +13,6 @@ const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 const DEDUST_SWAP_URL = `https://dedust.io/swap/TON/${DEDUST_POOL_ADDRESS}`;
 const WHITEPAPER_URL = 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a';
 
-// Static data defined outside component to avoid re-creation on every render
-const footerLinks = [
-  { label: 'Privacy', href: WHITEPAPER_URL, icon: undefined },
-  { label: 'Terms', href: WHITEPAPER_URL, icon: undefined },
-  { label: 'Contact', href: 'https://t.me/SolarisCET', icon: undefined },
-  { label: 'Sovereign (no JS)', href: '/sovereign/', icon: Shield },
-  { label: 'GitHub', href: GITHUB_URL, icon: Globe },
-];
-
 const socialLinks = [
   { icon: X, href: 'https://twitter.com/SolarisCET', label: 'X', color: 'hover:text-[#1DA1F2] hover:bg-[#1DA1F2]/10' },
   { icon: Send, href: 'https://t.me/SolarisCET', label: 'Telegram', color: 'hover:text-[#2AABEE] hover:bg-[#2AABEE]/10' },
@@ -31,6 +22,13 @@ const socialLinks = [
 
 const FooterSection = () => {
   const { t } = useLanguage();
+  const footerLinks = [
+    { label: t.footerNav.privacy, href: WHITEPAPER_URL, icon: undefined },
+    { label: t.footerNav.terms, href: WHITEPAPER_URL, icon: undefined },
+    { label: t.footerNav.contact, href: 'https://t.me/SolarisCET', icon: undefined },
+    { label: t.footerNav.sovereignNoJs, href: '/sovereign/', icon: Shield },
+    { label: t.footerNav.github, href: GITHUB_URL, icon: Globe },
+  ];
   const sectionRef = useRef<HTMLDivElement>(null);
   const ctaCardRef = useRef<HTMLDivElement>(null);
   const newsletterRef = useRef<HTMLDivElement>(null);
