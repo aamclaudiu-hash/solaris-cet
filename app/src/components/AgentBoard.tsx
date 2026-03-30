@@ -8,6 +8,8 @@ import { useAgentBoard, type EventKind } from '../hooks/useAgentBoard';
 import { AGENT_BOARD_DEPT_TO_MESH_ID } from '@/lib/agentBoardSkillMix';
 import {
   shortSkillWhisper,
+  meshWhisperFromKey,
+  meshStandardBurstFromKey,
   meshWhisperForAiTeamRoleAgent,
   meshWhisperForBoardLiveAgent,
   meshStandardBurstForBoardLiveAgent,
@@ -86,7 +88,11 @@ const AgentBoard = () => {
               const kc = KIND_CONFIG[k];
               const KindIcon = kc.icon;
               return (
-                <span key={k} className={`w-5 h-5 rounded-md ${kc.bg} flex items-center justify-center`}>
+                <span
+                  key={k}
+                  className={`w-5 h-5 rounded-md ${kc.bg} flex items-center justify-center`}
+                  title={`${meshStandardBurstFromKey(`agentBoard|kindBadge|${k}`)}\n—\n${meshWhisperFromKey(`agentBoard|kindBadge|${k}|w`)}`}
+                >
                   <KindIcon className={`w-2.5 h-2.5 ${kc.color}`} />
                 </span>
               );

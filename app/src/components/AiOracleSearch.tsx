@@ -11,6 +11,8 @@ import {
   deepLatticeLineForQuery,
   observeLocusBranchFromTopic,
   observeLocusClip,
+  meshStandardBurstFromKey,
+  meshWhisperFromKey,
   shortSkillWhisper,
   skillSeedFromLabel,
   standardSkillBurst,
@@ -517,6 +519,16 @@ export default function AiOracleSearch() {
       `RAV_BURST: ${standardSkillBurst(skillSeedFromLabel(`${q}|ravInit`))}`
     );
     addLog('INFO', `TASK_MESH: ~200k task agents · delegated sub-queries · Oracle consolidation`);
+    addLog(
+      'INFO',
+      `AGENT_POOL_MESH: ${meshStandardBurstFromKey(`oracle|agentPool|${detected}|${skillSeedFromLabel(q)}`)}`
+    );
+    if (detected === 'team' || detected === 'ai') {
+      addLog(
+        'INFO',
+        `TEAM_AGENT_MESH: ${meshWhisperFromKey(`oracle|teamAgent|${q}|${detected}`)}`
+      );
+    }
     addLog('INFO', `INPUT_STREAM: "${q}" · Tokens: ${tokenCount}`);
     addLog('INFO', `INPUT_MESH: ${deepLatticeLineForQuery(`${q}|inputStream`)}`);
     addLog(
@@ -852,6 +864,8 @@ export default function AiOracleSearch() {
                             log.message.startsWith('INPUT_MESH:') ||
                             log.message.startsWith('CONTEXT_MESH:') ||
                             log.message.startsWith('TASK_MESH:') ||
+                            log.message.startsWith('AGENT_POOL_MESH:') ||
+                            log.message.startsWith('TEAM_AGENT_MESH:') ||
                             log.message.startsWith('SKILL_LOCUS:') ||
                             log.message.startsWith('EXPRESSOME_BURST:') ||
                             log.message.startsWith('DEEP_LATTICE:') ||
