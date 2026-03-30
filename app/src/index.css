@@ -393,7 +393,7 @@
 }
 
 .animate-ticker {
-  animation: ticker-scroll 20s linear infinite;
+  animation: ticker-scroll 32s linear infinite;
   will-change: transform;
 }
 
@@ -595,7 +595,7 @@
   height: 16px;
   border-radius: 2px;
   background: currentColor;
-  animation: wave 1.2s ease-in-out infinite;
+  animation: wave 1.65s ease-in-out infinite;
   will-change: transform;
 }
 
@@ -681,7 +681,7 @@
   background: linear-gradient(90deg, #F2C94C, #2EE7FF, #F2C94C);
   background-size: 200% 100%;
   border-radius: 1px;
-  animation: loading-bar 0.8s ease forwards, shimmer 1.5s linear infinite;
+  animation: loading-bar 1.05s cubic-bezier(0.33, 1, 0.68, 1) forwards, shimmer 1.5s linear infinite;
   will-change: width, background-position;
 }
 

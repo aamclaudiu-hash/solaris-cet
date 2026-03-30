@@ -173,6 +173,7 @@ button, .btn-gold, .btn-filled-gold {
   .animate-orb-pulse,
   .animate-gold-pulse,
   .animate-hero-aurora,
+  .animate-hero-conic-drift,
   .cursor-glow {
     animation: none !important;
   }

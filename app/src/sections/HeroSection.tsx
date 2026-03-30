@@ -111,26 +111,26 @@ const HeroSection: React.FC = () => {
     }
 
     const ctx = gsap.context(() => {
-      const mainTl = gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.2 } });
+      const mainTl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1.05 } });
 
       mainTl
-        .fromTo(coinWrapperRef.current, { scale: 0.5, rotateY: -45 }, { scale: 1, rotateY: 0, duration: 1.5 })
-        .fromTo([titleContainerRef.current, hudWrapperRef.current], { y: 50 }, { y: 0, stagger: 0.2 }, '-=1')
-        .fromTo(cetAiWrapperRef.current, { width: '0%' }, { width: '100%', duration: 0.8 }, '-=0.5')
-        .fromTo(tickerContainerRef.current, { y: 100 }, { y: 0 }, '-=0.5');
+        .fromTo(coinWrapperRef.current, { scale: 0.88, rotateY: -18, opacity: 0 }, { scale: 1, rotateY: 0, opacity: 1, duration: 1.35 })
+        .fromTo([titleContainerRef.current, hudWrapperRef.current], { y: 28, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.12 }, '-=0.85')
+        .fromTo(cetAiWrapperRef.current, { width: '0%', opacity: 0 }, { width: '100%', opacity: 1, duration: 0.85, ease: 'power2.out' }, '-=0.55')
+        .fromTo(tickerContainerRef.current, { y: 48, opacity: 0 }, { y: 0, opacity: 1 }, '-=0.45');
 
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: 'top top',
         end: '+=150%',
         pin: true,
-        scrub: 1,
+        scrub: 0.65,
         animation: gsap
-          .timeline()
-          .fromTo(coinWrapperRef.current, { opacity: 1 }, { x: '-25vw', rotateY: 90, opacity: 0 })
-          .fromTo(titleContainerRef.current, { opacity: 1 }, { x: '-100%', opacity: 0 }, 0)
-          .fromTo(hudWrapperRef.current, { opacity: 1 }, { x: '100%', opacity: 0 }, 0)
-          .fromTo(cetAiWrapperRef.current, { opacity: 1 }, { y: 40, opacity: 0 }, 0),
+          .timeline({ defaults: { ease: 'power2.inOut' } })
+          .fromTo(coinWrapperRef.current, { opacity: 1 }, { x: '-18vw', rotateY: 72, opacity: 0 })
+          .fromTo(titleContainerRef.current, { opacity: 1 }, { x: '-85%', opacity: 0 }, 0)
+          .fromTo(hudWrapperRef.current, { opacity: 1 }, { x: '85%', opacity: 0 }, 0)
+          .fromTo(cetAiWrapperRef.current, { opacity: 1 }, { y: 28, opacity: 0 }, 0),
       });
     }, containerRef);
 
@@ -178,10 +178,10 @@ const HeroSection: React.FC = () => {
             }}
           />
 
-          <GlowOrbs variant="gold" className="opacity-80" />
+          <GlowOrbs variant="gold" className="opacity-[0.68]" />
 
           <div
-            className="absolute inset-0 opacity-[0.4] mix-blend-screen animate-spin-slow"
+            className="absolute inset-0 opacity-[0.22] mix-blend-screen animate-hero-conic-drift"
             style={{
               background:
                 'conic-gradient(from 200deg at 50% 40%, transparent 0deg, rgba(234,179,8,0.07) 60deg, transparent 120deg, rgba(46,231,255,0.04) 200deg, transparent 280deg)',
@@ -189,7 +189,7 @@ const HeroSection: React.FC = () => {
           />
 
           <Suspense fallback={null}>
-            <ParticleCanvas count={96} className="hidden sm:block opacity-[0.85]" connectionRadius={110} />
+            <ParticleCanvas count={96} className="hidden sm:block opacity-[0.72]" connectionRadius={118} />
           </Suspense>
 
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_85%_55%_at_50%_0%,rgba(255,200,120,0.1),transparent_60%)]" />

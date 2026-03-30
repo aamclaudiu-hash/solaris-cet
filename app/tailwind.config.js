@@ -141,6 +141,11 @@ module.exports = {
           "0%, 100%": { transform: "translate(-48%, -42%) scale(1)" },
           "50%": { transform: "translate(-52%, -46%) scale(1.08)" },
         },
+        /** Very slow conic sheen — avoids the “cheap spinner” feel of 8s spin-slow. */
+        "hero-conic-drift": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -154,6 +159,7 @@ module.exports = {
         "gold-pulse": "gold-pulse 3s ease-in-out infinite",
         "spin-slow": "spin 8s linear infinite",
         "hero-aurora": "hero-aurora 28s ease-in-out infinite",
+        "hero-conic-drift": "hero-conic-drift 100s linear infinite",
       },
     },
   },

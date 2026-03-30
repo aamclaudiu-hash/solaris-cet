@@ -40,7 +40,8 @@ import { shortSkillWhisper, skillSeedFromLabel } from './lib/meshSkillFeed';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LOADING_DURATION_MS = 800;
+/** Long enough to read the bar; exit uses GSAP so it doesn’t feel like a hard cut. */
+const LOADING_DURATION_MS = 1100;
 
 function AppContent() {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -59,8 +60,8 @@ function AppContent() {
     const timer = setTimeout(() => {
       gsap.to(loadingEl, {
         opacity: 0,
-        duration: 0.6,
-        ease: 'power2.inOut',
+        duration: 0.75,
+        ease: 'power3.out',
         onComplete: () => {
           loadingEl.style.display = 'none';
           setIsLoaded(true);
@@ -268,9 +269,8 @@ function AppContent() {
             className="relative z-10 py-24"
           >
             <ErrorBoundary>
-              <ScrollFadeUp>
-                <HeroSection />
-              </ScrollFadeUp>
+              {/* Hero runs its own GSAP entrance + pin; ScrollFadeUp here caused double opacity / janky first paint */}
+              <HeroSection />
             </ErrorBoundary>
           </section>
 
