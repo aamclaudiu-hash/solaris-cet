@@ -86,7 +86,8 @@ const FooterSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative section-glass pt-16 pb-8">
+    // Landmark `landmarks.footer` + `data-testid="footer-landmark-section"` live on App.tsx wrapper; avoid nested <section>.
+    <div ref={sectionRef} className="relative section-glass pt-16 pb-8">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[30vh] grid-floor opacity-10" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-solaris-gold/20 to-transparent" />
@@ -308,7 +309,7 @@ const FooterSection = () => {
           </p>
         </footer>
       </div>
-    </section>
+    </div>
   );
 };
 

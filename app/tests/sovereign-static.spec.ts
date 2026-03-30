@@ -26,10 +26,10 @@ test.describe('OMEGA sovereign static surface', () => {
   });
 
   test('main site footer navigates to sovereign surface', async ({ page }) => {
-    // ?lang=en matches useLanguage E2E pattern so landmarks.footer is "Site footer".
+    // ?lang=en matches useLanguage E2E pattern so `landmarks.footer` aria-label matches the App wrapper.
     await page.goto('/?lang=en');
     await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
-    // Scroll App.tsx footer landmark (not FooterSection’s inner <section>) so LazyLoadWrapper mounts the chunk.
+    // Scroll App.tsx `<section aria-label={t.landmarks.footer}>` (lazy footer loads inside).
     await page.getByTestId('footer-landmark-section').scrollIntoViewIfNeeded();
     // Stable across locales (copy lives in i18n `footerNav.sovereignNoJs`).
     const link = page.getByTestId('footer-sovereign-link');
