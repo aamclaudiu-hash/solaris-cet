@@ -55,6 +55,8 @@ export interface Translations {
     backToTop: string;
     /** Prepended to language label in selector `aria-label` (e.g. "Switch language to EN"). */
     switchLanguagePrefix: string;
+    /** Generic loading indicator (`Spinner`, etc.). */
+    loadingAria: string;
   };
   /** Footer / resource strip social actions. */
   social: {
@@ -172,6 +174,7 @@ const translations: Record<LangCode, Translations> = {
     common: {
       backToTop: 'Back to top',
       switchLanguagePrefix: 'Switch language to',
+      loadingAria: 'Loading',
     },
     social: {
       shareOnX: 'Share on X',
@@ -310,6 +313,7 @@ const translations: Record<LangCode, Translations> = {
     common: {
       backToTop: 'Volver arriba',
       switchLanguagePrefix: 'Cambiar idioma a',
+      loadingAria: 'Cargando',
     },
     social: {
       shareOnX: 'Compartir en X',
@@ -448,6 +452,7 @@ const translations: Record<LangCode, Translations> = {
     common: {
       backToTop: '返回顶部',
       switchLanguagePrefix: '切换语言为',
+      loadingAria: '加载中',
     },
     social: {
       shareOnX: '在 X 分享',
@@ -586,6 +591,7 @@ const translations: Record<LangCode, Translations> = {
     common: {
       backToTop: 'Наверх',
       switchLanguagePrefix: 'Переключить язык на',
+      loadingAria: 'Загрузка',
     },
     social: {
       shareOnX: 'Поделиться в X',
@@ -724,6 +730,7 @@ const translations: Record<LangCode, Translations> = {
     common: {
       backToTop: 'Înapoi sus',
       switchLanguagePrefix: 'Schimbă limba la',
+      loadingAria: 'Se încarcă',
     },
     social: {
       shareOnX: 'Distribuie pe X',
@@ -862,6 +869,7 @@ const translations: Record<LangCode, Translations> = {
     common: {
       backToTop: 'Voltar ao topo',
       switchLanguagePrefix: 'Mudar idioma para',
+      loadingAria: 'A carregar',
     },
     social: {
       shareOnX: 'Partilhar no X',
@@ -1000,6 +1008,7 @@ const translations: Record<LangCode, Translations> = {
     common: {
       backToTop: 'Nach oben',
       switchLanguagePrefix: 'Sprache wechseln zu',
+      loadingAria: 'Laden',
     },
     social: {
       shareOnX: 'Auf X teilen',

@@ -91,6 +91,15 @@ function resolveInitialLang(): LangCode {
   return detectLanguage();
 }
 
+/**
+ * Same rules as `useLanguageState` initial locale — for `ErrorBoundary`, `aria` primitives, etc.
+ * outside the normal React render cycle.
+ */
+export function getActiveLangSync(): LangCode {
+  if (typeof window === 'undefined') return 'en';
+  return resolveInitialLang();
+}
+
 export const LanguageContext = createContext<LanguageContextValue>({
   lang: 'en',
   setLang: () => undefined,

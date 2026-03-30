@@ -1,19 +1,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
-import translations, { type LangCode } from '../i18n/translations';
-import { SUPPORTED_LANGS } from '../hooks/useLanguage';
+import translations from '../i18n/translations';
+import { getActiveLangSync } from '../hooks/useLanguage';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
-
-/** Matches `useLanguage` / `localStorage` so the boundary UI respects the selected locale. */
-function getLang(): LangCode {
-  if (typeof window === 'undefined') return 'en';
-  try {
-    const s = localStorage.getItem('solaris_lang');
-    if (s && (SUPPORTED_LANGS as readonly string[]).includes(s)) return s as LangCode;
-  } catch {
-    /* ignore */
-  }
-  return 'en';
-}
 
 interface Props {
   children: ReactNode;
@@ -78,7 +66,7 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       const canRetry = this.state.retryCount < MAX_RETRIES;
-      const eb = translations[getLang()].errorBoundary;
+      const eb = translations[getActiveLangSync()].errorBoundary;
 
       return (
         <div role="alert" className="py-16 flex items-center justify-center text-white">
