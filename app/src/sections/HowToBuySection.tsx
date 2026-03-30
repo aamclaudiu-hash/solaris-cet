@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { Wallet, ArrowRightLeft, Coins, Copy, Check, ExternalLink } from 'lucide-react';
 import LivePoolStats from '../components/LivePoolStats';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
+import { useLanguage } from '../hooks/useLanguage';
 
 const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 const DEDUST_POOL_ADDRESS = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
@@ -56,6 +57,7 @@ const colorMap: Record<string, { bg: string; text: string; border: string }> = {
 };
 
 const HowToBuySection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const stepsRef = useRef<HTMLDivElement>(null);
@@ -259,7 +261,7 @@ const HowToBuySection = () => {
               </span>
               <button
                 onClick={handleCopy}
-                aria-label="Copy CET contract address"
+                aria-label={t.sectionAria.copyCetAddress}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold active:scale-95 transition-all duration-150 ${
                   copyFailed
                     ? 'bg-red-400/10 border-red-400/30 text-red-400 hover:bg-red-400/20'

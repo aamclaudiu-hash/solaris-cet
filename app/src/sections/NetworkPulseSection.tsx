@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { Activity, Layers, Cpu, Globe, Lock, TrendingUp } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
+import { useLanguage } from '../hooks/useLanguage';
 
 // ─── Live network stats that increment over time ──────────────────────────
 
@@ -95,6 +96,7 @@ function formatLive(n: number, unit: string): string {
  * Stats increment every second to show a living, breathing network.
  */
 const NetworkPulseSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const gridRef    = useRef<HTMLDivElement>(null);
 
@@ -140,7 +142,7 @@ const NetworkPulseSection = () => {
     <section
       id="network-pulse"
       ref={sectionRef}
-      aria-label="TON Network and CET Protocol Live Stats"
+      aria-label={t.sectionAria.networkPulse}
       className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="mixed" />

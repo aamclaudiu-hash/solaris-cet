@@ -14,12 +14,14 @@ import {
   meshStandardBurstForAiTeamRoleAgent,
   meshWhisperForAiTeamRoleGene,
 } from '@/lib/meshSkillFeed';
+import { useLanguage } from '../hooks/useLanguage';
 
 const departments = solarisDepartments;
 
 const TOTAL_AGENTS = departments.reduce((s, d) => s + d.agentCount, 0);
 
 const AITeamSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -90,7 +92,7 @@ const AITeamSection = () => {
     <section
       id="team"
       ref={sectionRef}
-      aria-label="AI Corporate Team Structure"
+      aria-label={t.sectionAria.aiTeamStructure}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />

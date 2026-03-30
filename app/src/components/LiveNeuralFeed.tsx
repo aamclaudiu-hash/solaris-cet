@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Activity } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useLanguage } from '@/hooks/useLanguage';
 import { expressSkillForFeed } from '@/lib/skillGenome';
 import { expressMeshSkillForFeed, meshStandardBurstFromKey, meshWhisperFromKey } from '@/lib/meshSkillFeed';
 
@@ -70,6 +71,7 @@ const MAX_LINES = 22;
  * and global open signals (illustrative, not live backend telemetry).
  */
 const LiveNeuralFeed = () => {
+  const { t } = useLanguage();
   const [lines, setLines] = useState<string[]>(() => [
     `[${new Date().toISOString().slice(11, 23)}] [BOOT] neural_mesh=200000 target=FULL_SPECTRUM_RAV`,
   ]);
@@ -103,7 +105,7 @@ const LiveNeuralFeed = () => {
       className="relative bento-card border border-solaris-cyan/25 overflow-hidden shadow-depth bg-[#05060d]/90 neural-feed-crt"
       role="log"
       aria-live="polite"
-      aria-label="Live neural feed simulation"
+      aria-label={t.sectionAria.liveNeuralFeed}
     >
       <div
         className="pointer-events-none absolute inset-0 z-[1] opacity-[0.11] mix-blend-overlay neural-feed-scanlines"

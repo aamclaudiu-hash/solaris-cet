@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect, useState, useEffect, useCallback } from 'react
 import { gsap } from 'gsap';
 import { Brain, Atom, ChevronRight, RotateCcw, Zap, Eye, Cpu } from 'lucide-react';
 import { observeLocusClip, type ObserveLocusBranch } from '@/lib/meshSkillFeed';
+import { useLanguage } from '@/hooks/useLanguage';
 
 // Realistic TON mainnet block height range (as of 2025)
 const TON_MAINNET_BLOCK_MIN = 40_000_000;
@@ -105,6 +106,7 @@ function buildReasoningSteps(query: string): ReasoningStep[] {
 }
 
 const NeuralReasoningEngine = () => {
+  const { t } = useLanguage();
   const [query, setQuery] = useState('');
   const [steps, setSteps] = useState<ReasoningStep[]>([]);
   const [visibleIndex, setVisibleIndex] = useState(-1);
@@ -199,7 +201,7 @@ const NeuralReasoningEngine = () => {
         <button
           onClick={handleReset}
           className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-solaris-muted transition-all"
-          aria-label="Reset"
+          aria-label={t.sectionAria.reset}
         >
           <RotateCcw className="w-4 h-4" />
         </button>
@@ -295,6 +297,7 @@ function initQubits(): QubitState[] {
 }
 
 const QuantumEntropyOracle = () => {
+  const { t } = useLanguage();
   const [qubits, setQubits] = useState<QubitState[]>(initQubits);
   const [collapsed, setCollapsed] = useState(false);
   const [entropyBits, setEntropyBits] = useState<string>('');
@@ -491,7 +494,7 @@ const QuantumEntropyOracle = () => {
         <button
           onClick={reset}
           className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-solaris-muted transition-all"
-          aria-label="Reset"
+          aria-label={t.sectionAria.reset}
         >
           <RotateCcw className="w-4 h-4" />
         </button>

@@ -4,6 +4,7 @@ import { Calculator, Smartphone, Laptop, Monitor, Server, TrendingUp } from 'luc
 import type { MiningInput, MiningResult } from '../lib/mining-math';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { meshStandardBurstFromKey, meshWhisperFromKey } from '@/lib/meshSkillFeed';
+import { useLanguage } from '../hooks/useLanguage';
 
 
 type DeviceType = 'smartphone' | 'laptop' | 'desktop' | 'node';
@@ -34,6 +35,7 @@ const liveStats = [
 ];
 
 const MiningCalculatorSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const calculatorRef = useRef<HTMLDivElement>(null);
@@ -219,7 +221,7 @@ const MiningCalculatorSection = () => {
             {/* Device Selection */}
             <div className="mb-6">
               <label className="hud-label mb-3 block">Device Type</label>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3" role="group" aria-label="Device type selection">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3" role="group" aria-label={t.sectionAria.miningDeviceTypes}>
                 {(Object.keys(devices) as DeviceType[]).map((deviceType) => {
                   const DeviceIcon = devices[deviceType].icon;
                   return (

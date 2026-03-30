@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 import {
   Users, Code2, TrendingUp, Brain, Coins,
   Globe, Palette, Shield, FileCheck, Crown,
@@ -62,6 +63,7 @@ function timeSince(ts: number): string {
  * colour-coded department bars and event-type badges.
  */
 const AgentBoard = () => {
+  const { t } = useLanguage();
   const events = useAgentBoard({ maxEvents: 7, intervalMs: 2200 });
   const [footTick, setFootTick] = useState(0);
 
@@ -101,7 +103,7 @@ const AgentBoard = () => {
       </div>
 
       {/* Feed */}
-      <ul className="divide-y divide-white/4" aria-live="polite" aria-label="Live agent activity feed">
+      <ul className="divide-y divide-white/4" aria-live="polite" aria-label={t.sectionAria.agentBoardFeed}>
         {events.map((ev) => {
           const dept = DEPT_DISPLAY[ev.dept] ?? DEPT_DISPLAY['Engineering'];
           const DeptIcon = dept.icon;

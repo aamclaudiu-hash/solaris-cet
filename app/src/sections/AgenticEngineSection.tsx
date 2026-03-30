@@ -10,12 +10,14 @@ import AgenticNeuralCanvas from '@/components/AgenticNeuralCanvas';
 import AgenticWhispers from '@/components/AgenticWhispers';
 import AgenticSignalUnlock from '@/components/AgenticSignalUnlock';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import { useLanguage } from '@/hooks/useLanguage';
 
 /**
  * Agentic engine narrative: live neural simulation, department IQ, RAV internet mesh, benchmark dashboard.
  * (Companion to AITeamSection — structural headcount lives there; this section is runtime / protocol intelligence.)
  */
 const AgenticEngineSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
   const [sectionVisible, setSectionVisible] = useState(false);
@@ -58,7 +60,7 @@ const AgenticEngineSection = () => {
     <section
       ref={sectionRef}
       id="agentic-engine"
-      aria-label="Agentic engine — neural feed and benchmarks"
+      aria-label={t.sectionAria.agenticEngine}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       <AgenticSignalUnlock active={sectionVisible} />

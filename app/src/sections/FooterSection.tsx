@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { Download, FileText, ArrowRight, Sun, Globe, X, Send, Copy, CheckCircle, Zap } from 'lucide-react';
 import SocialShare from '../components/SocialShare';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
+import { useLanguage } from '../hooks/useLanguage';
 
 // Constants defined once to avoid duplication and maintain a single source of truth
 const GITHUB_URL = 'https://github.com/Solaris-CET/solaris-cet';
@@ -28,6 +29,7 @@ const socialLinks = [
 ];
 
 const FooterSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const ctaCardRef = useRef<HTMLDivElement>(null);
   const newsletterRef = useRef<HTMLDivElement>(null);
@@ -167,7 +169,7 @@ const FooterSection = () => {
           <button
             onClick={handleCopyContract}
             className="shrink-0 p-2 rounded-lg bg-white/5 hover:bg-solaris-gold/10 transition-all duration-200"
-            aria-label="Copy CET contract address"
+            aria-label={t.sectionAria.copyCetAddress}
           >
             {copiedContract
               ? <CheckCircle className="w-4 h-4 text-emerald-400" />
@@ -194,7 +196,7 @@ const FooterSection = () => {
           <button
             onClick={handleCopyPool}
             className="shrink-0 p-2 rounded-lg bg-white/5 hover:bg-solaris-gold/10 transition-all duration-200"
-            aria-label="Copy DeDust pool address"
+            aria-label={t.sectionAria.copyDedustPool}
           >
             {copiedPool
               ? <CheckCircle className="w-4 h-4 text-emerald-400" />

@@ -7,12 +7,14 @@ import {
 
 import { cn } from "@/lib/utils"
 import { buttonVariants, type Button } from "@/components/ui/button"
+import { useLanguage } from "@/hooks/useLanguage"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+  const { t } = useLanguage()
   return (
     <nav
       role="navigation"
-      aria-label="pagination"
+      aria-label={t.ui.paginationNav}
       data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}
@@ -69,9 +71,10 @@ function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useLanguage()
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={t.ui.paginationPrevious}
       size="default"
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
@@ -86,9 +89,10 @@ function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useLanguage()
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={t.ui.paginationNext}
       size="default"
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}

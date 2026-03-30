@@ -5,6 +5,7 @@ import AnimatedCounter from '../components/AnimatedCounter';
 import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { meshStandardBurstFromKey, meshWhisperFromKey } from '@/lib/meshSkillFeed';
+import { useLanguage } from '../hooks/useLanguage';
 
 /** Overrides global `.bento-card:hover` (translate/scale/shadow) with the bento gold glow spec. */
 const BENTO_TILE_INTERACTION =
@@ -89,6 +90,7 @@ const TRUST_BADGES = [
  * Placed after Hero, before Intelligence Core (problem narrative).
  */
 const StatsBento = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const bentoRef   = useRef<HTMLDivElement>(null);
 
@@ -124,7 +126,7 @@ const StatsBento = () => {
     <section
       id="stats"
       ref={sectionRef}
-      aria-label="Solaris CET core statistics"
+      aria-label={t.sectionAria.statsBento}
       className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       {/* Aurora + orbs background */}

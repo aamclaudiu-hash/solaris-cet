@@ -17,6 +17,7 @@ import {
   Atom,
 } from 'lucide-react';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import { useLanguage } from '../hooks/useLanguage';
 
 const WHITEPAPER_URL =
   'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a';
@@ -304,6 +305,7 @@ const WPSectionCard = ({ section }: { section: WPSection }) => {
 // ─── Main Section ─────────────────────────────────────────────────────────────
 
 const WhitepaperSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -370,7 +372,7 @@ const WhitepaperSection = () => {
     <section
       ref={sectionRef}
       id="whitepaper"
-      aria-label="Whitepaper"
+      aria-label={t.sectionAria.whitepaperSection}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       {/* Background decorations */}

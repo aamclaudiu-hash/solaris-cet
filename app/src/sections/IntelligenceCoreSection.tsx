@@ -6,6 +6,7 @@ import DualAiFusionGraphic from '../components/DualAiFusionGraphic';
 import GlowOrbs from '../components/GlowOrbs';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useLanguage } from '../hooks/useLanguage';
 
 
 const steps = [
@@ -18,6 +19,7 @@ const steps = [
 ];
 
 const IntelligenceCoreSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const leftCardRef = useRef<HTMLDivElement>(null);
   const rightCardRef = useRef<HTMLDivElement>(null);
@@ -114,7 +116,7 @@ const IntelligenceCoreSection = () => {
     <section
       ref={sectionRef}
       id="intelligence"
-      aria-label="Intelligence Core"
+      aria-label={t.sectionAria.intelligenceCore}
       className="section-pinned section-glass flex items-center justify-center section-padding-x"
     >
       {/* Background grid */}

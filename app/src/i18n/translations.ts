@@ -103,6 +103,39 @@ export interface Translations {
     roadmap: string;
     footer: string;
   };
+  /** Section/component `aria-label` strings (lazy sections, mesh, copy buttons). */
+  sectionAria: {
+    liveNeuralFeed: string;
+    agentBoardFeed: string;
+    intelligenceCore: string;
+    statsBento: string;
+    aiTeamStructure: string;
+    miningDeviceTypes: string;
+    whitepaperSection: string;
+    faq: string;
+    rwa: string;
+    copyCetAddress: string;
+    copyDedustPool: string;
+    compliance: string;
+    security: string;
+    trustSignals: string;
+    ecosystemIndex: string;
+    agenticEngine: string;
+    networkPulse: string;
+    competition: string;
+    meshSkillSample: string;
+    meshSkillExpression: string;
+    ravIngress: string;
+    reset: string;
+  };
+  /** shadcn-style UI primitives (may be unused but kept i18n-ready). */
+  ui: {
+    toggleSidebar: string;
+    paginationNav: string;
+    paginationPrevious: string;
+    paginationNext: string;
+    breadcrumb: string;
+  };
   hero: {
     tagline: string;
     subtitle: string;
@@ -111,6 +144,9 @@ export interface Translations {
     description: string;
     startMining: string;
     docs: string;
+    miningStartAria: string;
+    miningProcessingAria: string;
+    miningSuccessAria: string;
   };
   tokenomics: {
     title: string;
@@ -227,6 +263,37 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Roadmap',
       footer: 'Site footer',
     },
+    sectionAria: {
+      liveNeuralFeed: 'Live neural feed simulation',
+      agentBoardFeed: 'Live agent activity feed',
+      intelligenceCore: 'Intelligence Core',
+      statsBento: 'Solaris CET core statistics',
+      aiTeamStructure: 'AI Corporate Team Structure',
+      miningDeviceTypes: 'Device type selection',
+      whitepaperSection: 'Whitepaper',
+      faq: 'Frequently Asked Questions',
+      rwa: 'Real World Assets — Cetățuia Agricultural Land',
+      copyCetAddress: 'Copy CET contract address',
+      copyDedustPool: 'Copy DeDust pool address',
+      compliance: 'Compliance and Regulation',
+      security: 'Security and Compliance',
+      trustSignals: 'Trust signals',
+      ecosystemIndex: 'Ecosystem Index',
+      agenticEngine: 'Agentic engine — neural feed and benchmarks',
+      networkPulse: 'TON Network and CET Protocol Live Stats',
+      competition: 'Competitive Analysis',
+      meshSkillSample: 'Mesh skill sample',
+      meshSkillExpression: 'Sample recombinant skill expression from the agent mesh',
+      ravIngress: 'Simulated skill ingress from open retrieval',
+      reset: 'Reset',
+    },
+    ui: {
+      toggleSidebar: 'Toggle Sidebar',
+      paginationNav: 'Pagination',
+      paginationPrevious: 'Go to previous page',
+      paginationNext: 'Go to next page',
+      breadcrumb: 'Breadcrumb',
+    },
     hero: {
       tagline: 'The Digital Foundation of Cetățuia',
       subtitle: 'A hyper-scarce token with 9,000 CET supply on the TON blockchain',
@@ -236,6 +303,9 @@ const translations: Record<LangCode, Translations> = {
         '~200,000 task-specialist AI agents (routing, retrieval, validation) across 10 enterprise lanes — orchestrated with the on-site Oracle. The world\'s first AI-native RWA token on TON: Grok × Gemini RAV Protocol, anchored in Cetățuia, Romania.',
       startMining: 'START MINING',
       docs: 'DOCS',
+      miningStartAria: 'Start mining',
+      miningProcessingAria: 'Processing mining operation',
+      miningSuccessAria: 'Mining initiated successfully',
     },
     tokenomics: {
       title: 'Tokenomics',
@@ -375,6 +445,37 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Hoja de ruta',
       footer: 'Pie de página',
     },
+    sectionAria: {
+      liveNeuralFeed: 'Simulación de feed neuronal en vivo',
+      agentBoardFeed: 'Feed de actividad de agentes en vivo',
+      intelligenceCore: 'Núcleo de inteligencia',
+      statsBento: 'Estadísticas centrales de Solaris CET',
+      aiTeamStructure: 'Estructura corporativa del equipo IA',
+      miningDeviceTypes: 'Selección de tipo de dispositivo',
+      whitepaperSection: 'Libro blanco',
+      faq: 'Preguntas frecuentes',
+      rwa: 'Activos del mundo real — tierras agrícolas Cetățuia',
+      copyCetAddress: 'Copiar dirección del contrato CET',
+      copyDedustPool: 'Copiar dirección del pool DeDust',
+      compliance: 'Cumplimiento y regulación',
+      security: 'Seguridad y cumplimiento',
+      trustSignals: 'Señales de confianza',
+      ecosystemIndex: 'Índice del ecosistema',
+      agenticEngine: 'Motor agéntico — feed neuronal y referencias',
+      networkPulse: 'Estadísticas en vivo de la red TON y el protocolo CET',
+      competition: 'Análisis competitivo',
+      meshSkillSample: 'Muestra de habilidad mesh',
+      meshSkillExpression: 'Expresión de habilidad recombinante de muestra del mesh de agentes',
+      ravIngress: 'Ingress simulado de habilidades desde recuperación abierta',
+      reset: 'Restablecer',
+    },
+    ui: {
+      toggleSidebar: 'Alternar barra lateral',
+      paginationNav: 'Paginación',
+      paginationPrevious: 'Ir a la página anterior',
+      paginationNext: 'Ir a la página siguiente',
+      breadcrumb: 'Ruta de navegación',
+    },
     hero: {
       tagline: 'La Base Digital de Cetățuia',
       subtitle: 'Un token de escasez extrema con 9.000 CET en la blockchain TON',
@@ -384,6 +485,9 @@ const translations: Record<LangCode, Translations> = {
         '~200.000 agentes de IA especializados en tareas (enrutamiento, recuperación, validación) en 10 líneas empresariales, orquestados con el Oráculo integrado. El primer token RWA nativo de IA en TON: protocolo RAV Grok × Gemini, anclado en Cetățuia, Rumanía.',
       startMining: 'INICIAR MINERÍA',
       docs: 'DOCUMENTOS',
+      miningStartAria: 'Iniciar minería',
+      miningProcessingAria: 'Procesando operación de minería',
+      miningSuccessAria: 'Minería iniciada correctamente',
     },
     tokenomics: {
       title: 'Tokenómica',
@@ -523,6 +627,37 @@ const translations: Record<LangCode, Translations> = {
       roadmap: '路线图',
       footer: '页脚',
     },
+    sectionAria: {
+      liveNeuralFeed: '实时神经流模拟',
+      agentBoardFeed: '实时智能体活动 feed',
+      intelligenceCore: '智能核心',
+      statsBento: 'Solaris CET 核心统计',
+      aiTeamStructure: 'AI 企业团队结构',
+      miningDeviceTypes: '设备类型选择',
+      whitepaperSection: '白皮书',
+      faq: '常见问题',
+      rwa: '现实世界资产 — Cetățuia 农业用地',
+      copyCetAddress: '复制 CET 合约地址',
+      copyDedustPool: '复制 DeDust 池地址',
+      compliance: '合规与监管',
+      security: '安全与合规',
+      trustSignals: '信任信号',
+      ecosystemIndex: '生态指数',
+      agenticEngine: '智能体引擎 — 神经流与基准',
+      networkPulse: 'TON 网络与 CET 协议实时统计',
+      competition: '竞争分析',
+      meshSkillSample: '网格技能示例',
+      meshSkillExpression: '来自智能体网格的重组技能表达示例',
+      ravIngress: '来自开放检索的模拟技能入口',
+      reset: '重置',
+    },
+    ui: {
+      toggleSidebar: '切换侧边栏',
+      paginationNav: '分页导航',
+      paginationPrevious: '上一页',
+      paginationNext: '下一页',
+      breadcrumb: '面包屑导航',
+    },
     hero: {
       tagline: 'Cetățuia 的数字基础',
       subtitle: 'TON 区块链上供应量仅 9,000 枚 CET 的超稀缺代币',
@@ -532,6 +667,9 @@ const translations: Record<LangCode, Translations> = {
         '约20万个任务型AI智能体（路由、检索、验证）分布于10条企业业务线，与站内预言机协同编排。全球首个TON链上AI原生RWA代币：Grok × Gemini RAV 协议，锚定罗马尼亚 Cetățuia。',
       startMining: '开始挖矿',
       docs: '文档',
+      miningStartAria: '开始挖矿',
+      miningProcessingAria: '正在处理挖矿操作',
+      miningSuccessAria: '挖矿已成功启动',
     },
     tokenomics: {
       title: '代币经济学',
@@ -671,6 +809,37 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Дорожная карта',
       footer: 'Подвал сайта',
     },
+    sectionAria: {
+      liveNeuralFeed: 'Симуляция живого нейропотока',
+      agentBoardFeed: 'Лента активности агентов в реальном времени',
+      intelligenceCore: 'Ядро интеллекта',
+      statsBento: 'Ключевая статистика Solaris CET',
+      aiTeamStructure: 'Корпоративная структура AI-команды',
+      miningDeviceTypes: 'Выбор типа устройства',
+      whitepaperSection: 'Whitepaper',
+      faq: 'Часто задаваемые вопросы',
+      rwa: 'Реальные активы — сельхозземли Cetățuia',
+      copyCetAddress: 'Копировать адрес контракта CET',
+      copyDedustPool: 'Копировать адрес пула DeDust',
+      compliance: 'Соответствие и регулирование',
+      security: 'Безопасность и соответствие',
+      trustSignals: 'Сигналы доверия',
+      ecosystemIndex: 'Индекс экосистемы',
+      agenticEngine: 'Агентный движок — нейропоток и бенчмарки',
+      networkPulse: 'Живая статистика сети TON и протокола CET',
+      competition: 'Конкурентный анализ',
+      meshSkillSample: 'Образец mesh-навыка',
+      meshSkillExpression: 'Образец рекомбинантного выражения навыка из mesh агентов',
+      ravIngress: 'Симулированный вход навыка из открытого поиска',
+      reset: 'Сброс',
+    },
+    ui: {
+      toggleSidebar: 'Переключить боковую панель',
+      paginationNav: 'Пагинация',
+      paginationPrevious: 'Предыдущая страница',
+      paginationNext: 'Следующая страница',
+      breadcrumb: 'Хлебные крошки',
+    },
     hero: {
       tagline: 'Цифровая Основа Cetățuia',
       subtitle: 'Гиперредкий токен с запасом 9 000 CET на блокчейне TON',
@@ -680,6 +849,9 @@ const translations: Record<LangCode, Translations> = {
         '~200 000 узкоспециализированных AI-агентов задач (маршрутизация, поиск, валидация) в 10 корпоративных направлениях — в связке с он-сайт Оракулом. Первый AI-нативный RWA-токен на TON: протокол RAV Grok × Gemini, привязанный к Cetățuia, Румыния.',
       startMining: 'НАЧАТЬ МАЙНИНГ',
       docs: 'ДОКУМЕНТЫ',
+      miningStartAria: 'Начать майнинг',
+      miningProcessingAria: 'Обработка операции майнинга',
+      miningSuccessAria: 'Майнинг успешно запущен',
     },
     tokenomics: {
       title: 'Токеномика',
@@ -819,6 +991,37 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Foaie de parcurs',
       footer: 'Subsol site',
     },
+    sectionAria: {
+      liveNeuralFeed: 'Simulare feed neural în timp real',
+      agentBoardFeed: 'Flux activitate agenți în timp real',
+      intelligenceCore: 'Nucleu de inteligență',
+      statsBento: 'Statistici centrale Solaris CET',
+      aiTeamStructure: 'Structură corporativă echipă AI',
+      miningDeviceTypes: 'Selecție tip dispozitiv',
+      whitepaperSection: 'Whitepaper',
+      faq: 'Întrebări frecvente',
+      rwa: 'Active din lumea reală — teren agricol Cetățuia',
+      copyCetAddress: 'Copiază adresa contractului CET',
+      copyDedustPool: 'Copiază adresa pool-ului DeDust',
+      compliance: 'Conformitate și reglementare',
+      security: 'Securitate și conformitate',
+      trustSignals: 'Semnale de încredere',
+      ecosystemIndex: 'Indice ecosistem',
+      agenticEngine: 'Motor agențial — feed neural și benchmark-uri',
+      networkPulse: 'Statistici live rețea TON și protocol CET',
+      competition: 'Analiză competitivă',
+      meshSkillSample: 'Exemplu skill mesh',
+      meshSkillExpression: 'Expresie skill recombinantă din mesh-ul de agenți',
+      ravIngress: 'Ingress simulat de skill din recuperare deschisă',
+      reset: 'Resetare',
+    },
+    ui: {
+      toggleSidebar: 'Comută bara laterală',
+      paginationNav: 'Paginare',
+      paginationPrevious: 'Pagina anterioară',
+      paginationNext: 'Pagina următoare',
+      breadcrumb: 'Fil de navigare',
+    },
     hero: {
       tagline: 'Fundația Digitală a Cetățuiei',
       subtitle: 'Un token ultra-rar cu 9.000 CET pe blockchain-ul TON',
@@ -828,6 +1031,9 @@ const translations: Record<LangCode, Translations> = {
         '~200.000 de agenți AI specializați pe taskuri (rutare, recuperare, validare) pe 10 linii enterprise — orchestrați cu Oracolul din site. Primul token RWA nativ-AI pe TON: protocol RAV Grok × Gemini, ancorat în Cetățuia, România.',
       startMining: 'ÎNCEPE MINAREA',
       docs: 'DOCUMENTE',
+      miningStartAria: 'Începe minarea',
+      miningProcessingAria: 'Se procesează operațiunea de minare',
+      miningSuccessAria: 'Minare inițiată cu succes',
     },
     tokenomics: {
       title: 'Tokenomică',
@@ -967,6 +1173,37 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Roteiro',
       footer: 'Rodapé',
     },
+    sectionAria: {
+      liveNeuralFeed: 'Simulação de feed neural em tempo real',
+      agentBoardFeed: 'Feed de atividade dos agentes em tempo real',
+      intelligenceCore: 'Núcleo de inteligência',
+      statsBento: 'Estatísticas centrais Solaris CET',
+      aiTeamStructure: 'Estrutura corporativa da equipa IA',
+      miningDeviceTypes: 'Seleção do tipo de dispositivo',
+      whitepaperSection: 'Whitepaper',
+      faq: 'Perguntas frequentes',
+      rwa: 'Ativos do mundo real — terras agrícolas Cetățuia',
+      copyCetAddress: 'Copiar endereço do contrato CET',
+      copyDedustPool: 'Copiar endereço do pool DeDust',
+      compliance: 'Conformidade e regulamentação',
+      security: 'Segurança e conformidade',
+      trustSignals: 'Sinais de confiança',
+      ecosystemIndex: 'Índice do ecossistema',
+      agenticEngine: 'Motor agêntico — feed neural e benchmarks',
+      networkPulse: 'Estatísticas em tempo real da rede TON e do protocolo CET',
+      competition: 'Análise competitiva',
+      meshSkillSample: 'Amostra de skill mesh',
+      meshSkillExpression: 'Expressão de skill recombinante da malha de agentes',
+      ravIngress: 'Ingresso simulado de skill a partir de recuperação aberta',
+      reset: 'Repor',
+    },
+    ui: {
+      toggleSidebar: 'Alternar barra lateral',
+      paginationNav: 'Paginação',
+      paginationPrevious: 'Página anterior',
+      paginationNext: 'Página seguinte',
+      breadcrumb: 'Navegação estrutural',
+    },
     hero: {
       tagline: 'A Fundação Digital da Cetățuia',
       subtitle: 'Um token ultra-escasso com oferta de 9.000 CET na blockchain TON',
@@ -976,6 +1213,9 @@ const translations: Record<LangCode, Translations> = {
         '~200.000 agentes de IA especializados em tarefas (roteamento, recuperação, validação) em 10 frentes enterprise — orquestrados com o Oráculo no site. O primeiro token RWA nativo de IA na TON: protocolo RAV Grok × Gemini, ancorado em Cetățuia, Romênia.',
       startMining: 'INICIAR MINERAÇÃO',
       docs: 'DOCUMENTOS',
+      miningStartAria: 'Iniciar mineração',
+      miningProcessingAria: 'A processar operação de mineração',
+      miningSuccessAria: 'Mineração iniciada com sucesso',
     },
     tokenomics: {
       title: 'Tokenomia',
@@ -1115,6 +1355,37 @@ const translations: Record<LangCode, Translations> = {
       roadmap: 'Fahrplan',
       footer: 'Seitenfuß',
     },
+    sectionAria: {
+      liveNeuralFeed: 'Live-Neural-Feed-Simulation',
+      agentBoardFeed: 'Live-Aktivitätsfeed der Agenten',
+      intelligenceCore: 'Intelligenz-Kern',
+      statsBento: 'Kernstatistiken Solaris CET',
+      aiTeamStructure: 'Unternehmensstruktur des KI-Teams',
+      miningDeviceTypes: 'Gerätetyp-Auswahl',
+      whitepaperSection: 'Whitepaper',
+      faq: 'Häufig gestellte Fragen',
+      rwa: 'Real World Assets — landwirtschaftliche Flächen Cetățuia',
+      copyCetAddress: 'CET-Vertragsadresse kopieren',
+      copyDedustPool: 'DeDust-Pool-Adresse kopieren',
+      compliance: 'Compliance und Regulierung',
+      security: 'Sicherheit und Compliance',
+      trustSignals: 'Vertrauenssignale',
+      ecosystemIndex: 'Ökosystem-Index',
+      agenticEngine: 'Agentic Engine — Neural Feed und Benchmarks',
+      networkPulse: 'Live-Statistiken TON-Netzwerk und CET-Protokoll',
+      competition: 'Wettbewerbsanalyse',
+      meshSkillSample: 'Mesh-Skill-Beispiel',
+      meshSkillExpression: 'Beispiel einer rekombinanten Skill-Expression aus dem Agenten-Mesh',
+      ravIngress: 'Simulierter Skill-Eingang aus offener Retrieval-Quelle',
+      reset: 'Zurücksetzen',
+    },
+    ui: {
+      toggleSidebar: 'Seitenleiste umschalten',
+      paginationNav: 'Seitennummerierung',
+      paginationPrevious: 'Zur vorherigen Seite',
+      paginationNext: 'Zur nächsten Seite',
+      breadcrumb: 'Brotkrumen-Navigation',
+    },
     hero: {
       tagline: 'Das digitale Fundament von Cetățuia',
       subtitle: 'Ein extrem seltener Token mit 9.000 CET auf der TON-Blockchain',
@@ -1124,6 +1395,9 @@ const translations: Record<LangCode, Translations> = {
         '~200.000 aufgaben-spezialisierte KI-Agenten (Routing, Retrieval, Validierung) in 10 Enterprise-Spuren — orchestriert mit dem On-Site-Orakel. Das KI-native RWA-Token auf TON: RAV-Protokoll Grok × Gemini, verankert in Cetățuia, Rumänien.',
       startMining: 'MINING STARTEN',
       docs: 'DOKUMENTE',
+      miningStartAria: 'Mining starten',
+      miningProcessingAria: 'Mining-Vorgang wird verarbeitet',
+      miningSuccessAria: 'Mining erfolgreich gestartet',
     },
     tokenomics: {
       title: 'Tokenomik',

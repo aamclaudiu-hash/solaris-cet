@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
+import { useLanguage } from '../hooks/useLanguage';
 
 interface FAQLink {
   label: string;
@@ -102,6 +103,7 @@ const faqs: FAQ[] = [
 ];
 
 const FAQSection = () => {
+  const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
@@ -175,7 +177,7 @@ const FAQSection = () => {
     <section
       id="faq"
       ref={sectionRef}
-      aria-label="Frequently Asked Questions"
+      aria-label={t.sectionAria.faq}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="cyan" />

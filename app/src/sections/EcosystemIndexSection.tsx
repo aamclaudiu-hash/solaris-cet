@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { TrendingUp, ExternalLink, BarChart2 } from 'lucide-react';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface CryptoProject {
   name: string;
@@ -122,6 +123,7 @@ const categoryConfig: CategoryConfig[] = [
 ];
 
 const EcosystemIndexSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const featuredRef = useRef<HTMLDivElement>(null);
@@ -192,7 +194,7 @@ const EcosystemIndexSection = () => {
     <section
       id="ecosystem-index"
       ref={sectionRef}
-      aria-label="Ecosystem Index"
+      aria-label={t.sectionAria.ecosystemIndex}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       {/* Background decorations */}

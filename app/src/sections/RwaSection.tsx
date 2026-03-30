@@ -4,6 +4,7 @@ import { MapPin, Leaf, Shield, TrendingUp, Layers, Sun, Landmark } from 'lucide-
 import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
+import { useLanguage } from '../hooks/useLanguage';
 
 /** Inline SVG placeholder — replace with on-site photography of Cetățuia land when available */
 const PHYSICAL_ASSET_PLACEHOLDER_BG =
@@ -81,6 +82,7 @@ const RWA_PILLARS = [
  * backing of Solaris CET and how AI agents optimise its yield.
  */
 const RwaSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const gridRef    = useRef<HTMLDivElement>(null);
   const physicalAssetRef = useRef<HTMLDivElement>(null);
@@ -134,7 +136,7 @@ const RwaSection = () => {
     <section
       id="rwa"
       ref={sectionRef}
-      aria-label="Real World Assets — Cetățuia Agricultural Land"
+      aria-label={t.sectionAria.rwa}
       className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />

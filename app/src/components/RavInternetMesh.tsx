@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useLanguage } from '@/hooks/useLanguage';
 import { shortSkillWhisper } from '@/lib/meshSkillFeed';
 import { Globe2, Radio } from 'lucide-react';
 
@@ -25,6 +26,7 @@ function polar(angleDeg: number, r: number): { x: number; y: number } {
  * SVG diagram: RAV core pulling from internet-scale sources (conceptual).
  */
 const RavInternetMesh = () => {
+  const { t } = useLanguage();
   const reduce = useReducedMotion();
   const [ticker, setTicker] = useState(200);
 
@@ -135,7 +137,7 @@ const RavInternetMesh = () => {
       <div
         className="mt-4 rounded-xl border border-fuchsia-500/15 bg-fuchsia-500/[0.04] px-3 py-2.5 mb-3"
         aria-live="polite"
-        aria-label="Simulated skill ingress from open retrieval"
+        aria-label={t.sectionAria.ravIngress}
       >
         <div className="text-[8px] font-mono uppercase tracking-[0.18em] text-fuchsia-400/85 mb-1">
           RAV · skill ingress (sim)

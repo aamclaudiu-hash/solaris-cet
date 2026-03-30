@@ -233,10 +233,10 @@ const HeroSection: React.FC = () => {
                     aria-busy={miningState === 'PROCESSING'}
                     aria-label={
                       miningState === 'IDLE'
-                        ? 'Start mining'
+                        ? t.hero.miningStartAria
                         : miningState === 'PROCESSING'
-                          ? 'Processing mining operation'
-                          : 'Mining initiated successfully'
+                          ? t.hero.miningProcessingAria
+                          : t.hero.miningSuccessAria
                     }
                     className="group relative w-full md:w-auto min-h-[52px] px-8 py-4 rounded-2xl bg-gradient-to-br from-[#F2C94C] to-[#D4AF37] text-slate-950 font-bold text-sm md:text-base tracking-wide shadow-[0_0_28px_rgba(234,179,8,0.35)] transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-[0_0_50px_rgba(250,204,21,0.55),0_0_100px_rgba(234,179,8,0.28)] hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2.5 overflow-hidden"
                   >

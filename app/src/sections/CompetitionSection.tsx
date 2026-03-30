@@ -4,6 +4,7 @@ import { CheckCircle, XCircle, Minus, Trophy, Zap, Shield, Brain, Coins } from '
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import GlowOrbs from '../components/GlowOrbs';
 import { skillSeedFromLabel, standardSkillBurst } from '@/lib/meshSkillFeed';
+import { useLanguage } from '../hooks/useLanguage';
 
 interface CompetitionBarTooltipPayload {
   value?: number;
@@ -211,6 +212,7 @@ const advantages = [
 // ─── Component ────────────────────────────────────────────────────────────
 
 const CompetitionSection = () => {
+  const { t } = useLanguage();
   const sectionRef   = useRef<HTMLDivElement>(null);
   const headingRef   = useRef<HTMLDivElement>(null);
   const tableRef     = useRef<HTMLDivElement>(null);
@@ -246,7 +248,7 @@ const CompetitionSection = () => {
     <section
       id="competition"
       ref={sectionRef}
-      aria-label="Competitive Analysis"
+      aria-label={t.sectionAria.competition}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />

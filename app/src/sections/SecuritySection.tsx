@@ -12,6 +12,7 @@ import {
   Anchor,
 } from 'lucide-react';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import { useLanguage } from '@/hooks/useLanguage';
 
 
 // Static data defined outside component to avoid re-creation on every render
@@ -62,6 +63,7 @@ const trustSignalBadges = [
 ] as const;
 
 const SecuritySection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const leftColumnRef = useRef<HTMLDivElement>(null);
   const badgeGridRef = useRef<HTMLDivElement>(null);
@@ -155,7 +157,7 @@ const SecuritySection = () => {
     <section
       id="security"
       ref={sectionRef}
-      aria-label="Security and Compliance"
+      aria-label={t.sectionAria.security}
       className="relative section-glass py-24 lg:py-32 overflow-hidden"
     >
       {/* Background */}
@@ -210,7 +212,7 @@ const SecuritySection = () => {
             <div
               className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 backdrop-blur-sm"
               role="group"
-              aria-label="Trust signals"
+              aria-label={t.sectionAria.trustSignals}
             >
               <span className="text-solaris-muted text-[10px] font-mono uppercase tracking-[0.2em] shrink-0">
                 Trust signals

@@ -4,9 +4,11 @@ import { ShieldCheck, FileCheck, Globe, Server } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useLanguage } from '../hooks/useLanguage';
 
 
 const ComplianceSection = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const leftCardRef = useRef<HTMLDivElement>(null);
   const rightCardRef = useRef<HTMLDivElement>(null);
@@ -94,7 +96,7 @@ const ComplianceSection = () => {
   return (
     <section
       ref={sectionRef}
-      aria-label="Compliance and Regulation"
+      aria-label={t.sectionAria.compliance}
       className="section-pinned section-glass flex items-center justify-center section-padding-x"
     >
       {/* Background grid */}
