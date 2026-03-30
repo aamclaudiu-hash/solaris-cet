@@ -17,5 +17,15 @@ if (!existsSync(src)) {
   process.exit(1);
 }
 
+/** OMEGA: @font-face in static/sovereign/index.html — build must fail if vendored woff2 is missing. */
+const requiredFont = join(src, "fonts/jetbrains-mono-400.woff2");
+if (!existsSync(requiredFont)) {
+  console.error(
+    "[sync-sovereign] missing self-hosted font (SIL OFL). Expected:",
+    requiredFont
+  );
+  process.exit(1);
+}
+
 cpSync(src, dest, { recursive: true });
 console.log("[sync-sovereign]", src, "→", dest);
