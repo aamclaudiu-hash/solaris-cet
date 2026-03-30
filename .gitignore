@@ -5,6 +5,7 @@ app/dist/
 app/public/sovereign/
 app/coverage/
 app/test-results/
+app/playwright-report/
 app/coverage/
 contracts/build/
 *.log
