@@ -126,6 +126,20 @@ describe("useIntersectionObserver", () => {
     ).not.toThrow();
   });
 
+  it("starts with isVisible=false for varied option objects", () => {
+    mockIntersectionObserver();
+    const opts: Parameters<typeof useIntersectionObserver>[0][] = [
+      {},
+      { threshold: 0.2 },
+      { rootMargin: "100px" },
+      { freezeOnceVisible: false },
+    ];
+    for (const o of opts) {
+      const { result } = renderHook(() => useIntersectionObserver(o));
+      expect(result.current.isVisible).toBe(false);
+    }
+  });
+
   it("disconnect is called when the element enters the viewport (freezeOnceVisible=true)", () => {
     const { disconnect, trigger } = mockIntersectionObserver();
 
