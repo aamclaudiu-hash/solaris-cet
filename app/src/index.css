@@ -638,6 +638,8 @@
  * Do not use on: (1) any element that GSAP tweens with `transform`, or (2) the same
  * node as a `ref` passed to ScrollTrigger/scrub `y`/`x`/`rotate` tweens — causes jitter.
  * Pinned sections (Compliance, Hybrid, Intelligence) should keep `holo-card` only.
+ * Regression check: `holo-card-3d` must not appear on nodes targeted by GSAP `transform` tweens
+ * (see FooterSection ctaCardRef, StatsBento `.bento-stat`, etc.).
  */
 .holo-card-3d {
   transform-style: preserve-3d;
@@ -685,6 +687,17 @@
     background: none !important;
     -webkit-text-fill-color: #f2c94c !important;
     color: #f2c94c !important;
+  }
+}
+
+/* Reduce continuous background-position animation on narrow viewports (battery / mid-range GPUs). */
+@media (max-width: 480px) {
+  .living-gold-text {
+    animation: none !important;
+    background: linear-gradient(120deg, #fff8e7 0%, #f2c94c 45%, #a67c00 100%);
+    background-size: 100% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
   }
 }
 
@@ -1501,4 +1514,45 @@
     black 92%,
     transparent 100%
   );
+}
+
+/* ── Print: tokenomics / records (hide chrome, high contrast) ───────────── */
+@media print {
+  .loading-overlay,
+  .cursor-glow,
+  .noise-overlay,
+  header[class*="fixed"],
+  button.fixed.bottom-6.right-6 {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  #staking {
+    break-inside: avoid;
+  }
+
+  #staking .rounded-2xl,
+  #staking .bento-card {
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  #staking .font-mono,
+  #staking .tabular-nums {
+    color: #000 !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+    word-break: break-all;
+  }
 }

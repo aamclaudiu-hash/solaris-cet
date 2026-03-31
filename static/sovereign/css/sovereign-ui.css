@@ -265,3 +265,12 @@
     opacity: 0.65;
   }
 }
+
+/* Keyboard / accessibility — visible focus without JS */
+.skip:focus,
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent-sovereign);
+  outline-offset: 2px;
+}
