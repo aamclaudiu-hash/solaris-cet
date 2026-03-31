@@ -287,9 +287,17 @@ const FooterSection = () => {
           </div>
           <div className="my-6 holo-line" />
           <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-            <p className="text-solaris-muted text-sm">
-              © {new Date().getFullYear()} Solaris CET. AI Bridge to High Intelligence. All rights reserved.
-            </p>
+            <div className="text-center lg:text-left">
+              <p className="text-solaris-muted text-sm">
+                © {new Date().getFullYear()} Solaris CET. AI Bridge to High Intelligence. All rights reserved.
+              </p>
+              <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-solaris-muted/90">
+                Genesis anchor:{' '}
+                <span className="text-solaris-gold/70">2026-03-31T23:23:00Z</span>
+                {' · '}
+                CET supply cap: 9,000 · Surface: OMEGA-2026
+              </p>
+            </div>
           <div className="flex flex-col md:flex-row items-center gap-3">
               <SocialShare />
               <div className="hidden md:block w-px h-4 bg-white/10" />

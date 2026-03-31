@@ -7,6 +7,9 @@
       name="description"
       content="Solaris CET — RWA on TON. Fixed 9,000 CET. Cetățuia, Romania. Tactical static surface (no JavaScript)."
     />
+    <meta name="genesis-date" content="2026-03-31T23:23:00Z" />
+    <meta name="cet-supply" content="9000" />
+    <meta name="cet-standard" content="OMEGA-2026" />
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'"
@@ -271,7 +274,7 @@
               <div
                 class="led-display scanlines-subtle supply-figure"
                 role="group"
-                aria-label="CET supply cap (display)"
+                aria-label="9,000 CET tokens, fixed supply cap"
               >
                 <span class="data-mono led-main phosphor-bloom weight-indicator">9,000</span
                 ><span class="data-mono led-fraction" aria-hidden="true">.00</span>
@@ -358,11 +361,8 @@
         </div>
       </div>
       <footer role="contentinfo">
-        <p
-          class="sovereign-eternity-line data-mono"
-          aria-hidden="true"
-        >
-          GENESIS_ANCHOR: 2026-03-31T00:00:00Z · CET_SUPPLY_CAP: 9000 · GEO_ANCHOR: Cetățuia, Romania · NETWORK: TON
+        <p class="sovereign-eternity-line data-mono">
+          GENESIS_ANCHOR: 2026-03-31T23:23:00Z · CET_SUPPLY_CAP: 9000 · GEO_ANCHOR: Cetățuia, Romania · NETWORK: TON
         </p>
         <p class="data-mono">solaris-cet.com/sovereign/</p>
         <p style="margin: 1rem 0 0">
@@ -370,5 +370,6 @@
         </p>
       </footer>
     </main>
+    <!-- BUILD_SEAL_INJECT -->
   </body>
 </html>

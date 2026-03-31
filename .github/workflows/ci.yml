@@ -158,6 +158,7 @@ jobs:
         working-directory: app
         run: npm run build
 
+      # Immutable performance budget (main entry chunk). Raise only with explicit review — production UX depends on it.
       - name: Check main bundle size budget
         working-directory: app
         run: |

@@ -964,3 +964,47 @@ summary:focus-visible {
   outline: 2px solid var(--accent-sovereign);
   outline-offset: 2px;
 }
+
+/* Screen-reader-only (static surface has no Tailwind) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Build-time artifact seal (injected before </body>; no JS) */
+.sovereign-build-seal {
+  position: fixed;
+  bottom: 0.65rem;
+  right: 0.65rem;
+  z-index: 50;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.55);
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.sovereign-build-seal:hover {
+  opacity: 1;
+}

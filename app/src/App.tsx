@@ -8,6 +8,7 @@ import CursorGlow from './components/CursorGlow';
 import LazyLoadWrapper from './components/LazyLoadWrapper';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import BackToTop from './components/BackToTop';
+import { BuildSeal } from './components/BuildSeal';
 import { ScrollFadeUp } from './components/ScrollFadeUp';
 // Pinned sections — loaded eagerly so the snap/scroll setup can find their ScrollTriggers
 import HeroSection from './sections/HeroSection';
@@ -476,6 +477,7 @@ function AppContent() {
         </main>
       </div>
       <BackToTop />
+      <BuildSeal />
     </LanguageContext.Provider>
   );
 }

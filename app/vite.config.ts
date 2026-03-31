@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process"
 import fs from "node:fs"
 import path from "path"
 import react from "@vitejs/plugin-react"
@@ -57,9 +58,28 @@ function resolvePreviewPort(fallback = 4173): number {
   return n
 }
 
+/** Build-time artifact seal (Coolify can set VITE_* env). */
+function gitShort(): string {
+  const fromEnv = process.env.VITE_GIT_COMMIT_HASH?.trim()
+  if (fromEnv) return fromEnv.slice(0, 7)
+  try {
+    return execSync("git rev-parse --short HEAD", { encoding: "utf8" }).trim().slice(0, 7)
+  } catch {
+    return "unknown"
+  }
+}
+
+function buildTimestamp(): string {
+  return process.env.VITE_BUILD_TIMESTAMP?.trim() || new Date().toISOString()
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
+  define: {
+    "import.meta.env.VITE_GIT_COMMIT_HASH": JSON.stringify(gitShort()),
+    "import.meta.env.VITE_BUILD_TIMESTAMP": JSON.stringify(buildTimestamp()),
+  },
   plugins: [
     previewHealthJson(),
     react(),
