@@ -73,9 +73,9 @@ module.exports = {
         "solaris-cyan": "rgb(46 231 255 / <alpha-value>)",
       },
       fontFamily: {
-        sans: ['"Space Grotesk"', "system-ui", "sans-serif"],
-        display: ['"Space Grotesk"', "system-ui", "sans-serif"],
-        mono: ["IBM Plex Mono", "monospace"],
+        sans: ['"Avenir Next"', '"Segoe UI"', "Inter", "system-ui", "sans-serif"],
+        display: ['"Avenir Next"', '"Segoe UI"', "Inter", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

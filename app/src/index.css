@@ -2,6 +2,14 @@
 @config "../tailwind.config.js";
 
 @layer base {
+  @font-face {
+    font-family: "JetBrains Mono";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/sovereign/fonts/jetbrains-mono-400.woff2") format("woff2");
+  }
+
   ::selection {
     background: rgba(242, 201, 76, 0.3);
     color: #fff;
@@ -79,7 +87,7 @@
   }
   
   .font-mono {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   }
 
   ::-webkit-scrollbar {
@@ -150,7 +158,7 @@
   }
   
   .hud-label {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.08em;
@@ -734,7 +742,7 @@
   gap: 6px;
   padding: 4px 10px;
   border-radius: 6px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -877,7 +885,7 @@
   outline: none;
   padding: 10px 10px 10px 34px;
   font-size: 13px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color: rgba(244, 246, 255, 0.9);
   letter-spacing: 0.015em;
 }
@@ -908,7 +916,7 @@
   border: 1px solid rgba(242, 201, 76, 0.30);
   border-radius: 8px;
   color: rgba(242, 201, 76, 0.85);
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 11px;
   letter-spacing: 0.04em;
   padding: 5px 10px;
@@ -994,7 +1002,7 @@
 
 .oracle-modal-query {
   font-size: 11px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color: rgba(46, 231, 255, 0.72);
   margin-bottom: 16px;
   padding: 8px 12px;

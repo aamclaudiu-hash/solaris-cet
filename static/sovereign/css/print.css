@@ -57,7 +57,7 @@
   }
 
   body::after {
-    content: "Tiparit la: " attr(data-print-date) " | Hash Verificare: SOL-CET-2026";
+    content: "Tiparit la: " var(--print-date, "N/A") " | Hash Verificare: SOL-CET-2026";
     display: block;
     text-align: center;
     font-size: 9pt;
