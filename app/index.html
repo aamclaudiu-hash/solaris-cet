@@ -60,10 +60,10 @@
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
                    script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://plausible.io https://telegram.org;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   style-src 'self' 'unsafe-inline';
                    img-src 'self' data: https:;
-                   font-src 'self' data: https://fonts.gstatic.com;
-                   connect-src 'self' https://toncenter.com https://tonapi.io https://github.com https://api.dedust.io https://bridge.tonapi.io https://tonconnectapi.com https://plausible.io https://telegram.org https://cdn.jsdelivr.net https://api.country.is wss:;
+                   font-src 'self' data:;
+                   connect-src 'self' https://toncenter.com https://tonapi.io https://github.com https://api.dedust.io https://bridge.tonapi.io https://tonconnectapi.com https://plausible.io https://telegram.org https://api.country.is wss:;
                    worker-src 'self' blob:;
                    object-src 'none';
                    frame-src 'none';" />
@@ -162,22 +162,7 @@
     }
     </script>
 
-    <!-- Google Fonts: preconnect + non-blocking load to eliminate render-blocking -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Load fonts asynchronously — switch rel from print to all after load -->
-    <link
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-      />
-    </noscript>
+    <!-- OMEGA policy: no external font/style CDNs in shipped runtime HTML -->
 
     <!-- Preload above-the-fold hero image to improve Largest Contentful Paint -->
     <link rel="preload" as="image" href="./hero-coin.png" fetchpriority="high" />
