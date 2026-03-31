@@ -33,9 +33,9 @@
     "node": ">=22"
   },
   "scripts": {
-    "predev": "node ../scripts/sync-sovereign-to-public.mjs",
+    "predev": "node ../scripts/sync-sovereign-to-public.mjs && node ../scripts/sync-onnxruntime-assets.mjs",
     "dev": "vite",
-    "prebuild": "node ../scripts/sync-sovereign-to-public.mjs",
+    "prebuild": "node ../scripts/sync-sovereign-to-public.mjs && node ../scripts/sync-onnxruntime-assets.mjs",
     "build": "tsc -b && vite build",
     "start": "vite preview --host 0.0.0.0 --port ${PORT:-4173}",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",

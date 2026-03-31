@@ -36,9 +36,8 @@
 
 import type { InferenceSession, Tensor } from 'onnxruntime-web';
 
-// Keep in sync with the version pinned in package.json.
-const ORT_CDN_BASE =
-  'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.24.3/dist/';
+// Same-origin ONNX runtime assets copied by scripts/sync-onnxruntime-assets.mjs.
+const ORT_LOCAL_BASE = '/vendor/onnxruntime/';
 
 // ---------------------------------------------------------------------------
 // Public types (importable by host components)
@@ -116,12 +115,11 @@ async function resolveBackend(): Promise<'webgpu' | 'wasm'> {
 
 async function loadModel(modelUrl: string): Promise<void> {
   // Dynamic import keeps onnxruntime-web out of the main-thread bundle.
-  // WASM binaries are served from the CDN so the Service Worker can cache
-  // them for fully-offline execution (see vite.config.ts runtimeCaching).
+  // WASM binaries are served from same-origin static assets for CSP compliance.
   const ort = await import('onnxruntime-web');
   const backend = await resolveBackend();
 
-  ort.env.wasm.wasmPaths = ORT_CDN_BASE;
+  ort.env.wasm.wasmPaths = ORT_LOCAL_BASE;
 
   session = await ort.InferenceSession.create(modelUrl, {
     executionProviders: [backend, 'wasm'],
