@@ -3,7 +3,7 @@
  * Copies static/sovereign → app/public/sovereign so Vite production build
  * serves the OMEGA zero-JS surface at /sovereign/ (Coolify: same artifact as SPA).
  */
-import { cpSync, existsSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,4 +28,10 @@ if (!existsSync(requiredFont)) {
 }
 
 cpSync(src, dest, { recursive: true });
+
+/** React app @font-face uses `/fonts/jetbrains-mono-400.woff2` — mirror from sovereign source of truth. */
+const appFonts = join(root, "app/public/fonts");
+mkdirSync(appFonts, { recursive: true });
+cpSync(requiredFont, join(appFonts, "jetbrains-mono-400.woff2"));
 console.log("[sync-sovereign]", src, "→", dest);
+console.log("[sync-sovereign] app font →", join(appFonts, "jetbrains-mono-400.woff2"));

@@ -117,11 +117,34 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        /** SPA fallback; do not hijack the zero-JS sovereign subtree. */
+        /**
+         * SPA shell for client routes (must stay index.html — not offline.html, or SPA breaks).
+         * Offline navigations use NetworkFirst below + handlerDidError → offline.html.
+         */
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/sovereign\//],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB to cover phone-mockup.png
         runtimeCaching: [
+          {
+            urlPattern: ({ request, url }: { request: Request; url: URL }) =>
+              request.mode === 'navigate' && !url.pathname.startsWith('/sovereign/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-offline-fallback',
+              networkTimeoutSeconds: 5,
+              plugins: [
+                {
+                  /** Runs in the generated service worker; `caches` is a SW global. */
+                  handlerDidError: async () => {
+                    const g = globalThis as unknown as {
+                      caches: { match: (req: string) => Promise<Response | undefined> }
+                    }
+                    return (await g.caches.match('/offline.html')) ?? undefined
+                  },
+                },
+              ],
+            },
+          },
           {
             urlPattern: /\/api\/state\.json$/,
             handler: 'StaleWhileRevalidate',
