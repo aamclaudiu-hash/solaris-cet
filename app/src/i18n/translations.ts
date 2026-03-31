@@ -158,6 +158,27 @@ export interface Translations {
     predictiveTerrainHeatmap: string;
     /** Security section — BFT illustration disclaimer. */
     bftConsensusDemo: string;
+    /** Predictive terrain — legend title. */
+    predictiveTerrainLegendTitle: string;
+    terrainYieldHigh: string;
+    terrainYieldMed: string;
+    terrainYieldLow: string;
+    terrainWater: string;
+    predictiveTerrainModelLabel: string;
+    /** `{sample}` = locale-formatted integer demo. */
+    predictiveTerrainLocaleSample: string;
+    /** `{value}` = CET/ha scalar (illustrative). */
+    predictiveTerrainCellTooltip: string;
+    bftConsensusHeading: string;
+    /** `{honest}` `{total}` */
+    bftStatsHonest: string;
+    /** `{faulty}` `{total}` */
+    bftStatsFaulty: string;
+    bftStatsTolerance: string;
+    bftEducationalNote: string;
+    bftNodeLeader: string;
+    bftNodeByzantine: string;
+    bftNodeHonest: string;
   };
   /** shadcn-style UI primitives (may be unused but kept i18n-ready). */
   ui: {
@@ -344,6 +365,23 @@ const translations: Record<LangCode, Translations> = {
         'Illustrative heatmap of relative land-yield zones for Cetățuia — not a live agricultural feed or investment signal.',
       bftConsensusDemo:
         'Illustrative validator-style cluster: honest majority and Byzantine fault tolerance (conceptual; not live TON status).',
+      predictiveTerrainLegendTitle: 'Legend',
+      terrainYieldHigh: 'Higher yield (illustrative)',
+      terrainYieldMed: 'Moderate',
+      terrainYieldLow: 'Lower',
+      terrainWater: 'Water / boundary',
+      predictiveTerrainModelLabel: 'Model: RAV-AGRI-v2.6 (presentational)',
+      predictiveTerrainLocaleSample: 'Locale sample: {sample} · CET/ha (unit demo)',
+      predictiveTerrainCellTooltip: '~{value} CET/ha (illustrative model)',
+      bftConsensusHeading: 'BFT consensus (illustrative)',
+      bftStatsHonest: 'Honest: {honest}/{total}',
+      bftStatsFaulty: 'Faulty: {faulty}/{total}',
+      bftStatsTolerance: 'f < n/3 (concept)',
+      bftEducationalNote:
+        'TON mainnet uses BFT-class consensus; this diagram is educational and not a live node status.',
+      bftNodeLeader: 'Leader (illustrative)',
+      bftNodeByzantine: 'Byzantine / faulty (isolated in model)',
+      bftNodeHonest: 'Honest validator (illustrative)',
     },
     ui: {
       toggleSidebar: 'Toggle Sidebar',
@@ -552,6 +590,23 @@ const translations: Record<LangCode, Translations> = {
         'Mapa de calor ilustrativo de zonas de rendimiento relativo en Cetățuia — no es un feed agrícola en vivo ni señal de inversión.',
       bftConsensusDemo:
         'Clúster ilustrativo estilo validador: mayoría honesta y tolerancia a fallos bizantinos (conceptual; no es estado en vivo de TON).',
+      predictiveTerrainLegendTitle: 'Leyenda',
+      terrainYieldHigh: 'Mayor rendimiento (ilustrativo)',
+      terrainYieldMed: 'Moderado',
+      terrainYieldLow: 'Menor',
+      terrainWater: 'Agua / límite',
+      predictiveTerrainModelLabel: 'Modelo: RAV-AGRI-v2.6 (presentacional)',
+      predictiveTerrainLocaleSample: 'Muestra de locale: {sample} · CET/ha (demo de unidad)',
+      predictiveTerrainCellTooltip: '~{value} CET/ha (modelo ilustrativo)',
+      bftConsensusHeading: 'Consenso BFT (ilustrativo)',
+      bftStatsHonest: 'Honestos: {honest}/{total}',
+      bftStatsFaulty: 'Defectuosos: {faulty}/{total}',
+      bftStatsTolerance: 'f < n/3 (concepto)',
+      bftEducationalNote:
+        'TON mainnet usa consenso tipo BFT; este diagrama es educativo y no refleja nodos en vivo.',
+      bftNodeLeader: 'Líder (ilustrativo)',
+      bftNodeByzantine: 'Bizantino / fallo (aislado en el modelo)',
+      bftNodeHonest: 'Validador honesto (ilustrativo)',
     },
     ui: {
       toggleSidebar: 'Alternar barra lateral',
@@ -760,6 +815,22 @@ const translations: Record<LangCode, Translations> = {
         'Cetățuia 相对产量区域示意热力图 — 非实时农业数据或投资建议。',
       bftConsensusDemo:
         '示意性验证者集群：诚实多数与拜占庭容错（概念示意，非 TON 实时状态）。',
+      predictiveTerrainLegendTitle: '图例',
+      terrainYieldHigh: '较高产量（示意）',
+      terrainYieldMed: '中等',
+      terrainYieldLow: '较低',
+      terrainWater: '水体 / 边界',
+      predictiveTerrainModelLabel: '模型：RAV-AGRI-v2.6（展示用）',
+      predictiveTerrainLocaleSample: '区域格式示例：{sample} · CET/公顷（单位演示）',
+      predictiveTerrainCellTooltip: '约 {value} CET/公顷（示意模型）',
+      bftConsensusHeading: 'BFT 共识（示意）',
+      bftStatsHonest: '诚实：{honest}/{total}',
+      bftStatsFaulty: '故障：{faulty}/{total}',
+      bftStatsTolerance: 'f < n/3（概念）',
+      bftEducationalNote: 'TON 主网采用类 BFT 共识；本图为教学示意，不代表实时节点状态。',
+      bftNodeLeader: '领导者（示意）',
+      bftNodeByzantine: '拜占庭 / 故障（模型中已隔离）',
+      bftNodeHonest: '诚实验证者（示意）',
     },
     ui: {
       toggleSidebar: '切换侧边栏',
@@ -967,6 +1038,23 @@ const translations: Record<LangCode, Translations> = {
         'Иллюстративная тепловая карта относительной урожайности для Cetățuia — не живой агроканал и не инвестсигнал.',
       bftConsensusDemo:
         'Иллюстративный кластер валидаторов: честное большинство и византийская отказоустойчивость (концепция; не статус TON в реальном времени).',
+      predictiveTerrainLegendTitle: 'Условные обозначения',
+      terrainYieldHigh: 'Выше урожайность (иллюстрация)',
+      terrainYieldMed: 'Умеренно',
+      terrainYieldLow: 'Ниже',
+      terrainWater: 'Вода / граница',
+      predictiveTerrainModelLabel: 'Модель: RAV-AGRI-v2.6 (демонстрационная)',
+      predictiveTerrainLocaleSample: 'Пример локали: {sample} · CET/га (демо единицы)',
+      predictiveTerrainCellTooltip: '~{value} CET/га (иллюстративная модель)',
+      bftConsensusHeading: 'Консенсус BFT (иллюстрация)',
+      bftStatsHonest: 'Честные: {honest}/{total}',
+      bftStatsFaulty: 'Сбойные: {faulty}/{total}',
+      bftStatsTolerance: 'f < n/3 (концепция)',
+      bftEducationalNote:
+        'В TON mainnet используется консенсус класса BFT; схема учебная и не отражает живые узлы.',
+      bftNodeLeader: 'Лидер (иллюстрация)',
+      bftNodeByzantine: 'Византийский / сбойный (изолирован в модели)',
+      bftNodeHonest: 'Честный валидатор (иллюстрация)',
     },
     ui: {
       toggleSidebar: 'Переключить боковую панель',
@@ -1175,6 +1263,23 @@ const translations: Record<LangCode, Translations> = {
         'Hartă termică ilustrativă pentru zone de randament relativ Cetățuia — nu feed agricol live sau semnal de investiții.',
       bftConsensusDemo:
         'Cluster ilustrativ tip validator: majoritate cinstită și toleranță bizantină (conceptual; nu status TON live).',
+      predictiveTerrainLegendTitle: 'Legendă',
+      terrainYieldHigh: 'Randament mai mare (ilustrativ)',
+      terrainYieldMed: 'Moderat',
+      terrainYieldLow: 'Mai scăzut',
+      terrainWater: 'Apă / limită',
+      predictiveTerrainModelLabel: 'Model: RAV-AGRI-v2.6 (prezentare)',
+      predictiveTerrainLocaleSample: 'Exemplu locale: {sample} · CET/ha (demo unitate)',
+      predictiveTerrainCellTooltip: '~{value} CET/ha (model ilustrativ)',
+      bftConsensusHeading: 'Consens BFT (ilustrativ)',
+      bftStatsHonest: 'Cinstiți: {honest}/{total}',
+      bftStatsFaulty: 'Defecți: {faulty}/{total}',
+      bftStatsTolerance: 'f < n/3 (concept)',
+      bftEducationalNote:
+        'TON mainnet folosește consens de tip BFT; diagrama este educativă și nu reflectă noduri live.',
+      bftNodeLeader: 'Lider (ilustrativ)',
+      bftNodeByzantine: 'Bizantin / defecțiune (izolat în model)',
+      bftNodeHonest: 'Validator cinstit (ilustrativ)',
     },
     ui: {
       toggleSidebar: 'Comută bara laterală',
@@ -1383,6 +1488,23 @@ const translations: Record<LangCode, Translations> = {
         'Mapa de calor ilustrativo de zonas de rendimento relativo em Cetățuia — não é feed agrícola ao vivo nem sinal de investimento.',
       bftConsensusDemo:
         'Cluster ilustrativo de validadores: maioria honesta e tolerância bizantina (conceitual; não é estado TON em tempo real).',
+      predictiveTerrainLegendTitle: 'Legenda',
+      terrainYieldHigh: 'Maior rendimento (ilustrativo)',
+      terrainYieldMed: 'Moderado',
+      terrainYieldLow: 'Menor',
+      terrainWater: 'Água / limite',
+      predictiveTerrainModelLabel: 'Modelo: RAV-AGRI-v2.6 (apresentacional)',
+      predictiveTerrainLocaleSample: 'Amostra de locale: {sample} · CET/ha (demo de unidade)',
+      predictiveTerrainCellTooltip: '~{value} CET/ha (modelo ilustrativo)',
+      bftConsensusHeading: 'Consenso BFT (ilustrativo)',
+      bftStatsHonest: 'Honestos: {honest}/{total}',
+      bftStatsFaulty: 'Com falha: {faulty}/{total}',
+      bftStatsTolerance: 'f < n/3 (conceito)',
+      bftEducationalNote:
+        'A TON mainnet usa consenso tipo BFT; este diagrama é educativo e não mostra nós ao vivo.',
+      bftNodeLeader: 'Líder (ilustrativo)',
+      bftNodeByzantine: 'Bizantino / falha (isolado no modelo)',
+      bftNodeHonest: 'Validador honesto (ilustrativo)',
     },
     ui: {
       toggleSidebar: 'Alternar barra lateral',
@@ -1591,6 +1713,23 @@ const translations: Record<LangCode, Translations> = {
         'Illustrative Heatmap relativer Ertragszonen für Cetățuia — kein Live-Agrarfeed und kein Investmenthinweis.',
       bftConsensusDemo:
         'Illustratives Validator-Cluster: ehrliche Mehrheit und byzantinische Fehlertoleranz (konzeptuell; kein Live-TON-Status).',
+      predictiveTerrainLegendTitle: 'Legende',
+      terrainYieldHigh: 'Höherer Ertrag (illustrativ)',
+      terrainYieldMed: 'Mittel',
+      terrainYieldLow: 'Niedriger',
+      terrainWater: 'Gewässer / Grenze',
+      predictiveTerrainModelLabel: 'Modell: RAV-AGRI-v2.6 (Demonstration)',
+      predictiveTerrainLocaleSample: 'Locale-Beispiel: {sample} · CET/ha (Einheitendemo)',
+      predictiveTerrainCellTooltip: '~{value} CET/ha (illustratives Modell)',
+      bftConsensusHeading: 'BFT-Konsens (illustrativ)',
+      bftStatsHonest: 'Ehrlich: {honest}/{total}',
+      bftStatsFaulty: 'Fehlerhaft: {faulty}/{total}',
+      bftStatsTolerance: 'f < n/3 (Konzept)',
+      bftEducationalNote:
+        'TON mainnet nutzt BFT-Konsens; dieses Diagramm ist lehrreich und kein Live-Node-Status.',
+      bftNodeLeader: 'Leader (illustrativ)',
+      bftNodeByzantine: 'Byzantinisch / fehlerhaft (im Modell isoliert)',
+      bftNodeHonest: 'Ehrlicher Validator (illustrativ)',
     },
     ui: {
       toggleSidebar: 'Seitenleiste umschalten',

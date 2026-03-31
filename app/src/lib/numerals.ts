@@ -1,5 +1,15 @@
 import type { LangCode } from "@/i18n/translations"
 
+/** Replace `{key}` placeholders in i18n strings (e.g. `{sample}`, `{honest}`). */
+export function interpolatePlaceholders(
+  template: string,
+  vars: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) =>
+    key in vars ? String(vars[key]) : `{${key}}`,
+  )
+}
+
 const localeByLang: Record<LangCode, string> = {
   en: "en-US",
   es: "es-ES",
@@ -19,6 +29,19 @@ export function formatCetInteger(amount: number, lang: LangCode): string {
   return new Intl.NumberFormat(locale, {
     maximumFractionDigits: 0,
     minimumFractionDigits: 0,
+  }).format(amount)
+}
+
+/** Locale-aware decimals for illustrative metrics (e.g. CET/ha on the terrain demo). */
+export function formatCetDecimal(
+  amount: number,
+  lang: LangCode,
+  fractionDigits = 2,
+): string {
+  const locale = localeByLang[lang] ?? "en-US"
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
   }).format(amount)
 }
 

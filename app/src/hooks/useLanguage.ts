@@ -139,9 +139,11 @@ export const useLanguageState = (): LanguageContextValue => {
   }, []);
 
   // Keep <html lang> and `dir` in sync for screen readers, SEO, and RTL readiness (WCAG 3.1.2).
+  // `data-lang` enables subtle locale-aware typography in App.css (no JS runtime on static surfaces).
   useEffect(() => {
     document.documentElement.lang = lang;
     document.documentElement.dir = getTextDirForLang(lang);
+    document.documentElement.dataset.lang = lang;
   }, [lang]);
 
   return { lang, setLang, t: translations[lang] };

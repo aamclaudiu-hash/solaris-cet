@@ -53,7 +53,10 @@ function walkFiles(dir, acc = [], depth = 0) {
 
 function scanRepo() {
   const appSrc = join(root, "app", "src");
-  const files = walkFiles(existsSync(appSrc) ? appSrc : join(root, "app"));
+  const staticDir = join(root, "static");
+  const roots = [existsSync(appSrc) ? appSrc : join(root, "app")];
+  if (existsSync(staticDir)) roots.push(staticDir);
+  const files = roots.flatMap((dir) => walkFiles(dir));
   const findings = [];
 
   const patterns = [
@@ -61,6 +64,9 @@ function scanRepo() {
     { id: "SEC-002", severity: "info", re: /\beval\s*\(/g, msg: "eval() usage — avoid in production bundles" },
     { id: "SEC-003", severity: "low", re: /\.innerHTML\s*=/g, msg: "innerHTML assignment — ensure trusted input only" },
     { id: "SEC-004", severity: "info", re: /JSON\.parse\s*\(\s*[^)]*request/gi, msg: "JSON.parse on request-like input — validate schema" },
+    { id: "SEC-005", severity: "low", re: /\bnew\s+Function\s*\(/g, msg: "new Function() — dynamic code; review trust boundaries" },
+    { id: "SEC-006", severity: "info", re: /\bdocument\.write\s*\(/g, msg: "document.write — can break CSP / streaming; avoid" },
+    { id: "SEC-007", severity: "low", re: /href\s*=\s*["']javascript:/gi, msg: "javascript: URL in href — XSS vector if interpolated" },
   ];
 
   for (const file of files) {
@@ -99,7 +105,7 @@ const report = {
 const md = `# Solaris CET — Swarm audit report
 
 **Generated:** ${report.timestamp}  
-**Mode:** automated static scans of \`app/src\` (pattern-based).  
+**Mode:** automated static scans of \`app/src\` and \`static/\` (pattern-based).  
 **Narrative framing:** ${report.agents_deployed.toLocaleString("en-US")} logical checks across ${report.departments} departments — *operational metaphor only*.
 
 ## Summary

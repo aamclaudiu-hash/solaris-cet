@@ -284,3 +284,11 @@ button, .btn-gold, .btn-filled-gold {
   direction: rtl;
 }
 
+/* Locale hooks: `data-lang` from `useLanguage` (typography tuning without per-locale bundles). */
+html[data-lang="de"] .font-display {
+  letter-spacing: -0.02em;
+}
+html[data-lang="zh"] .font-mono {
+  letter-spacing: 0.03em;
+}
+

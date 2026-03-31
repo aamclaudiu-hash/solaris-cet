@@ -1,7 +1,7 @@
 # Solaris CET — Swarm audit report
 
-**Generated:** 2026-03-31T21:07:43.668Z  
-**Mode:** automated static scans of `app/src` (pattern-based).  
+**Generated:** 2026-03-31T21:19:41.137Z  
+**Mode:** automated static scans of `app/src` and `static/` (pattern-based).  
 **Narrative framing:** 200,000 logical checks across 10 departments — *operational metaphor only*.
 
 ## Summary
