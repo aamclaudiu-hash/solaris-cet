@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { ExternalLink, Menu } from 'lucide-react';
 import { SolarisLogoMark } from './SolarisLogoMark';
 import LanguageSelector from './LanguageSelector';
@@ -29,6 +29,9 @@ const NAV_HREFS = [
   { key: 'faq',         href: '#faq'         },
 ] as const;
 
+const MOBILE_MENU_FOCUSABLE_SELECTOR =
+  'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /**
  * Navigation — the fixed top navigation bar for the Solaris CET landing page.
  *
@@ -49,6 +52,8 @@ const Navigation = () => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const mobileMenuToggleRef = useRef<HTMLButtonElement>(null);
   const mobileMenuContentRef = useRef<HTMLDivElement>(null);
+  /** True after the sheet has been opened at least once — avoids focusing the menu button on first mount. */
+  const wasMobileMenuOpenRef = useRef(false);
   const { t } = useLanguage();
 
   const navLinks = NAV_HREFS.map(({ key, href }) => ({
@@ -70,50 +75,53 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Single document keydown listener while the sheet is open: Escape + Tab focus trap.
-  // One named function per effect run guarantees add/remove use the same reference (no orphan listeners).
-  useEffect(() => {
-    if (!isMobileMenuOpen) {
-      mobileMenuToggleRef.current?.focus();
+  // Stable handler reference: same function instance for add + removeEventListener (no duplicate document listeners).
+  const handleMobileMenuKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setIsMobileMenuOpen(false);
       return;
     }
+    if (event.key !== 'Tab') return;
 
     const content = mobileMenuContentRef.current;
     if (!content) return;
 
-    const focusableSelector =
-      'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-    const getFocusable = () => content.querySelectorAll<HTMLElement>(focusableSelector);
+    const focusable = content.querySelectorAll<HTMLElement>(MOBILE_MENU_FOCUSABLE_SELECTOR);
+    if (focusable.length === 0) return;
 
-    const initialFocusable = getFocusable();
+    const firstFocusable = focusable[0] ?? null;
+    const lastFocusable = focusable[focusable.length - 1] ?? null;
+    const active = document.activeElement as HTMLElement | null;
+
+    if (event.shiftKey && active === firstFocusable) {
+      event.preventDefault();
+      lastFocusable?.focus();
+    } else if (!event.shiftKey && active === lastFocusable) {
+      event.preventDefault();
+      firstFocusable?.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      if (wasMobileMenuOpenRef.current) {
+        mobileMenuToggleRef.current?.focus();
+      }
+      wasMobileMenuOpenRef.current = false;
+      return;
+    }
+
+    wasMobileMenuOpenRef.current = true;
+
+    const content = mobileMenuContentRef.current;
+    if (!content) return;
+
+    const initialFocusable = content.querySelectorAll<HTMLElement>(MOBILE_MENU_FOCUSABLE_SELECTOR);
     (initialFocusable[0] as HTMLElement | undefined)?.focus();
-
-    const handleMobileMenuKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsMobileMenuOpen(false);
-        return;
-      }
-      if (event.key !== 'Tab') return;
-
-      const focusable = getFocusable();
-      if (focusable.length === 0) return;
-
-      const firstFocusable = focusable[0] ?? null;
-      const lastFocusable = focusable[focusable.length - 1] ?? null;
-      const active = document.activeElement as HTMLElement | null;
-
-      if (event.shiftKey && active === firstFocusable) {
-        event.preventDefault();
-        lastFocusable?.focus();
-      } else if (!event.shiftKey && active === lastFocusable) {
-        event.preventDefault();
-        firstFocusable?.focus();
-      }
-    };
 
     document.addEventListener('keydown', handleMobileMenuKeyDown);
     return () => document.removeEventListener('keydown', handleMobileMenuKeyDown);
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, handleMobileMenuKeyDown]);
 
   return (
     <header
