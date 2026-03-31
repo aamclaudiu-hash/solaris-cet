@@ -53,6 +53,37 @@
     text-shadow: none !important;
   }
 
+  main.ley-grid::before {
+    display: none !important;
+  }
+
+  .sacred-asymmetric {
+    display: block !important;
+  }
+
+  .ley-item--seal {
+    justify-content: center !important;
+  }
+
+  .sovereign-card-wrap.impossible-border::before {
+    display: none !important;
+  }
+
+  .sovereign-card-wrap.kinetic-shadow {
+    animation: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .led-display::after,
+  .scanlines-subtle::before {
+    display: none !important;
+  }
+
+  .checksum-dot {
+    animation: none !important;
+  }
+
   h1,
   h2,
   h3 {

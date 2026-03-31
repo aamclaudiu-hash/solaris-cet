@@ -1,7 +1,7 @@
 /**
  * Solaris CET — OMEGA sovereign surface (100% CSS, no JS).
  * Innovation Sprint 3: holographic depth, living gold, CRT scan, magnetic buttons.
- * Phase 5: phi spacing, seal, premium numerals, heavy CTA.
+ * Phase 5–6: phi, seal, CRT/LED, ley grid, kinetic shadow, impossible border.
  * All animations respect prefers-reduced-motion.
  */
 
@@ -637,6 +637,322 @@ main.section-padding {
   .chromatic-hover:hover,
   .crt-rav-line:hover {
     text-shadow: none !important;
+  }
+}
+
+/* ─── Phase 6 — Phosphor / LED (Y), ley grid (Z), kinetic shadow (AA), checksum (AB), impossible border (AC) ─── */
+
+.main-ley {
+  position: relative;
+  z-index: 1;
+}
+
+main.ley-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(242, 201, 76, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(242, 201, 76, 0.035) 1px, transparent 1px);
+  background-size: 6.25rem 6.25rem;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.9;
+}
+
+main.ley-grid > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sacred-asymmetric {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .sacred-asymmetric {
+    grid-template-columns: 1fr 1.618fr;
+    gap: calc(var(--phi) * 1rem);
+  }
+}
+
+.ley-item--seal {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 48rem) {
+  .ley-item--seal {
+    justify-content: flex-end;
+    padding-top: var(--space-sm);
+  }
+}
+
+.sovereign-card-wrap {
+  position: relative;
+  border-radius: 0.85rem;
+  isolation: isolate;
+}
+
+.sovereign-card-wrap > .solaris-panel {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+/* Rotating conic “energy” rim — pseudos live on wrapper (panel keeps scan ::before) */
+.impossible-border {
+  padding: 1px;
+  background: rgba(2, 6, 23, 0.55);
+}
+
+.impossible-border::before {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  pointer-events: none;
+  inset: -1px;
+  z-index: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(242, 201, 76, 0.55) 70deg,
+    rgba(255, 255, 255, 0.35) 130deg,
+    rgba(242, 201, 76, 0.45) 200deg,
+    transparent 260deg,
+    transparent 360deg
+  );
+  opacity: 0.45;
+  filter: blur(3px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .impossible-border::before {
+    animation: border-rotate 14s linear infinite;
+  }
+}
+
+@keyframes border-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.kinetic-shadow {
+  box-shadow:
+    0 12px 42px -12px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(242, 201, 76, 0.1);
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .kinetic-shadow {
+    animation: shadow-breathe 8s ease-in-out infinite;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .kinetic-shadow:hover {
+    transform: translateY(-3px);
+    animation: shadow-active 2.5s ease-in-out infinite;
+  }
+}
+
+@keyframes shadow-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 12px 42px -12px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(242, 201, 76, 0.1),
+      0 0 22px rgba(242, 201, 76, 0.06);
+  }
+
+  50% {
+    box-shadow:
+      0 18px 52px -10px rgba(0, 0, 0, 0.62),
+      0 0 0 1px rgba(242, 201, 76, 0.16),
+      0 0 38px rgba(242, 201, 76, 0.1);
+  }
+}
+
+@keyframes shadow-active {
+  0%,
+  100% {
+    box-shadow:
+      0 18px 56px -10px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(242, 201, 76, 0.2),
+      0 0 36px rgba(242, 201, 76, 0.12);
+  }
+
+  50% {
+    box-shadow:
+      0 22px 64px -8px rgba(0, 0, 0, 0.58),
+      0 0 0 1px rgba(242, 201, 76, 0.26),
+      0 0 48px rgba(242, 201, 76, 0.16);
+  }
+}
+
+.phosphor-bloom {
+  color: #f2c94c;
+  text-shadow:
+    0 0 2px rgba(242, 201, 76, 0.45),
+    0 0 6px rgba(242, 201, 76, 0.22),
+    0 0 14px rgba(242, 201, 76, 0.1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+}
+
+.led-display {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15em 0.35em;
+  margin: 0.5rem 0 0.35rem;
+  font-size: clamp(1.35rem, 4.5vw, 1.75rem);
+  z-index: 1;
+}
+
+.led-display::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+  pointer-events: none;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  border-radius: 0.25rem;
+  z-index: 1;
+}
+
+.led-main {
+  position: relative;
+  z-index: 3;
+}
+
+.led-main.weight-indicator::after {
+  z-index: 4;
+}
+
+.led-fraction {
+  font-size: 0.55em;
+  opacity: 0.55;
+  color: rgba(242, 201, 76, 0.75);
+}
+
+.led-unit {
+  font-size: 0.55em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.scanlines-subtle {
+  position: relative;
+}
+
+.scanlines-subtle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.045) 1px,
+    rgba(0, 0, 0, 0.045) 2px
+  );
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.65;
+  border-radius: 0.2rem;
+}
+
+.checksum-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.15rem 0 0;
+  opacity: 0.5;
+  transition: opacity 0.25s ease;
+}
+
+.checksum-group:hover,
+.checksum-group:focus-within {
+  opacity: 1;
+}
+
+.checksum-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .checksum-dot {
+    animation: checksum-pulse 2.8s ease-in-out infinite;
+  }
+}
+
+@keyframes checksum-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.checksum-line {
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.checksum-separator {
+  color: rgba(242, 201, 76, 0.28);
+  margin: 0 0.12em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .impossible-border::before {
+    animation: none !important;
+    opacity: 0.28;
+  }
+
+  .kinetic-shadow {
+    animation: none !important;
+    box-shadow:
+      0 12px 40px -12px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(242, 201, 76, 0.12);
+  }
+
+  .kinetic-shadow:hover {
+    transform: none;
+  }
+
+  .checksum-dot {
+    animation: none !important;
+  }
+
+  .led-display::after {
+    opacity: 0.15;
   }
 }
 
