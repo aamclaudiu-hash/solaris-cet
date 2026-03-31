@@ -156,6 +156,12 @@ button, .btn-gold, .btn-filled-gold {
   }
 }
 
+@media (pointer: coarse) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,

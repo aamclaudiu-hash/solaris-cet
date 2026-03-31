@@ -425,18 +425,18 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 600px;
-  height: 600px;
+  width: 520px;
+  height: 520px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(255, 210, 150, 0.09) 0%,
-    rgba(242, 201, 76, 0.05) 38%,
-    rgba(46, 231, 255, 0.03) 55%,
+    rgba(255, 210, 150, 0.065) 0%,
+    rgba(242, 201, 76, 0.04) 36%,
+    rgba(46, 231, 255, 0.022) 54%,
     transparent 72%
   );
   pointer-events: none;
-  z-index: 9998;
+  z-index: 3;
   mix-blend-mode: screen;
   will-change: transform;
 }
@@ -447,19 +447,19 @@
 
 .touch-ripple {
   position: fixed;
-  width: 100px;
-  height: 100px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(242, 201, 76, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(242, 201, 76, 0.18) 0%, transparent 70%);
   pointer-events: none;
-  z-index: 9998;
-  animation: touch-ripple-expand 600ms ease-out forwards;
+  z-index: 3;
+  animation: touch-ripple-expand 450ms ease-out forwards;
   will-change: transform, opacity;
 }
 
 @keyframes touch-ripple-expand {
-  0% { transform: scale(0); opacity: 1; }
-  100% { transform: scale(2); opacity: 0; }
+  0% { transform: scale(0); opacity: 0.9; }
+  100% { transform: scale(1.65); opacity: 0; }
 }
 
 /* ─────────────────────────────────────────────
