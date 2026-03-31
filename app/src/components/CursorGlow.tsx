@@ -17,6 +17,8 @@ const CursorGlow = () => {
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Skip runtime work when device has no fine pointer (touch-first/coarse).
+    if (!window.matchMedia('(pointer: fine)').matches) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       targetRef.current = { x: e.clientX, y: e.clientY };
