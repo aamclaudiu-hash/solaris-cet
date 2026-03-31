@@ -1,4 +1,4 @@
-import { lazy, useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
@@ -94,68 +94,6 @@ function AppContent() {
 
     return () => window.clearInterval(id);
   }, [isLoaded]);
-
-  const buildSnapTo = useCallback((pinnedRanges: { start: number; end: number; center: number }[]) => {
-    return (value: number) => {
-      const inPinned = pinnedRanges.some(
-        r => value >= r.start - 0.02 && value <= r.end + 0.02
-      );
-      if (!inPinned) return value;
-
-      let closest = pinnedRanges[0]?.center ?? 0;
-      let closestDist = Math.abs(closest - value);
-      for (let i = 1; i < pinnedRanges.length; i++) {
-        const dist = Math.abs(pinnedRanges[i].center - value);
-        if (dist < closestDist) {
-          closestDist = dist;
-          closest = pinnedRanges[i].center;
-        }
-      }
-      return closest;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    // Setup global snap for pinned sections
-    const setupGlobalSnap = () => {
-      // Skip snap on mobile — pin animations are disabled on mobile,
-      // so snap would create confusing empty scroll space.
-      const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
-      if (isMobile) return;
-
-      const pinned = ScrollTrigger.getAll()
-        .filter(st => st.vars.pin)
-        .sort((a, b) => a.start - b.start);
-      
-      const maxScroll = ScrollTrigger.maxScroll(window);
-      if (!maxScroll || pinned.length === 0) return;
-
-      const pinnedRanges = pinned.map(st => ({
-        start: st.start / maxScroll,
-        end: (st.end ?? st.start) / maxScroll,
-        center: (st.start + ((st.end ?? st.start) - st.start) * 0.5) / maxScroll,
-      }));
-
-      ScrollTrigger.create({
-        snap: {
-          snapTo: buildSnapTo(pinnedRanges),
-          duration: { min: 0.15, max: 0.35 },
-          delay: 0,
-          ease: 'power2.out',
-        },
-      });
-    };
-
-    // Delay snap setup to ensure all ScrollTriggers are created
-    const snapTimer = setTimeout(setupGlobalSnap, 500);
-
-    return () => {
-      clearTimeout(snapTimer);
-      ScrollTrigger.getAll().forEach(st => st.kill());
-    };
-  }, [isLoaded, buildSnapTo]);
 
   return (
     <LanguageContext.Provider value={langState}>
