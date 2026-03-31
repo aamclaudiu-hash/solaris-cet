@@ -20,7 +20,8 @@ if (!existsSync(src)) {
 mkdirSync(dest, { recursive: true });
 
 // Keep only runtime files needed by ort.env.wasm.wasmPaths.
-const requiredPrefixes = ["ort-wasm-", "ort.webgpu", "ort.wasm"];
+// Use "ort-wasm" (no trailing dash) so we match ort-wasm.wasm / ort-wasm.js and ort-wasm-simd-*.
+const requiredPrefixes = ["ort-wasm", "ort.webgpu", "ort.wasm"];
 const requiredSuffixes = [".wasm", ".mjs", ".js"];
 
 const files = readdirSync(src).filter((name) => {
