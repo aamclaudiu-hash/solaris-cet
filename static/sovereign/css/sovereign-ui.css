@@ -433,6 +433,213 @@ main.section-padding {
   }
 }
 
+/* ─── Phase 5b — Optical type (U), isometric depth (V), weight metaphor (W), chromatic (X) ─── */
+
+.optical-align {
+  hanging-punctuation: first last;
+  text-indent: -0.04em;
+}
+
+@supports not (hanging-punctuation: first) {
+  .optical-align {
+    padding-left: 0.06em;
+    text-indent: 0;
+  }
+}
+
+.headline-balance {
+  text-wrap: balance;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+@supports (hyphenate-limit-chars: 6 3 2) {
+  .headline-balance {
+    hyphenate-limit-chars: 6 3 2;
+  }
+}
+
+.text-align-perfect {
+  text-align: start;
+  padding-inline-start: 0.12em;
+}
+
+/* Isometric data block — desktop + hover only; inner counter-rotates for legibility */
+.isometric-stage {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.isometric-card {
+  position: relative;
+  border-radius: 0.75rem;
+  padding: 0;
+  transform-style: preserve-3d;
+  background: linear-gradient(
+    155deg,
+    rgba(15, 23, 42, 0.95) 0%,
+    rgba(15, 23, 42, 0.65) 100%
+  );
+  border: 1px solid rgba(242, 201, 76, 0.18);
+  box-shadow:
+    -10px 16px 36px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.55s ease;
+}
+
+.isometric-card__inner {
+  padding: clamp(1rem, 3vw, 1.35rem);
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 48rem) and (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .isometric-stage {
+    perspective: 1200px;
+    padding-bottom: 0.35rem;
+  }
+
+  /* Mild angles so content stays inside .solaris-panel (overflow: hidden) */
+  .isometric-card {
+    transform: perspective(1000px) rotateX(7deg) rotateZ(-4deg);
+    transform-origin: center bottom;
+  }
+
+  .isometric-card__inner {
+    transform: rotateZ(4deg) rotateX(-7deg);
+    transform-origin: center center;
+  }
+
+  .isometric-card:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateZ(-2deg) translateZ(12px);
+    box-shadow:
+      -14px 20px 44px rgba(0, 0, 0, 0.48),
+      -1px 1px 0 rgba(255, 255, 255, 0.05),
+      0 0 32px rgba(242, 201, 76, 0.05);
+  }
+
+  .isometric-card:hover .isometric-card__inner {
+    transform: rotateZ(2deg) rotateX(-5deg);
+  }
+}
+
+.weight-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-top: var(--space-md);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.85);
+}
+
+.weight-row__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+}
+
+.weight-row__icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.weight-row__sep {
+  width: 1px;
+  height: 1rem;
+  background: rgba(148, 163, 184, 0.35);
+}
+
+.weight-row__text {
+  font-size: 0.62rem;
+}
+
+.weight-indicator {
+  position: relative;
+  display: inline-block;
+}
+
+.weight-indicator::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f2c94c, transparent);
+  opacity: 0.45;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .weight-indicator::after {
+    animation: weigh-pulse 4s ease-in-out infinite;
+  }
+}
+
+@keyframes weigh-pulse {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scaleX(1.06);
+    opacity: 0.75;
+  }
+}
+
+/* Chromatic aberration — subtle text-shadow only (no duplicate DOM text) */
+.chromatic-hover {
+  transition:
+    text-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .chromatic-hover:hover {
+    text-shadow:
+      0.5px 0 0 rgba(255, 90, 90, 0.28),
+      -0.5px 0 0 rgba(0, 210, 255, 0.24);
+  }
+
+  .crt-rav-line:hover {
+    text-shadow:
+      0.4px 0 0 rgba(255, 80, 80, 0.22),
+      -0.4px 0 0 rgba(0, 200, 255, 0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isometric-card,
+  .isometric-card__inner {
+    transform: none !important;
+  }
+
+  .isometric-card:hover {
+    box-shadow:
+      -10px 16px 36px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .weight-indicator::after {
+    animation: none !important;
+    opacity: 0.5;
+  }
+
+  .chromatic-hover:hover,
+  .crt-rav-line:hover {
+    text-shadow: none !important;
+  }
+}
+
 /* Keyboard / accessibility — visible focus without JS */
 .skip:focus,
 a:focus-visible,

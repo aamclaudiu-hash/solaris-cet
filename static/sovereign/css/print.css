@@ -25,6 +25,34 @@
     page-break-inside: avoid;
   }
 
+  .isometric-stage,
+  .isometric-card,
+  .isometric-card__inner {
+    transform: none !important;
+    perspective: none !important;
+    box-shadow: none !important;
+    border: 1px solid #d4d4d4 !important;
+    background: #fafafa !important;
+  }
+
+  .weight-row {
+    color: #333 !important;
+    font-size: 9pt !important;
+  }
+
+  .weight-row__sep {
+    background: #999 !important;
+  }
+
+  .weight-indicator::after {
+    display: none !important;
+  }
+
+  .chromatic-hover,
+  .crt-rav-line {
+    text-shadow: none !important;
+  }
+
   h1,
   h2,
   h3 {
