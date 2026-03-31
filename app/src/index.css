@@ -249,6 +249,16 @@
     text-wrap: balance;
   }
 
+  /* A11y: normalize legacy micro labels to at least 12px */
+  .text-\[10px\] {
+    font-size: 0.75rem !important;
+    line-height: 1rem !important;
+  }
+
+  .text-micro {
+    @apply text-xs uppercase tracking-wider text-slate-400;
+  }
+
   /** Premium gold accent — use for fills, strokes, or `text-transparent` + bg-clip-text */
   .accent-gradient-gold {
     @apply bg-gradient-to-br from-[#F2C94C] to-[#D4AF37];
@@ -1168,6 +1178,22 @@
   animation: scan 8s linear infinite;
   pointer-events: none;
   z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .solaris-panel::before {
+    animation: none !important;
+    opacity: 0.1;
+  }
 }
 
 /* ── Number reveal animation ─────────────────────────────────────────────── */

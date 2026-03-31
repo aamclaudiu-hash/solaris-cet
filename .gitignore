@@ -55,6 +55,10 @@ pulls/
 
 # Track PWA and OG assets in app/public/
 !app/public/favicon.svg
+!app/public/favicon-16x16.png
+!app/public/favicon-32x32.png
+!app/public/apple-touch-icon.png
+!app/public/safari-pinned-tab.svg
 !app/public/icon-192.png
 !app/public/icon-512.png
 !app/public/og-image.png
