@@ -3,6 +3,7 @@ app/node_modules/
 app/dist/
 # Copied from static/sovereign by prebuild / predev (source of truth: static/sovereign/)
 app/public/sovereign/
+app/public/apocalypse/
 app/coverage/
 app/test-results/
 app/playwright-report/

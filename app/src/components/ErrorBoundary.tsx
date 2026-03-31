@@ -90,7 +90,14 @@ export class ErrorBoundary extends Component<Props, State> {
             >
               {eb.sovereignLink}
             </a>
-            <p className="text-solaris-muted/80 text-[11px] mb-6 leading-relaxed">{eb.sovereignHint}</p>
+            <p className="text-solaris-muted/80 text-[11px] mb-4 leading-relaxed">{eb.sovereignHint}</p>
+            <a
+              href="/apocalypse/"
+              className="mb-5 block rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-sm font-semibold text-solaris-text hover:bg-white/10 transition-colors"
+            >
+              {eb.apocalypseLink}
+            </a>
+            <p className="text-solaris-muted/80 text-[11px] mb-6 leading-relaxed">{eb.apocalypseHint}</p>
             <div
               role="group"
               aria-label={eb.recoveryGroupAria}

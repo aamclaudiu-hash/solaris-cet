@@ -142,12 +142,14 @@ export default defineConfig({
          * Offline navigations use NetworkFirst below + handlerDidError → offline.html.
          */
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/sovereign\//],
+        navigateFallbackDenylist: [/^\/sovereign\//, /^\/apocalypse\//],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB to cover phone-mockup.png
         runtimeCaching: [
           {
             urlPattern: ({ request, url }: { request: Request; url: URL }) =>
-              request.mode === 'navigate' && !url.pathname.startsWith('/sovereign/'),
+              request.mode === 'navigate' &&
+              !url.pathname.startsWith('/sovereign/') &&
+              !url.pathname.startsWith('/apocalypse/'),
             handler: 'NetworkFirst',
             options: {
               cacheName: 'pages-offline-fallback',

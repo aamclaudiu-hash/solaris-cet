@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useState, useCallback, memo, lazy, Suspense } from 'react';
+import React, { useRef, useLayoutEffect, useState, useCallback, useMemo, memo, lazy, Suspense } from 'react';
 import { gsap } from 'gsap';
 import { Zap, Activity, Loader2 } from 'lucide-react';
 
@@ -11,6 +11,7 @@ import { SolarisLogoMark } from '../components/SolarisLogoMark';
 import { TooltipProvider } from '../components/ui/tooltip';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useLanguage } from '../hooks/useLanguage';
+import { formatCetSupplyWithSuffix } from '@/lib/numerals';
 
 const APP_CONFIG = {
   LINKS: {
@@ -67,7 +68,14 @@ const HeroSection: React.FC = () => {
 
   const [miningState, setMiningState] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
   const prefersReducedMotion = useReducedMotion();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+
+  const tickerRows = useMemo(() => {
+    const supply = formatCetSupplyWithSuffix(lang);
+    return TICKER_DATA.map((row) =>
+      row.label === 'SUPPLY' ? { ...row, value: supply } : row,
+    );
+  }, [lang]);
 
   const handleMiningOperation = useCallback(async () => {
     if (miningState !== 'IDLE') return;
@@ -352,7 +360,7 @@ const HeroSection: React.FC = () => {
             aria-hidden
           />
           <div className="flex min-w-max animate-ticker whitespace-nowrap">
-            {[...TICKER_DATA, ...TICKER_DATA].map((item, i) => (
+            {[...tickerRows, ...tickerRows].map((item, i) => (
               <div key={i} className="inline-flex items-center px-6 sm:px-8 md:px-10 gap-3 md:gap-4">
                 <span className="text-[10px] text-zinc-500 font-mono">{item.label}</span>
                 <span className="text-yellow-500 font-bold text-sm">{item.value}</span>

@@ -12,6 +12,7 @@ import {
   Anchor,
 } from 'lucide-react';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import { ByzantineConsensusVisualization } from '@/components/ByzantineConsensusVisualization';
 import { useLanguage } from '@/hooks/useLanguage';
 
 
@@ -229,6 +230,8 @@ const SecuritySection = () => {
                 ))}
               </div>
             </div>
+
+            <ByzantineConsensusVisualization />
 
             {/* Security Score Banner */}
             <div className="bento-card p-6 mb-10 flex flex-col md:flex-row items-center gap-6 border border-solaris-gold/30">

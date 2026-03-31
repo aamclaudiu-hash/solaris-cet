@@ -279,3 +279,8 @@ button, .btn-gold, .btn-filled-gold {
   opacity: 1;
 }
 
+/* RTL: `document.documentElement.dir` is set from `getTextDirForLang` (future ar/he). */
+[dir="rtl"] .section-padding-x {
+  direction: rtl;
+}
+

@@ -27,10 +27,10 @@ export function ByzantineConsensusVisualization() {
           const isLeader = i === 0
           const isByzantine = i === 10
           const cls = isLeader
-            ? "border-solaris-gold text-solaris-gold shadow-[0_0_16px_rgba(242,201,76,0.35)] animate-bft-leader"
+            ? "border-solaris-gold text-solaris-gold shadow-[0_0_16px_rgba(242,201,76,0.35)] motion-safe:animate-bft-leader"
             : isByzantine
-              ? "border-red-500/80 text-red-400/90 animate-bft-glitch"
-              : "border-emerald-500/70 text-emerald-400/90 animate-bft-honest"
+              ? "border-red-500/80 text-red-400/90 motion-safe:animate-bft-glitch"
+              : "border-emerald-500/70 text-emerald-400/90 motion-safe:animate-bft-honest"
           return (
             <div
               key={i}

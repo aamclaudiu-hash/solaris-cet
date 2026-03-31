@@ -5,6 +5,7 @@ import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 import { useLanguage } from '../hooks/useLanguage';
+import { PredictiveTerrainHeatmap } from '@/components/PredictiveTerrainHeatmap';
 
 /** Inline SVG placeholder — replace with on-site photography of Cetățuia land when available */
 const PHYSICAL_ASSET_PLACEHOLDER_BG =
@@ -229,6 +230,8 @@ const RwaSection = () => {
             );
           })}
         </div>
+
+        <PredictiveTerrainHeatmap />
 
         {/* Four pillars */}
         <div ref={pillarsRef} className="grid grid-cols-1 md:grid-cols-2 gap-5">

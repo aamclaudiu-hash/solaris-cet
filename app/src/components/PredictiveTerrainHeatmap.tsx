@@ -41,7 +41,7 @@ export function PredictiveTerrainHeatmap() {
       <div className="mb-4 flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
         <div>
           <h3 className="font-display text-lg md:text-xl text-solaris-text">
-            Predictive terrain <span className="text-emerald-400/90">(illustrative)</span>
+            {t.sectionAria.predictiveTerrainTitle}
           </h3>
           <p className="text-solaris-muted text-sm max-w-2xl mt-1">
             {t.sectionAria.predictiveTerrainHeatmap}

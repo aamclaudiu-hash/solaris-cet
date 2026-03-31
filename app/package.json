@@ -33,13 +33,14 @@
     "node": ">=22"
   },
   "scripts": {
-    "predev": "node ../scripts/sync-sovereign-to-public.mjs && node ../scripts/sync-onnxruntime-assets.mjs && node ../scripts/inject-sovereign-build-seal.mjs",
+    "predev": "node ../scripts/sync-sovereign-to-public.mjs && node ../scripts/sync-apocalypse-to-public.mjs && node ../scripts/sync-onnxruntime-assets.mjs && node ../scripts/inject-sovereign-build-seal.mjs",
     "dev": "vite",
-    "prebuild": "node ../scripts/sync-sovereign-to-public.mjs && node ../scripts/sync-onnxruntime-assets.mjs && node ../scripts/inject-sovereign-build-seal.mjs",
+    "prebuild": "node ../scripts/sync-sovereign-to-public.mjs && node ../scripts/sync-apocalypse-to-public.mjs && node ../scripts/sync-onnxruntime-assets.mjs && node ../scripts/inject-sovereign-build-seal.mjs",
     "build": "tsc -b && vite build",
     "start": "vite preview --host 0.0.0.0 --port ${PORT:-4173}",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
     "lint": "eslint .",
+    "audit:swarm": "node ../scripts/swarm-audit/audit-processor.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

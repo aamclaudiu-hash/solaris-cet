@@ -102,6 +102,9 @@ export interface Translations {
     /** Link to `/sovereign/` when the React tree has crashed (OMEGA zero-JS surface). */
     sovereignLink: string;
     sovereignHint: string;
+    /** Plain HTML emergency surface `/apocalypse/`. */
+    apocalypseLink: string;
+    apocalypseHint: string;
   };
   /** Main `<section>` region labels for page outline (screen readers). */
   landmarks: {
@@ -150,6 +153,11 @@ export interface Translations {
     meshSkillExpression: string;
     ravIngress: string;
     reset: string;
+    /** RWA illustrative heatmap — not live oracle data. */
+    predictiveTerrainTitle: string;
+    predictiveTerrainHeatmap: string;
+    /** Security section — BFT illustration disclaimer. */
+    bftConsensusDemo: string;
   };
   /** shadcn-style UI primitives (may be unused but kept i18n-ready). */
   ui: {
@@ -285,6 +293,8 @@ const translations: Record<LangCode, Translations> = {
       reloadPage: 'Reload Page',
       sovereignLink: 'Open OMEGA surface (no JavaScript)',
       sovereignHint: 'Tor-safe static page with CET supply and anchor facts.',
+      apocalypseLink: 'Open Apocalypse text-only page',
+      apocalypseHint: 'Minimal HTML for Lynx, legacy browsers, or when the SPA is unavailable.',
     },
     landmarks: {
       hero: 'Hero',
@@ -329,6 +339,11 @@ const translations: Record<LangCode, Translations> = {
       meshSkillExpression: 'Sample recombinant skill expression from the agent mesh',
       ravIngress: 'Simulated skill ingress from open retrieval',
       reset: 'Reset',
+      predictiveTerrainTitle: 'Predictive terrain (illustrative)',
+      predictiveTerrainHeatmap:
+        'Illustrative heatmap of relative land-yield zones for Cetățuia — not a live agricultural feed or investment signal.',
+      bftConsensusDemo:
+        'Illustrative validator-style cluster: honest majority and Byzantine fault tolerance (conceptual; not live TON status).',
     },
     ui: {
       toggleSidebar: 'Toggle Sidebar',
@@ -486,6 +501,8 @@ const translations: Record<LangCode, Translations> = {
       reloadPage: 'Recargar página',
       sovereignLink: 'Abrir superficie OMEGA (sin JavaScript)',
       sovereignHint: 'Página estática compatible con Tor: datos CET y ancla.',
+      apocalypseLink: 'Abrir página Apocalypse (solo texto)',
+      apocalypseHint: 'HTML mínimo para Lynx, navegadores antiguos o si la SPA no carga.',
     },
     landmarks: {
       hero: 'Hero',
@@ -530,6 +547,11 @@ const translations: Record<LangCode, Translations> = {
       meshSkillExpression: 'Expresión de habilidad recombinante de muestra del mesh de agentes',
       ravIngress: 'Ingress simulado de habilidades desde recuperación abierta',
       reset: 'Restablecer',
+      predictiveTerrainTitle: 'Terreno predictivo (ilustrativo)',
+      predictiveTerrainHeatmap:
+        'Mapa de calor ilustrativo de zonas de rendimiento relativo en Cetățuia — no es un feed agrícola en vivo ni señal de inversión.',
+      bftConsensusDemo:
+        'Clúster ilustrativo estilo validador: mayoría honesta y tolerancia a fallos bizantinos (conceptual; no es estado en vivo de TON).',
     },
     ui: {
       toggleSidebar: 'Alternar barra lateral',
@@ -687,6 +709,8 @@ const translations: Record<LangCode, Translations> = {
       reloadPage: '刷新页面',
       sovereignLink: '打开 OMEGA 静态页面（无 JavaScript）',
       sovereignHint: '兼容 Tor 的静态页，含 CET 供应量与锚定信息。',
+      apocalypseLink: '打开纯文本 Apocalypse 页面',
+      apocalypseHint: '极简 HTML，适用于 Lynx、旧版浏览器或 SPA 不可用。',
     },
     landmarks: {
       hero: '首屏',
@@ -731,6 +755,11 @@ const translations: Record<LangCode, Translations> = {
       meshSkillExpression: '来自智能体网格的重组技能表达示例',
       ravIngress: '来自开放检索的模拟技能入口',
       reset: '重置',
+      predictiveTerrainTitle: '预测性地块示意',
+      predictiveTerrainHeatmap:
+        'Cetățuia 相对产量区域示意热力图 — 非实时农业数据或投资建议。',
+      bftConsensusDemo:
+        '示意性验证者集群：诚实多数与拜占庭容错（概念示意，非 TON 实时状态）。',
     },
     ui: {
       toggleSidebar: '切换侧边栏',
@@ -887,6 +916,8 @@ const translations: Record<LangCode, Translations> = {
       reloadPage: 'Перезагрузить страницу',
       sovereignLink: 'Открыть OMEGA-страницу (без JavaScript)',
       sovereignHint: 'Статическая страница, дружественная к Tor: факты о CET и якоре.',
+      apocalypseLink: 'Открыть текстовую страницу Apocalypse',
+      apocalypseHint: 'Минимальный HTML для Lynx, старых браузеров или если SPA недоступна.',
     },
     landmarks: {
       hero: 'Герой',
@@ -931,6 +962,11 @@ const translations: Record<LangCode, Translations> = {
       meshSkillExpression: 'Образец рекомбинантного выражения навыка из mesh агентов',
       ravIngress: 'Симулированный вход навыка из открытого поиска',
       reset: 'Сброс',
+      predictiveTerrainTitle: 'Прогнозная карта (иллюстрация)',
+      predictiveTerrainHeatmap:
+        'Иллюстративная тепловая карта относительной урожайности для Cetățuia — не живой агроканал и не инвестсигнал.',
+      bftConsensusDemo:
+        'Иллюстративный кластер валидаторов: честное большинство и византийская отказоустойчивость (концепция; не статус TON в реальном времени).',
     },
     ui: {
       toggleSidebar: 'Переключить боковую панель',
@@ -1088,6 +1124,8 @@ const translations: Record<LangCode, Translations> = {
       reloadPage: 'Reîncarcă pagina',
       sovereignLink: 'Deschide suprafața OMEGA (fără JavaScript)',
       sovereignHint: 'Pagină statică compatibilă Tor — ofertă CET și ancoră.',
+      apocalypseLink: 'Deschide pagina Apocalypse (doar text)',
+      apocalypseHint: 'HTML minimal pentru Lynx, browsere vechi sau când SPA nu răspunde.',
     },
     landmarks: {
       hero: 'Hero',
@@ -1132,6 +1170,11 @@ const translations: Record<LangCode, Translations> = {
       meshSkillExpression: 'Expresie skill recombinantă din mesh-ul de agenți',
       ravIngress: 'Ingress simulat de skill din recuperare deschisă',
       reset: 'Resetare',
+      predictiveTerrainTitle: 'Teren predictiv (ilustrativ)',
+      predictiveTerrainHeatmap:
+        'Hartă termică ilustrativă pentru zone de randament relativ Cetățuia — nu feed agricol live sau semnal de investiții.',
+      bftConsensusDemo:
+        'Cluster ilustrativ tip validator: majoritate cinstită și toleranță bizantină (conceptual; nu status TON live).',
     },
     ui: {
       toggleSidebar: 'Comută bara laterală',
@@ -1289,6 +1332,8 @@ const translations: Record<LangCode, Translations> = {
       reloadPage: 'Recarregar página',
       sovereignLink: 'Abrir superfície OMEGA (sem JavaScript)',
       sovereignHint: 'Página estática compatível com Tor — dados CET e âncora.',
+      apocalypseLink: 'Abrir página Apocalypse (só texto)',
+      apocalypseHint: 'HTML mínimo para Lynx, browsers antigos ou quando a SPA falha.',
     },
     landmarks: {
       hero: 'Hero',
@@ -1333,6 +1378,11 @@ const translations: Record<LangCode, Translations> = {
       meshSkillExpression: 'Expressão de skill recombinante da malha de agentes',
       ravIngress: 'Ingresso simulado de skill a partir de recuperação aberta',
       reset: 'Repor',
+      predictiveTerrainTitle: 'Terreno preditivo (ilustrativo)',
+      predictiveTerrainHeatmap:
+        'Mapa de calor ilustrativo de zonas de rendimento relativo em Cetățuia — não é feed agrícola ao vivo nem sinal de investimento.',
+      bftConsensusDemo:
+        'Cluster ilustrativo de validadores: maioria honesta e tolerância bizantina (conceitual; não é estado TON em tempo real).',
     },
     ui: {
       toggleSidebar: 'Alternar barra lateral',
@@ -1490,6 +1540,8 @@ const translations: Record<LangCode, Translations> = {
       reloadPage: 'Seite neu laden',
       sovereignLink: 'OMEGA-Oberfläche öffnen (ohne JavaScript)',
       sovereignHint: 'Tor-freundliche statische Seite mit CET-Angebot und Anker.',
+      apocalypseLink: 'Apocalypse-Textseite öffnen',
+      apocalypseHint: 'Minimales HTML für Lynx, alte Browser oder wenn die SPA nicht lädt.',
     },
     landmarks: {
       hero: 'Hero',
@@ -1534,6 +1586,11 @@ const translations: Record<LangCode, Translations> = {
       meshSkillExpression: 'Beispiel einer rekombinanten Skill-Expression aus dem Agenten-Mesh',
       ravIngress: 'Simulierter Skill-Eingang aus offener Retrieval-Quelle',
       reset: 'Zurücksetzen',
+      predictiveTerrainTitle: 'Prädiktives Terrain (illustrativ)',
+      predictiveTerrainHeatmap:
+        'Illustrative Heatmap relativer Ertragszonen für Cetățuia — kein Live-Agrarfeed und kein Investmenthinweis.',
+      bftConsensusDemo:
+        'Illustratives Validator-Cluster: ehrliche Mehrheit und byzantinische Fehlertoleranz (konzeptuell; kein Live-TON-Status).',
     },
     ui: {
       toggleSidebar: 'Seitenleiste umschalten',
