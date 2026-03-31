@@ -35,11 +35,12 @@ export function PredictiveTerrainHeatmap() {
   const { t, lang } = useLanguage()
 
   const cells = useMemo(() => {
+    void lang
     return Array.from({ length: CELLS }, (_, i) => {
       const { level, prediction } = yieldForIndex(i)
       return { i, level, prediction }
     })
-  }, [])
+  }, [lang])
 
   const localeDemo = formatCetInteger(124, lang)
   const a = t.sectionAria

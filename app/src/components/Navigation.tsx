@@ -32,6 +32,24 @@ const NAV_HREFS = [
 const MOBILE_MENU_FOCUSABLE_SELECTOR =
   'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+/** Try each candidate until `focus()` sticks (iOS may ignore inert/hidden/disabled nodes). */
+function tryFocusFirstFocusable(nodes: NodeListOf<HTMLElement>): void {
+  for (const el of Array.from(nodes)) {
+    if (!(el instanceof HTMLElement)) continue;
+    if (el.hasAttribute('disabled')) continue;
+    if (el.getAttribute('aria-hidden') === 'true') continue;
+    if (el.closest('[hidden]')) continue;
+    const style = typeof window !== 'undefined' ? window.getComputedStyle(el) : null;
+    if (style && (style.display === 'none' || style.visibility === 'hidden')) continue;
+    try {
+      el.focus({ preventScroll: true });
+    } catch {
+      continue;
+    }
+    if (document.activeElement === el) return;
+  }
+}
+
 /**
  * Navigation — the fixed top navigation bar for the Solaris CET landing page.
  *
@@ -117,7 +135,7 @@ const Navigation = () => {
     if (!content) return;
 
     const initialFocusable = content.querySelectorAll<HTMLElement>(MOBILE_MENU_FOCUSABLE_SELECTOR);
-    (initialFocusable[0] as HTMLElement | undefined)?.focus();
+    tryFocusFirstFocusable(initialFocusable);
 
     document.addEventListener('keydown', handleMobileMenuKeyDown);
     return () => document.removeEventListener('keydown', handleMobileMenuKeyDown);

@@ -361,7 +361,10 @@ const HeroSection: React.FC = () => {
           />
           <div className="flex min-w-max animate-ticker whitespace-nowrap">
             {[...tickerRows, ...tickerRows].map((item, i) => (
-              <div key={i} className="inline-flex items-center px-6 sm:px-8 md:px-10 gap-3 md:gap-4">
+              <div
+                key={`${lang}-ticker-${item.label}-${i}`}
+                className="inline-flex items-center px-6 sm:px-8 md:px-10 gap-3 md:gap-4"
+              >
                 <span className="text-[10px] text-zinc-500 font-mono">{item.label}</span>
                 <span className="text-yellow-500 font-bold text-sm">{item.value}</span>
               </div>
