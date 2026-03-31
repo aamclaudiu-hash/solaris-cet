@@ -127,8 +127,10 @@ const TokenomicsSection = () => {
       <div ref={pillsRef} className="absolute inset-0 z-20 pointer-events-none">
         <div
           className={`metric-pill pointer-events-auto absolute left-[6vw] top-[20vh] bento-card px-5 py-3 flex items-center gap-3 animate-float shadow-depth ${BENTO_TILE_INTERACTION}`}
+          role="group"
+          aria-label={`${t.tokenomics.cetCapLabel}: 9,000 CET`}
         >
-          <Coins className="w-5 h-5 text-amber-400" />
+          <Coins className="w-5 h-5 text-amber-400" aria-hidden />
           <div>
             <div className="hud-label text-[10px]">{t.tokenomics.cetCapLabel}</div>
             <div className="font-mono tabular-nums text-amber-300 font-semibold">9,000</div>

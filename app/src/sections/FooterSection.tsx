@@ -292,10 +292,7 @@ const FooterSection = () => {
                 © {new Date().getFullYear()} Solaris CET. AI Bridge to High Intelligence. All rights reserved.
               </p>
               <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-solaris-muted/90">
-                Genesis anchor:{' '}
-                <span className="text-solaris-gold/70">2026-03-31T23:23:00Z</span>
-                {' · '}
-                CET supply cap: 9,000 · Surface: OMEGA-2026
+                {t.footerMeta.genesisCertification}
               </p>
             </div>
           <div className="flex flex-col md:flex-row items-center gap-3">

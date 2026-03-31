@@ -60,6 +60,10 @@ export interface Translations {
     switchLanguagePrefix: string;
     /** Generic loading indicator (`Spinner`, etc.). */
     loadingAria: string;
+    /** Skip link target `#main-content` (WCAG 2.4.1). */
+    skipToMain: string;
+    /** `BuildSeal` — replace `{commit}` and `{date}` (YYYY-MM-DD). */
+    buildSealAriaLabel: string;
   };
   /** Footer / resource strip social actions. */
   social: {
@@ -118,6 +122,10 @@ export interface Translations {
     sovereignNoJs: string;
     github: string;
   };
+  /** Product anchor line (genesis timestamp, supply cap, surface label). */
+  footerMeta: {
+    genesisCertification: string;
+  };
   /** Section/component `aria-label` strings (lazy sections, mesh, copy buttons). */
   sectionAria: {
     liveNeuralFeed: string;
@@ -162,6 +170,8 @@ export interface Translations {
     miningStartAria: string;
     miningProcessingAria: string;
     miningSuccessAria: string;
+    /** Landmark for the scrolling metrics strip (WCAG 2.4.1 / 1.3.1). */
+    liveTickerAria: string;
   };
   tokenomics: {
     title: string;
@@ -238,6 +248,9 @@ const translations: Record<LangCode, Translations> = {
       backToTop: 'Back to top',
       switchLanguagePrefix: 'Switch language to',
       loadingAria: 'Loading',
+      skipToMain: 'Skip to main content',
+      buildSealAriaLabel:
+        'Deployment artifact: short commit {commit}, build date {date}. Compare with the repository to verify this deployment.',
     },
     social: {
       shareOnX: 'Share on X',
@@ -289,6 +302,10 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: 'Sovereign (no JS)',
       github: 'GitHub',
     },
+    footerMeta: {
+      genesisCertification:
+        'Genesis anchor: 2026-03-31T23:23:00Z · CET supply cap: 9,000 · Surface: OMEGA-2026',
+    },
     sectionAria: {
       liveNeuralFeed: 'Live neural feed simulation',
       agentBoardFeed: 'Live agent activity feed',
@@ -332,6 +349,8 @@ const translations: Record<LangCode, Translations> = {
       miningStartAria: 'Start mining',
       miningProcessingAria: 'Processing mining operation',
       miningSuccessAria: 'Mining initiated successfully',
+      liveTickerAria:
+        'Scrolling highlights: task agents, CET supply, TON network, DeDust pool, mining, and protocol metrics',
     },
     tokenomics: {
       title: 'Tokenomics',
@@ -430,6 +449,9 @@ const translations: Record<LangCode, Translations> = {
       backToTop: 'Volver arriba',
       switchLanguagePrefix: 'Cambiar idioma a',
       loadingAria: 'Cargando',
+      skipToMain: 'Saltar al contenido principal',
+      buildSealAriaLabel:
+        'Artefacto de despliegue: commit corto {commit}, fecha de build {date}. Compare con el repositorio para verificar este despliegue.',
     },
     social: {
       shareOnX: 'Compartir en X',
@@ -481,6 +503,10 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: 'Soberano (sin JS)',
       github: 'GitHub',
     },
+    footerMeta: {
+      genesisCertification:
+        'Ancla genesis: 2026-03-31T23:23:00Z · Tope CET: 9.000 · Superficie: OMEGA-2026',
+    },
     sectionAria: {
       liveNeuralFeed: 'Simulación de feed neuronal en vivo',
       agentBoardFeed: 'Feed de actividad de agentes en vivo',
@@ -524,6 +550,8 @@ const translations: Record<LangCode, Translations> = {
       miningStartAria: 'Iniciar minería',
       miningProcessingAria: 'Procesando operación de minería',
       miningSuccessAria: 'Minería iniciada correctamente',
+      liveTickerAria:
+        'Destacados en carrusel: agentes, suministro CET, red TON, pool DeDust, minería y métricas del protocolo',
     },
     tokenomics: {
       title: 'Tokenómica',
@@ -622,6 +650,9 @@ const translations: Record<LangCode, Translations> = {
       backToTop: '返回顶部',
       switchLanguagePrefix: '切换语言为',
       loadingAria: '加载中',
+      skipToMain: '跳到主要内容',
+      buildSealAriaLabel:
+        '部署产物：短提交 {commit}，构建日期 {date}。可与仓库比对以验证此部署。',
     },
     social: {
       shareOnX: '在 X 分享',
@@ -673,6 +704,10 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: '主权（无 JS）',
       github: 'GitHub',
     },
+    footerMeta: {
+      genesisCertification:
+        '创世锚点：2026-03-31T23:23:00Z · CET 上限：9,000 · 表面：OMEGA-2026',
+    },
     sectionAria: {
       liveNeuralFeed: '实时神经流模拟',
       agentBoardFeed: '实时智能体活动 feed',
@@ -716,6 +751,7 @@ const translations: Record<LangCode, Translations> = {
       miningStartAria: '开始挖矿',
       miningProcessingAria: '正在处理挖矿操作',
       miningSuccessAria: '挖矿已成功启动',
+      liveTickerAria: '横向滚动指标：智能体、CET 供应量、TON 网络、DeDust 池、挖矿与协议数据',
     },
     tokenomics: {
       title: '代币经济学',
@@ -814,6 +850,9 @@ const translations: Record<LangCode, Translations> = {
       backToTop: 'Наверх',
       switchLanguagePrefix: 'Переключить язык на',
       loadingAria: 'Загрузка',
+      skipToMain: 'Перейти к основному содержимому',
+      buildSealAriaLabel:
+        'Артефакт сборки: короткий коммит {commit}, дата сборки {date}. Сверьте с репозиторием, чтобы проверить развёртывание.',
     },
     social: {
       shareOnX: 'Поделиться в X',
@@ -865,6 +904,10 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: 'Суверенный (без JS)',
       github: 'GitHub',
     },
+    footerMeta: {
+      genesisCertification:
+        'Якорь genesis: 2026-03-31T23:23:00Z · Потолок CET: 9 000 · Поверхность: OMEGA-2026',
+    },
     sectionAria: {
       liveNeuralFeed: 'Симуляция живого нейропотока',
       agentBoardFeed: 'Лента активности агентов в реальном времени',
@@ -908,6 +951,8 @@ const translations: Record<LangCode, Translations> = {
       miningStartAria: 'Начать майнинг',
       miningProcessingAria: 'Обработка операции майнинга',
       miningSuccessAria: 'Майнинг успешно запущен',
+      liveTickerAria:
+        'Бегущая строка: агенты, запас CET, сеть TON, пул DeDust, майнинг и метрики протокола',
     },
     tokenomics: {
       title: 'Токеномика',
@@ -1006,6 +1051,9 @@ const translations: Record<LangCode, Translations> = {
       backToTop: 'Înapoi sus',
       switchLanguagePrefix: 'Schimbă limba la',
       loadingAria: 'Se încarcă',
+      skipToMain: 'Sari la conținutul principal',
+      buildSealAriaLabel:
+        'Artefact de deployment: commit scurt {commit}, dată build {date}. Compară cu depozitul pentru a verifica.',
     },
     social: {
       shareOnX: 'Distribuie pe X',
@@ -1057,6 +1105,10 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: 'Suveran (fără JS)',
       github: 'GitHub',
     },
+    footerMeta: {
+      genesisCertification:
+        'Ancoră genesis: 2026-03-31T23:23:00Z · Plafon CET: 9.000 · Suprafață: OMEGA-2026',
+    },
     sectionAria: {
       liveNeuralFeed: 'Simulare feed neural în timp real',
       agentBoardFeed: 'Flux activitate agenți în timp real',
@@ -1100,6 +1152,8 @@ const translations: Record<LangCode, Translations> = {
       miningStartAria: 'Începe minarea',
       miningProcessingAria: 'Se procesează operațiunea de minare',
       miningSuccessAria: 'Minare inițiată cu succes',
+      liveTickerAria:
+        'Bandă derulantă: agenți, ofertă CET, rețea TON, pool DeDust, minare și metrici protocol',
     },
     tokenomics: {
       title: 'Tokenomică',
@@ -1198,6 +1252,9 @@ const translations: Record<LangCode, Translations> = {
       backToTop: 'Voltar ao topo',
       switchLanguagePrefix: 'Mudar idioma para',
       loadingAria: 'A carregar',
+      skipToMain: 'Saltar para o conteúdo principal',
+      buildSealAriaLabel:
+        'Artefacto de deployment: commit curto {commit}, data de build {date}. Compare com o repositório para verificar.',
     },
     social: {
       shareOnX: 'Partilhar no X',
@@ -1249,6 +1306,10 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: 'Soberano (sem JS)',
       github: 'GitHub',
     },
+    footerMeta: {
+      genesisCertification:
+        'Âncora genesis: 2026-03-31T23:23:00Z · Teto CET: 9.000 · Superfície: OMEGA-2026',
+    },
     sectionAria: {
       liveNeuralFeed: 'Simulação de feed neural em tempo real',
       agentBoardFeed: 'Feed de atividade dos agentes em tempo real',
@@ -1292,6 +1353,8 @@ const translations: Record<LangCode, Translations> = {
       miningStartAria: 'Iniciar mineração',
       miningProcessingAria: 'A processar operação de mineração',
       miningSuccessAria: 'Mineração iniciada com sucesso',
+      liveTickerAria:
+        'Destaques em rolagem: agentes, oferta CET, rede TON, pool DeDust, mineração e métricas do protocolo',
     },
     tokenomics: {
       title: 'Tokenomia',
@@ -1390,6 +1453,9 @@ const translations: Record<LangCode, Translations> = {
       backToTop: 'Nach oben',
       switchLanguagePrefix: 'Sprache wechseln zu',
       loadingAria: 'Laden',
+      skipToMain: 'Zum Hauptinhalt springen',
+      buildSealAriaLabel:
+        'Deployment-Artefakt: Kurz-Commit {commit}, Build-Datum {date}. Mit dem Repository abgleichen, um dieses Deployment zu prüfen.',
     },
     social: {
       shareOnX: 'Auf X teilen',
@@ -1441,6 +1507,10 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: 'Souverän (ohne JS)',
       github: 'GitHub',
     },
+    footerMeta: {
+      genesisCertification:
+        'Genesis-Anker: 2026-03-31T23:23:00Z · CET-Obergrenze: 9.000 · Oberfläche: OMEGA-2026',
+    },
     sectionAria: {
       liveNeuralFeed: 'Live-Neural-Feed-Simulation',
       agentBoardFeed: 'Live-Aktivitätsfeed der Agenten',
@@ -1484,6 +1554,8 @@ const translations: Record<LangCode, Translations> = {
       miningStartAria: 'Mining starten',
       miningProcessingAria: 'Mining-Vorgang wird verarbeitet',
       miningSuccessAria: 'Mining erfolgreich gestartet',
+      liveTickerAria:
+        'Lauftext: Agenten, CET-Angebot, TON-Netz, DeDust-Pool, Mining und Protokollkennzahlen',
     },
     tokenomics: {
       title: 'Tokenomik',

@@ -161,6 +161,8 @@ npm run build
 # Output is generated in app/dist/
 ```
 
+Optional **deployment artifact seal** (footer hash + date in the React app, static seal on `/sovereign/`): set `VITE_GIT_COMMIT_HASH` and `VITE_BUILD_TIMESTAMP` in Coolify so the UI matches the deployed commit. See `app/.env.example` and `docs/CONTINUITY.md`.
+
 ### Preview production build locally
 
 ```bash

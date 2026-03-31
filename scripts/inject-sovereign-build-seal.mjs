@@ -29,7 +29,8 @@ hash = hash.slice(0, 7);
 const iso = process.env.VITE_BUILD_TIMESTAMP?.trim() || new Date().toISOString();
 const date = iso.slice(0, 10);
 
-const seal = `      <div class="sovereign-build-seal" aria-hidden="true">ARTIFACT · ${hash} · ${date}</div>`;
+const sealAria = `Artifact seal: short commit ${hash}, build date ${date}. Compare with the repository to verify this deployment.`;
+const seal = `      <div class="sovereign-build-seal" role="img" aria-label="${sealAria.replace(/"/g, "&quot;")}"><span aria-hidden="true">ARTIFACT · ${hash} · ${date}</span></div>`;
 
 let html = readFileSync(target, "utf8");
 const marker = "<!-- BUILD_SEAL_INJECT -->";

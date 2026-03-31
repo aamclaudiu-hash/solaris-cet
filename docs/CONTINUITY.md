@@ -28,3 +28,24 @@ This document describes how the project can be **rebuilt and redeployed** withou
 ## Community & governance
 
 Public community links (e.g. Telegram, GitHub) are listed on the live site. **Do not** treat chat messages as authoritative for key rotation or legal commitments; use signed releases and documented governance where applicable.
+
+## Verifying what is deployed
+
+- **React app:** the bottom-right **build seal** shows the short git hash and build date (from `vite.config.ts` `define`, overridable via `VITE_GIT_COMMIT_HASH` / `VITE_BUILD_TIMESTAMP` in Coolify).
+- **OMEGA static page (`/sovereign/`):** after `npm run build`, the synced HTML includes an **artifact line** injected by `scripts/inject-sovereign-build-seal.mjs` (same env vars or local `git rev-parse`).
+- **Compare** the short hash to `git rev-parse --short HEAD` on the tagged release you intend to run.
+
+## Rollback
+
+- Revert or checkout the last known-good **git tag** / commit on `main`, then redeploy the same Docker image or rebuild `app/` with `npm ci && npm run build`.
+- Keep **previous `dist/` or image digest** on the host until the new deployment is smoke-tested (health route, `/sovereign/`, wallet flows if applicable).
+
+## CI expectations
+
+- `.github/workflows/ci.yml` enforces lint, tests, and a **main bundle size budget** (see workflow).
+- Lighthouse thresholds for static `dist/` are in `app/lighthouserc.cjs` and mirrored in `.github/workflows/lighthouse-ci.yml` so PRs cannot silently weaken gates by editing only one file.
+
+## TLS / HSTS
+
+- **Nginx** (`docker/nginx.conf`) can send `Strict-Transport-Security` when it terminates HTTPS. If TLS ends at **Coolify** or a reverse proxy, configure the same header there so browsers always use HTTPS.
+- After deploy, validate the **HSTS preload** checklist at [hstspreload.org](https://hstspreload.org/?domain=solaris-cet.com) (valid certificate, redirect to HTTPS, header on the response).

@@ -70,15 +70,8 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (!isMobileMenuOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsMobileMenuOpen(false);
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isMobileMenuOpen]);
-
+  // Single document keydown listener while the sheet is open: Escape + Tab focus trap.
+  // One named function per effect run guarantees add/remove use the same reference (no orphan listeners).
   useEffect(() => {
     if (!isMobileMenuOpen) {
       mobileMenuToggleRef.current?.focus();
@@ -91,12 +84,17 @@ const Navigation = () => {
     const focusableSelector =
       'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
     const getFocusable = () => content.querySelectorAll<HTMLElement>(focusableSelector);
-    const initialFocusable = getFocusable();
-    const first = initialFocusable[0] ?? null;
-    first?.focus();
 
-    const trapTab = (event: KeyboardEvent) => {
+    const initialFocusable = getFocusable();
+    (initialFocusable[0] as HTMLElement | undefined)?.focus();
+
+    const handleMobileMenuKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+        return;
+      }
       if (event.key !== 'Tab') return;
+
       const focusable = getFocusable();
       if (focusable.length === 0) return;
 
@@ -113,8 +111,8 @@ const Navigation = () => {
       }
     };
 
-    document.addEventListener('keydown', trapTab);
-    return () => document.removeEventListener('keydown', trapTab);
+    document.addEventListener('keydown', handleMobileMenuKeyDown);
+    return () => document.removeEventListener('keydown', handleMobileMenuKeyDown);
   }, [isMobileMenuOpen]);
 
   return (

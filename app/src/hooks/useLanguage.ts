@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import translations, { type LangCode, type Translations } from '../i18n/translations';
+import { getTextDirForLang } from '../lib/textDirection';
 
 export type { LangCode };
 

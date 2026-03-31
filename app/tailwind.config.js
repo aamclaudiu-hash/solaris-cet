@@ -156,6 +156,19 @@ module.exports = {
           "0%, 100%": { transform: "translate(0%, 0%) scale(1)" },
           "50%": { transform: "translate(-1.2%, -0.8%) scale(1.02)" },
         },
+        "bft-honest": {
+          "0%, 100%": { opacity: "0.85", boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.2)" },
+          "50%": { opacity: "1", boxShadow: "0 0 12px 0 rgba(34, 197, 94, 0.35)" },
+        },
+        "bft-glitch": {
+          "0%, 100%": { transform: "translate(0, 0)", opacity: "1" },
+          "33%": { transform: "translate(-1px, 1px)", opacity: "0.85" },
+          "66%": { transform: "translate(1px, -1px)", opacity: "0.92" },
+        },
+        "bft-leader": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -172,6 +185,9 @@ module.exports = {
         "hero-conic-drift": "hero-conic-drift 100s linear infinite",
         "logo-breathe": "logo-breathe 5s ease-in-out infinite",
         "hero-mesh-shift": "hero-mesh-shift 42s ease-in-out infinite",
+        "bft-honest": "bft-honest 2.2s ease-in-out infinite",
+        "bft-glitch": "bft-glitch 0.55s ease-in-out infinite",
+        "bft-leader": "bft-leader 24s linear infinite",
       },
     },
   },

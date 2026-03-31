@@ -339,6 +339,8 @@ const HeroSection: React.FC = () => {
 
         <div
           ref={tickerContainerRef}
+          role="region"
+          aria-label={t.hero.liveTickerAria}
           className="relative lg:absolute lg:bottom-0 w-full overflow-hidden py-4 md:py-6 border-t border-white/10 bg-slate-950/75 backdrop-blur-2xl mt-6 lg:mt-0 shadow-[0_-24px_80px_-28px_rgba(255,200,100,0.07)]"
         >
           <div

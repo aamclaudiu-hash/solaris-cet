@@ -247,6 +247,9 @@ function AppContent() {
         {/* Noise overlay */}
         <div className="noise-overlay" />
         
+        <a href="#main-content" className="skip-to-content">
+          {langState.t.common.skipToMain}
+        </a>
         {/* Navigation */}
         <Navigation />
         
