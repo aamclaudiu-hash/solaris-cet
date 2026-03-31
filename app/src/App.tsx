@@ -1,4 +1,4 @@
-import { lazy, useEffect, useRef, useState } from 'react';
+import { lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
@@ -46,6 +46,7 @@ const LOADING_DURATION_MS = 1100;
 function AppContent() {
   const mainRef = useRef<HTMLDivElement>(null);
   const loadingRef = useRef<HTMLDivElement>(null);
+  const snapTriggerRef = useRef<ScrollTrigger | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const langState = useLanguageState();
 
@@ -78,6 +79,67 @@ function AppContent() {
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
+
+  const buildSnapTo = useCallback((pinnedRanges: { start: number; end: number; center: number }[]) => {
+    return (value: number) => {
+      const inPinned = pinnedRanges.some(
+        (r) => value >= r.start - 0.02 && value <= r.end + 0.02,
+      );
+      if (!inPinned) return value;
+
+      let closest = pinnedRanges[0]?.center ?? value;
+      let closestDist = Math.abs(closest - value);
+      for (let i = 1; i < pinnedRanges.length; i += 1) {
+        const dist = Math.abs(pinnedRanges[i].center - value);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = pinnedRanges[i].center;
+        }
+      }
+      return closest;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    // Re-enable scroll snap for pinned sections on wide desktop only.
+    const isBelowDesktop = typeof window !== 'undefined' && window.matchMedia('(max-width: 1279px)').matches;
+    if (isBelowDesktop) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const setupSnap = () => {
+      const pinned = ScrollTrigger.getAll()
+        .filter((st) => st.vars.pin)
+        .sort((a, b) => a.start - b.start);
+
+      const maxScroll = ScrollTrigger.maxScroll(window);
+      if (!maxScroll || pinned.length === 0) return;
+
+      const pinnedRanges = pinned.map((st) => ({
+        start: st.start / maxScroll,
+        end: (st.end ?? st.start) / maxScroll,
+        center: (st.start + ((st.end ?? st.start) - st.start) * 0.5) / maxScroll,
+      }));
+
+      snapTriggerRef.current?.kill();
+      snapTriggerRef.current = ScrollTrigger.create({
+        snap: {
+          snapTo: buildSnapTo(pinnedRanges),
+          duration: { min: 0.15, max: 0.35 },
+          delay: 0,
+          ease: 'power2.out',
+        },
+      });
+    };
+
+    const timer = window.setTimeout(setupSnap, 500);
+    return () => {
+      window.clearTimeout(timer);
+      snapTriggerRef.current?.kill();
+      snapTriggerRef.current = null;
+    };
+  }, [isLoaded, buildSnapTo]);
 
   /** When the server serves `index.html` for `/mining`, scroll to the calculator after lazy sections mount. */
   useEffect(() => {
