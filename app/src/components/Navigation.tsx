@@ -47,6 +47,8 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const mobileMenuToggleRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuNavRef = useRef<HTMLElement>(null);
   const { t } = useLanguage();
 
   const navLinks = NAV_HREFS.map(({ key, href }) => ({
@@ -75,6 +77,39 @@ const Navigation = () => {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      mobileMenuToggleRef.current?.focus();
+      return;
+    }
+
+    const nav = mobileMenuNavRef.current;
+    if (!nav) return;
+
+    const focusable = nav.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    first?.focus();
+
+    const trapTab = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || focusable.length === 0) return;
+      const active = document.activeElement as HTMLElement | null;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', trapTab);
+    return () => document.removeEventListener('keydown', trapTab);
   }, [isMobileMenuOpen]);
 
   return (
@@ -175,6 +210,7 @@ const Navigation = () => {
             <button
               type="button"
               data-testid="mobile-menu-toggle"
+              ref={mobileMenuToggleRef}
               className="xl:hidden p-2 text-solaris-text shrink-0"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label={t.nav.openMenu}
@@ -212,6 +248,7 @@ const Navigation = () => {
           </SheetHeader>
 
           <nav
+            ref={mobileMenuNavRef}
             className="flex flex-col flex-1 items-center px-6 sm:px-8 md:px-10 py-8 gap-1 min-h-0 w-full max-w-full"
             aria-label={t.nav.primaryNavigation}
           >

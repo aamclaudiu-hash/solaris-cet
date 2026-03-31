@@ -1,0 +1,69 @@
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 12pt;
+    line-height: 1.45;
+  }
+
+  .skip,
+  .pulse,
+  details {
+    display: none !important;
+  }
+
+  .solaris-panel {
+    background: #fff !important;
+    border: 1px solid #c9c9c9 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: #000 !important;
+    page-break-after: avoid;
+  }
+
+  .data-mono {
+    font-family: "Courier New", Courier, monospace !important;
+    font-size: 11pt !important;
+    color: #111 !important;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #444;
+    font-family: "Courier New", Courier, monospace;
+  }
+
+  body::before {
+    content: "Solaris CET - Document Valoare RWA (solaris-cet.com)";
+    display: block;
+    text-align: center;
+    font-size: 10pt;
+    color: #666;
+    border-bottom: 1px solid #d0d0d0;
+    padding-bottom: 8pt;
+    margin-bottom: 14pt;
+  }
+
+  body::after {
+    content: "Tiparit la: " attr(data-print-date) " | Hash Verificare: SOL-CET-2026";
+    display: block;
+    text-align: center;
+    font-size: 9pt;
+    color: #888;
+    border-top: 1px solid #d0d0d0;
+    padding-top: 8pt;
+    margin-top: 14pt;
+  }
+}
