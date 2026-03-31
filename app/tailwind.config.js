@@ -151,6 +151,11 @@ module.exports = {
           "0%, 100%": { transform: "scale(1)", opacity: "1" },
           "50%": { transform: "scale(1.045)", opacity: "0.96" },
         },
+        /** Subtle parallax on hero SVG mesh — slow enough to feel premium, not gimmicky. */
+        "hero-mesh-shift": {
+          "0%, 100%": { transform: "translate(0%, 0%) scale(1)" },
+          "50%": { transform: "translate(-1.2%, -0.8%) scale(1.02)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -166,6 +171,7 @@ module.exports = {
         "hero-aurora": "hero-aurora 28s ease-in-out infinite",
         "hero-conic-drift": "hero-conic-drift 100s linear infinite",
         "logo-breathe": "logo-breathe 5s ease-in-out infinite",
+        "hero-mesh-shift": "hero-mesh-shift 42s ease-in-out infinite",
       },
     },
   },

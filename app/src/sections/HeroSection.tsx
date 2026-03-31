@@ -4,6 +4,7 @@ import { Zap, Activity, Loader2 } from 'lucide-react';
 
 const ParticleCanvas = lazy(() => import('../components/ParticleCanvas'));
 import GlowOrbs from '../components/GlowOrbs';
+import HeroAmbientFields from '../components/HeroAmbientFields';
 import CetAiSearch from '../components/CetAiSearch';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { SolarisLogoMark } from '../components/SolarisLogoMark';
@@ -165,6 +166,8 @@ const HeroSection: React.FC = () => {
 
           <GlowOrbs variant="gold" className="opacity-[0.68]" />
 
+          <HeroAmbientFields />
+
           <div
             className="absolute inset-0 opacity-[0.12] mix-blend-screen animate-hero-conic-drift"
             style={{
@@ -176,6 +179,11 @@ const HeroSection: React.FC = () => {
           <Suspense fallback={null}>
             <ParticleCanvas count={56} className="hidden sm:block opacity-[0.45]" connectionRadius={110} />
           </Suspense>
+
+          <div
+            className="absolute inset-0 z-[2] mix-blend-overlay opacity-[0.22] motion-reduce:opacity-[0.12] hero-film-grain pointer-events-none"
+            aria-hidden
+          />
 
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_85%_55%_at_50%_0%,rgba(255,200,120,0.1),transparent_60%)]" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-950/90" />
@@ -207,7 +215,11 @@ const HeroSection: React.FC = () => {
               </div>
 
               <h1 className="w-full font-black tracking-[-0.045em] leading-[0.92] text-balance">
-                <span className="block text-5xl sm:text-6xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-[#FFF8E7] via-[#F2C94C] to-[#A67C00] drop-shadow-[0_2px_24px_rgba(0,0,0,0.55)]">
+                <span className="relative block text-5xl sm:text-6xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-[#FFF8E7] via-[#F2C94C] to-[#A67C00] drop-shadow-[0_2px_24px_rgba(0,0,0,0.55)]">
+                  <span
+                    className="absolute -inset-x-8 -inset-y-3 -z-10 rounded-[2rem] bg-gradient-to-r from-transparent via-amber-400/[0.07] to-transparent blur-2xl motion-safe:animate-hero-mesh-shift"
+                    aria-hidden
+                  />
                   SOLARIS CET
                 </span>
               </h1>

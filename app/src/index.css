@@ -126,6 +126,20 @@
   }
 }
 
+@layer utilities {
+  /**
+   * Ultra-fine grain (no external texture) — “cinema” depth on hero; keeps motion-safe via opacity.
+   */
+  .hero-film-grain {
+    background-image: repeating-radial-gradient(
+      circle at 40% 35%,
+      rgba(255, 255, 255, 0.035) 0,
+      transparent 1.5px
+    );
+    background-size: 3px 3px;
+  }
+}
+
 @layer components {
   /**
    * Premium Dark & Gold — glass cards (unified with Tailwind tokens)

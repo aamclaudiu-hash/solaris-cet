@@ -52,10 +52,33 @@
       body {
         margin: 0;
         min-height: 100vh;
+        position: relative;
         font-family: ui-sans-serif, system-ui, sans-serif;
         background: var(--bg-void);
         color: var(--text-primary);
         line-height: 1.6;
+      }
+
+      /* CSS-only depth layer (no JS) — aligns with main app hero mesh language */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.22;
+        background-image:
+          linear-gradient(rgba(242, 201, 76, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(242, 201, 76, 0.06) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(ellipse 85% 70% at 50% 20%, black 0%, transparent 72%);
+      }
+
+      header,
+      main,
+      footer {
+        position: relative;
+        z-index: 1;
       }
 
       .skip {
@@ -228,6 +251,13 @@
           Fixed supply. Anchor: agricultural land, <strong>Cetățuia, Romania</strong>.
         </p>
         <p class="pulse" role="status">No JavaScript · Tor-safe surface</p>
+        <details>
+          <summary>Visual layer (Tor-safe)</summary>
+          <ul>
+            <li>Fixed CSS grid + radial mask — no scripts, no external assets.</li>
+            <li>Print stylesheet: <span class="data-mono">css/print.css</span> (paper-friendly).</li>
+          </ul>
+        </details>
         <details>
           <summary>Operational notes</summary>
           <ul>

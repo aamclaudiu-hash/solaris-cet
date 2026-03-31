@@ -129,6 +129,10 @@ const StatsBento = () => {
       aria-label={t.sectionAria.statsBento}
       className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-gradient-to-r from-transparent via-amber-400/35 to-transparent"
+        aria-hidden
+      />
       {/* Aurora + orbs background */}
       <div className="absolute inset-0 aurora-bg opacity-60 pointer-events-none" aria-hidden="true" />
       <GlowOrbs variant="aurora" />
