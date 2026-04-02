@@ -35,28 +35,44 @@ function calculateRewards(input: MiningInput): MiningResult {
 }
 
 describe("calculateRewards", () => {
-  it("daily/monthly, stake 2× at max, APY rules, non-negative, rounding", () => {
+  it("worker formula: zeros, scaling, stake, APY, rounding, reference scenarios", () => {
+    const z = calculateRewards({ adjustedHashrate: 0, stake: 0 });
+    expect(z.daily).toBe(0);
+    expect(z.monthly).toBe(0);
+    expect(z.apy).toBe(15);
+
     const one = calculateRewards({ adjustedHashrate: 1, stake: 0 });
-    expect(one.daily).toBeCloseTo(0.0082, 4);
+    expect(one.daily).toBe(0.0082);
     const ten = calculateRewards({ adjustedHashrate: 10, stake: 0 });
-    expect(ten.monthly).toBeCloseTo(ten.daily * 30, 1);
+    expect(ten.monthly).toBeCloseTo(ten.daily * 30, 2);
+    expect(ten.apy).toBe(16);
+
     const noStake = calculateRewards({ adjustedHashrate: 100, stake: 0 });
     const maxStake = calculateRewards({ adjustedHashrate: 100, stake: 10_000 });
     expect(maxStake.daily).toBeCloseTo(noStake.daily * 2, 2);
-    const z = calculateRewards({ adjustedHashrate: 0, stake: 0 });
-    expect(z.apy).toBe(15.0);
+
     const r100 = calculateRewards({ adjustedHashrate: 100, stake: 0 });
     const r200 = calculateRewards({ adjustedHashrate: 200, stake: 0 });
     expect(r200.apy - r100.apy).toBeCloseTo(10.0, 1);
-    const r0 = calculateRewards({ adjustedHashrate: 0, stake: 0 });
     const r1k = calculateRewards({ adjustedHashrate: 0, stake: 1_000 });
-    expect(r1k.apy - r0.apy).toBeCloseTo(1.0, 1);
+    expect(r1k.apy - z.apy).toBeCloseTo(1.0, 1);
+    expect(calculateRewards({ adjustedHashrate: 0, stake: 5_000 }).apy).toBe(20);
+    expect(calculateRewards({ adjustedHashrate: 10, stake: 10_000 }).apy).toBe(26);
+
     const real = calculateRewards({ adjustedHashrate: 50, stake: 5_000 });
     expect(real.daily).toBeGreaterThan(0);
     expect(real.monthly).toBeGreaterThan(0);
     expect(real.apy).toBeGreaterThan(0);
+
+    const scen = calculateRewards({ adjustedHashrate: 50, stake: 2_500 });
+    expect(scen.daily).toBe(0.5125);
+    expect(scen.monthly).toBe(15.38);
+    expect(scen.apy).toBe(22.5);
+
     const rnd = calculateRewards({ adjustedHashrate: 1.23456, stake: 0 });
     expect(rnd.daily.toString().replace(/^\d+\.?/, "").length).toBeLessThanOrEqual(4);
     expect(rnd.monthly.toString().replace(/^\d+\.?/, "").length).toBeLessThanOrEqual(2);
+    const apyDec = calculateRewards({ adjustedHashrate: 1.5, stake: 500 });
+    expect((apyDec.apy.toString().split(".")[1] ?? "").length).toBeLessThanOrEqual(1);
   });
 });
