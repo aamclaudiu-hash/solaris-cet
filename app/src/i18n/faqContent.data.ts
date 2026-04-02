@@ -1,4 +1,5 @@
 import type { FaqContent } from './faqContent.types';
+import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
 
 type FaqLang = 'en' | 'es' | 'zh' | 'ru' | 'ro' | 'pt' | 'de';
 
@@ -16,7 +17,7 @@ const faqEn: FaqContent = {
     'The total supply is fixed at 9,000 CET — permanently. No minting, no admin keys, no inflation. This makes each token represent 0.011% of the entire global supply.',
   q3: 'How do I buy CET?',
   a3:
-    'CET trades on DeDust DEX on the TON network. Connect a TON wallet (Tonkeeper recommended), fund it with TON, then swap TON → CET at the official DeDust pool. Always verify the contract address: EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+    `CET trades on DeDust DEX on the TON network. Connect a TON wallet (Tonkeeper recommended), fund it with TON, then swap TON → CET at the official DeDust pool. Always verify the contract address: ${CET_CONTRACT_ADDRESS}`,
   q4: 'Is the smart contract audited?',
   a4:
     'Yes. The CET smart contract was fully audited by Cyberscope with zero critical findings. The core team has also completed KYC verification and the project is listed on Freshcoins. The full audit report is linked in the whitepaper.',
@@ -72,7 +73,7 @@ export const faqContentByLang: Record<FaqLang, FaqContent> = {
       'El suministro total es fijo en 9.000 CET — para siempre. Sin acuñación, sin claves de administrador, sin inflación. Cada token representa el 0,011% del suministro global.',
     q3: '¿Cómo compro CET?',
     a3:
-      'CET cotiza en el DEX DeDust en TON. Conecta un wallet TON (recomendado Tonkeeper), carga TON e intercambia TON → CET en el pool oficial DeDust. Verifica siempre la dirección del contrato: EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+      `CET cotiza en el DEX DeDust en TON. Conecta un wallet TON (recomendado Tonkeeper), carga TON e intercambia TON → CET en el pool oficial DeDust. Verifica siempre la dirección del contrato: ${CET_CONTRACT_ADDRESS}`,
     q4: '¿Está auditado el contrato inteligente?',
     a4:
       'Sí. El contrato CET fue auditado por Cyberscope sin hallazgos críticos. El equipo completó KYC y el proyecto figura en Freshcoins. El informe completo está enlazado en el libro blanco.',
@@ -123,7 +124,7 @@ export const faqContentByLang: Record<FaqLang, FaqContent> = {
       '总供应量永久固定为 9,000 CET。无增发、无管理员私钥、无通胀。每个代币占全球总供应的 0.011%。',
     q3: '如何购买 CET？',
     a3:
-      'CET 在 TON 网络的 DeDust DEX 上交易。连接 TON 钱包（推荐 Tonkeeper），充值 TON，再在官方 DeDust 池将 TON 兑换为 CET。请务必核对合约地址：EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+      `CET 在 TON 网络的 DeDust DEX 上交易。连接 TON 钱包（推荐 Tonkeeper），充值 TON，再在官方 DeDust 池将 TON 兑换为 CET。请务必核对合约地址：${CET_CONTRACT_ADDRESS}`,
     q4: '智能合约是否经过审计？',
     a4:
       '是的。CET 合约已由 Cyberscope 全面审计，零严重问题。核心团队已完成 KYC，项目已上架 Freshcoins。完整审计报告见白皮书链接。',
@@ -175,7 +176,7 @@ export const faqContentByLang: Record<FaqLang, FaqContent> = {
       'Общий объём зафиксирован навсегда: 9 000 CET. Без минтинга, без админ-ключей, без инфляции. Каждый токен = 0,011% от всего предложения.',
     q3: 'Как купить CET?',
     a3:
-      'CET торгуется на DEX DeDust в сети TON. Подключите кошелёк TON (рекомендуется Tonkeeper), пополните TON и обменяйте TON → CET в официальном пуле. Проверяйте адрес контракта: EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+      `CET торгуется на DEX DeDust в сети TON. Подключите кошелёк TON (рекомендуется Tonkeeper), пополните TON и обменяйте TON → CET в официальном пуле. Проверяйте адрес контракта: ${CET_CONTRACT_ADDRESS}`,
     q4: 'Проведён ли аудит смарт-контракта?',
     a4:
       'Да. Контракт CET полностью аудирован Cyberscope без критических замечаний. Команда прошла KYC, проект в Freshcoins. Полный отчёт — в whitepaper.',
@@ -227,7 +228,7 @@ export const faqContentByLang: Record<FaqLang, FaqContent> = {
       'Oferta totală este fixată permanent la 9.000 CET. Fără emisie nouă, fără chei de admin, fără inflație. Fiecare token reprezintă 0,011% din întreaga ofertă globală.',
     q3: 'Cum cumpăr CET?',
     a3:
-      'CET se tranzacționează pe DEX-ul DeDust în rețeaua TON. Conectează un portofel TON (recomandat Tonkeeper), alimentează cu TON, apoi schimbă TON → CET la pool-ul oficial DeDust. Verifică mereu adresa contractului: EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+      `CET se tranzacționează pe DEX-ul DeDust în rețeaua TON. Conectează un portofel TON (recomandat Tonkeeper), alimentează cu TON, apoi schimbă TON → CET la pool-ul oficial DeDust. Verifică mereu adresa contractului: ${CET_CONTRACT_ADDRESS}`,
     q4: 'Este contractul inteligent auditat?',
     a4:
       'Da. Contractul CET a fost auditat complet de Cyberscope, fără constatări critice. Echipa a finalizat KYC, iar proiectul este listat pe Freshcoins. Raportul complet este legat în whitepaper.',
@@ -279,7 +280,7 @@ export const faqContentByLang: Record<FaqLang, FaqContent> = {
       'O fornecimento total é fixo em 9.000 CET — permanentemente. Sem mint, sem chaves de admin, sem inflação. Cada token = 0,011% do fornecimento global.',
     q3: 'Como compro CET?',
     a3:
-      'O CET negocia na DeDust na rede TON. Ligue uma carteira TON (Tonkeeper recomendado), carregue TON e troque TON → CET no pool oficial. Verifique o endereço do contrato: EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+      `O CET negocia na DeDust na rede TON. Ligue uma carteira TON (Tonkeeper recomendado), carregue TON e troque TON → CET no pool oficial. Verifique o endereço do contrato: ${CET_CONTRACT_ADDRESS}`,
     q4: 'O contrato inteligente foi auditado?',
     a4:
       'Sim. O contrato CET foi auditado pela Cyberscope sem achados críticos. A equipa concluiu KYC e o projeto está na Freshcoins. O relatório completo está ligado no whitepaper.',
@@ -331,7 +332,7 @@ export const faqContentByLang: Record<FaqLang, FaqContent> = {
       'Das Gesamtangebot ist dauerhaft auf 9.000 CET fixiert. Kein Minting, keine Admin-Keys, keine Inflation. Jeder Token entspricht 0,011% des globalen Angebots.',
     q3: 'Wie kaufe ich CET?',
     a3:
-      'CET wird auf DeDust im TON-Netz gehandelt. Verbinden Sie eine TON-Wallet (empfohlen: Tonkeeper), laden Sie TON auf und tauschen Sie im offiziellen Pool TON → CET. Vertragsadresse prüfen: EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+      `CET wird auf DeDust im TON-Netz gehandelt. Verbinden Sie eine TON-Wallet (empfohlen: Tonkeeper), laden Sie TON auf und tauschen Sie im offiziellen Pool TON → CET. Vertragsadresse prüfen: ${CET_CONTRACT_ADDRESS}`,
     q4: 'Ist der Smart Contract auditiert?',
     a4:
       'Ja. Der CET-Vertrag wurde von Cyberscope vollständig auditiert, ohne kritische Befunde. Das Team hat KYC abgeschlossen, das Projekt ist bei Freshcoins gelistet. Der Bericht ist im Whitepaper verlinkt.',

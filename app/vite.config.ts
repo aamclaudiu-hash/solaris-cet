@@ -1,6 +1,7 @@
 import { execSync } from "node:child_process"
 import fs from "node:fs"
 import path from "path"
+import { DEDUST_POOL_DEPOSIT_URL } from "./src/lib/dedustUrls"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 import type { Plugin } from "vite"
@@ -126,7 +127,7 @@ export default defineConfig({
           {
             name: 'Buy CET on DeDust',
             short_name: 'Buy CET',
-            url: 'https://dedust.io/pools/EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB/deposit',
+            url: DEDUST_POOL_DEPOSIT_URL,
           },
           {
             name: 'Start Mining on Telegram',

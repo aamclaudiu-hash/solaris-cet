@@ -1,10 +1,11 @@
 import { describe, it, expect } from "vitest";
+import { DEDUST_POOL_ADDRESS } from "@/lib/dedustUrls";
 import { truncateAddress, formatTokenAmount } from "../lib/utils";
 
 // ── truncateAddress ──────────────────────────────────────────────────────────
 
 describe("truncateAddress", () => {
-  const POOL = "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB";
+  const POOL = DEDUST_POOL_ADDRESS;
 
   it("truncates a long address with default chars=4", () => {
     expect(truncateAddress(POOL)).toBe("EQB5…lfnB");
