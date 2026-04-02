@@ -218,6 +218,36 @@ export interface Translations {
   /** Mining calculator (`MiningCalculatorSection`) — illustrative UI only. */
   miningCalculator: {
     estimateDisclaimer: string;
+    kicker: string;
+    title: string;
+    subtitle: string;
+    configureTitle: string;
+    deviceTypeLabel: string;
+    hashrateLabel: string;
+    stakeLabel: string;
+    projectedEarningsTitle: string;
+    dailyYieldLabel: string;
+    monthlyProjectionLabel: string;
+    apyRangeLabel: string;
+    unitBtcS: string;
+    efficiencyHigh: string;
+    efficiencyStandard: string;
+    efficiencyConservative: string;
+    liveNetworkStatsTitle: string;
+    footnoteBottom: string;
+    devices: {
+      smartphone: string;
+      laptop: string;
+      desktop: string;
+      node: string;
+    };
+    /** Stable keys for `meshWhisperFromKey('miningCalc|live|…')`. */
+    liveStatLabels: {
+      networkHashrate: string;
+      activeMiners: string;
+      avgBlockTime: string;
+      rewardPerBlock: string;
+    };
   };
   /** Four trust pillars — glass bento (authority, chain, geography, transparency). */
   authorityTrust: {
@@ -495,6 +525,37 @@ const translations: Record<LangCode, Translations> = {
     miningCalculator: {
       estimateDisclaimer:
         'Illustrative estimates only — not financial advice. Actual rewards follow protocol rules and official channels.',
+      kicker: 'Estimate your rewards',
+      title: 'Mining calculator',
+      subtitle:
+        'Estimate daily yield from device type, hashrate, and staking multiplier.',
+      configureTitle: 'Configure your setup',
+      deviceTypeLabel: 'Device type',
+      hashrateLabel: 'Hashrate (TH/s)',
+      stakeLabel: 'Stake (BTC-S)',
+      projectedEarningsTitle: 'Projected earnings',
+      dailyYieldLabel: 'Daily yield (est.)',
+      monthlyProjectionLabel: 'Monthly projection',
+      apyRangeLabel: 'APY range',
+      unitBtcS: 'BTC-S',
+      efficiencyHigh: 'High efficiency',
+      efficiencyStandard: 'Standard',
+      efficiencyConservative: 'Conservative',
+      liveNetworkStatsTitle: 'Live network stats',
+      footnoteBottom:
+        '* Estimates are indicative only. Actual earnings depend on network hashrate, difficulty, and mining period. Not financial advice.',
+      devices: {
+        smartphone: 'Smartphone',
+        laptop: 'Laptop',
+        desktop: 'Desktop',
+        node: 'Dedicated node',
+      },
+      liveStatLabels: {
+        networkHashrate: 'Network hashrate',
+        activeMiners: 'Active miners',
+        avgBlockTime: 'Avg block time',
+        rewardPerBlock: 'Reward per block',
+      },
     },
     authorityTrust: {
       kicker: 'TRUST ARCHITECTURE',
@@ -799,6 +860,37 @@ const translations: Record<LangCode, Translations> = {
     miningCalculator: {
       estimateDisclaimer:
         'Cifras ilustrativas — no es asesoramiento financiero. Las recompensas reales siguen el protocolo y los canales oficiales.',
+      kicker: 'Estima tus recompensas',
+      title: 'Calculadora de minería',
+      subtitle:
+        'Estima el rendimiento diario según dispositivo, hashrate y multiplicador de staking.',
+      configureTitle: 'Configura tu equipo',
+      deviceTypeLabel: 'Tipo de dispositivo',
+      hashrateLabel: 'Hashrate (TH/s)',
+      stakeLabel: 'Stake (BTC-S)',
+      projectedEarningsTitle: 'Ganancias proyectadas',
+      dailyYieldLabel: 'Rendimiento diario (est.)',
+      monthlyProjectionLabel: 'Proyección mensual',
+      apyRangeLabel: 'Rango APY',
+      unitBtcS: 'BTC-S',
+      efficiencyHigh: 'Alta eficiencia',
+      efficiencyStandard: 'Estándar',
+      efficiencyConservative: 'Conservador',
+      liveNetworkStatsTitle: 'Estadísticas de red en vivo',
+      footnoteBottom:
+        '* Las estimaciones son orientativas. Los ingresos reales dependen del hashrate de la red, la dificultad y el periodo de minería. No es asesoramiento financiero.',
+      devices: {
+        smartphone: 'Smartphone',
+        laptop: 'Portátil',
+        desktop: 'Escritorio',
+        node: 'Nodo dedicado',
+      },
+      liveStatLabels: {
+        networkHashrate: 'Hashrate de red',
+        activeMiners: 'Mineros activos',
+        avgBlockTime: 'Tiempo medio de bloque',
+        rewardPerBlock: 'Recompensa por bloque',
+      },
     },
     authorityTrust: {
       kicker: 'ARQUITECTURA DE CONFIANZA',
@@ -1100,6 +1192,36 @@ const translations: Record<LangCode, Translations> = {
     },
     miningCalculator: {
       estimateDisclaimer: '演示估算，不构成投资建议。实际收益以协议规则与官方渠道为准。',
+      kicker: '估算收益',
+      title: '挖矿计算器',
+      subtitle: '按设备类型、算力与质押倍数估算每日产出。',
+      configureTitle: '配置你的设备',
+      deviceTypeLabel: '设备类型',
+      hashrateLabel: '算力 (TH/s)',
+      stakeLabel: '质押 (BTC-S)',
+      projectedEarningsTitle: '预估收益',
+      dailyYieldLabel: '每日产出（估算）',
+      monthlyProjectionLabel: '月度预估',
+      apyRangeLabel: 'APY 区间',
+      unitBtcS: 'BTC-S',
+      efficiencyHigh: '高效',
+      efficiencyStandard: '标准',
+      efficiencyConservative: '保守',
+      liveNetworkStatsTitle: '网络实时数据',
+      footnoteBottom:
+        '* 估算仅供参考。实际收益取决于全网算力、难度调整与挖矿周期。不构成投资建议。',
+      devices: {
+        smartphone: '手机',
+        laptop: '笔记本',
+        desktop: '台式机',
+        node: '专用节点',
+      },
+      liveStatLabels: {
+        networkHashrate: '全网算力',
+        activeMiners: '活跃矿工',
+        avgBlockTime: '平均出块时间',
+        rewardPerBlock: '每块奖励',
+      },
     },
     authorityTrust: {
       kicker: '信任架构',
@@ -1399,6 +1521,37 @@ const translations: Record<LangCode, Translations> = {
     miningCalculator: {
       estimateDisclaimer:
         'Оценки носят иллюстративный характер — не финансовая рекомендация. Фактические награды по правилам протокола и официальным каналам.',
+      kicker: 'Оцените награды',
+      title: 'Калькулятор майнинга',
+      subtitle:
+        'Оценка дневной доходности по типу устройства, хешрейту и множителю стейкинга.',
+      configureTitle: 'Настройте конфигурацию',
+      deviceTypeLabel: 'Тип устройства',
+      hashrateLabel: 'Хешрейт (TH/s)',
+      stakeLabel: 'Стейк (BTC-S)',
+      projectedEarningsTitle: 'Прогноз дохода',
+      dailyYieldLabel: 'Дневная доходность (оценка)',
+      monthlyProjectionLabel: 'Месячный прогноз',
+      apyRangeLabel: 'Диапазон APY',
+      unitBtcS: 'BTC-S',
+      efficiencyHigh: 'Высокая эффективность',
+      efficiencyStandard: 'Стандарт',
+      efficiencyConservative: 'Консервативно',
+      liveNetworkStatsTitle: 'Статистика сети в реальном времени',
+      footnoteBottom:
+        '* Оценки ориентировочны. Реальный доход зависит от хешрейта сети, сложности и периода майнинга. Не финансовая рекомендация.',
+      devices: {
+        smartphone: 'Смартфон',
+        laptop: 'Ноутбук',
+        desktop: 'ПК',
+        node: 'Выделенный узел',
+      },
+      liveStatLabels: {
+        networkHashrate: 'Хешрейт сети',
+        activeMiners: 'Активные майнеры',
+        avgBlockTime: 'Среднее время блока',
+        rewardPerBlock: 'Награда за блок',
+      },
     },
     authorityTrust: {
       kicker: 'АРХИТЕКТУРА ДОВЕРИЯ',
@@ -1703,6 +1856,37 @@ const translations: Record<LangCode, Translations> = {
     miningCalculator: {
       estimateDisclaimer:
         'Estimări ilustrative — nu reprezintă sfaturi financiare. Recompensele reale urmează regulile protocolului și canalele oficiale.',
+      kicker: 'Estimează recompensele',
+      title: 'Calculator minare',
+      subtitle:
+        'Estimează randamentul zilnic în funcție de dispozitiv, hashrate și multiplicator de staking.',
+      configureTitle: 'Configurează setup-ul',
+      deviceTypeLabel: 'Tip dispozitiv',
+      hashrateLabel: 'Hashrate (TH/s)',
+      stakeLabel: 'Stake (BTC-S)',
+      projectedEarningsTitle: 'Câștiguri estimate',
+      dailyYieldLabel: 'Randament zilnic (est.)',
+      monthlyProjectionLabel: 'Proiecție lunară',
+      apyRangeLabel: 'Interval APY',
+      unitBtcS: 'BTC-S',
+      efficiencyHigh: 'Eficiență ridicată',
+      efficiencyStandard: 'Standard',
+      efficiencyConservative: 'Conservator',
+      liveNetworkStatsTitle: 'Statistici rețea live',
+      footnoteBottom:
+        '* Estimările sunt orientative. Câștigurile reale depind de hashrate-ul rețelei, dificultate și perioada de minare. Nu reprezintă sfaturi financiare.',
+      devices: {
+        smartphone: 'Smartphone',
+        laptop: 'Laptop',
+        desktop: 'Desktop',
+        node: 'Nod dedicat',
+      },
+      liveStatLabels: {
+        networkHashrate: 'Hashrate rețea',
+        activeMiners: 'Mineri activi',
+        avgBlockTime: 'Timp mediu bloc',
+        rewardPerBlock: 'Recompensă per bloc',
+      },
     },
     authorityTrust: {
       kicker: 'ARHITECTURĂ DE ÎNCREDERE',
@@ -2007,6 +2191,37 @@ const translations: Record<LangCode, Translations> = {
     miningCalculator: {
       estimateDisclaimer:
         'Estimativas ilustrativas — não são aconselhamento financeiro. Recompensas reais seguem o protocolo e canais oficiais.',
+      kicker: 'Estime as suas recompensas',
+      title: 'Calculadora de mineração',
+      subtitle:
+        'Estime o rendimento diário por tipo de dispositivo, hashrate e multiplicador de staking.',
+      configureTitle: 'Configure o seu setup',
+      deviceTypeLabel: 'Tipo de dispositivo',
+      hashrateLabel: 'Hashrate (TH/s)',
+      stakeLabel: 'Stake (BTC-S)',
+      projectedEarningsTitle: 'Ganhos projetados',
+      dailyYieldLabel: 'Rendimento diário (est.)',
+      monthlyProjectionLabel: 'Projeção mensal',
+      apyRangeLabel: 'Intervalo APY',
+      unitBtcS: 'BTC-S',
+      efficiencyHigh: 'Alta eficiência',
+      efficiencyStandard: 'Padrão',
+      efficiencyConservative: 'Conservador',
+      liveNetworkStatsTitle: 'Estatísticas da rede ao vivo',
+      footnoteBottom:
+        '* As estimativas são indicativas. Os ganhos reais dependem do hashrate da rede, da dificuldade e do período de mineração. Não é aconselhamento financeiro.',
+      devices: {
+        smartphone: 'Smartphone',
+        laptop: 'Portátil',
+        desktop: 'Desktop',
+        node: 'Nó dedicado',
+      },
+      liveStatLabels: {
+        networkHashrate: 'Hashrate da rede',
+        activeMiners: 'Mineradores ativos',
+        avgBlockTime: 'Tempo médio de bloco',
+        rewardPerBlock: 'Recompensa por bloco',
+      },
     },
     authorityTrust: {
       kicker: 'ARQUITETURA DE CONFIANÇA',
@@ -2311,6 +2526,37 @@ const translations: Record<LangCode, Translations> = {
     miningCalculator: {
       estimateDisclaimer:
         'Nur veranschaulichende Schätzungen — keine Finanzberatung. Echte Rewards folgen Protokollregeln und offiziellen Kanälen.',
+      kicker: 'Schätze deine Rewards',
+      title: 'Mining-Rechner',
+      subtitle:
+        'Schätze die tägliche Ausbeute nach Gerätetyp, Hashrate und Staking-Multiplikator.',
+      configureTitle: 'Setup konfigurieren',
+      deviceTypeLabel: 'Gerätetyp',
+      hashrateLabel: 'Hashrate (TH/s)',
+      stakeLabel: 'Stake (BTC-S)',
+      projectedEarningsTitle: 'Projizierte Einnahmen',
+      dailyYieldLabel: 'Tagesausbeute (geschätzt)',
+      monthlyProjectionLabel: 'Monatsprojektion',
+      apyRangeLabel: 'APY-Bandbreite',
+      unitBtcS: 'BTC-S',
+      efficiencyHigh: 'Hohe Effizienz',
+      efficiencyStandard: 'Standard',
+      efficiencyConservative: 'Konservativ',
+      liveNetworkStatsTitle: 'Live-Netzwerkstatistiken',
+      footnoteBottom:
+        '* Schätzungen sind indikativ. Tatsächliche Einnahmen hängen von Netzwerk-Hashrate, Schwierigkeit und Mining-Zeitraum ab. Keine Finanzberatung.',
+      devices: {
+        smartphone: 'Smartphone',
+        laptop: 'Laptop',
+        desktop: 'Desktop',
+        node: 'Dedizierter Node',
+      },
+      liveStatLabels: {
+        networkHashrate: 'Netzwerk-Hashrate',
+        activeMiners: 'Aktive Miner',
+        avgBlockTime: 'Ø Blockzeit',
+        rewardPerBlock: 'Belohnung pro Block',
+      },
     },
     authorityTrust: {
       kicker: 'VERTRAUENSARCHITEKTUR',

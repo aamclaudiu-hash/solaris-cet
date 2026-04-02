@@ -9,29 +9,28 @@ import { useLanguage } from '../hooks/useLanguage';
 
 type DeviceType = 'smartphone' | 'laptop' | 'desktop' | 'node';
 
-interface DeviceConfig {
+interface DeviceSpec {
   icon: React.ElementType;
-  label: string;
   baseHashrate: number;
   efficiency: number;
 }
 
-const devices: Record<DeviceType, DeviceConfig> = {
-  smartphone: { icon: Smartphone, label: 'Smartphone', baseHashrate: 0.5, efficiency: 0.8 },
-  laptop: { icon: Laptop, label: 'Laptop', baseHashrate: 2.5, efficiency: 0.9 },
-  desktop: { icon: Monitor, label: 'Desktop', baseHashrate: 8.0, efficiency: 1.0 },
-  node: { icon: Server, label: 'Dedicated Node', baseHashrate: 50.0, efficiency: 1.2 },
+const DEVICES: Record<DeviceType, DeviceSpec> = {
+  smartphone: { icon: Smartphone, baseHashrate: 0.5, efficiency: 0.8 },
+  laptop: { icon: Laptop, baseHashrate: 2.5, efficiency: 0.9 },
+  desktop: { icon: Monitor, baseHashrate: 8.0, efficiency: 1.0 },
+  node: { icon: Server, baseHashrate: 50.0, efficiency: 1.2 },
 };
 
 const HIGH_EFFICIENCY_THRESHOLD = 0.01;
 const STANDARD_EFFICIENCY_THRESHOLD = 0.001;
 
-// Static data defined outside component to avoid re-creation on every render
-const liveStats = [
-  { label: 'Network Hashrate', value: '2.4 EH/s', change: '+12%' },
-  { label: 'Active Miners', value: '18,420', change: '+5%' },
-  { label: 'Avg Block Time', value: '2.0s', change: 'Stable' },
-  { label: 'Reward per Block', value: '6.25 BTC-S', change: '-2%' },
+/** Illustrative row values; labels from `t.miningCalculator.liveStatLabels`. */
+const LIVE_STATS_ROWS = [
+  { id: 'networkHashrate' as const, value: '2.4 EH/s', change: '+12%' },
+  { id: 'activeMiners' as const, value: '18,420', change: '+5%' },
+  { id: 'avgBlockTime' as const, value: '2.0s', change: 'Stable' },
+  { id: 'rewardPerBlock' as const, value: '6.25 BTC-S', change: '-2%' },
 ];
 
 const MiningCalculatorSection = () => {
@@ -43,7 +42,7 @@ const MiningCalculatorSection = () => {
   const statsRef = useRef<HTMLDivElement>(null);
 
   const [device, setDevice] = useState<DeviceType>('smartphone');
-  const [hashrate, setHashrate] = useState(0.5);
+  const [hashrate, setHashrate] = useState(DEVICES.smartphone.baseHashrate);
   const [stake, setStake] = useState(100);
   const [results, setResults] = useState({ daily: 0, monthly: 0, apy: 0 });
 
@@ -92,7 +91,7 @@ const MiningCalculatorSection = () => {
 
   // Send calculation request to the worker whenever inputs change
   useEffect(() => {
-    const deviceConfig = devices[device];
+    const deviceConfig = DEVICES[device];
     const input: MiningInput = {
       adjustedHashrate: hashrate * deviceConfig.efficiency,
       stake,
@@ -179,7 +178,7 @@ const MiningCalculatorSection = () => {
 
   const handleDeviceChange = useCallback((newDevice: DeviceType) => {
     setDevice(newDevice);
-    setHashrate(devices[newDevice].baseHashrate);
+    setHashrate(DEVICES[newDevice].baseHashrate);
   }, []);
 
   return (
@@ -200,13 +199,13 @@ const MiningCalculatorSection = () => {
             <div className="w-10 h-10 rounded-lg bg-solaris-gold/10 flex items-center justify-center">
               <Calculator className="w-5 h-5 text-solaris-gold" />
             </div>
-            <span className="hud-label text-solaris-gold">Estimate Your Rewards</span>
+            <span className="hud-label text-solaris-gold">{t.miningCalculator.kicker}</span>
           </div>
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,44px)] text-solaris-text mb-3">
-            Mining Calculator
+            {t.miningCalculator.title}
           </h2>
           <p className="text-solaris-muted text-base lg:text-lg max-w-xl">
-            Estimate your daily yield based on device type, hashrate, and staking multiplier.
+            {t.miningCalculator.subtitle}
           </p>
           <p className="mt-2 text-xs text-solaris-muted/85 max-w-xl leading-relaxed">
             {t.miningCalculator.estimateDisclaimer}
@@ -218,15 +217,15 @@ const MiningCalculatorSection = () => {
           {/* Input Card */}
           <div ref={calculatorRef} className="bento-card p-6 lg:p-8">
             <h3 className="font-display font-semibold text-lg text-solaris-text mb-6">
-              Configure Your Setup
+              {t.miningCalculator.configureTitle}
             </h3>
 
             {/* Device Selection */}
             <div className="mb-6">
-              <label className="hud-label mb-3 block">Device Type</label>
+              <label className="hud-label mb-3 block">{t.miningCalculator.deviceTypeLabel}</label>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3" role="group" aria-label={t.sectionAria.miningDeviceTypes}>
-                {(Object.keys(devices) as DeviceType[]).map((deviceType) => {
-                  const DeviceIcon = devices[deviceType].icon;
+                {(Object.keys(DEVICES) as DeviceType[]).map((deviceType) => {
+                  const DeviceIcon = DEVICES[deviceType].icon;
                   return (
                     <button
                       key={deviceType}
@@ -249,7 +248,7 @@ const MiningCalculatorSection = () => {
                           device === deviceType ? 'text-solaris-text' : 'text-solaris-muted'
                         }`}
                       >
-                        {devices[deviceType].label}
+                        {t.miningCalculator.devices[deviceType]}
                       </span>
                     </button>
                   );
@@ -265,15 +264,15 @@ const MiningCalculatorSection = () => {
                   className="hud-label"
                   title={meshWhisperFromKey('miningCalc|slider|hashrate')}
                 >
-                  Hashrate (TH/s)
+                  {t.miningCalculator.hashrateLabel}
                 </label>
                 <span className="font-mono text-solaris-gold">{hashrate.toFixed(1)}</span>
               </div>
               <input
                 id="hashrate-slider"
                 type="range"
-                min={devices[device].baseHashrate * 0.5}
-                max={devices[device].baseHashrate * 3}
+                min={DEVICES[device].baseHashrate * 0.5}
+                max={DEVICES[device].baseHashrate * 3}
                 step={0.1}
                 value={hashrate}
                 onChange={(e) => setHashrate(Number(e.target.value))}
@@ -289,7 +288,7 @@ const MiningCalculatorSection = () => {
                   className="hud-label"
                   title={meshWhisperFromKey('miningCalc|slider|stake')}
                 >
-                  Stake (BTC-S)
+                  {t.miningCalculator.stakeLabel}
                 </label>
                 <span className="font-mono text-solaris-cyan">{stake}</span>
               </div>
@@ -309,17 +308,17 @@ const MiningCalculatorSection = () => {
           {/* Results Card */}
           <div ref={resultRef} className="glass-card-gold p-6 lg:p-8">
             <h3 className="font-display font-semibold text-lg text-solaris-text mb-6">
-              Projected Earnings
+              {t.miningCalculator.projectedEarningsTitle}
             </h3>
 
             <div className="space-y-6" aria-live="polite" aria-atomic="true">
               <div className="p-5 rounded-xl bg-white/5">
-                <div className="hud-label mb-2">Daily Yield (est)</div>
+                <div className="hud-label mb-2">{t.miningCalculator.dailyYieldLabel}</div>
                 <div className="flex items-baseline gap-2">
                   <span className="font-display font-bold text-3xl lg:text-4xl text-solaris-gold">
                     {results.daily.toFixed(4)}
                   </span>
-                  <span className="text-solaris-muted">BTC-S</span>
+                  <span className="text-solaris-muted">{t.miningCalculator.unitBtcS}</span>
                 </div>
                 <p
                   className="mt-3 text-[9px] font-mono text-fuchsia-200/60 leading-snug line-clamp-2 border-t border-fuchsia-500/10 pt-2"
@@ -330,12 +329,12 @@ const MiningCalculatorSection = () => {
               </div>
 
               <div className="p-5 rounded-xl bg-white/5">
-                <div className="hud-label mb-2">Monthly Projection</div>
+                <div className="hud-label mb-2">{t.miningCalculator.monthlyProjectionLabel}</div>
                 <div className="flex items-baseline gap-2">
                   <span className="font-display font-bold text-3xl lg:text-4xl text-solaris-cyan">
                     {results.monthly.toFixed(2)}
                   </span>
-                  <span className="text-solaris-muted">BTC-S</span>
+                  <span className="text-solaris-muted">{t.miningCalculator.unitBtcS}</span>
                 </div>
                 <p
                   className="mt-3 text-[9px] font-mono text-fuchsia-200/60 leading-snug line-clamp-2 border-t border-fuchsia-500/10 pt-2"
@@ -346,7 +345,7 @@ const MiningCalculatorSection = () => {
               </div>
 
               <div className="p-5 rounded-xl bg-emerald-400/5 border border-emerald-400/20">
-                <div className="hud-label text-emerald-400 mb-2">APY Range</div>
+                <div className="hud-label text-emerald-400 mb-2">{t.miningCalculator.apyRangeLabel}</div>
                 <div className="flex items-baseline gap-2">
                   <span className="font-display font-bold text-3xl lg:text-4xl text-emerald-400">
                     {results.apy.toFixed(1)}%
@@ -365,15 +364,15 @@ const MiningCalculatorSection = () => {
               <div className="flex justify-center pt-1">
                 {results.daily >= HIGH_EFFICIENCY_THRESHOLD ? (
                   <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-solaris-gold/10 border border-solaris-gold/30 text-solaris-gold text-xs font-semibold tracking-wide">
-                    ⚡ High Efficiency
+                    ⚡ {t.miningCalculator.efficiencyHigh}
                   </span>
                 ) : results.daily >= STANDARD_EFFICIENCY_THRESHOLD ? (
                   <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-solaris-cyan/10 border border-solaris-cyan/30 text-solaris-cyan text-xs font-semibold tracking-wide">
-                    ✓ Standard
+                    ✓ {t.miningCalculator.efficiencyStandard}
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-solaris-muted text-xs font-semibold tracking-wide">
-                    ○ Conservative
+                    ○ {t.miningCalculator.efficiencyConservative}
                   </span>
                 )}
               </div>
@@ -386,11 +385,13 @@ const MiningCalculatorSection = () => {
           ref={statsRef}
           className="bento-card p-5 lg:p-6"
         >
-          <div className="hud-label mb-4">Live Network Stats</div>
+          <div className="hud-label mb-4">{t.miningCalculator.liveNetworkStatsTitle}</div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {liveStats.map((stat) => (
-              <div key={stat.label} className="p-4 rounded-lg bg-white/5">
-                <div className="text-solaris-muted text-sm mb-1">{stat.label}</div>
+            {LIVE_STATS_ROWS.map((stat) => (
+              <div key={stat.id} className="p-4 rounded-lg bg-white/5">
+                <div className="text-solaris-muted text-sm mb-1">
+                  {t.miningCalculator.liveStatLabels[stat.id]}
+                </div>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-solaris-text font-semibold">{stat.value}</span>
                   <span
@@ -407,9 +408,9 @@ const MiningCalculatorSection = () => {
                 </div>
                 <p
                   className="mt-2 text-[9px] font-mono text-fuchsia-200/55 leading-snug line-clamp-2 border-t border-fuchsia-500/10 pt-2"
-                  title={meshWhisperFromKey(`miningCalc|live|${stat.label}`)}
+                  title={meshWhisperFromKey(`miningCalc|live|${stat.id}`)}
                 >
-                  {meshWhisperFromKey(`miningCalc|live|${stat.label}`)}
+                  {meshWhisperFromKey(`miningCalc|live|${stat.id}`)}
                 </p>
               </div>
             ))}
@@ -422,7 +423,7 @@ const MiningCalculatorSection = () => {
         </div>
 
         <p className="text-solaris-muted text-[11px] leading-relaxed mt-4 text-center opacity-60">
-          * Estimates are indicative only. Actual earnings depend on network hashrate, difficulty adjustment, and mining period. Not financial advice.
+          {t.miningCalculator.footnoteBottom}
         </p>
       </div>
     </section>
