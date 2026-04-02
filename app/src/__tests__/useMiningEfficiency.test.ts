@@ -1,9 +1,13 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useMiningEfficiency } from "../hooks/useMiningEfficiency";
 
 describe("useMiningEfficiency", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
     Object.defineProperty(document, "hidden", {
@@ -46,6 +50,7 @@ describe("useMiningEfficiency", () => {
       document.dispatchEvent(new Event("visibilitychange"));
     });
     expect(v2.current.isSuspended).toBe(true);
+    expect(localStorage.getItem("mining-status")).toBe("suspended");
 
     Object.defineProperty(document, "hidden", {
       writable: true,
@@ -63,6 +68,7 @@ describe("useMiningEfficiency", () => {
       document.dispatchEvent(new Event("visibilitychange"));
     });
     expect(v3.current.isSuspended).toBe(false);
+    expect(localStorage.getItem("mining-status")).toBe("active");
 
     Object.defineProperty(document, "hidden", {
       writable: true,

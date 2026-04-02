@@ -1,78 +1,108 @@
 import { describe, it, expect } from "vitest";
+import { calculateRewards as rewardsCalc } from "../lib/mining-calc";
+import {
+  calculateRewards as rewardsLegacy,
+  type MiningInput,
+} from "../lib/mining-calculations";
 
-/**
- * Tests for the mining rewards calculation formulas.
- *
- * These formulas mirror the logic in `src/workers/mining.worker.ts`
- * and serve as a specification / regression guard for the on-chain reward model.
- */
+/** Worker (`mining.worker.ts`) delegates to `mining-calc`; both TS modules must stay identical. */
+const PARITY_CASES: MiningInput[] = [
+  { adjustedHashrate: 0, stake: 0 },
+  { adjustedHashrate: 1, stake: 0 },
+  { adjustedHashrate: 10, stake: 0 },
+  { adjustedHashrate: 10, stake: 5_000 },
+  { adjustedHashrate: 10, stake: 10_000 },
+  { adjustedHashrate: 100, stake: 0 },
+  { adjustedHashrate: 100, stake: 1_000 },
+  { adjustedHashrate: 100, stake: 5_000 },
+  { adjustedHashrate: 50, stake: 2_500 },
+  { adjustedHashrate: 50, stake: 5_000 },
+  { adjustedHashrate: 1.23456, stake: 0 },
+  { adjustedHashrate: 1_000_000, stake: 0 },
+];
 
-interface MiningInput {
-  adjustedHashrate: number;
-  stake: number;
-}
+describe("mining rewards", () => {
+  it("mining-calc ≡ mining-calculations; zeros, linearity, stake tiers, APY, rounding, refs", () => {
+    for (const c of PARITY_CASES) {
+      expect(rewardsLegacy(c), JSON.stringify(c)).toEqual(rewardsCalc(c));
+    }
 
-interface MiningResult {
-  daily: number;
-  monthly: number;
-  apy: number;
-}
+    const calc = rewardsCalc;
 
-/** Inline implementation kept in sync with mining.worker.ts */
-function calculateRewards(input: MiningInput): MiningResult {
-  const { adjustedHashrate, stake } = input;
-
-  const stakeMultiplier = 1 + stake / 10_000;
-  const daily = adjustedHashrate * 0.0082 * stakeMultiplier;
-  const monthly = daily * 30;
-  const apy = 15 + stake / 1_000 + adjustedHashrate * 0.1;
-
-  return {
-    daily: Number(daily.toFixed(4)),
-    monthly: Number(monthly.toFixed(2)),
-    apy: Number(apy.toFixed(1)),
-  };
-}
-
-describe("calculateRewards", () => {
-  it("worker formula: zeros, scaling, stake, APY, rounding, reference scenarios", () => {
-    const z = calculateRewards({ adjustedHashrate: 0, stake: 0 });
+    const z = calc({ adjustedHashrate: 0, stake: 0 });
     expect(z.daily).toBe(0);
     expect(z.monthly).toBe(0);
     expect(z.apy).toBe(15);
 
-    const one = calculateRewards({ adjustedHashrate: 1, stake: 0 });
-    expect(one.daily).toBe(0.0082);
-    const ten = calculateRewards({ adjustedHashrate: 10, stake: 0 });
+    expect(calc({ adjustedHashrate: 1, stake: 0 }).daily).toBe(0.0082);
+    const ten = calc({ adjustedHashrate: 10, stake: 0 });
+    expect(ten.daily).toBe(0.082);
     expect(ten.monthly).toBeCloseTo(ten.daily * 30, 2);
     expect(ten.apy).toBe(16);
 
-    const noStake = calculateRewards({ adjustedHashrate: 100, stake: 0 });
-    const maxStake = calculateRewards({ adjustedHashrate: 100, stake: 10_000 });
-    expect(maxStake.daily).toBeCloseTo(noStake.daily * 2, 2);
+    const r10 = calc({ adjustedHashrate: 10, stake: 0 });
+    const r20 = calc({ adjustedHashrate: 20, stake: 0 });
+    expect(r20.daily).toBeCloseTo(r10.daily * 2, 2);
 
-    const r100 = calculateRewards({ adjustedHashrate: 100, stake: 0 });
-    const r200 = calculateRewards({ adjustedHashrate: 200, stake: 0 });
-    expect(r200.apy - r100.apy).toBeCloseTo(10.0, 1);
-    const r1k = calculateRewards({ adjustedHashrate: 0, stake: 1_000 });
-    expect(r1k.apy - z.apy).toBeCloseTo(1.0, 1);
-    expect(calculateRewards({ adjustedHashrate: 0, stake: 5_000 }).apy).toBe(20);
-    expect(calculateRewards({ adjustedHashrate: 10, stake: 10_000 }).apy).toBe(26);
+    const noStake = calc({ adjustedHashrate: 10, stake: 0 });
+    const maxStake = calc({ adjustedHashrate: 10, stake: 10_000 });
+    expect(maxStake.daily).toBeCloseTo(noStake.daily * 2, 4);
+    expect(calc({ adjustedHashrate: 10, stake: 5_000 }).daily).toBeCloseTo(
+      10 * 0.0082 * 1.5,
+      4,
+    );
 
-    const real = calculateRewards({ adjustedHashrate: 50, stake: 5_000 });
-    expect(real.daily).toBeGreaterThan(0);
-    expect(real.monthly).toBeGreaterThan(0);
-    expect(real.apy).toBeGreaterThan(0);
+    const noStake100 = calc({ adjustedHashrate: 100, stake: 0 });
+    expect(calc({ adjustedHashrate: 100, stake: 10_000 }).daily).toBeCloseTo(
+      noStake100.daily * 2,
+      2,
+    );
 
-    const scen = calculateRewards({ adjustedHashrate: 50, stake: 2_500 });
+    const mid = calc({ adjustedHashrate: 100, stake: 1_000 });
+    expect(mid.monthly).toBeCloseTo(mid.daily * 30, 1);
+
+    const baseApy = calc({ adjustedHashrate: 0, stake: 0 }).apy;
+    expect(calc({ adjustedHashrate: 10, stake: 0 }).apy - baseApy).toBeCloseTo(1, 1);
+    expect(calc({ adjustedHashrate: 0, stake: 1_000 }).apy - baseApy).toBeCloseTo(1, 1);
+    const r100 = calc({ adjustedHashrate: 100, stake: 0 });
+    const r200 = calc({ adjustedHashrate: 200, stake: 0 });
+    expect(r200.apy - r100.apy).toBeCloseTo(10, 1);
+    const r1k = calc({ adjustedHashrate: 0, stake: 1_000 });
+    const r2k = calc({ adjustedHashrate: 0, stake: 2_000 });
+    expect(r2k.apy - r1k.apy).toBeCloseTo(1, 1);
+    expect(calc({ adjustedHashrate: 0, stake: 5_000 }).apy).toBe(20);
+    expect(calc({ adjustedHashrate: 10, stake: 10_000 }).apy).toBe(26);
+    expect(calc({ adjustedHashrate: 50, stake: 5_000 }).apy).toBeCloseTo(25, 1);
+
+    const ref: MiningInput = { adjustedHashrate: 100, stake: 5_000 };
+    const refR = calc(ref);
+    expect(refR.daily).toBe(1.23);
+    expect(refR.monthly).toBe(36.9);
+    expect(refR.apy).toBe(30);
+
+    const scen = calc({ adjustedHashrate: 50, stake: 2_500 });
     expect(scen.daily).toBe(0.5125);
     expect(scen.monthly).toBe(15.38);
     expect(scen.apy).toBe(22.5);
 
-    const rnd = calculateRewards({ adjustedHashrate: 1.23456, stake: 0 });
+    const real = calc({ adjustedHashrate: 50, stake: 5_000 });
+    expect(real.daily).toBeGreaterThan(0);
+    expect(real.monthly).toBeGreaterThan(0);
+    expect(real.apy).toBeGreaterThan(0);
+
+    const big = calc({ adjustedHashrate: 1_000_000, stake: 0 });
+    expect(big.daily).toBeGreaterThan(0);
+    expect(Number.isFinite(big.apy)).toBe(true);
+
+    const prec = calc({ adjustedHashrate: 7, stake: 3_500 });
+    expect((prec.daily.toString().split(".")[1] ?? "").length).toBeLessThanOrEqual(4);
+    expect((prec.monthly.toString().split(".")[1] ?? "").length).toBeLessThanOrEqual(2);
+    expect((prec.apy.toString().split(".")[1] ?? "").length).toBeLessThanOrEqual(1);
+
+    const rnd = calc({ adjustedHashrate: 1.23456, stake: 0 });
     expect(rnd.daily.toString().replace(/^\d+\.?/, "").length).toBeLessThanOrEqual(4);
     expect(rnd.monthly.toString().replace(/^\d+\.?/, "").length).toBeLessThanOrEqual(2);
-    const apyDec = calculateRewards({ adjustedHashrate: 1.5, stake: 500 });
+    const apyDec = calc({ adjustedHashrate: 1.5, stake: 500 });
     expect((apyDec.apy.toString().split(".")[1] ?? "").length).toBeLessThanOrEqual(1);
   });
 });
