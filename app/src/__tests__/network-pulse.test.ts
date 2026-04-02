@@ -18,7 +18,7 @@ const LIVE_STATS = [
 ];
 
 describe('NetworkPulse', () => {
-  it('formatLive scales + % priority + floor', () => {
+  it('formatLive + LIVE_STATS shape', () => {
     expect(formatLive(2_841_903_512, '')).toBe('2.8B');
     expect(formatLive(1_000_000_000, '')).toBe('1.0B');
     expect(formatLive(12_847_293, '')).toBe('12.8M');
@@ -34,9 +34,7 @@ describe('NetworkPulse', () => {
     expect(formatLive(1_000_000, '%')).toBe('1000000.00%');
     expect(formatLive(999.9, '')).toBe('999');
     expect(formatLive(0.5, '')).toBe('0');
-  });
 
-  it('LIVE_STATS shape and rates', () => {
     expect(LIVE_STATS).toHaveLength(6);
     LIVE_STATS.forEach((s) => {
       expect(s.base).toBeGreaterThan(0);
@@ -50,3 +48,4 @@ describe('NetworkPulse', () => {
     expect(LIVE_STATS.find((s) => s.label === 'Uptime')!.base).toBeLessThanOrEqual(100);
   });
 });
+
