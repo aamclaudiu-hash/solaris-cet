@@ -48,7 +48,6 @@ test.describe('Conversion UI', () => {
     await page.evaluate(() => {
       window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' });
     });
-    const link = page.locator('footer a[href="#authority-trust"]');
-    await expect(link).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId('footer-authority-trust-link')).toBeVisible({ timeout: 20000 });
   });
 });

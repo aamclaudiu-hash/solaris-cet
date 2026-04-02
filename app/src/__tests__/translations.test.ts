@@ -181,6 +181,25 @@ describe("translations — specific content", () => {
     }
   });
 
+  it("footerNav has all expected keys for every language", () => {
+    const expectedFooterNavKeys: Array<keyof Translations["footerNav"]> = [
+      "privacy",
+      "terms",
+      "contact",
+      "authorityTrust",
+      "sovereignNoJs",
+      "github",
+    ];
+    for (const lang of SUPPORTED_LANGS) {
+      for (const key of expectedFooterNavKeys) {
+        expect(
+          translations[lang].footerNav[key],
+          `${lang}.footerNav.${key} missing`
+        ).toBeTruthy();
+      }
+    }
+  });
+
   it("tokenomics section has all expected keys for every language", () => {
     const expectedTokenomicsKeys: Array<keyof Translations["tokenomics"]> = [
       "title",
