@@ -232,22 +232,30 @@ describe("translations — specific content", () => {
   });
 });
 
-describe("translations — authorityTrust ** markers for renderSimpleBold", () => {
-  const pillarBodyKeys: Array<keyof Translations["authorityTrust"]> = [
+describe("translations — authorityTrust ** markers (balanced for renderSimpleBold)", () => {
+  /** All copy in this block may use `**bold**`; pillar bodies use `renderSimpleBold` in UI. */
+  const authorityTrustKeys: Array<keyof Translations["authorityTrust"]> = [
+    "kicker",
+    "title",
+    "subtitle",
+    "pillar1Title",
     "pillar1Body",
+    "pillar2Title",
     "pillar2Body",
+    "pillar3Title",
     "pillar3Body",
+    "pillar4Title",
     "pillar4Body",
   ];
 
   for (const lang of SUPPORTED_LANGS) {
-    it(`${lang}: pillar bodies have balanced ** delimiters`, () => {
+    it(`${lang}: all authorityTrust strings have balanced ** delimiters`, () => {
       const at = translations[lang].authorityTrust;
-      for (const key of pillarBodyKeys) {
-        const body = at[key];
+      for (const key of authorityTrustKeys) {
+        const value = at[key];
         expect(
-          hasBalancedSimpleBoldMarkers(body),
-          `${lang}.authorityTrust.${key}: ${JSON.stringify(body.slice(0, 80))}…`
+          hasBalancedSimpleBoldMarkers(value),
+          `${lang}.authorityTrust.${key}: ${JSON.stringify(value.slice(0, 80))}…`
         ).toBe(true);
       }
     });
