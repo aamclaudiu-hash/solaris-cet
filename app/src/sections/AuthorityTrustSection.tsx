@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, type ReactNode } from 'react';
+import { Fragment, useRef, useLayoutEffect, type ReactNode } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ShieldCheck, Link2, MapPin, Eye } from 'lucide-react';
@@ -10,15 +10,17 @@ gsap.registerPlugin(ScrollTrigger);
 /** Minimal `**bold**` from translation strings — no HTML injection. */
 function renderSimpleBold(text: string): ReactNode {
   const parts = text.split(/\*\*/);
-  return parts.map((part, i) =>
-    i % 2 === 1 ? (
-      <strong key={`${i}-${part.slice(0, 12)}`} className="text-solaris-text font-semibold">
-        {part}
-      </strong>
-    ) : (
-      part
-    ),
-  );
+  /* One keyed Fragment per segment: indices are stable for a given split pattern;
+     avoids mixing keyed/unkeyed siblings and duplicate-text key collisions. */
+  return parts.map((part, i) => (
+    <Fragment key={i}>
+      {i % 2 === 1 ? (
+        <strong className="text-solaris-text font-semibold">{part}</strong>
+      ) : (
+        part
+      )}
+    </Fragment>
+  ));
 }
 
 /**

@@ -31,6 +31,7 @@ const FooterSection = () => {
     { id: 'terms', label: t.footerNav.terms, href: WHITEPAPER_URL, icon: undefined },
     { id: 'contact', label: t.footerNav.contact, href: 'https://t.me/SolarisCET', icon: undefined },
     { id: 'authorityTrust', label: t.footerNav.authorityTrust, href: '#authority-trust', icon: undefined },
+    { id: 'competition', label: t.nav.competition, href: '#competition', icon: undefined },
     { id: 'sovereign', label: t.footerNav.sovereignNoJs, href: '/sovereign/', icon: Shield },
     { id: 'github', label: t.footerNav.github, href: GITHUB_URL, icon: Globe },
   ];
@@ -268,7 +269,9 @@ const FooterSection = () => {
                     ? 'footer-sovereign-link'
                     : link.href === '#authority-trust'
                       ? 'footer-authority-trust-link'
-                      : undefined
+                      : link.href === '#competition'
+                        ? 'footer-competition-link'
+                        : undefined
                 }
                   target={link.href.startsWith('http') ? '_blank' : undefined}
                   rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}

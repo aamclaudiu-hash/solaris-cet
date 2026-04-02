@@ -10,12 +10,13 @@ const NAV_HREFS = [
   { key: 'team',        href: '#team'        },
   { key: 'howToBuy',    href: '#how-to-buy'  },
   { key: 'resources',   href: '#resources'   },
+  { key: 'competition', href: '#competition' },
   { key: 'faq',         href: '#faq'         },
 ] as const;
 
 describe('Navigation — NAV_HREFS integrity', () => {
-  it('has exactly 7 primary nav items (flat IA)', () => {
-    expect(NAV_HREFS).toHaveLength(7);
+  it('has 8 primary nav items incl. global comparison (flat IA)', () => {
+    expect(NAV_HREFS).toHaveLength(8);
   });
 
   it('all hrefs start with #', () => {
@@ -37,6 +38,10 @@ describe('Navigation — NAV_HREFS integrity', () => {
   it('howToBuy link exists and points to #how-to-buy', () => {
     const item = NAV_HREFS.find(i => i.key === 'howToBuy');
     expect(item?.href).toBe('#how-to-buy');
+  });
+
+  it('competition link exists and points to #competition', () => {
+    expect(NAV_HREFS.find((i) => i.key === 'competition')?.href).toBe('#competition');
   });
 
   it('faq is last nav item', () => {

@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 import { standardSkillBurst, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
 
-/** 7 primary destinations — flat IA, Hick/Miller-friendly (Cursor AI architecture playbook). */
+/** Primary in-page destinations — flat IA (Compare links FAQ’s global matrix + `#competition`). */
 const NAV_HREFS = [
   { key: 'cetApp',      href: '#nova-app'    },
   { key: 'tokenomics',  href: '#staking'     },
@@ -23,6 +23,7 @@ const NAV_HREFS = [
   { key: 'team',        href: '#team'        },
   { key: 'howToBuy',    href: '#how-to-buy'  },
   { key: 'resources',   href: '#resources'   },
+  { key: 'competition', href: '#competition' },
   { key: 'faq',         href: '#faq'         },
 ] as const;
 

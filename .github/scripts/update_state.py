@@ -1,14 +1,43 @@
-"""Update app/public/api/state.json with live CET token and pool data from DeDust."""
+"""Update app/public/api/state.json with live CET token and pool data from DeDust.
+
+On-chain addresses default from the same TypeScript sources as the app
+(`app/src/lib/cetContract.ts`, `app/src/lib/dedustUrls.ts`). Override with
+`CET_CONTRACT` / `DEDUST_POOL` env vars when needed.
+"""
 
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
 
 import requests
 
-CET_CONTRACT = os.environ.get("CET_CONTRACT", "EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX")
-DEDUST_POOL = os.environ.get("DEDUST_POOL", "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB")
+
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parent.parent.parent
+
+
+def _parse_ts_string_const(rel_path: str, const_name: str) -> str:
+    """Read `export const NAME = '...'` (possibly multiline before the quote)."""
+    path = _repo_root() / rel_path
+    text = path.read_text(encoding="utf-8")
+    pat = rf"export const {re.escape(const_name)}\s*=\s*[\s\n]*'([^']+)'"
+    m = re.search(pat, text)
+    if not m:
+        raise RuntimeError(f"Could not find {const_name} string literal in {path}")
+    return m.group(1)
+
+
+def _env_or_ts(env_key: str, rel_path: str, const_name: str) -> str:
+    if env_key in os.environ:
+        return os.environ[env_key]
+    return _parse_ts_string_const(rel_path, const_name)
+
+
+CET_CONTRACT = _env_or_ts("CET_CONTRACT", "app/src/lib/cetContract.ts", "CET_CONTRACT_ADDRESS")
+DEDUST_POOL = _env_or_ts("DEDUST_POOL", "app/src/lib/dedustUrls.ts", "DEDUST_POOL_ADDRESS")
 CET_DECIMALS = int(os.environ.get("CET_DECIMALS", "9"))
 TIMESTAMP = os.environ.get("TIMESTAMP") or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
