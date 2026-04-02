@@ -15,6 +15,7 @@ import {
   buildConsensusBurstLogMessage,
   buildLoopCompleteBurstLogMessage,
 } from '@/lib/cetAiTelemetry';
+import { TONSCAN_CET_CONTRACT_URL } from '@/lib/cetContract';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -985,7 +986,7 @@ export default function CetAiSearch() {
                             </button>
                             {/* On-chain verify */}
                             <a
-                              href={`https://tonscan.org/address/EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX`}
+                              href={TONSCAN_CET_CONTRACT_URL}
                               target="_blank"
                               rel="noopener noreferrer"
                               title={t.cetAi.verifyOnTonscanTitle}

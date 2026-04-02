@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { CET_CONTRACT_ADDRESS } from "@/lib/cetContract";
+import { DEDUST_POOL_ADDRESS } from "@/lib/dedustUrls";
 import type {
   ChainState,
   ChainTokenState,
@@ -13,7 +15,7 @@ function makeToken(overrides: Partial<ChainTokenState> = {}): ChainTokenState {
   return {
     symbol: "CET",
     name: "Cetățuia Ecosystem Token",
-    contract: "EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX",
+    contract: CET_CONTRACT_ADDRESS,
     totalSupply: "9000.000000000",
     decimals: 9,
     ...overrides,
@@ -22,7 +24,7 @@ function makeToken(overrides: Partial<ChainTokenState> = {}): ChainTokenState {
 
 function makePool(overrides: Partial<ChainPoolState> = {}): ChainPoolState {
   return {
-    address: "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB",
+    address: DEDUST_POOL_ADDRESS,
     reserveTon: "1000.000000000",
     reserveCet: "4500.000000000",
     lpSupply: "2121.320343560",
@@ -89,9 +91,7 @@ describe("ChainPoolState shape", () => {
 
   it("pool address matches the known DeDust pool", () => {
     const pool = makePool();
-    expect(pool.address).toBe(
-      "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB"
-    );
+    expect(pool.address).toBe(DEDUST_POOL_ADDRESS);
   });
 });
 
@@ -139,9 +139,7 @@ describe("fetchChainState (via module re-import with mocked fetch)", () => {
     const result = await chainStatePromise;
 
     expect(result.token.symbol).toBe("CET");
-    expect(result.pool.address).toBe(
-      "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB"
-    );
+    expect(result.pool.address).toBe(DEDUST_POOL_ADDRESS);
     expect(typeof result.updatedAt).toBe("string");
   });
 

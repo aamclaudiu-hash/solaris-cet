@@ -4,9 +4,9 @@ import { Wallet, ArrowRightLeft, Coins, Copy, Check, ExternalLink } from 'lucide
 import LivePoolStats from '../components/LivePoolStats';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { useLanguage } from '../hooks/useLanguage';
+import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
 import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
 
-const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 const TONKEEPER_URL = 'https://tonkeeper.com';
 
 // Static data defined outside component to avoid re-creation on every render

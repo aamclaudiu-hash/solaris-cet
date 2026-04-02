@@ -20,15 +20,14 @@
 import OpenAI from 'openai';
 import { getAllowedOrigin } from '../lib/cors';
 import { resolveApiKey } from '../lib/crypto';
+import { CET_CONTRACT_ADDRESS } from '../../src/lib/cetContract';
+import { DEDUST_POOL_ADDRESS } from '../../src/lib/dedustUrls';
 
 export const config = { runtime: 'edge' };
 
 /** AI model identifiers — update here to change versions across all call sites. */
 const GEMINI_MODEL = 'gemini-2.0-flash';
 const GROK_MODEL = 'grok-3-mini-beta';
-
-const DEDUST_POOL_ADDRESS = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
-const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 
 interface DeDustAsset {
   type: 'native' | 'jetton';

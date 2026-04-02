@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
+import { DEDUST_POOL_ADDRESS } from '@/lib/dedustUrls';
 import type { ChainState, ChainTokenState, ChainPoolState } from '../lib/chain-state';
 
 // ─── Type Shape Tests ──────────────────────────────────────────────────────
@@ -9,12 +11,12 @@ describe('ChainState — type shape', () => {
       token: {
         symbol: 'CET',
         name: 'Solaris CET',
-        contract: 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+        contract: CET_CONTRACT_ADDRESS,
         totalSupply: '9000.000000000',
         decimals: 9,
       },
       pool: {
-        address: 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB',
+        address: DEDUST_POOL_ADDRESS,
         reserveTon: '100.5',
         reserveCet: '4500.0',
         lpSupply: '2121.0',
@@ -31,7 +33,7 @@ describe('ChainState — type shape', () => {
     const token: ChainTokenState = {
       symbol: 'CET',
       name: 'Solaris CET',
-      contract: 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX',
+      contract: CET_CONTRACT_ADDRESS,
       totalSupply: null,
       decimals: 9,
     };
@@ -40,7 +42,7 @@ describe('ChainState — type shape', () => {
 
   it('accepts null fields in ChainPoolState', () => {
     const pool: ChainPoolState = {
-      address: 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB',
+      address: DEDUST_POOL_ADDRESS,
       reserveTon: null,
       reserveCet: null,
       lpSupply: null,
@@ -54,8 +56,8 @@ describe('ChainState — type shape', () => {
 // ─── Address Format Validation ────────────────────────────────────────────
 
 describe('ChainState — address constants', () => {
-  const CET_CONTRACT  = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
-  const POOL_ADDRESS  = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
+  const CET_CONTRACT = CET_CONTRACT_ADDRESS;
+  const POOL_ADDRESS = DEDUST_POOL_ADDRESS;
   const TON_ADDRESS_RE = /^EQ[A-Za-z0-9_-]{46}$/;
 
   it('CET contract matches TON EQ address format', () => {

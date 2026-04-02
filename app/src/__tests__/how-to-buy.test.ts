@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { CET_CONTRACT_ADDRESS as CET_CONTRACT } from '@/lib/cetContract';
 import { DEDUST_POOL_ADDRESS, DEDUST_SWAP_URL } from '@/lib/dedustUrls';
 
 // ─── HowToBuy steps data ──────────────────────────────────────────────────
@@ -70,8 +71,6 @@ describe('HowToBuySection — steps integrity', () => {
 });
 
 // ─── CET contract address validation ─────────────────────────────────────
-
-const CET_CONTRACT = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 
 describe('HowToBuySection — contract addresses', () => {
   it('CET contract is a valid TON EQ address', () => {

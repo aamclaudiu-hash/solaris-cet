@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
+import { DEDUST_POOL_ADDRESS } from '@/lib/dedustUrls';
 import { createTimeoutSignal } from '../hooks/use-live-pool-data';
 
 // ─── createTimeoutSignal ──────────────────────────────────────────────────
@@ -66,13 +68,11 @@ describe('createTimeoutSignal — fallback path (no AbortSignal.timeout)', () =>
 
 describe('PoolData — initial state constants', () => {
   it('DeDust pool address is the correct format', () => {
-    const addr = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
-    expect(addr).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
+    expect(DEDUST_POOL_ADDRESS).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
   });
 
   it('CET contract address is the correct format', () => {
-    const addr = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
-    expect(addr).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
+    expect(CET_CONTRACT_ADDRESS).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
   });
 
   it('CET decimals are 9 (TON jetton standard)', () => {

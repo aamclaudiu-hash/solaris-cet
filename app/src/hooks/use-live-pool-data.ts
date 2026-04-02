@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
+import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
 import { DEDUST_POOL_ADDRESS } from '@/lib/dedustUrls';
-const CET_CONTRACT_ADDRESS = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
 const CET_DECIMALS = 9;
 const REFRESH_INTERVAL_MS = 60_000;
 
