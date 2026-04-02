@@ -13,6 +13,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useLanguage } from '../hooks/useLanguage';
 import { formatCetSupplyWithSuffix } from '@/lib/numerals';
 import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
+import { renderSimpleBold } from '@/lib/renderSimpleBold';
 
 const APP_CONFIG = {
   LINKS: {
@@ -238,7 +239,10 @@ const HeroSection: React.FC = () => {
               </p>
 
               <p className="mt-4 max-w-[52ch] text-sm sm:text-base text-solaris-muted leading-relaxed">
-                {t.hero.description}
+                {renderSimpleBold(
+                  t.hero.description,
+                  'text-solaris-gold/90 font-semibold',
+                )}
               </p>
 
               <div
@@ -307,6 +311,9 @@ const HeroSection: React.FC = () => {
                   >
                     {t.hero.docs}
                   </a>
+                  <p className="w-full mt-1 text-[11px] sm:text-xs text-solaris-muted/95 text-center lg:text-left leading-snug max-w-[52ch]">
+                    {t.hero.miningTelegramHint}
+                  </p>
                 </div>
               </div>
             </div>

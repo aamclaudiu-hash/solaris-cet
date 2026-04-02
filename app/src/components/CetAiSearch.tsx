@@ -681,6 +681,12 @@ export default function CetAiSearch() {
           <p className="text-gray-400 text-xs md:text-sm mt-1 tracking-widest uppercase">
             {t.cetAi.subtitle}
           </p>
+          <p
+            role="note"
+            className="text-gray-500 text-[10px] sm:text-xs mt-3 max-w-2xl mx-auto text-center leading-relaxed px-1"
+          >
+            {t.cetAi.heroCapabilityNote}
+          </p>
           <div className="flex items-center gap-2 mt-2">
             <span className="text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>
             <span className="text-gray-600 text-xs">×</span>
@@ -759,6 +765,18 @@ export default function CetAiSearch() {
               <p className="text-gray-500 text-xs tracking-widest uppercase mt-0.5">
                 {t.cetAi.subtitle}
               </p>
+              {phase === 'complete' && finalResponse && (
+                <span
+                  role="status"
+                  className={`inline-block mt-2 text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border ${
+                    responseUsedLiveApi
+                      ? 'border-green-500/40 text-green-400 bg-green-500/10'
+                      : 'border-amber-500/40 text-amber-200/90 bg-amber-500/10'
+                  }`}
+                >
+                  {responseUsedLiveApi ? t.cetAi.sourceBadgeLive : t.cetAi.sourceBadgeLocal}
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-3">
               <span className="hidden sm:inline text-xs font-mono bg-gray-900 border border-gray-700 px-2 py-0.5 rounded text-blue-400">Gemini REASON</span>

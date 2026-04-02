@@ -179,6 +179,7 @@ describe("translations — specific content", () => {
       "nextStepBuy",
       "nextStepTokenomics",
       "nextStepHowToBuy",
+      "miningTelegramHint",
     ];
     for (const lang of SUPPORTED_LANGS) {
       for (const key of expectedHeroKeys) {
@@ -230,6 +231,40 @@ describe("translations — specific content", () => {
       }
     }
   });
+});
+
+describe("translations — hero ** markers (balanced for renderSimpleBold)", () => {
+  const heroStringKeys: Array<keyof Translations["hero"]> = [
+    "tagline",
+    "subtitle",
+    "buyNow",
+    "learnMore",
+    "description",
+    "startMining",
+    "docs",
+    "miningStartAria",
+    "miningProcessingAria",
+    "miningSuccessAria",
+    "liveTickerAria",
+    "nextStepsLabel",
+    "nextStepBuy",
+    "nextStepTokenomics",
+    "nextStepHowToBuy",
+    "miningTelegramHint",
+  ];
+
+  for (const lang of SUPPORTED_LANGS) {
+    it(`${lang}: all hero strings have balanced ** delimiters`, () => {
+      const h = translations[lang].hero;
+      for (const key of heroStringKeys) {
+        const value = h[key];
+        expect(
+          hasBalancedSimpleBoldMarkers(value),
+          `${lang}.hero.${key}: ${JSON.stringify(value.slice(0, 80))}…`
+        ).toBe(true);
+      }
+    });
+  }
 });
 
 describe("translations — authorityTrust ** markers (balanced for renderSimpleBold)", () => {

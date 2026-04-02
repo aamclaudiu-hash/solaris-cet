@@ -212,6 +212,8 @@ export interface Translations {
     nextStepBuy: string;
     nextStepTokenomics: string;
     nextStepHowToBuy: string;
+    /** Mining rewards continue in the official Telegram bot; hero CTA is on-site flow only. */
+    miningTelegramHint: string;
   };
   /** Four trust pillars — glass bento (authority, chain, geography, transparency). */
   authorityTrust: {
@@ -311,6 +313,12 @@ export interface Translations {
     verifyOnTonscanTitle: string;
     /** Short submit label in CET AI dialog (visible on sm+). */
     sendCompact: string;
+    /** Persistent footnote under the hero CET AI widget (before any request). */
+    heroCapabilityNote: string;
+    /** Modal header pill when the last reply used live /api/chat (X-Cet-Ai-Source: live). */
+    sourceBadgeLive: string;
+    /** Modal header pill when the reply used built-in knowledge or non-live API. */
+    sourceBadgeLocal: string;
     knowledge: CetAiKnowledge;
   };
   /** FAQ accordion copy (`faqContent.data.ts`). */
@@ -477,6 +485,8 @@ const translations: Record<LangCode, Translations> = {
       nextStepBuy: 'Buy on DeDust',
       nextStepTokenomics: '9,000 CET',
       nextStepHowToBuy: 'How to buy',
+      miningTelegramHint:
+        'Mining runs in the official Solaris CET Telegram bot — this button only starts the on-site flow.',
     },
     authorityTrust: {
       kicker: 'TRUST ARCHITECTURE',
@@ -552,6 +562,10 @@ const translations: Record<LangCode, Translations> = {
       sendQuestionAria: 'Send question',
       verifyOnTonscanTitle: 'Verify on TonScan',
       sendCompact: 'SEND',
+      heroCapabilityNote:
+        'Until /api/chat is live on this host, answers use built-in Solaris facts; deploy the API for Grok × Gemini.',
+      sourceBadgeLive: 'Live API',
+      sourceBadgeLocal: 'Built-in knowledge',
       knowledge: {
         price: `**CET trades on DeDust (TON)** with a fixed supply of **9,000 tokens** — genuine hyper-scarcity.\n\n- Pool: \`${DEDUST_POOL_ADDRESS}\`\n- The **DCBM model** correlates scarcity with a 90-year emission schedule\n- Long-term value accumulation driven purely by on-chain demand`,
         mining: '**CET mining runs for 90 years** with a decaying reward curve.\n\n- **66.66%** of total supply enters circulation through proof-of-work\n- Active nodes: **18,420+**\n- Battery drain approaches **0%** thanks to the Zero-Battery constraint\n- Optimal mining window: **Q3 2025** (high-efficiency period)',
@@ -771,6 +785,8 @@ const translations: Record<LangCode, Translations> = {
       nextStepBuy: 'Comprar en DeDust',
       nextStepTokenomics: '9.000 CET',
       nextStepHowToBuy: 'Cómo comprar',
+      miningTelegramHint:
+        'La minería continúa en el bot oficial de Telegram de Solaris CET — este botón solo inicia el flujo en la web.',
     },
     authorityTrust: {
       kicker: 'ARQUITECTURA DE CONFIANZA',
@@ -846,6 +862,10 @@ const translations: Record<LangCode, Translations> = {
       sendQuestionAria: 'Enviar pregunta',
       verifyOnTonscanTitle: 'Verificar en TonScan',
       sendCompact: 'ENVIAR',
+      heroCapabilityNote:
+        'Hasta que /api/chat esté activo aquí, las respuestas usan conocimiento integrado; despliega la API para Grok × Gemini.',
+      sourceBadgeLive: 'API en vivo',
+      sourceBadgeLocal: 'Conocimiento integrado',
       knowledge: {
         price: `**CET cotiza en DeDust (TON)** con un suministro fijo de **9,000 tokens** — escasez real.\n\n- Pool: \`${DEDUST_POOL_ADDRESS}\`\n- El **modelo DCBM** correlaciona la escasez con un cronograma de emisión de 90 años\n- Acumulación de valor a largo plazo impulsada por la demanda on-chain`,
         mining: '**La minería CET dura 90 años** con una curva de recompensa decreciente.\n\n- **66.66%** del suministro total entra en circulación mediante prueba de trabajo\n- Nodos activos: **18,420+**\n- Consumo de batería cercano a **0%** gracias al Zero-Battery constraint\n- Ventana óptima de minería: **Q3 2025**',
@@ -1063,6 +1083,8 @@ const translations: Record<LangCode, Translations> = {
       nextStepBuy: '在 DeDust 购买',
       nextStepTokenomics: '9,000 CET',
       nextStepHowToBuy: '如何购买',
+      miningTelegramHint:
+        '日常挖矿在官方 Solaris CET Telegram 机器人中进行；本按钮仅启动站内流程。',
     },
     authorityTrust: {
       kicker: '信任架构',
@@ -1134,6 +1156,10 @@ const translations: Record<LangCode, Translations> = {
       sendQuestionAria: '发送问题',
       verifyOnTonscanTitle: '在 TonScan 验证',
       sendCompact: '发送',
+      heroCapabilityNote:
+        '在 /api/chat 未部署前，回答来自内置知识；部署后可使用 Grok × Gemini。',
+      sourceBadgeLive: '实时 API',
+      sourceBadgeLocal: '内置知识',
       knowledge: {
         price: `**CET 在 DeDust（TON）上交易**，固定供应量 **9,000 枚** — 真正的超稀缺性。\n\n- 池: \`${DEDUST_POOL_ADDRESS}\`\n- **DCBM 模型**将稀缺性与 90 年发行时间表相关联\n- 长期价值积累完全由链上需求驱动`,
         mining: '**CET 挖矿持续 90 年**，奖励曲线递减。\n\n- **66.66%** 的总供应量通过工作量证明流入流通\n- 活跃节点: **18,420+**\n- 得益于零电池约束，电池消耗接近 **0%**\n- 最佳挖矿窗口: **2025 年 Q3**',
@@ -1352,6 +1378,8 @@ const translations: Record<LangCode, Translations> = {
       nextStepBuy: 'Купить на DeDust',
       nextStepTokenomics: '9 000 CET',
       nextStepHowToBuy: 'Как купить',
+      miningTelegramHint:
+        'Майнинг ведётся в официальном Telegram-боте Solaris CET — кнопка здесь только запускает сценарий на сайте.',
     },
     authorityTrust: {
       kicker: 'АРХИТЕКТУРА ДОВЕРИЯ',
@@ -1427,6 +1455,10 @@ const translations: Record<LangCode, Translations> = {
       sendQuestionAria: 'Отправить вопрос',
       verifyOnTonscanTitle: 'Проверить на TonScan',
       sendCompact: 'ОТПРАВИТЬ',
+      heroCapabilityNote:
+        'Пока /api/chat не развёрнут здесь, ответы из встроенной базы; подключите API для Grok × Gemini.',
+      sourceBadgeLive: 'Живой API',
+      sourceBadgeLocal: 'Встроенная база',
       knowledge: {
         price: `**CET торгуется на DeDust (TON)** с фиксированным запасом **9 000 токенов** — настоящая гиперредкость.\n\n- Пул: \`${DEDUST_POOL_ADDRESS}\`\n- **Модель DCBM** коррелирует дефицит с 90-летним графиком эмиссии\n- Долгосрочное накопление стоимости, обусловленное исключительно он-чейн спросом`,
         mining: '**Майнинг CET продолжается 90 лет** с убывающей кривой вознаграждений.\n\n- **66.66%** от общего запаса поступает в обращение через proof-of-work\n- Активных узлов: **18 420+**\n- Расход батареи стремится к **0%** благодаря Zero-Battery ограничению\n- Оптимальное окно майнинга: **Q3 2025**',
@@ -1646,6 +1678,8 @@ const translations: Record<LangCode, Translations> = {
       nextStepBuy: 'Cumpără pe DeDust',
       nextStepTokenomics: '9.000 CET',
       nextStepHowToBuy: 'Cum cumperi',
+      miningTelegramHint:
+        'Minarea continuă în botul oficial Telegram Solaris CET — acest buton pornește doar fluxul pe site.',
     },
     authorityTrust: {
       kicker: 'ARHITECTURĂ DE ÎNCREDERE',
@@ -1721,6 +1755,10 @@ const translations: Record<LangCode, Translations> = {
       sendQuestionAria: 'Trimite întrebarea',
       verifyOnTonscanTitle: 'Verifică pe TonScan',
       sendCompact: 'TRIMITE',
+      heroCapabilityNote:
+        'Până când /api/chat e activ aici, răspunsurile folosesc cunoștințe integrate; deploy API pentru Grok × Gemini.',
+      sourceBadgeLive: 'API live',
+      sourceBadgeLocal: 'Cunoștințe integrate',
       knowledge: {
         price: `**CET se tranzacționează pe DeDust (TON)** cu o ofertă fixă de **9.000 de tokeni** — raritate extremă reală.\n\n- Pool: \`${DEDUST_POOL_ADDRESS}\`\n- **Modelul DCBM** corelează raritatea cu un program de emisie de 90 de ani\n- Acumulare de valoare pe termen lung determinată exclusiv de cererea on-chain`,
         mining: '**Minarea CET durează 90 de ani** cu o curbă de recompensă descrescătoare.\n\n- **66.66%** din oferta totală intră în circulație prin proof-of-work\n- Noduri active: **18.420+**\n- Consum de baterie aproape de **0%** datorită constrângerii Zero-Battery\n- Fereastra optimă de minare: **T3 2025** (perioadă de eficiență ridicată)',
@@ -1940,6 +1978,8 @@ const translations: Record<LangCode, Translations> = {
       nextStepBuy: 'Comprar no DeDust',
       nextStepTokenomics: '9.000 CET',
       nextStepHowToBuy: 'Como comprar',
+      miningTelegramHint:
+        'A mineração continua no bot oficial do Telegram Solaris CET — este botão só inicia o fluxo no site.',
     },
     authorityTrust: {
       kicker: 'ARQUITETURA DE CONFIANÇA',
@@ -2015,6 +2055,10 @@ const translations: Record<LangCode, Translations> = {
       sendQuestionAria: 'Enviar pergunta',
       verifyOnTonscanTitle: 'Verificar no TonScan',
       sendCompact: 'ENVIAR',
+      heroCapabilityNote:
+        'Enquanto /api/chat não estiver ativo aqui, as respostas usam conhecimento integrado; faça deploy da API para Grok × Gemini.',
+      sourceBadgeLive: 'API ao vivo',
+      sourceBadgeLocal: 'Conhecimento integrado',
       knowledge: {
         price: `**CET negocia na DeDust (TON)** com fornecimento fixo de **9.000 tokens** — escassez real.\n\n- Pool: \`${DEDUST_POOL_ADDRESS}\`\n- O **modelo DCBM** correlaciona escassez com cronograma de emissão de 90 anos\n- Acumulação de valor a longo prazo impulsionada pela demanda on-chain`,
         mining: '**A mineração CET dura 90 anos** com curva de recompensa decrescente.\n\n- **66.66%** do fornecimento total entra em circulação via proof-of-work\n- Nós ativos: **18.420+**\n- Consumo de bateria próximo a **0%** graças à restrição Zero-Battery\n- Janela ótima de mineração: **Q3 2025**',
@@ -2234,6 +2278,8 @@ const translations: Record<LangCode, Translations> = {
       nextStepBuy: 'Auf DeDust kaufen',
       nextStepTokenomics: '9.000 CET',
       nextStepHowToBuy: 'So kaufst du',
+      miningTelegramHint:
+        'Mining läuft im offiziellen Solaris-CET-Telegram-Bot — hier starten Sie nur den Ablauf auf der Website.',
     },
     authorityTrust: {
       kicker: 'VERTRAUENSARCHITEKTUR',
@@ -2309,6 +2355,10 @@ const translations: Record<LangCode, Translations> = {
       sendQuestionAria: 'Frage senden',
       verifyOnTonscanTitle: 'Auf TonScan prüfen',
       sendCompact: 'SENDEN',
+      heroCapabilityNote:
+        'Solange /api/chat hier nicht aktiv ist, nutzen Antworten eingebautes Wissen; deployen Sie die API für Grok × Gemini.',
+      sourceBadgeLive: 'Live-API',
+      sourceBadgeLocal: 'Eingebautes Wissen',
       knowledge: {
         price: `**CET wird auf DeDust (TON)** mit einem festen Angebot von **9.000 Token** gehandelt — echte Hyperknappheit.\n\n- Pool: \`${DEDUST_POOL_ADDRESS}\`\n- Das **DCBM-Modell** korreliert Knappheit mit einem 90-Jahres-Emissionsplan\n- Langfristige Wertakkumulation, die ausschließlich durch On-Chain-Nachfrage angetrieben wird`,
         mining: '**CET-Mining läuft 90 Jahre** mit einer abnehmenden Belohnungskurve.\n\n- **66.66%** des Gesamtangebots gelangt durch Proof-of-Work in Umlauf\n- Aktive Nodes: **18.420+**\n- Akkuverbrauch nahezu **0%** dank der Zero-Battery-Einschränkung\n- Optimales Mining-Fenster: **Q3 2025**',
