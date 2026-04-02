@@ -41,21 +41,19 @@ function removeTelegramWebApp() {
 describe('useTelegram', () => {
   afterEach(() => removeTelegramWebApp());
 
-  it('outside WebApp: false, null tg, haptic no-op, return shape', async () => {
+  it('outside / inside / empty initData + return shape + haptic', async () => {
     removeTelegramWebApp();
-    const { resultRef, unmount } = await renderHook(() => useTelegram());
-    expect(resultRef.current.isTelegram).toBe(false);
-    expect(resultRef.current.tg).toBeNull();
-    expect(() => resultRef.current.haptic()).not.toThrow();
-    expect(() => resultRef.current.haptic('heavy')).not.toThrow();
-    expect(resultRef.current).toHaveProperty('isTelegram');
-    expect(resultRef.current).toHaveProperty('tg');
-    expect(resultRef.current).toHaveProperty('haptic');
-    expect(typeof resultRef.current.haptic).toBe('function');
-    await unmount();
-  });
+    const { resultRef: out, unmount: u0 } = await renderHook(() => useTelegram());
+    expect(out.current.isTelegram).toBe(false);
+    expect(out.current.tg).toBeNull();
+    expect(() => out.current.haptic()).not.toThrow();
+    expect(() => out.current.haptic('heavy')).not.toThrow();
+    expect(out.current).toHaveProperty('isTelegram');
+    expect(out.current).toHaveProperty('tg');
+    expect(out.current).toHaveProperty('haptic');
+    expect(typeof out.current.haptic).toBe('function');
+    await u0();
 
-  it('inside WebApp vs empty initData', async () => {
     installTelegramWebApp();
     const { resultRef: inTg, unmount: u1 } = await renderHook(() => useTelegram());
     expect(inTg.current.isTelegram).toBe(true);

@@ -4,6 +4,10 @@ import {
   calculateRewards as rewardsLegacy,
   type MiningInput,
 } from "../lib/mining-calculations";
+import {
+  calculateRewards as miningMathRewards,
+  type MiningInput as MiningMathInput,
+} from "../lib/mining-math";
 
 /** Worker (`mining.worker.ts`) delegates to `mining-calc`; both TS modules must stay identical. */
 const PARITY_CASES: MiningInput[] = [
@@ -104,5 +108,45 @@ describe("mining rewards", () => {
     expect(rnd.monthly.toString().replace(/^\d+\.?/, "").length).toBeLessThanOrEqual(2);
     const apyDec = calc({ adjustedHashrate: 1.5, stake: 500 });
     expect((apyDec.apy.toString().split(".")[1] ?? "").length).toBeLessThanOrEqual(1);
+  });
+});
+
+describe("mining-math module", () => {
+  it("≡ mining-calc + shape, monotonicity, device profiles", () => {
+    for (const c of PARITY_CASES) {
+      expect(miningMathRewards(c as MiningMathInput), JSON.stringify(c)).toEqual(
+        rewardsCalc(c),
+      );
+    }
+
+    const a = miningMathRewards({ adjustedHashrate: 1, stake: 0 });
+    expect(a).toHaveProperty("daily");
+    expect(a).toHaveProperty("monthly");
+    expect(a).toHaveProperty("apy");
+
+    const inputs: MiningMathInput[] = [
+      { adjustedHashrate: 0.5, stake: 0 },
+      { adjustedHashrate: 2.5, stake: 0 },
+      { adjustedHashrate: 8.0, stake: 0 },
+      { adjustedHashrate: 50.0, stake: 0 },
+    ];
+    const dailies = inputs.map((i) => miningMathRewards(i).daily);
+    for (let i = 1; i < dailies.length; i++) {
+      expect(dailies[i]).toBeGreaterThan(dailies[i - 1]);
+    }
+
+    const profiles = [
+      { device: "smartphone", hashrate: 0.5 * 0.8, stake: 0 },
+      { device: "laptop", hashrate: 2.5 * 0.9, stake: 0 },
+      { device: "desktop", hashrate: 8.0 * 1.0, stake: 0 },
+      { device: "node", hashrate: 50.0 * 1.2, stake: 0 },
+    ];
+    profiles.forEach(({ device, hashrate, stake }) => {
+      const result = miningMathRewards({ adjustedHashrate: hashrate, stake });
+      expect(result.daily, `${device} daily should be > 0`).toBeGreaterThan(0);
+    });
+    const phone = miningMathRewards({ adjustedHashrate: 0.5 * 0.8, stake: 0 });
+    const node = miningMathRewards({ adjustedHashrate: 50.0 * 1.2, stake: 0 });
+    expect(node.daily / phone.daily).toBeGreaterThan(100);
   });
 });

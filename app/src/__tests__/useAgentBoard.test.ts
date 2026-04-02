@@ -3,13 +3,13 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { renderHook, act } from './renderHook';
 import { useAgentBoard, defaultGenerateEvent } from '../hooks/useAgentBoard';
 
-describe('useAgentBoard', () => {
+describe('useAgentBoard + defaultGenerateEvent', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
-  it('initial length, maxEvents default, fields, interval prepend, cap, custom generator', async () => {
+  it('hook: length, fields, timers, cap, custom gen; generator: shape, learned, ids, skill', async () => {
     const { resultRef: r5, unmount: u5 } = await renderHook(() =>
       useAgentBoard({ maxEvents: 5, intervalMs: 10_000 }),
     );
@@ -78,11 +78,7 @@ describe('useAgentBoard', () => {
     expect(generator).toHaveBeenCalled();
     expect(rg.current.every((e) => e.id === 'test-42')).toBe(true);
     await ug();
-  });
-});
 
-describe('defaultGenerateEvent', () => {
-  it('valid event, learned messages, unique ids, skill roleTitle', () => {
     const ev = defaultGenerateEvent();
     expect(ev.id).toBeTruthy();
     expect(['solved', 'learned', 'talking', 'alert', 'skill']).toContain(ev.kind);

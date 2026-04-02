@@ -1,8 +1,20 @@
 import { describe, it, expect } from "vitest";
-import { cn, formatUsd, formatPrice, clamp, debounce } from "../lib/utils";
+import { DEDUST_POOL_ADDRESS } from "@/lib/dedustUrls";
+import {
+  cn,
+  formatUsd,
+  formatPrice,
+  clamp,
+  debounce,
+  formatNumber,
+  formatCurrency,
+  formatPercentage,
+  truncateAddress,
+  formatTokenAmount,
+} from "../lib/utils";
 
 describe("lib/utils", () => {
-  it("cn, formatUsd, formatPrice, clamp", () => {
+  it("cn, money helpers, clamp, debounce, formatNumber/Currency/Percentage, truncateAddress, formatTokenAmount", async () => {
     expect(cn()).toBe("");
     expect(cn("foo", "bar")).toBe("foo bar");
     expect(cn("foo", false, null, undefined, 0, "", "bar")).toBe("foo bar");
@@ -32,9 +44,7 @@ describe("lib/utils", () => {
     expect(clamp(-3, 0, 10)).toBe(0);
     expect(clamp(15, 0, 10)).toBe(10);
     expect(clamp(0, -10, -1)).toBe(-1);
-  });
 
-  it("debounce coalesces and forwards args", async () => {
     let callCount = 0;
     const fn1 = debounce(() => {
       callCount++;
@@ -61,5 +71,36 @@ describe("lib/utils", () => {
     fn3(1, 2, 3);
     await new Promise((resolve) => setTimeout(resolve, 80));
     expect(received).toEqual([1, 2, 3]);
+
+    expect(formatNumber(9000)).toBe("9,000.00");
+    expect(formatNumber(1_000_000)).toBe("1,000,000.00");
+    expect(formatNumber(1234.5, 0)).toBe("1,235");
+    expect(formatNumber(0.0082, 4)).toBe("0.0082");
+    expect(formatNumber(0)).toBe("0.00");
+    expect(formatNumber(0, 0)).toBe("0");
+    expect(formatNumber(-42.5, 1)).toBe("-42.5");
+
+    expect(formatCurrency(1234.5)).toBe("$1,234.50");
+    expect(formatCurrency(0)).toBe("$0.00");
+    expect(formatCurrency(0.00082, 5)).toBe("$0.00082");
+    expect(formatCurrency(9000)).toBe("$9,000.00");
+
+    expect(formatPercentage(15.5)).toBe("15.50%");
+    expect(formatPercentage(100, 0)).toBe("100%");
+    expect(formatPercentage(0)).toBe("0.00%");
+
+    const POOL = DEDUST_POOL_ADDRESS;
+    expect(truncateAddress(POOL)).toBe("EQB5…lfnB");
+    expect(truncateAddress(POOL, 6)).toBe("EQB5_h…IelfnB");
+    expect(truncateAddress("ABCDEFGHI", 4)).toBe("ABCDEFGHI");
+    expect(truncateAddress("ABCDEFGHIJ", 4)).toBe("ABCD…GHIJ");
+    expect(truncateAddress("", 4)).toBe("");
+
+    expect(formatTokenAmount("9000.000000000")).toBe("9,000.00");
+    expect(formatTokenAmount(null)).toBe("—");
+    expect(formatTokenAmount("not-a-number")).toBe("—");
+    expect(formatTokenAmount("1234.5678", 4)).toBe("1,234.5678");
+    expect(formatTokenAmount("1234.5699", 2)).toBe("1,234.57");
+    expect(formatTokenAmount("0")).toBe("0.00");
   });
 });

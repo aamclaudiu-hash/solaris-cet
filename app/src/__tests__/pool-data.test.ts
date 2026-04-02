@@ -66,6 +66,15 @@ describe('DeDust pool — formulas & live-pool config', () => {
     const cetInTon = parseFloat(tonR) / 1e9 / (parseFloat(cetR) / 10 ** CET_DECIMALS);
     expect(cetInTon).toBeCloseTo(5, 6);
 
+    const tonReserveNano = 1e9;
+    const cetReserveNano = 2 * 10 ** CET_DECIMALS;
+    const tonPriceUsdSpot = 5;
+    const priceUsdSpot =
+      (tonReserveNano / 1e9 / (cetReserveNano / 10 ** CET_DECIMALS)) * tonPriceUsdSpot;
+    expect(priceUsdSpot).toBe(2.5);
+    expect((500 * 1e9) / 1e9 * 3 * 2).toBe(3000);
+    expect(((100 * 1e9) / 1e9) * 4).toBe(400);
+
     expect(DEDUST_POOL_ADDRESS).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
     expect(CET_CONTRACT_ADDRESS).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
     expect(CET_DECIMALS).toBe(9);
