@@ -18,11 +18,11 @@ import { Factory, MAINNET_FACTORY_ADDR, PoolType, Asset, JettonRoot } from '@ded
 import { writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { CET_CONTRACT_ADDRESS } from '../app/src/lib/cetContract';
+import { DEDUST_POOL_ADDRESS } from '../app/src/lib/dedustUrls';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-const CET_CONTRACT = 'EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX';
-const DEDUST_POOL  = 'EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB';
 const TON_ENDPOINT = process.env['TON_RPC_ENDPOINT'] ?? 'https://toncenter.com/api/v2/jsonRPC';
 
 // Number of nano-units per whole token (both TON and CET use 9 decimals)
@@ -71,7 +71,7 @@ function bigintToDecimalString(value: bigint, decimals: number): string {
 async function main(): Promise<void> {
   console.log('[ton-indexer] Starting Solaris CET indexer…');
 
-  const cetAddress = Address.parse(CET_CONTRACT);
+  const cetAddress = Address.parse(CET_CONTRACT_ADDRESS);
 
   // ── 1. Query CET jetton master for total supply ───────────────────────────
   let totalSupply: bigint | null = null;
@@ -119,7 +119,7 @@ async function main(): Promise<void> {
 
     // Graceful fallback: query DeDust REST API
     try {
-      const res = await fetch(`https://api.dedust.io/v2/pools/${DEDUST_POOL}`);
+      const res = await fetch(`https://api.dedust.io/v2/pools/${DEDUST_POOL_ADDRESS}`);
       if (res.ok) {
         const json = await res.json() as {
           reserves?: [string, string];
@@ -144,14 +144,14 @@ async function main(): Promise<void> {
     token: {
       symbol,
       name,
-      contract: CET_CONTRACT,
+      contract: CET_CONTRACT_ADDRESS,
       totalSupply: totalSupply !== null
         ? bigintToDecimalString(totalSupply, decimals)
         : null,
       decimals,
     },
     pool: {
-      address: DEDUST_POOL,
+      address: DEDUST_POOL_ADDRESS,
       reserveTon: reserveTon !== null
         ? bigintToDecimalString(reserveTon, 9)
         : null,

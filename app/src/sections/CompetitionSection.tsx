@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 import GlowOrbs from '../components/GlowOrbs';
 import { skillSeedFromLabel, standardSkillBurst } from '@/lib/meshSkillFeed';
 import { useLanguage } from '../hooks/useLanguage';
+import { localeForLang } from '@/lib/localeForLang';
 
 interface CompetitionBarTooltipPayload {
   value?: number;
@@ -16,22 +17,26 @@ function CompetitionBarTooltip({
   payload,
   label,
   valueLabel,
+  numberLocale,
 }: {
   active?: boolean;
   payload?: readonly CompetitionBarTooltipPayload[];
   label?: string | number;
   valueLabel: string;
+  numberLocale: string;
 }) {
   if (!active || !payload?.length) return null;
   const p = payload[0];
   const name = String(label ?? p?.name ?? '');
   const v = p?.value;
   const skill = standardSkillBurst(skillSeedFromLabel(`competition|${valueLabel}|${name}`));
+  const formatted =
+    typeof v === 'number' ? v.toLocaleString(numberLocale, { maximumFractionDigits: 0 }) : String(v);
   return (
     <div className="rounded-lg border border-white/12 bg-[#0D0E17] px-3 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.4)] max-w-[min(90vw,280px)]">
       <p className="font-mono text-sm font-bold text-solaris-text">{name}</p>
       <p className="text-xs text-solaris-muted mt-1 tabular-nums">
-        {typeof v === 'number' ? v.toLocaleString() : String(v)} {valueLabel}
+        {formatted} {valueLabel}
       </p>
       <p
         className="mt-2 pt-2 border-t border-fuchsia-500/20 text-[10px] font-mono text-fuchsia-200/85 leading-snug line-clamp-3"
@@ -42,8 +47,6 @@ function CompetitionBarTooltip({
     </div>
   );
 }
-
-// ─── Shared chart Y-axis formatters ──────────────────────────────────────
 
 /** Format TPS values: 1000 → "1k", 100000 → "100k" */
 function formatTpsAxis(v: number): string {
@@ -155,11 +158,8 @@ const competitors: Competitor[] = [
   },
 ];
 
-// ─── Feature rows ─────────────────────────────────────────────────────────
-
-
 function BoolCell({ value }: { value: boolean | 'partial' }) {
-  if (value === true)    return <CheckCircle className="w-4 h-4 text-emerald-400 mx-auto" />;
+  if (value === true) return <CheckCircle className="w-4 h-4 text-emerald-400 mx-auto" />;
   if (value === 'partial') return <Minus className="w-4 h-4 text-solaris-gold mx-auto" />;
   return <XCircle className="w-4 h-4 text-red-400/60 mx-auto" />;
 }
@@ -172,72 +172,95 @@ function TextCell({ value, isCET }: { value: string; isCET?: boolean }) {
   );
 }
 
-// ─── CET advantage cards ──────────────────────────────────────────────────
+/** TPS chart — matches matrix peers (incl. ASI). */
+const TPS_CHART_ROWS = [
+  { name: 'CET', value: 100_000, isCET: true },
+  { name: 'FET', value: 1_000, isCET: false },
+  { name: 'TAO', value: 1_000, isCET: false },
+  { name: 'ASI', value: 1_000, isCET: false },
+  { name: 'AGIX', value: 15, isCET: false },
+  { name: 'OCEAN', value: 15, isCET: false },
+] as const;
 
-const advantages = [
-  {
-    icon: Coins,
-    title: 'Extreme Scarcity',
-    body: '9,000 CET total — forever. FET has 1.15B tokens. AGIX has 2B. Scarcity is Solaris CET\'s permanent structural advantage.',
-    color: 'text-solaris-gold',
-    bg: 'bg-solaris-gold/10',
-    border: 'border-solaris-gold/20',
-  },
-  {
-    icon: Zap,
-    title: 'Fastest Chain: TON',
-    body: '100,000 TPS and 2-second finality. Fetch.ai, TAO, AGIX, and OCEAN run on chains with <1,000 TPS. Speed is not even close.',
-    color: 'text-cyan-400',
-    bg: 'bg-cyan-400/10',
-    border: 'border-cyan-400/20',
-  },
-  {
-    icon: Brain,
-    title: 'Only Dual-AI Protocol',
-    body: 'Grok (xAI) × Gemini (Google) — every agent action Reasons + Acts + Verifies with two independent frontier models. No competitor does this.',
-    color: 'text-purple-400',
-    bg: 'bg-purple-400/10',
-    border: 'border-purple-400/20',
-  },
-  {
-    icon: Shield,
-    title: 'Real-World Asset Backing',
-    body: 'Each CET is anchored to actual agricultural and AI infrastructure in Cetățuia, Romania. Every competitor is purely digital speculation.',
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-400/10',
-    border: 'border-emerald-400/20',
-  },
-];
-
-// ─── Component ────────────────────────────────────────────────────────────
+/** Scarcity chart — log scale; ASI included for parity with matrix. */
+const SCARCITY_CHART_ROWS = [
+  { name: 'CET', value: 9_000, isCET: true },
+  { name: 'TAO', value: 21_000_000, isCET: false },
+  { name: 'ASI', value: 4_600_000_000, isCET: false },
+  { name: 'FET', value: 1_150_000_000, isCET: false },
+  { name: 'OCEAN', value: 1_410_000_000, isCET: false },
+  { name: 'AGIX', value: 2_000_000_000, isCET: false },
+] as const;
 
 const CompetitionSection = () => {
-  const { t } = useLanguage();
-  const sectionRef   = useRef<HTMLDivElement>(null);
-  const headingRef   = useRef<HTMLDivElement>(null);
-  const tableRef     = useRef<HTMLDivElement>(null);
-  const cardsRef     = useRef<HTMLDivElement>(null);
+  const { t, lang } = useLanguage();
+  const cs = t.competitionSection;
+  const numberLocale = localeForLang(lang);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  const advantageCards = [
+    { icon: Coins, title: cs.advScarcityTitle, body: cs.advScarcityBody, color: 'text-solaris-gold', bg: 'bg-solaris-gold/10', border: 'border-solaris-gold/20' },
+    { icon: Zap, title: cs.advTonTitle, body: cs.advTonBody, color: 'text-cyan-400', bg: 'bg-cyan-400/10', border: 'border-cyan-400/20' },
+    { icon: Brain, title: cs.advDualAiTitle, body: cs.advDualAiBody, color: 'text-purple-400', bg: 'bg-purple-400/10', border: 'border-purple-400/20' },
+    { icon: Shield, title: cs.advRwaTitle, body: cs.advRwaBody, color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/20' },
+  ];
+
+  const tableRowsText = [
+    { label: cs.rowTotalSupply, key: 'supply' as const },
+    { label: cs.rowTps, key: 'tps' as const },
+    { label: cs.rowAgents, key: 'agents' as const },
+    { label: cs.rowMarginalCost, key: 'marginalCost' as const },
+  ];
+
+  const tableRowsBool = [
+    { label: cs.rowRwa, key: 'rwa' as const },
+    { label: cs.rowDualAi, key: 'dualAi' as const },
+    { label: cs.rowPowMining, key: 'mining' as const },
+    { label: cs.rowAuditKyc, key: 'auditKyc' as const },
+  ];
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
     const ctx = gsap.context(() => {
-      gsap.fromTo(headingRef.current,
+      gsap.fromTo(
+        headingRef.current,
         { y: 32, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8,
-          scrollTrigger: { trigger: headingRef.current, start: 'top 82%', end: 'top 55%', scrub: true } }
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          scrollTrigger: { trigger: headingRef.current, start: 'top 82%', end: 'top 55%', scrub: true },
+        },
       );
-      gsap.fromTo(tableRef.current,
+      gsap.fromTo(
+        tableRef.current,
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8,
-          scrollTrigger: { trigger: tableRef.current, start: 'top 80%', end: 'top 45%', scrub: true } }
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          scrollTrigger: { trigger: tableRef.current, start: 'top 80%', end: 'top 45%', scrub: true },
+        },
       );
       const cards = cardsRef.current?.querySelectorAll('.adv-card');
       if (cards) {
-        gsap.fromTo(cards,
+        gsap.fromTo(
+          cards,
           { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.12, duration: 0.7,
-            scrollTrigger: { trigger: cardsRef.current, start: 'top 80%', end: 'top 30%', scrub: true } }
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.12,
+            duration: 0.7,
+            scrollTrigger: { trigger: cardsRef.current, start: 'top 80%', end: 'top 30%', scrub: true },
+          },
         );
       }
     }, section);
@@ -254,37 +277,38 @@ const CompetitionSection = () => {
       <GlowOrbs variant="gold" />
 
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
-
-        {/* Heading */}
         <div ref={headingRef} className="max-w-3xl mb-16">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
               <Trophy className="w-5 h-5 text-solaris-gold" />
             </div>
-            <span className="hud-label text-solaris-gold">COMPETITIVE ANALYSIS</span>
+            <span className="hud-label text-solaris-gold">{cs.badge}</span>
           </div>
           <h2 className="font-display font-bold text-[clamp(28px,3.5vw,48px)] text-solaris-text mb-4">
-            How Solaris CET Compares to{' '}
-            <span className="text-solaris-gold">AI Token Leaders</span>
+            {cs.titleLead}{' '}
+            <span className="text-solaris-gold">{cs.titleAccent}</span>
           </h2>
           <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
-            FET, TAO, AGIX, OCEAN and ASI combined represent{' '}
-            <span className="text-solaris-text font-semibold">$8B+ in market capitalisation</span>.
-            Below is why Solaris CET is structurally different — and superior — on every dimension that drives long-term value.
+            {cs.introLead}
+            <span className="text-solaris-text font-semibold">{cs.introEmphasis}</span>
+            {cs.introTail}
           </p>
         </div>
 
-        {/* Comparison table */}
         <div ref={tableRef} className="mb-16 overflow-x-auto">
           <table className="w-full min-w-[700px] border-collapse">
             <thead>
               <tr>
-                <th className="text-left p-3 text-solaris-muted text-xs font-mono uppercase tracking-widest border-b border-white/10 w-36">
-                  Feature
+                <th
+                  scope="col"
+                  className="text-left p-3 text-solaris-muted text-xs font-mono uppercase tracking-widest border-b border-white/10 w-36"
+                >
+                  {cs.tableFeature}
                 </th>
-                {competitors.map(c => (
+                {competitors.map((c) => (
                   <th
                     key={c.symbol}
+                    scope="col"
                     className={`text-center p-3 text-xs font-bold uppercase tracking-wider border-b ${
                       c.isCET
                         ? 'text-solaris-gold border-solaris-gold/40 bg-solaris-gold/5'
@@ -292,7 +316,9 @@ const CompetitionSection = () => {
                     }`}
                   >
                     <div>{c.symbol}</div>
-                    <div className={`text-[10px] font-normal mt-0.5 ${c.isCET ? 'text-solaris-gold/70' : 'text-solaris-muted/50'}`}>
+                    <div
+                      className={`text-[10px] font-normal mt-0.5 ${c.isCET ? 'text-solaris-gold/70' : 'text-solaris-muted/50'}`}
+                    >
                       {c.chain}
                     </div>
                   </th>
@@ -300,34 +326,24 @@ const CompetitionSection = () => {
               </tr>
             </thead>
             <tbody>
-              {(
-                [
-                  { label: 'Total Supply',   key: 'supply'       as const },
-                  { label: 'TPS',            key: 'tps'          as const },
-                  { label: 'Active Agents',  key: 'agents'       as const },
-                  { label: 'Marginal Cost',  key: 'marginalCost' as const },
-                ] as { label: string; key: keyof Competitor }[]
-              ).map(({ label, key }) => (
+              {tableRowsText.map(({ label, key }) => (
                 <tr key={key} className="border-b border-white/5 hover:bg-white/2 transition-colors">
-                  <td className="p-3 text-solaris-muted text-xs font-mono">{label}</td>
-                  {competitors.map(c => (
+                  <th scope="row" className="p-3 text-solaris-muted text-xs font-mono text-left font-normal">
+                    {label}
+                  </th>
+                  {competitors.map((c) => (
                     <td key={c.symbol} className={`p-3 text-center ${c.isCET ? 'bg-solaris-gold/5' : ''}`}>
                       <TextCell value={c[key] as string} isCET={c.isCET} />
                     </td>
                   ))}
                 </tr>
               ))}
-              {(
-                [
-                  { label: 'RWA Backing',  key: 'rwa'      as const },
-                  { label: 'Dual-AI',      key: 'dualAi'   as const },
-                  { label: 'PoW Mining',   key: 'mining'   as const },
-                  { label: 'Audit + KYC', key: 'auditKyc' as const },
-                ] as { label: string; key: keyof Competitor }[]
-              ).map(({ label, key }) => (
+              {tableRowsBool.map(({ label, key }) => (
                 <tr key={key} className="border-b border-white/5 hover:bg-white/2 transition-colors">
-                  <td className="p-3 text-solaris-muted text-xs font-mono">{label}</td>
-                  {competitors.map(c => (
+                  <th scope="row" className="p-3 text-solaris-muted text-xs font-mono text-left font-normal">
+                    {label}
+                  </th>
+                  {competitors.map((c) => (
                     <td key={c.symbol} className={`p-3 text-center ${c.isCET ? 'bg-solaris-gold/5' : ''}`}>
                       <BoolCell value={c[key] as boolean | 'partial'} />
                     </td>
@@ -336,14 +352,11 @@ const CompetitionSection = () => {
               ))}
             </tbody>
           </table>
-          <p className="text-solaris-muted/50 text-[11px] mt-2 font-mono">
-            * Data sourced from public whitepapers and official project documentation. Supply figures are approximate.
-          </p>
+          <p className="text-solaris-muted/50 text-[11px] mt-2 font-mono max-w-4xl">{cs.dataDisclaimer}</p>
         </div>
 
-        {/* Advantage cards */}
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {advantages.map(adv => {
+          {advantageCards.map((adv) => {
             const Icon = adv.icon;
             return (
               <div
@@ -360,105 +373,95 @@ const CompetitionSection = () => {
           })}
         </div>
 
-        {/* TPS + Agents charts */}
         <div className="mt-16 grid lg:grid-cols-2 gap-8">
-
-          {/* TPS chart */}
           <div className="bento-card p-6 border border-white/10">
             <div className="flex items-center gap-2 mb-6">
               <Zap className="w-4 h-4 text-solaris-cyan" />
-              <span className="hud-label text-solaris-cyan">TRANSACTIONS PER SECOND (TPS)</span>
+              <span className="hud-label text-solaris-cyan">{cs.chartTpsLabel}</span>
             </div>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={220}>
               <BarChart
-                data={[
-                  { name: 'CET', value: 100_000, isCET: true },
-                  { name: 'FET', value: 1_000,   isCET: false },
-                  { name: 'TAO', value: 1_000,   isCET: false },
-                  { name: 'AGIX', value: 15,     isCET: false },
-                  { name: 'OCEAN', value: 15,    isCET: false },
-                ]}
+                data={[...TPS_CHART_ROWS]}
                 margin={{ top: 0, right: 0, left: -20, bottom: 0 }}
               >
-                <XAxis dataKey="name" tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} tickFormatter={formatTpsAxis} />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={formatTpsAxis}
+                />
                 <Tooltip
                   content={(props) => (
                     <CompetitionBarTooltip
                       active={props.active}
                       payload={props.payload as readonly CompetitionBarTooltipPayload[] | undefined}
                       label={props.label}
-                      valueLabel="TPS"
+                      valueLabel={cs.tooltipTpsUnit}
+                      numberLocale={numberLocale}
                     />
                   )}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                  {[
-                    { name: 'CET', isCET: true },
-                    { name: 'FET', isCET: false },
-                    { name: 'TAO', isCET: false },
-                    { name: 'AGIX', isCET: false },
-                    { name: 'OCEAN', isCET: false },
-                  ].map((entry) => (
+                  {TPS_CHART_ROWS.map((entry) => (
                     <Cell key={entry.name} fill={entry.isCET ? '#F2C94C' : 'rgba(255,255,255,0.15)'} />
                   ))}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
-            <p className="text-solaris-muted/60 text-[11px] mt-2 font-mono text-center">
-              TON delivers 100× more throughput than closest AI-chain competitor
-            </p>
+            <p className="text-solaris-muted/60 text-[11px] mt-2 font-mono text-center">{cs.chartTpsCaption}</p>
           </div>
 
-          {/* Scarcity chart */}
           <div className="bento-card p-6 border border-white/10">
             <div className="flex items-center gap-2 mb-6">
               <Coins className="w-4 h-4 text-solaris-gold" />
-              <span className="hud-label text-solaris-gold">TOKEN SCARCITY (log scale — lower = rarer)</span>
+              <span className="hud-label text-solaris-gold">{cs.chartScarcityLabel}</span>
             </div>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={220}>
               <BarChart
-                data={[
-                  { name: 'CET',   value: 9_000,         isCET: true  },
-                  { name: 'TAO',   value: 21_000_000,    isCET: false },
-                  { name: 'FET',   value: 1_150_000_000, isCET: false },
-                  { name: 'OCEAN', value: 1_410_000_000, isCET: false },
-                  { name: 'AGIX',  value: 2_000_000_000, isCET: false },
-                ]}
+                data={[...SCARCITY_CHART_ROWS]}
                 margin={{ top: 0, right: 0, left: -20, bottom: 0 }}
               >
-                <XAxis dataKey="name" tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                <YAxis scale="log" domain={['auto', 'auto']} tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} tickFormatter={formatSupplyAxis} />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fill: '#A6A9B6', fontSize: 11, fontFamily: 'monospace' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  scale="log"
+                  domain={['auto', 'auto']}
+                  tick={{ fill: '#A6A9B6', fontSize: 10, fontFamily: 'monospace' }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={formatSupplyAxis}
+                />
                 <Tooltip
                   content={(props) => (
                     <CompetitionBarTooltip
                       active={props.active}
                       payload={props.payload as readonly CompetitionBarTooltipPayload[] | undefined}
                       label={props.label}
-                      valueLabel="tokens supply"
+                      valueLabel={cs.tooltipSupplyUnit}
+                      numberLocale={numberLocale}
                     />
                   )}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                  {[
-                    { name: 'CET',   isCET: true  },
-                    { name: 'TAO',   isCET: false },
-                    { name: 'FET',   isCET: false },
-                    { name: 'OCEAN', isCET: false },
-                    { name: 'AGIX',  isCET: false },
-                  ].map((entry) => (
+                  {SCARCITY_CHART_ROWS.map((entry) => (
                     <Cell key={entry.name} fill={entry.isCET ? '#F2C94C' : 'rgba(255,255,255,0.15)'} />
                   ))}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
-            <p className="text-solaris-muted/60 text-[11px] mt-2 font-mono text-center">
-              9,000 CET vs 2,000,000,000 AGIX — scarcity is the ultimate store of value
-            </p>
+            <p className="text-solaris-muted/60 text-[11px] mt-2 font-mono text-center">{cs.chartScarcityCaption}</p>
           </div>
-
         </div>
-
       </div>
     </section>
   );

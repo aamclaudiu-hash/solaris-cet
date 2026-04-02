@@ -95,8 +95,8 @@ export function formatPrice(value: number | null | undefined): string {
 }
 
 /**
- * Truncates a blockchain address for display, e.g.:
- *   "EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB" → "EQB5…lfnB"
+ * Truncates a TON user-friendly address (EQ…, typically 48 characters) for display.
+ * Canonical pool/contract examples live in `@/lib/dedustUrls` and `@/lib/cetContract`.
  *
  * @param address - Full address string
  * @param chars   - Number of characters to keep on each side (default: 4)
@@ -104,8 +104,8 @@ export function formatPrice(value: number | null | undefined): string {
  *          address if it is too short to truncate.
  *
  * @example
- * truncateAddress("EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB") // "EQB5…lfnB"
- * truncateAddress("EQB5_hZPl4-EI1aWdLSd21c8T9PoKyZK2IJtrDFdPJIelfnB", 6) // "EQB5_h…IelfnB"
+ * truncateAddress("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") // "EQAA…AAAA"
+ * truncateAddress("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", 6) // "EQAAAA…AAAAAA"
  */
 export function truncateAddress(address: string, chars = 4): string {
   const n = Math.max(1, Math.floor(chars));

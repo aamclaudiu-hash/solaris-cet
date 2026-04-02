@@ -246,6 +246,40 @@ export interface Translations {
     btcSReference: string;
     cetCapLabel: string;
   };
+  /** Global competition matrix + charts (`CompetitionSection`). */
+  competitionSection: {
+    badge: string;
+    titleLead: string;
+    titleAccent: string;
+    introLead: string;
+    introEmphasis: string;
+    introTail: string;
+    tableFeature: string;
+    rowTotalSupply: string;
+    /** Throughput — wording reflects public claims, not live benchmarks. */
+    rowTps: string;
+    rowAgents: string;
+    rowMarginalCost: string;
+    rowRwa: string;
+    rowDualAi: string;
+    rowPowMining: string;
+    rowAuditKyc: string;
+    dataDisclaimer: string;
+    advScarcityTitle: string;
+    advScarcityBody: string;
+    advTonTitle: string;
+    advTonBody: string;
+    advDualAiTitle: string;
+    advDualAiBody: string;
+    advRwaTitle: string;
+    advRwaBody: string;
+    chartTpsLabel: string;
+    chartTpsCaption: string;
+    chartScarcityLabel: string;
+    chartScarcityCaption: string;
+    tooltipTpsUnit: string;
+    tooltipSupplyUnit: string;
+  };
   cetAi: {
     title: string;
     subtitle: string;
@@ -538,6 +572,44 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — AI-native RWA token (9,000 CET) on TON.\n\n- **~200,000 task-specialist agents** + **Grok × Gemini CET AI** (RAV) for structured, token-efficient answers\n- **90-year mining** · **BRAID** · **Quantum OS** entropy narrative · **DCBM** stability story\n- Q1 2026 milestones **complete** — Q2 2026 in progress\n\n**Handoff for other AI tools:** paste this block as context so your assistant needs fewer follow-up turns.\n\nAsk about *price, mining, AI, security*, or *roadmap*.',
       },
     },
+    competitionSection: {
+      badge: 'COMPETITIVE ANALYSIS',
+      titleLead: 'How Solaris CET Compares to',
+      titleAccent: 'AI Token Leaders',
+      introLead: 'FET, TAO, AGIX, OCEAN and ASI combined represent ',
+      introEmphasis: '$8B+ in market capitalisation',
+      introTail:
+        '. Below is why Solaris CET is structurally different — and superior — on every dimension that drives long-term value.',
+      tableFeature: 'Feature',
+      rowTotalSupply: 'Total Supply',
+      rowTps: 'TPS (claimed)',
+      rowAgents: 'Active Agents',
+      rowMarginalCost: 'Marginal Cost',
+      rowRwa: 'RWA Backing',
+      rowDualAi: 'Dual-AI',
+      rowPowMining: 'PoW Mining',
+      rowAuditKyc: 'Audit + KYC',
+      dataDisclaimer:
+        'Figures are illustrative and sourced from public whitepapers and official project documentation. Supply and throughput are approximate public claims — verify against each project’s own specifications.',
+      advScarcityTitle: 'Extreme Scarcity',
+      advScarcityBody:
+        '9,000 CET total — forever. FET has 1.15B tokens. AGIX has 2B. Scarcity is Solaris CET\'s permanent structural advantage.',
+      advTonTitle: 'Fastest Chain: TON',
+      advTonBody:
+        '100,000 TPS and 2-second finality. Fetch.ai, TAO, AGIX, and OCEAN run on chains with far lower headline throughput. Speed is not even close.',
+      advDualAiTitle: 'Only Dual-AI Protocol',
+      advDualAiBody:
+        'Grok (xAI) × Gemini (Google) — every agent action Reasons + Acts + Verifies with two independent frontier models. No competitor does this.',
+      advRwaTitle: 'Real-World Asset Backing',
+      advRwaBody:
+        'Each CET is anchored to actual agricultural and AI infrastructure in Cetățuia, Romania. Peers without RWA are purely digital exposure.',
+      chartTpsLabel: 'TRANSACTIONS PER SECOND (TPS)',
+      chartTpsCaption: 'TON headline throughput vs. typical public claims for legacy AI-token chains',
+      chartScarcityLabel: 'TOKEN SCARCITY (log scale — lower = rarer)',
+      chartScarcityCaption: '9,000 CET vs multi-billion supplies — scarcity is a structural store-of-value signal',
+      tooltipTpsUnit: 'TPS',
+      tooltipSupplyUnit: 'tokens (circulating / target supply)',
+    },
     faqContent: faqContentByLang.en,
   },
   es: {
@@ -794,6 +866,44 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — token RWA nativo de IA (9.000 CET) en TON.\n\n- **~200.000 agentes especializados en tareas** + **Oráculo Grok × Gemini** (RAV) para respuestas estructuradas y eficientes en tokens\n- **Minería 90 años** · **BRAID** · narrativa **Quantum OS** · historia **DCBM**\n- Hitos Q1 2026 **completados** — Q2 2026 en curso\n\n**Transferencia a otras herramientas de IA:** pega este bloque como contexto para que tu asistente necesite menos turnos de seguimiento.\n\nPregunta por *precio, minería, IA, seguridad* u *hoja de ruta*.',
       },
     },
+    competitionSection: {
+      badge: 'ANÁLISIS COMPETITIVO',
+      titleLead: 'Cómo se compara Solaris CET con los',
+      titleAccent: 'líderes en tokens de IA',
+      introLead: 'FET, TAO, AGIX, OCEAN y ASI suman juntos ',
+      introEmphasis: 'más de 8.000 M$ de capitalización',
+      introTail:
+        '. Aquí se muestra por qué Solaris CET es distinto — y superior — en cada dimensión que impulsa el valor a largo plazo.',
+      tableFeature: 'Característica',
+      rowTotalSupply: 'Oferta total',
+      rowTps: 'TPS (reclamado)',
+      rowAgents: 'Agentes activos',
+      rowMarginalCost: 'Coste marginal',
+      rowRwa: 'Respaldo RWA',
+      rowDualAi: 'Dual-IA',
+      rowPowMining: 'Minería PoW',
+      rowAuditKyc: 'Auditoría + KYC',
+      dataDisclaimer:
+        'Cifras ilustrativas basadas en libros blancos públicos y documentación oficial. La oferta y el throughput son aproximaciones — verifica las especificaciones de cada proyecto.',
+      advScarcityTitle: 'Escasez extrema',
+      advScarcityBody:
+        '9.000 CET en total — para siempre. FET tiene 1.150M de tokens. AGIX tiene 2.000M. La escasez es la ventaja estructural permanente de Solaris CET.',
+      advTonTitle: 'La cadena más rápida: TON',
+      advTonBody:
+        '100.000 TPS y finalidad en ~2 s. Fetch.ai, TAO, AGIX y OCEAN operan sobre cadenas con mucho menor rendimiento nominal. La diferencia de velocidad es abismal.',
+      advDualAiTitle: 'Único protocolo Dual-IA',
+      advDualAiBody:
+        'Grok (xAI) × Gemini (Google): cada acción del agente Razona + Actúa + Verifica con dos modelos de frontera independientes. Ningún competidor lo replica.',
+      advRwaTitle: 'Respaldado por activos reales',
+      advRwaBody:
+        'Cada CET está anclado a infraestructura agrícola y de IA real en Cetățuia, Rumanía. Los pares sin RWA son solo exposición digital.',
+      chartTpsLabel: 'TRANSACCIONES POR SEGUNDO (TPS)',
+      chartTpsCaption: 'Rendimiento nominal de TON frente a reclamaciones típicas de cadenas «AI-token» heredadas',
+      chartScarcityLabel: 'ESCASEZ DEL TOKEN (escala log — menor = más raro)',
+      chartScarcityCaption: '9.000 CET frente a miles de millones de suministro — la escasez es señal estructural de reserva de valor',
+      tooltipTpsUnit: 'TPS',
+      tooltipSupplyUnit: 'tokens (suministro en circulación / objetivo)',
+    },
     faqContent: faqContentByLang.es,
   },
   zh: {
@@ -1043,6 +1153,43 @@ const translations: Record<LangCode, Translations> = {
         team: '**Solaris CET — 约20万任务型智能体**，分布于10个企业部门（路由、检索、验证、仿真 — 概念网格）。\n\n| 部门 | 智能体数 | 主要职责 |\n|---|---|---|\n| 客户运营 | 48,000 | 支持、入职、留存 |\n| 工程 | 34,000 | DevOps、合约、协议研发 |\n| 销售 | 27,000 | 线索筛选、合作 |\n| 数据与 AI | 21,000 | 训练数据、分析、RAV 调优 |\n| 财务 | 18,000 | 财库、DCBM、FP&A |\n| 营销 | 17,000 | 增长、内容、社区 |\n| 产品 | 13,000 | UX、路线图 |\n| 安全 | 10,000 | 审计、威胁、KYC |\n| 法务 | 7,000 | 合规、RWA |\n| 研究 | 5,000 | Quantum OS、BRAID、ZK |\n\n为 **预言机压缩工作量**，使面向用户的回答更快、更省 token。\n\n**交接：** 将本部门概览粘贴到其他助手作为上下文，减少追问轮次。',
         default: '**Solaris CET** — TON 上的 AI 原生 RWA 代币（9,000 CET）。\n\n- **约20万任务型智能体** + **Grok × Gemini 预言机**（RAV），结构化、省 token 的回答\n- **90 年挖矿** · **BRAID** · **Quantum OS** 叙事 · **DCBM** 稳定机制\n- 2026 Q1 里程碑 **已完成** — Q2 进行中\n\n**交接给其他 AI 工具：** 将本段粘贴为上下文，可减少后续追问轮次。\n\n可问 *价格、挖矿、AI、安全* 或 *路线图*。',
       },
+    },
+    competitionSection: {
+      badge: '竞争分析',
+      titleLead: 'Solaris CET 与',
+      titleAccent: '全球 AI 代币龙头相比如何',
+      introLead: 'FET、TAO、AGIX、OCEAN 与 ASI 合计约 ',
+      introEmphasis: '超 80 亿美元市值',
+      introTail: '。下文说明 Solaris CET 在长期价值维度上的结构性差异与优势。',
+      tableFeature: '维度',
+      rowTotalSupply: '总供应量',
+      rowTps: 'TPS（公开宣称）',
+      rowAgents: '活跃智能体',
+      rowMarginalCost: '边际成本',
+      rowRwa: 'RWA 背书',
+      rowDualAi: '双模型 AI',
+      rowPowMining: 'PoW 挖矿',
+      rowAuditKyc: '审计 + KYC',
+      dataDisclaimer:
+        '数据为示意性质，来源于公开白皮书与官方文档。供应量与吞吐为近似公开口径 — 请以各项目官方规格为准。',
+      advScarcityTitle: '极致稀缺',
+      advScarcityBody:
+        'CET 总量 9,000 枚 — 永久不变。FET 约 11.5 亿枚，AGIX 约 20 亿枚。稀缺是 Solaris CET 的结构性优势。',
+      advTonTitle: '最快链：TON',
+      advTonBody:
+        '约 10 万 TPS 与约 2 秒最终性。Fetch.ai、TAO、AGIX、OCEAN 所在链的公开吞吐远低于 TON，速度差距悬殊。',
+      advDualAiTitle: '独有的双 AI 协议',
+      advDualAiBody:
+        'Grok（xAI）× Gemini（Google）：每个智能体动作经双前沿模型推理、执行与验证。竞品无同等双轨架构。',
+      advRwaTitle: '真实世界资产锚定',
+      advRwaBody:
+        '每枚 CET 锚定于罗马尼亚 Cetățuia 的真实农业与 AI 基础设施。无 RWA 的竞品仅为纯数字敞口。',
+      chartTpsLabel: '每秒交易数（TPS）',
+      chartTpsCaption: 'TON 名义吞吐与典型「AI 代币」公链公开数据对比',
+      chartScarcityLabel: '代币稀缺性（对数坐标 — 越低越稀缺）',
+      chartScarcityCaption: '9,000 CET 对比数十亿级供应 — 稀缺是长期价值储存信号',
+      tooltipTpsUnit: 'TPS',
+      tooltipSupplyUnit: '代币（流通量 / 目标供应）',
     },
     faqContent: faqContentByLang.zh,
   },
@@ -1300,6 +1447,44 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — AI-нативный RWA-токен (9 000 CET) на TON.\n\n- **~200 000 агентов задач** + **Оракул Grok × Gemini** (RAV) для структурированных ответов\n- **90 лет майнинга** · **BRAID** · **Quantum OS** · **DCBM**\n- Вехи Q1 2026 **выполнены** — Q2 2026 в работе\n\n**Передача другим ИИ-инструментам:** вставьте этот блок как контекст — меньше уточняющих запросов.\n\nСпросите о *цене, майнинге, ИИ, безопасности* или *дорожной карте*.',
       },
     },
+    competitionSection: {
+      badge: 'КОНКУРЕНТНЫЙ АНАЛИЗ',
+      titleLead: 'Как Solaris CET соотносится с',
+      titleAccent: 'лидерами AI-токенов',
+      introLead: 'Совокупно FET, TAO, AGIX, OCEAN и ASI — около ',
+      introEmphasis: '$8B+ рыночной капитализации',
+      introTail:
+        '. Ниже — почему Solaris CET структурно отличается и сильнее по ключевым измерениям долгосрочной ценности.',
+      tableFeature: 'Параметр',
+      rowTotalSupply: 'Эмиссия',
+      rowTps: 'TPS (заявлено)',
+      rowAgents: 'Активные агенты',
+      rowMarginalCost: 'Предельная стоимость',
+      rowRwa: 'RWA-привязка',
+      rowDualAi: 'Dual-AI',
+      rowPowMining: 'PoW-майнинг',
+      rowAuditKyc: 'Аудит + KYC',
+      dataDisclaimer:
+        'Иллюстративные данные из публичных white paper и официальной документации. Эмиссия и пропускная способность — приблизительные заявления; сверяйтесь со спецификациями проектов.',
+      advScarcityTitle: 'Экстремальный дефицит',
+      advScarcityBody:
+        'Всего 9 000 CET — навсегда. У FET ~1,15 млрд токенов, у AGIX ~2 млрд. Дефицит — постоянное структурное преимущество Solaris CET.',
+      advTonTitle: 'Самая быстрая сеть: TON',
+      advTonBody:
+        'До 100 000 TPS и финальность ~2 с. Fetch.ai, TAO, AGIX и OCEAN работают на сетях с гораздо более низкими заявленными показателями.',
+      advDualAiTitle: 'Единственный Dual-AI протокол',
+      advDualAiBody:
+        'Grok (xAI) × Gemini (Google): каждое действие агента — Reason + Act + Verify на двух независимых моделях. У конкурентов такого нет.',
+      advRwaTitle: 'Привязка к реальным активам',
+      advRwaBody:
+        'Каждый CET привязан к реальной агро- и AI-инфраструктуре в Cetățuia, Румыния. Без RWA остаётся только цифровая спекуляция.',
+      chartTpsLabel: 'ТРАНЗАКЦИЙ В СЕКУНДУ (TPS)',
+      chartTpsCaption: 'Заявленная пропускная способность TON против типичных публичных цифр «legacy» AI-токен сетей',
+      chartScarcityLabel: 'ДЕФИЦИТ ТОКЕНА (лог. шкала — меньше = реже)',
+      chartScarcityCaption: '9 000 CET против миллиардной эмиссии — дефицит как сигнал хранения стоимости',
+      tooltipTpsUnit: 'TPS',
+      tooltipSupplyUnit: 'токенов (оборот / целевая эмиссия)',
+    },
     faqContent: faqContentByLang.ru,
   },
   ro: {
@@ -1555,6 +1740,44 @@ const translations: Record<LangCode, Translations> = {
         team: '**Solaris CET — ~200.000 agenți specializați pe taskuri** în 10 departamente enterprise (rutare, recuperare, validare, simulare — plasă conceptuală).\n\n| Departament | Agenți | Roluri cheie |\n|---|---|---|\n| Operațiuni clienți | 48.000 | Suport, onboarding, retenție |\n| Inginerie | 34.000 | DevOps, contracte, R&D protocol |\n| Vânzări | 27.000 | Calificare lead-uri, parteneriate |\n| Date & AI | 21.000 | Date antrenament, analitică, tuning RAV |\n| Finanțe | 18.000 | Trezorerie, DCBM, FP&A |\n| Marketing | 17.000 | Creștere, conținut, comunitate |\n| Produs | 13.000 | UX, foaie de parcurs |\n| Securitate | 10.000 | Audit, amenințări, KYC |\n| Juridic | 7.000 | Conformitate, RWA |\n| Cercetare | 5.000 | Quantum OS, BRAID, ZK |\n\n**Comprimă munca pentru Oracol** astfel încât răspunsurile rămân rapide și eficiente la tokeni.\n\n**Handoff:** Lipește acest rezumat pe departamente în alt asistent ca context pentru mai puține tururi de clarificare.',
         default: '**Solaris CET** — token RWA nativ-AI (9.000 CET) pe TON.\n\n- **~200.000 agenți de tasking** + **Oracol Grok × Gemini** (RAV) pentru răspunsuri structurate, eficiente la tokeni\n- **Minare 90 ani** · **BRAID** · narațiune **Quantum OS** · poveste **DCBM**\n- Repere Q1 2026 **finalizate** — Q2 2026 în desfășurare\n\n**Pentru alte unelte AI:** lipește acest bloc ca context ca asistentul tău să aibă nevoie de mai puține runde de clarificare.\n\nÎntreabă despre *preț, minare, AI, securitate* sau *foaie de parcurs*.',
       },
+    },
+    competitionSection: {
+      badge: 'ANALIZĂ COMPETITIVĂ',
+      titleLead: 'Cum se compară Solaris CET cu',
+      titleAccent: 'liderii de tokenuri AI',
+      introLead: 'FET, TAO, AGIX, OCEAN și ASI însumează peste ',
+      introEmphasis: '8 miliarde USD capitalizare',
+      introTail:
+        '. Mai jos: de ce Solaris CET este structural diferit — și superior — pe dimensiunile care susțin valoarea pe termen lung.',
+      tableFeature: 'Criteriu',
+      rowTotalSupply: 'Ofertă totală',
+      rowTps: 'TPS (declarat)',
+      rowAgents: 'Agenți activi',
+      rowMarginalCost: 'Cost marginal',
+      rowRwa: 'Sprijin RWA',
+      rowDualAi: 'Dual-AI',
+      rowPowMining: 'Minerit PoW',
+      rowAuditKyc: 'Audit + KYC',
+      dataDisclaimer:
+        'Date ilustrative din whitepaper-uri publice și documentație oficială. Oferta și throughput-ul sunt revendicări aproximative — verifică specificațiile fiecărui proiect.',
+      advScarcityTitle: 'Scăzămie extremă',
+      advScarcityBody:
+        '9.000 CET în total — pentru totdeauna. FET are 1,15 mld tokeni. AGIX are 2 mld. Scăzămia este avantajul structural permanent al Solaris CET.',
+      advTonTitle: 'Cel mai rapid lanț: TON',
+      advTonBody:
+        '100.000 TPS și finalitate ~2 s. Fetch.ai, TAO, AGIX și OCEAN rulează pe lanțuri cu mult mai puțin throughput declarat.',
+      advDualAiTitle: 'Singurul protocol Dual-AI',
+      advDualAiBody:
+        'Grok (xAI) × Gemini (Google): fiecare acțiune de agent Raționează + Acționează + Verifică cu două modele de frontieră. Niciun rival nu face asta.',
+      advRwaTitle: 'Ancorare în active reale',
+      advRwaBody:
+        'Fiecare CET este ancorat în infrastructură agricolă și AI reală la Cetățuia, România. Fără RWA rămâi doar la expunere digitală.',
+      chartTpsLabel: 'TRANZACȚII PE SECUNDĂ (TPS)',
+      chartTpsCaption: 'Throughput nominal TON vs. revendicări tipice pentru lanțuri «AI-token» mai vechi',
+      chartScarcityLabel: 'SCĂZĂMIE TOKEN (scală log — mai jos = mai rar)',
+      chartScarcityCaption: '9.000 CET față de miliarde de supply — scăzămia ca semnal de stocare a valorii',
+      tooltipTpsUnit: 'TPS',
+      tooltipSupplyUnit: 'tokeni (circulant / țintă emisie)',
     },
     faqContent: faqContentByLang.ro,
   },
@@ -1812,6 +2035,44 @@ const translations: Record<LangCode, Translations> = {
         default: '**Solaris CET** — token RWA nativo de IA (9.000 CET) na TON.\n\n- **~200.000 agentes de tarefa** + **Oráculo Grok × Gemini** (RAV) para respostas estruturadas e eficientes em tokens\n- **Mineração 90 anos** · **BRAID** · narrativa **Quantum OS** · história **DCBM**\n- Marcos Q1 2026 **concluídos** — Q2 2026 em curso\n\n**Handoff para outras ferramentas de IA:** cole este bloco como contexto para seu assistente precisar de menos voltas de esclarecimento.\n\nPergunte sobre *preço, mineração, IA, segurança* ou *roteiro*.',
       },
     },
+    competitionSection: {
+      badge: 'ANÁLISE COMPETITIVA',
+      titleLead: 'Como a Solaris CET se compara aos',
+      titleAccent: 'líderes em tokens de IA',
+      introLead: 'FET, TAO, AGIX, OCEAN e ASI somam mais de ',
+      introEmphasis: 'US$ 8B em capitalização',
+      introTail:
+        '. A seguir: por que a Solaris CET é estruturalmente diferente — e superior — em cada dimensão que sustenta valor de longo prazo.',
+      tableFeature: 'Critério',
+      rowTotalSupply: 'Oferta total',
+      rowTps: 'TPS (declarado)',
+      rowAgents: 'Agentes ativos',
+      rowMarginalCost: 'Custo marginal',
+      rowRwa: 'Lastro RWA',
+      rowDualAi: 'Dual-IA',
+      rowPowMining: 'Mineração PoW',
+      rowAuditKyc: 'Auditoria + KYC',
+      dataDisclaimer:
+        'Valores ilustrativos de whitepapers públicos e documentação oficial. Oferta e throughput são aproximações — confira as especificações de cada projeto.',
+      advScarcityTitle: 'Escassez extrema',
+      advScarcityBody:
+        '9.000 CET no total — para sempre. FET tem 1,15B de tokens. AGIX tem 2B. A escassez é a vantagem estrutural permanente da Solaris CET.',
+      advTonTitle: 'Cadeia mais rápida: TON',
+      advTonBody:
+        '100.000 TPS e finalidade ~2 s. Fetch.ai, TAO, AGIX e OCEAN operam em cadeias com muito menor throughput nominal.',
+      advDualAiTitle: 'Único protocolo Dual-IA',
+      advDualAiBody:
+        'Grok (xAI) × Gemini (Google): cada ação do agente Raciocina + Age + Verifica com dois modelos de fronteira. Nenhum concorrente replica.',
+      advRwaTitle: 'Lastro em ativos reais',
+      advRwaBody:
+        'Cada CET está ancorado em infraestrutura agrícola e de IA real em Cetățuia, Roménia. Pares sem RWA são só exposição digital.',
+      chartTpsLabel: 'TRANSAÇÕES POR SEGUNDO (TPS)',
+      chartTpsCaption: 'Throughput nominal da TON vs. valores públicos típicos de cadeias «AI-token» legadas',
+      chartScarcityLabel: 'ESCASSEZ DO TOKEN (escala log — menor = mais raro)',
+      chartScarcityCaption: '9.000 CET frente a bilhões de oferta — escassez como sinal de reserva de valor',
+      tooltipTpsUnit: 'TPS',
+      tooltipSupplyUnit: 'tokens (circulante / oferta-alvo)',
+    },
     faqContent: faqContentByLang.pt,
   },
   de: {
@@ -2067,6 +2328,44 @@ const translations: Record<LangCode, Translations> = {
         team: '**Solaris CET — ~200.000 aufgaben-spezialisierte Agenten** in 10 Unternehmensbereichen (Routing, Retrieval, Validierung, Simulation — konzeptuelles Mesh).\n\n| Abteilung | Agenten | Kernrollen |\n|---|---|---|\n| Kundenbetrieb | 48.000 | Support, Onboarding, Retention |\n| Engineering | 34.000 | DevOps, Contracts, Protokoll-F&E |\n| Vertrieb | 27.000 | Lead-Qualifizierung, Partnerschaften |\n| Daten & KI | 21.000 | Trainingsdaten, Analytics, RAV-Tuning |\n| Finanzen | 18.000 | Treasury, DCBM, FP&A |\n| Marketing | 17.000 | Wachstum, Content, Community |\n| Produkt | 13.000 | UX, Fahrplan |\n| Sicherheit | 10.000 | Audit, Bedrohungen, KYC |\n| Legal | 7.000 | Compliance, RWA |\n| Forschung | 5.000 | Quantum OS, BRAID, ZK |\n\nSie **komprimieren Arbeit fürs Orakel**, damit Nutzerantworten schnell und token-effizient bleiben.\n\n**Übergabe:** Diese Abteilungsübersicht in einen anderen Assistenten als Kontext einfügen — weniger Nachfragen.',
         default: '**Solaris CET** — KI-natives RWA-Token (9.000 CET) auf TON.\n\n- **~200.000 Task-Agenten** + **Grok × Gemini-Orakel** (RAV) für strukturierte, token-effiziente Antworten\n- **90 Jahre Mining** · **BRAID** · **Quantum-OS**-Erzählung · **DCBM**-Stabilität\n- Q1-2026-Meilensteine **abgeschlossen** — Q2 2026 aktiv\n\n**Übergabe an andere KI-Tools:** diesen Block als Kontext einfügen — weniger Nachfrage-Runden.\n\nFrage nach *Preis, Mining, KI, Sicherheit* oder *Fahrplan*.',
       },
+    },
+    competitionSection: {
+      badge: 'WETTBEWERBSANALYSE',
+      titleLead: 'So positioniert sich Solaris CET gegen',
+      titleAccent: 'führende KI-Token',
+      introLead: 'FET, TAO, AGIX, OCEAN und ASI ergeben zusammen über ',
+      introEmphasis: '8 Mrd. USD Marktkapitalisierung',
+      introTail:
+        '. Unten: warum Solaris CET strukturell anders — und überlegen — ist in jeder Dimension langfristiger Wertschöpfung.',
+      tableFeature: 'Merkmal',
+      rowTotalSupply: 'Gesamtangebot',
+      rowTps: 'TPS (offiziell angegeben)',
+      rowAgents: 'Aktive Agenten',
+      rowMarginalCost: 'Grenzkosten',
+      rowRwa: 'RWA-Verknüpfung',
+      rowDualAi: 'Dual-KI',
+      rowPowMining: 'PoW-Mining',
+      rowAuditKyc: 'Audit + KYC',
+      dataDisclaimer:
+        'Illustrative Zahlen aus öffentlichen Whitepapers und offizieller Dokumentation. Angebot und Durchsatz sind Näherungswerte — jeweilige Projektspezifikationen prüfen.',
+      advScarcityTitle: 'Extreme Knappheit',
+      advScarcityBody:
+        '9.000 CET insgesamt — für immer. FET: 1,15 Mrd. Tokens. AGIX: 2 Mrd. Knappheit ist Solaris CETs dauerhafter struktureller Vorteil.',
+      advTonTitle: 'Schnellste Chain: TON',
+      advTonBody:
+        '100.000 TPS und ~2 s Finalität. Fetch.ai, TAO, AGIX und OCEAN laufen auf Chains mit deutlich niedrigerer bekannter Kapazität.',
+      advDualAiTitle: 'Einziges Dual-KI-Protokoll',
+      advDualAiBody:
+        'Grok (xAI) × Gemini (Google): jede Agentenaktion mit zwei unabhängigen Frontier-Modellen — Reason, Act, Verify. Kein Wettbewerber bietet das.',
+      advRwaTitle: 'Realwelt-Asset-Verankerung',
+      advRwaBody:
+        'Jedes CET ist an reale Agrar- und KI-Infrastruktur in Cetățuia, Rumänien, gebunden. Ohne RWA bleibt nur digitale Spekulation.',
+      chartTpsLabel: 'TRANSAKTIONEN PRO SEKUNDE (TPS)',
+      chartTpsCaption: 'TON-Nenndurchsatz vs. typische öffentliche Angaben älterer AI-Token-Chains',
+      chartScarcityLabel: 'TOKEN-KNAPPHEIT (log. Skala — niedriger = seltener)',
+      chartScarcityCaption: '9.000 CET gegen Milliardenangebot — Knappheit als Struktursignal für Wertaufbewahrung',
+      tooltipTpsUnit: 'TPS',
+      tooltipSupplyUnit: 'Tokens (Umlauf / Zielangebot)',
     },
     faqContent: faqContentByLang.de,
   },
