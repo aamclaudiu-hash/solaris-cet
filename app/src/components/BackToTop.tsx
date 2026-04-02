@@ -5,7 +5,8 @@ import { SolarisLogoMark } from './SolarisLogoMark';
 
 /**
  * BackToTop — floating control after 600px scroll; uses Solaris mark on a dark inset for contrast on gold.
- * Below `xl`, sit above `MobileConversionDock` (z-900): same vertical band as `main` pb + safe-area + gap — avoids overlap with the dock.
+ * Below `xl`, sit above `MobileConversionDock` (z-900): `--back-to-top-bottom` in `index.css`
+ * (derived from `--mobile-conversion-dock-reserve`, same as `main` padding-bottom).
  */
 const BackToTop = () => {
   const { t } = useLanguage();
@@ -25,7 +26,7 @@ const BackToTop = () => {
       aria-hidden={!visible}
       className={`
         fixed right-6 z-[999]
-        bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px)+1rem)] xl:bottom-6
+        bottom-[var(--back-to-top-bottom)] xl:bottom-6
         w-12 h-12 rounded-full
         bg-gradient-to-br from-solaris-gold to-amber-500
         text-solaris-dark

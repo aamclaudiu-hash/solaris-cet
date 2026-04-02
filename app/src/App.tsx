@@ -258,7 +258,7 @@ function AppContent() {
         {/* Main content — conversion flow: Hero → Problem → Solution → Tokenomics → RWA → Roadmap → Footer */}
         <main
           id="main-content"
-          className="relative w-full overflow-x-clip pb-[5.75rem] xl:pb-0"
+          className="relative w-full overflow-x-clip pb-[var(--mobile-conversion-dock-reserve)] xl:pb-0"
         >
           {/* 1. Hero — Atenție */}
           <section

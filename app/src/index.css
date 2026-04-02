@@ -56,6 +56,12 @@
     --solaris-card: rgba(255, 255, 255, 0.05);
     --solaris-text: rgba(255, 255, 255, 0.9);
     --solaris-muted: #a6a9b6;
+
+    /* MobileConversionDock: must match `main` padding-bottom (< xl) and BackToTop offset. */
+    --mobile-conversion-dock-reserve: 5.75rem;
+    --back-to-top-bottom: calc(
+      var(--mobile-conversion-dock-reserve) + env(safe-area-inset-bottom, 0px) + 1rem
+    );
   }
 }
 
