@@ -21,47 +21,23 @@ const QUESTION_KEYS = [
 ] as const;
 
 describe('FAQSection — data integrity', () => {
-  it('has 14 FAQ question keys', () => {
+  it('en FAQ: 14 questions, shape, uniqueness, spot-checks, CTA labels', () => {
     expect(QUESTION_KEYS).toHaveLength(14);
-  });
+    const texts = QUESTION_KEYS.map((qk) => en[qk]);
+    for (let i = 0; i < QUESTION_KEYS.length; i++) {
+      const q = texts[i];
+      const qk = QUESTION_KEYS[i];
+      expect(typeof q, qk).toBe('string');
+      expect(q.length, qk).toBeGreaterThan(10);
+      expect(q.endsWith('?'), qk).toBe(true);
+    }
+    expect(new Set(texts).size).toBe(QUESTION_KEYS.length);
 
-  it('all questions are non-empty strings', () => {
-    QUESTION_KEYS.forEach((qk) => {
-      const q = en[qk];
-      expect(typeof q).toBe('string');
-      expect(q.length).toBeGreaterThan(10);
-    });
-  });
-
-  it('all questions end with a question mark', () => {
-    QUESTION_KEYS.forEach((qk) => {
-      expect(en[qk].endsWith('?')).toBe(true);
-    });
-  });
-
-  it('questions are unique', () => {
-    const questions = QUESTION_KEYS.map((qk) => en[qk]);
-    const unique = new Set(questions);
-    expect(unique.size).toBe(QUESTION_KEYS.length);
-  });
-
-  it('competition comparison question exists (q11)', () => {
     expect(en.q11.toLowerCase()).toMatch(/fetch|bittensor|singularity/);
-  });
-
-  it('BRAID Framework question exists (q12)', () => {
     expect(en.q12).toContain('BRAID');
-  });
-
-  it('RAV Protocol question exists (q13)', () => {
     expect(en.q13).toContain('RAV');
-  });
-
-  it('Zero-Battery Constraint question exists (q14)', () => {
     expect(en.q14).toContain('Zero-Battery');
-  });
 
-  it('link labels for FAQ CTAs are present', () => {
     expect(en.linkWhitepaper.length).toBeGreaterThan(3);
     expect(en.linkTelegram.length).toBeGreaterThan(3);
     expect(en.linkGithub.length).toBeGreaterThan(3);
@@ -76,23 +52,10 @@ describe('FAQSection — accordion state logic', () => {
     return openIndex === i ? null : i;
   }
 
-  it('opens an item when none is open', () => {
+  it('toggle: open, close, switch, last index', () => {
     expect(toggleFaq(null, 0)).toBe(0);
-  });
-
-  it('closes an item when the same item is toggled', () => {
     expect(toggleFaq(2, 2)).toBeNull();
-  });
-
-  it('switches to a different item', () => {
     expect(toggleFaq(1, 3)).toBe(3);
-  });
-
-  it('first item can be opened', () => {
-    expect(toggleFaq(null, 0)).toBe(0);
-  });
-
-  it('last item index is 13 (0-based)', () => {
     expect(toggleFaq(null, 13)).toBe(13);
   });
 });

@@ -208,6 +208,9 @@ const MiningCalculatorSection = () => {
           <p className="text-solaris-muted text-base lg:text-lg max-w-xl">
             Estimate your daily yield based on device type, hashrate, and staking multiplier.
           </p>
+          <p className="mt-2 text-xs text-solaris-muted/85 max-w-xl leading-relaxed">
+            {t.miningCalculator.estimateDisclaimer}
+          </p>
         </div>
 
         {/* Calculator Grid */}

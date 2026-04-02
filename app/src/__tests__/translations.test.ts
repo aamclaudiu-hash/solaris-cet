@@ -32,267 +32,183 @@ function getValueByPath(obj: Record<string, unknown>, path: string): unknown {
     );
 }
 
+/** Keys that may contain `**` and are rendered with `renderSimpleBold` in hero / authority sections. */
+const HERO_BOLD_KEYS: Array<keyof Translations["hero"]> = [
+  "tagline",
+  "subtitle",
+  "buyNow",
+  "learnMore",
+  "description",
+  "startMining",
+  "docs",
+  "miningStartAria",
+  "miningProcessingAria",
+  "miningSuccessAria",
+  "liveTickerAria",
+  "nextStepsLabel",
+  "nextStepBuy",
+  "nextStepTokenomics",
+  "nextStepHowToBuy",
+  "miningTelegramHint",
+];
+
+const AUTHORITY_TRUST_BOLD_KEYS: Array<keyof Translations["authorityTrust"]> = [
+  "kicker",
+  "title",
+  "subtitle",
+  "pillar1Title",
+  "pillar1Body",
+  "pillar2Title",
+  "pillar2Body",
+  "pillar3Title",
+  "pillar3Body",
+  "pillar4Title",
+  "pillar4Body",
+];
+
+const BOLD_SCOPES = [
+  { scope: "hero" as const, keys: HERO_BOLD_KEYS },
+  { scope: "authorityTrust" as const, keys: AUTHORITY_TRUST_BOLD_KEYS },
+] as const;
+
+const NAV_EXPECTED_KEYS: Array<keyof Translations["nav"]> = [
+  "home",
+  "cetApp",
+  "tokenomics",
+  "roadmap",
+  "team",
+  "howToBuy",
+  "whitepaper",
+  "resources",
+  "faq",
+  "competition",
+  "buyOnDedust",
+  "sheetDescription",
+  "openMenu",
+  "primaryNavigation",
+  "opensInNewWindow",
+];
+
+const FOOTER_NAV_EXPECTED_KEYS: Array<keyof Translations["footerNav"]> = [
+  "privacy",
+  "terms",
+  "contact",
+  "authorityTrust",
+  "sovereignNoJs",
+  "github",
+];
+
+const TOKENOMICS_EXPECTED_KEYS: Array<keyof Translations["tokenomics"]> = [
+  "title",
+  "supply",
+  "poolAddress",
+  "subtitle",
+  "fixedSupply",
+  "ravProtocol",
+  "ravStack",
+  "btcSReference",
+  "cetCapLabel",
+];
+
 const referenceLang: LangCode = "en";
 const referenceKeys = collectKeys(
   translations[referenceLang] as unknown as Record<string, unknown>
 );
 
 describe("translations — language coverage", () => {
-  it("SUPPORTED_LANGS covers every translation in the translations map", () => {
+  it("translation map ↔ SUPPORTED_LANGS (same set)", () => {
     const translationKeys = Object.keys(translations) as LangCode[];
-    for (const lang of translationKeys) {
-      expect(SUPPORTED_LANGS).toContain(lang);
-    }
-  });
-
-  it("every supported language has an entry in the translations map", () => {
-    for (const lang of SUPPORTED_LANGS) {
-      expect(translations).toHaveProperty(lang);
-    }
+    expect(new Set(translationKeys)).toEqual(new Set(SUPPORTED_LANGS));
   });
 });
 
 describe("translations — key completeness", () => {
-  for (const lang of SUPPORTED_LANGS) {
-    describe(`language: ${lang}`, () => {
-      const entry = translations[lang] as unknown as Record<string, unknown>;
-
-      it(`has all ${referenceKeys.length} keys from the reference (${referenceLang}) translation`, () => {
-        const missing: string[] = [];
-        for (const key of referenceKeys) {
-          if (getValueByPath(entry, key) === undefined) missing.push(key);
-        }
-        expect(missing).toEqual([]);
-      });
-
-      it("has no null or undefined values", () => {
-        const nullish: string[] = [];
-        for (const key of referenceKeys) {
-          const value = getValueByPath(entry, key);
-          if (value === undefined || value === null) nullish.push(key);
-        }
-        expect(nullish).toEqual([]);
-      });
-
-      it("has no empty string values", () => {
-        const empty: string[] = [];
-        for (const key of referenceKeys) {
-          const value = getValueByPath(entry, key);
-          if (typeof value === "string" && value.trim() === "") empty.push(key);
-        }
-        expect(empty).toEqual([]);
-      });
-
-      it("all values are strings (or string arrays for chip lists)", () => {
-        for (const key of referenceKeys) {
-          const value = getValueByPath(entry, key);
-          if (Array.isArray(value)) {
-            expect(
-              value.every((v) => typeof v === "string" && v.trim().length > 0),
-              `'${lang}.${key}' should be a non-empty string[]`
-            ).toBe(true);
-          } else {
-            expect(typeof value, `'${lang}.${key}' should be a string`).toBe("string");
-          }
-        }
-      });
-    });
-  }
-});
-
-describe("translations — key symmetry", () => {
-  it("every language contains exactly the same keys as English", () => {
-    const enKeys = collectKeys(
+  it("every language matches English (key set + value shape)", () => {
+    const enKeysSorted = collectKeys(
       translations.en as unknown as Record<string, unknown>
     ).sort();
 
     for (const lang of SUPPORTED_LANGS) {
-      const langKeys = collectKeys(
-        translations[lang] as unknown as Record<string, unknown>
-      ).sort();
-      expect(langKeys, `${lang} keys do not match English keys`).toEqual(enKeys);
+      const entry = translations[lang] as unknown as Record<string, unknown>;
+      expect(collectKeys(entry).sort(), `${lang} keys`).toEqual(enKeysSorted);
+
+      const nullish: string[] = [];
+      const empty: string[] = [];
+      const badType: string[] = [];
+
+      for (const key of referenceKeys) {
+        const value = getValueByPath(entry, key);
+        if (value === undefined || value === null) {
+          nullish.push(key);
+        } else if (Array.isArray(value)) {
+          if (
+            !value.every(
+              (v) => typeof v === "string" && v.trim().length > 0,
+            )
+          ) {
+            badType.push(key);
+          }
+        } else if (typeof value === "string") {
+          if (value.trim() === "") empty.push(key);
+        } else {
+          badType.push(key);
+        }
+      }
+
+      expect(
+        { lang, nullish, empty, badType },
+        `${lang}: nullish / empty / badType`,
+      ).toEqual({
+        lang,
+        nullish: [],
+        empty: [],
+        badType: [],
+      });
     }
   });
 });
 
 describe("translations — specific content", () => {
-  it("English tagline references Cetățuia", () => {
+  it("English tagline + all locales (copy, sections, mining disclaimer)", () => {
     expect(translations.en.hero.tagline).toContain("Cetățuia");
-  });
 
-  it("buy button text is non-empty for all languages", () => {
     for (const lang of SUPPORTED_LANGS) {
-      expect(translations[lang].hero.buyNow.trim().length).toBeGreaterThan(0);
-    }
-  });
-
-  it("nav section has all expected keys for every language", () => {
-    const expectedNavKeys: Array<keyof Translations["nav"]> = [
-      "home",
-      "cetApp",
-      "tokenomics",
-      "roadmap",
-      "team",
-      "howToBuy",
-      "whitepaper",
-      "resources",
-      "faq",
-      "competition",
-      "buyOnDedust",
-      "sheetDescription",
-      "openMenu",
-      "primaryNavigation",
-      "opensInNewWindow",
-    ];
-    for (const lang of SUPPORTED_LANGS) {
-      for (const key of expectedNavKeys) {
-        expect(
-          translations[lang].nav[key],
-          `${lang}.nav.${key} missing`
-        ).toBeTruthy();
+      const t = translations[lang];
+      expect(t.hero.buyNow.trim().length).toBeGreaterThan(0);
+      expect(t.nav.competition.trim().length).toBeGreaterThan(0);
+      expect(t.miningCalculator.estimateDisclaimer.trim().length).toBeGreaterThan(
+        0,
+      );
+      for (const key of NAV_EXPECTED_KEYS) {
+        expect(t.nav[key], `${lang}.nav.${String(key)}`).toBeTruthy();
       }
-    }
-  });
-
-  it("nav.competition is a non-empty string for every language (Navigation + Footer labels)", () => {
-    for (const lang of SUPPORTED_LANGS) {
-      const label = translations[lang].nav.competition;
-      expect(typeof label, `${lang}.nav.competition type`).toBe("string");
-      expect(label.trim().length, `${lang}.nav.competition empty`).toBeGreaterThan(0);
-    }
-  });
-
-  it("hero section has all expected keys for every language", () => {
-    const expectedHeroKeys: Array<keyof Translations["hero"]> = [
-      "tagline",
-      "subtitle",
-      "buyNow",
-      "learnMore",
-      "description",
-      "startMining",
-      "docs",
-      "miningStartAria",
-      "miningProcessingAria",
-      "miningSuccessAria",
-      "liveTickerAria",
-      "nextStepsLabel",
-      "nextStepBuy",
-      "nextStepTokenomics",
-      "nextStepHowToBuy",
-      "miningTelegramHint",
-    ];
-    for (const lang of SUPPORTED_LANGS) {
-      for (const key of expectedHeroKeys) {
-        expect(
-          translations[lang].hero[key],
-          `${lang}.hero.${key} missing`
-        ).toBeTruthy();
+      for (const key of HERO_BOLD_KEYS) {
+        expect(t.hero[key], `${lang}.hero.${String(key)}`).toBeTruthy();
       }
-    }
-  });
-
-  it("footerNav has all expected keys for every language", () => {
-    const expectedFooterNavKeys: Array<keyof Translations["footerNav"]> = [
-      "privacy",
-      "terms",
-      "contact",
-      "authorityTrust",
-      "sovereignNoJs",
-      "github",
-    ];
-    for (const lang of SUPPORTED_LANGS) {
-      for (const key of expectedFooterNavKeys) {
-        expect(
-          translations[lang].footerNav[key],
-          `${lang}.footerNav.${key} missing`
-        ).toBeTruthy();
+      for (const key of FOOTER_NAV_EXPECTED_KEYS) {
+        expect(t.footerNav[key], `${lang}.footerNav.${String(key)}`).toBeTruthy();
       }
-    }
-  });
-
-  it("tokenomics section has all expected keys for every language", () => {
-    const expectedTokenomicsKeys: Array<keyof Translations["tokenomics"]> = [
-      "title",
-      "supply",
-      "poolAddress",
-      "subtitle",
-      "fixedSupply",
-      "ravProtocol",
-      "ravStack",
-      "btcSReference",
-      "cetCapLabel",
-    ];
-    for (const lang of SUPPORTED_LANGS) {
-      for (const key of expectedTokenomicsKeys) {
-        expect(
-          translations[lang].tokenomics[key],
-          `${lang}.tokenomics.${key} missing`
-        ).toBeTruthy();
+      for (const key of TOKENOMICS_EXPECTED_KEYS) {
+        expect(t.tokenomics[key], `${lang}.tokenomics.${String(key)}`).toBeTruthy();
       }
     }
   });
 });
 
-describe("translations — hero ** markers (balanced for renderSimpleBold)", () => {
-  const heroStringKeys: Array<keyof Translations["hero"]> = [
-    "tagline",
-    "subtitle",
-    "buyNow",
-    "learnMore",
-    "description",
-    "startMining",
-    "docs",
-    "miningStartAria",
-    "miningProcessingAria",
-    "miningSuccessAria",
-    "liveTickerAria",
-    "nextStepsLabel",
-    "nextStepBuy",
-    "nextStepTokenomics",
-    "nextStepHowToBuy",
-    "miningTelegramHint",
-  ];
-
-  for (const lang of SUPPORTED_LANGS) {
-    it(`${lang}: all hero strings have balanced ** delimiters`, () => {
-      const h = translations[lang].hero;
-      for (const key of heroStringKeys) {
-        const value = h[key];
-        expect(
-          hasBalancedSimpleBoldMarkers(value),
-          `${lang}.hero.${key}: ${JSON.stringify(value.slice(0, 80))}…`
-        ).toBe(true);
+describe("translations — balanced ** (hero + authorityTrust)", () => {
+  it("all languages", () => {
+    for (const lang of SUPPORTED_LANGS) {
+      const t = translations[lang];
+      for (const { scope, keys } of BOLD_SCOPES) {
+        const block = t[scope] as Record<string, string>;
+        for (const key of keys) {
+          const value = block[key];
+          expect(
+            hasBalancedSimpleBoldMarkers(value),
+            `${lang}.${scope}.${String(key)}: ${JSON.stringify(value.slice(0, 72))}…`,
+          ).toBe(true);
+        }
       }
-    });
-  }
-});
-
-describe("translations — authorityTrust ** markers (balanced for renderSimpleBold)", () => {
-  /** All copy in this block may use `**bold**`; pillar bodies use `renderSimpleBold` in UI. */
-  const authorityTrustKeys: Array<keyof Translations["authorityTrust"]> = [
-    "kicker",
-    "title",
-    "subtitle",
-    "pillar1Title",
-    "pillar1Body",
-    "pillar2Title",
-    "pillar2Body",
-    "pillar3Title",
-    "pillar3Body",
-    "pillar4Title",
-    "pillar4Body",
-  ];
-
-  for (const lang of SUPPORTED_LANGS) {
-    it(`${lang}: all authorityTrust strings have balanced ** delimiters`, () => {
-      const at = translations[lang].authorityTrust;
-      for (const key of authorityTrustKeys) {
-        const value = at[key];
-        expect(
-          hasBalancedSimpleBoldMarkers(value),
-          `${lang}.authorityTrust.${key}: ${JSON.stringify(value.slice(0, 80))}…`
-        ).toBe(true);
-      }
-    });
-  }
+    }
+  });
 });

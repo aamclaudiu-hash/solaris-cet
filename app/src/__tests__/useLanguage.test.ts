@@ -32,14 +32,9 @@ function detectLanguage(
 // ── SUPPORTED_LANGS ───────────────────────────────────────────────────────────
 
 describe("SUPPORTED_LANGS", () => {
-  it("includes English", () => expect(SUPPORTED_LANGS).toContain("en"));
-  it("includes Spanish", () => expect(SUPPORTED_LANGS).toContain("es"));
-  it("includes Chinese", () => expect(SUPPORTED_LANGS).toContain("zh"));
-  it("includes Russian", () => expect(SUPPORTED_LANGS).toContain("ru"));
-  it("includes Romanian", () => expect(SUPPORTED_LANGS).toContain("ro"));
-  it("includes Portuguese", () => expect(SUPPORTED_LANGS).toContain("pt"));
-  it("includes German", () => expect(SUPPORTED_LANGS).toContain("de"));
-  it("has exactly 7 entries", () => expect(SUPPORTED_LANGS).toHaveLength(7));
+  it("is the fixed ordered set of locales", () => {
+    expect(SUPPORTED_LANGS).toEqual(["en", "es", "zh", "ru", "ro", "pt", "de"]);
+  });
 });
 
 // ── detectLanguage ────────────────────────────────────────────────────────────
@@ -74,20 +69,9 @@ describe("detectLanguage", () => {
 // ── translations object ───────────────────────────────────────────────────────
 
 describe("translations", () => {
-  it("has an entry for every supported language", () => {
-    for (const lang of SUPPORTED_LANGS) {
-      expect(translations).toHaveProperty(lang);
-    }
-  });
-
-  it("every locale has a non-empty nav.home string", () => {
+  it("every locale has non-empty nav.home and hero.tagline", () => {
     for (const lang of SUPPORTED_LANGS) {
       expect(translations[lang].nav.home.length).toBeGreaterThan(0);
-    }
-  });
-
-  it("every locale has a non-empty hero.tagline string", () => {
-    for (const lang of SUPPORTED_LANGS) {
       expect(translations[lang].hero.tagline.length).toBeGreaterThan(0);
     }
   });
@@ -100,16 +84,11 @@ describe("translations", () => {
     expect(translations.en.hero.buyNow).toBe("Buy CET");
   });
 
-  it("all locales define the same nav keys as English", () => {
+  it("all locales define the same nav and hero keys as English", () => {
     const enNavKeys = Object.keys(translations.en.nav).sort();
-    for (const lang of SUPPORTED_LANGS) {
-      expect(Object.keys(translations[lang].nav).sort()).toEqual(enNavKeys);
-    }
-  });
-
-  it("all locales define the same hero keys as English", () => {
     const enHeroKeys = Object.keys(translations.en.hero).sort();
     for (const lang of SUPPORTED_LANGS) {
+      expect(Object.keys(translations[lang].nav).sort()).toEqual(enNavKeys);
       expect(Object.keys(translations[lang].hero).sort()).toEqual(enHeroKeys);
     }
   });

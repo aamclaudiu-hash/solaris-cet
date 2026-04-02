@@ -16,8 +16,9 @@ import { standardSkillBurst, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
 
 /**
- * Primary in-page destinations — flat IA (Compare links FAQ’s global matrix + `#competition`).
- * Each `key` must exist on `Translations['nav']` (incl. `competition`); see `translations.test.ts`.
+ * Primary in-page destinations — flat IA, **7 items** (workspace target 5–7).
+ * Global comparison `#competition` is linked from the footer + FAQ, not duplicated here.
+ * Each `key` must exist on `Translations['nav']`; see `translations.test.ts`.
  */
 const NAV_HREFS = [
   { key: 'cetApp',      href: '#nova-app'    },
@@ -26,7 +27,6 @@ const NAV_HREFS = [
   { key: 'team',        href: '#team'        },
   { key: 'howToBuy',    href: '#how-to-buy'  },
   { key: 'resources',   href: '#resources'   },
-  { key: 'competition', href: '#competition' },
   { key: 'faq',         href: '#faq'         },
 ] as const;
 

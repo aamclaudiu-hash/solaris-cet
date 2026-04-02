@@ -215,6 +215,10 @@ export interface Translations {
     /** Mining rewards continue in the official Telegram bot; hero CTA is on-site flow only. */
     miningTelegramHint: string;
   };
+  /** Mining calculator (`MiningCalculatorSection`) — illustrative UI only. */
+  miningCalculator: {
+    estimateDisclaimer: string;
+  };
   /** Four trust pillars — glass bento (authority, chain, geography, transparency). */
   authorityTrust: {
     kicker: string;
@@ -487,6 +491,10 @@ const translations: Record<LangCode, Translations> = {
       nextStepHowToBuy: 'How to buy',
       miningTelegramHint:
         'Mining runs in the official Solaris CET Telegram bot — this button only starts the on-site flow.',
+    },
+    miningCalculator: {
+      estimateDisclaimer:
+        'Illustrative estimates only — not financial advice. Actual rewards follow protocol rules and official channels.',
     },
     authorityTrust: {
       kicker: 'TRUST ARCHITECTURE',
@@ -788,6 +796,10 @@ const translations: Record<LangCode, Translations> = {
       miningTelegramHint:
         'La minería continúa en el bot oficial de Telegram de Solaris CET — este botón solo inicia el flujo en la web.',
     },
+    miningCalculator: {
+      estimateDisclaimer:
+        'Cifras ilustrativas — no es asesoramiento financiero. Las recompensas reales siguen el protocolo y los canales oficiales.',
+    },
     authorityTrust: {
       kicker: 'ARQUITECTURA DE CONFIANZA',
       title: 'Pruebas verificables — no ruido de marketing',
@@ -1086,6 +1098,9 @@ const translations: Record<LangCode, Translations> = {
       miningTelegramHint:
         '日常挖矿在官方 Solaris CET Telegram 机器人中进行；本按钮仅启动站内流程。',
     },
+    miningCalculator: {
+      estimateDisclaimer: '演示估算，不构成投资建议。实际收益以协议规则与官方渠道为准。',
+    },
     authorityTrust: {
       kicker: '信任架构',
       title: '可验证的证明 — 非空洞宣传',
@@ -1380,6 +1395,10 @@ const translations: Record<LangCode, Translations> = {
       nextStepHowToBuy: 'Как купить',
       miningTelegramHint:
         'Майнинг ведётся в официальном Telegram-боте Solaris CET — кнопка здесь только запускает сценарий на сайте.',
+    },
+    miningCalculator: {
+      estimateDisclaimer:
+        'Оценки носят иллюстративный характер — не финансовая рекомендация. Фактические награды по правилам протокола и официальным каналам.',
     },
     authorityTrust: {
       kicker: 'АРХИТЕКТУРА ДОВЕРИЯ',
@@ -1681,6 +1700,10 @@ const translations: Record<LangCode, Translations> = {
       miningTelegramHint:
         'Minarea continuă în botul oficial Telegram Solaris CET — acest buton pornește doar fluxul pe site.',
     },
+    miningCalculator: {
+      estimateDisclaimer:
+        'Estimări ilustrative — nu reprezintă sfaturi financiare. Recompensele reale urmează regulile protocolului și canalele oficiale.',
+    },
     authorityTrust: {
       kicker: 'ARHITECTURĂ DE ÎNCREDERE',
       title: 'Dovezi pe care le poți verifica — nu doar marketing',
@@ -1981,6 +2004,10 @@ const translations: Record<LangCode, Translations> = {
       miningTelegramHint:
         'A mineração continua no bot oficial do Telegram Solaris CET — este botão só inicia o fluxo no site.',
     },
+    miningCalculator: {
+      estimateDisclaimer:
+        'Estimativas ilustrativas — não são aconselhamento financeiro. Recompensas reais seguem o protocolo e canais oficiais.',
+    },
     authorityTrust: {
       kicker: 'ARQUITETURA DE CONFIANÇA',
       title: 'Provas que pode verificar — não só marketing',
@@ -2280,6 +2307,10 @@ const translations: Record<LangCode, Translations> = {
       nextStepHowToBuy: 'So kaufst du',
       miningTelegramHint:
         'Mining läuft im offiziellen Solaris-CET-Telegram-Bot — hier starten Sie nur den Ablauf auf der Website.',
+    },
+    miningCalculator: {
+      estimateDisclaimer:
+        'Nur veranschaulichende Schätzungen — keine Finanzberatung. Echte Rewards folgen Protokollregeln und offiziellen Kanälen.',
     },
     authorityTrust: {
       kicker: 'VERTRAUENSARCHITEKTUR',

@@ -10,13 +10,12 @@ const NAV_HREFS = [
   { key: 'team',        href: '#team'        },
   { key: 'howToBuy',    href: '#how-to-buy'  },
   { key: 'resources',   href: '#resources'   },
-  { key: 'competition', href: '#competition' },
   { key: 'faq',         href: '#faq'         },
 ] as const;
 
 describe('Navigation — NAV_HREFS integrity', () => {
-  it('has 8 primary nav items incl. global comparison (flat IA)', () => {
-    expect(NAV_HREFS).toHaveLength(8);
+  it('has 7 primary nav items (workspace target 5–7; #competition via footer + FAQ)', () => {
+    expect(NAV_HREFS).toHaveLength(7);
   });
 
   it('all hrefs start with #', () => {
@@ -40,8 +39,8 @@ describe('Navigation — NAV_HREFS integrity', () => {
     expect(item?.href).toBe('#how-to-buy');
   });
 
-  it('competition link exists and points to #competition', () => {
-    expect(NAV_HREFS.find((i) => i.key === 'competition')?.href).toBe('#competition');
+  it('competition is not a primary nav item (reduces header cognitive load)', () => {
+    expect(NAV_HREFS.map(i => String(i.key))).not.toContain('competition');
   });
 
   it('faq is last nav item', () => {

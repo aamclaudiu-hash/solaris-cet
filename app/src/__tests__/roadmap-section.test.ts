@@ -79,73 +79,43 @@ const PHASES: Phase[] = [
 ];
 
 describe('RoadmapSection — phases integrity', () => {
-  it('has 7 phases total', () => {
+  it('structure, uniqueness, status ordering, milestone spot-checks', () => {
     expect(PHASES).toHaveLength(7);
-  });
-
-  it('all phase IDs are unique', () => {
     const ids = PHASES.map(p => p.id);
     expect(new Set(ids).size).toBe(ids.length);
-  });
-
-  it('all phase titles are unique', () => {
     const titles = PHASES.map(p => p.title);
     expect(new Set(titles).size).toBe(titles.length);
-  });
 
-  it('each phase has 4 milestones', () => {
-    PHASES.forEach(p => expect(p.milestones).toHaveLength(4));
-  });
-
-  it('all milestone texts are non-empty', () => {
-    PHASES.forEach(p =>
-      p.milestones.forEach(m => expect(m.text.length).toBeGreaterThan(5))
-    );
-  });
-
-  it('statuses are only done/active/upcoming', () => {
     const valid: PhaseStatus[] = ['done', 'active', 'upcoming'];
-    PHASES.forEach(p => expect(valid).toContain(p.status));
-  });
+    PHASES.forEach(p => {
+      expect(p.milestones).toHaveLength(4);
+      p.milestones.forEach(m => expect(m.text.length).toBeGreaterThan(5));
+      expect(valid).toContain(p.status);
+    });
 
-  it('exactly one phase is active', () => {
     const active = PHASES.filter(p => p.status === 'active');
     expect(active).toHaveLength(1);
-  });
+    expect(active[0]?.id).toBe('q2-2026');
 
-  it('the active phase is Q2 2026', () => {
-    const active = PHASES.find(p => p.status === 'active');
-    expect(active?.id).toBe('q2-2026');
-  });
-
-  it('exactly one phase is upcoming', () => {
     const upcoming = PHASES.filter(p => p.status === 'upcoming');
     expect(upcoming).toHaveLength(1);
-  });
 
-  it('done phases precede active which precedes upcoming', () => {
     const statusOrder = PHASES.map(p => p.status);
-    const lastDone  = statusOrder.lastIndexOf('done');
+    const lastDone = statusOrder.lastIndexOf('done');
     const firstActive = statusOrder.indexOf('active');
     const firstUpcoming = statusOrder.indexOf('upcoming');
     expect(lastDone).toBeLessThan(firstActive);
     expect(firstActive).toBeLessThan(firstUpcoming);
-  });
 
-  it('Foundation phase includes Cyberscope audit', () => {
     const foundation = PHASES.find(p => p.title === 'Foundation')!;
-    const hasCyberscope = foundation.milestones.some(m =>
+    expect(foundation.milestones.some(m =>
       m.text.toLowerCase().includes('cyberscope')
-    );
-    expect(hasCyberscope).toBe(true);
-  });
+    )).toBe(true);
 
-  it('Transcend phase includes AI-to-AI execution', () => {
     const transcend = PHASES.find(p => p.title === 'Transcend')!;
-    const hasAiToAi = transcend.milestones.some(m =>
+    expect(transcend.milestones.some(m =>
       m.text.toLowerCase().includes('ai-to-ai')
-    );
-    expect(hasAiToAi).toBe(true);
+    )).toBe(true);
   });
 });
 
@@ -158,16 +128,10 @@ describe('RoadmapSection — progress calculation', () => {
     return Math.round(((done + active * 0.5) / phases.length) * 100);
   }
 
-  it('progress is > 70% (5 done + 1 active of 7)', () => {
-    expect(calcProgress(PHASES)).toBeGreaterThan(70);
-  });
-
-  it('progress is < 100% (upcoming phase exists)', () => {
-    expect(calcProgress(PHASES)).toBeLessThan(100);
-  });
-
-  it('progress formula: (done + 0.5*active) / total', () => {
-    // 5 done + 0.5 * 1 active = 5.5 / 7 ≈ 78.57 → 79
-    expect(calcProgress(PHASES)).toBe(79);
+  it('formula (5 done + 0.5 active) / 7 → 79%, within (70, 100)', () => {
+    const p = calcProgress(PHASES);
+    expect(p).toBe(79);
+    expect(p).toBeGreaterThan(70);
+    expect(p).toBeLessThan(100);
   });
 });
