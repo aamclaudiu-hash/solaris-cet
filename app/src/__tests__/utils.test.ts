@@ -40,20 +40,10 @@ describe("cn (class name utility)", () => {
 // formatUsd
 // ---------------------------------------------------------------------------
 describe("formatUsd", () => {
-  it("returns '—' for null", () => {
-    expect(formatUsd(null)).toBe("—");
-  });
-
-  it("returns '—' for undefined", () => {
-    expect(formatUsd(undefined)).toBe("—");
-  });
-
-  it("returns '—' for NaN", () => {
-    expect(formatUsd(NaN)).toBe("—");
-  });
-
-  it("returns '—' for Infinity", () => {
-    expect(formatUsd(Infinity)).toBe("—");
+  it("returns '—' for null, undefined, NaN, Infinity", () => {
+    for (const v of [null, undefined, NaN, Infinity] as const) {
+      expect(formatUsd(v)).toBe("—");
+    }
   });
 
   it("formats millions with M suffix", () => {
@@ -84,16 +74,10 @@ describe("formatUsd", () => {
 // formatPrice
 // ---------------------------------------------------------------------------
 describe("formatPrice", () => {
-  it("returns '—' for null", () => {
-    expect(formatPrice(null)).toBe("—");
-  });
-
-  it("returns '—' for undefined", () => {
-    expect(formatPrice(undefined)).toBe("—");
-  });
-
-  it("returns '—' for NaN", () => {
-    expect(formatPrice(NaN)).toBe("—");
+  it("returns '—' for null, undefined, NaN", () => {
+    for (const v of [null, undefined, NaN] as const) {
+      expect(formatPrice(v)).toBe("—");
+    }
   });
 
   it("uses exponential notation for values < 0.001", () => {
