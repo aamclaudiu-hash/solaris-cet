@@ -38,6 +38,13 @@
       "description": "Ask Solaris CET AI (Grok × Gemini RAV)",
       "url": "/#cet-ai",
       "icons": [{ "src": "/hero-coin.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Compare vs AI tokens",
+      "short_name": "Compare",
+      "description": "Global competitive matrix (CET vs FET, TAO, AGIX, …)",
+      "url": "/#competition",
+      "icons": [{ "src": "/hero-coin.png", "sizes": "96x96" }]
     }
   ]
 }

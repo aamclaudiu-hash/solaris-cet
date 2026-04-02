@@ -11,7 +11,7 @@
     <meta name="keywords" content="Solaris CET, TON blockchain, RWA token, real world asset, DeDust, RAV protocol, Grok, Gemini, dual AI, agricultural AI, Cetățuia, 2026 Agentic Era, AI corporate structure, AI team, AI agents, autonomous agents" />
     <meta name="robots" content="index, follow" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <!-- Keep content in sync with app/layout.tsx → metadata.verification.google -->
+    <!-- Replace with real token from Google Search Console (set via Coolify / host inject if needed). -->
     <meta name="google-site-verification" content="YOUR_GOOGLE_SITE_VERIFICATION_CODE" />
     <meta name="author" content="Solaris CET Team" />
     <meta name="copyright" content="Copyright (c) 2025–2026 Solaris CET Team" />
@@ -29,6 +29,13 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ro_RO" />
+    <meta property="og:locale:alternate" content="de_DE" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:locale:alternate" content="pt_PT" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:image:alt" content="Solaris CET — 9,000 CET fixed supply on TON, RWA anchored in Cetățuia" />
 
     <!-- Resource hints for critical third-party endpoints used at runtime -->
     <link rel="preconnect" href="https://telegram.org" crossorigin />
@@ -36,6 +43,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@SolarisCET" />
+    <meta name="twitter:creator" content="@SolarisCET" />
     <meta name="twitter:url" content="https://solaris-cet.com/" />
     <meta name="twitter:title" content="Solaris CET — RWA Token on TON Blockchain" />
     <meta name="twitter:description" content="200,000 autonomous AI agents on TON. 9,000 CET fixed supply. The world's first AI-native RWA token — Grok × Gemini dual-AI RAV Protocol." />
@@ -96,6 +105,38 @@
       "copyrightYear": "2025",
       "keywords": "Solaris CET, TON blockchain, RWA token, real world asset, DeDust, RAV protocol, Grok, Gemini, dual AI",
       "codeRepository": "https://github.com/Solaris-CET/solaris-cet"
+    }
+    </script>
+
+    <!-- Organization + WebSite — brand entity parity with major AI / RWA projects -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://solaris-cet.com/#organization",
+          "name": "Solaris CET",
+          "url": "https://solaris-cet.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://solaris-cet.com/icon-512.png"
+          },
+          "sameAs": [
+            "https://github.com/Solaris-CET/solaris-cet",
+            "https://twitter.com/SolarisCET",
+            "https://t.me/SolarisCET"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://solaris-cet.com/#website",
+          "url": "https://solaris-cet.com/",
+          "name": "Solaris CET",
+          "publisher": { "@id": "https://solaris-cet.com/#organization" },
+          "inLanguage": ["en", "ro", "de", "es", "pt", "ru", "zh"]
+        }
+      ]
     }
     </script>
 

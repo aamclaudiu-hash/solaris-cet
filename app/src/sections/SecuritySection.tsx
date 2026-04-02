@@ -32,6 +32,9 @@ const auditBadges = [
     label: 'Freshcoins Verified',
     description: 'Project verification and due diligence',
     color: 'cyan',
+    link: 'https://www.freshcoins.io/',
+    linkLabel: 'Freshcoins ↗',
+    linkColor: 'text-solaris-cyan',
   },
   {
     icon: UserCheck,
@@ -47,6 +50,9 @@ const auditBadges = [
     label: 'Open Source',
     description: 'Fully transparent codebase',
     color: 'purple',
+    link: 'https://github.com/Solaris-CET/solaris-cet',
+    linkLabel: 'GitHub repository ↗',
+    linkColor: 'text-purple-400',
   },
 ];
 

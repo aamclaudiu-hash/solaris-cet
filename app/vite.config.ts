@@ -134,6 +134,16 @@ export default defineConfig({
             short_name: 'Mine CET',
             url: 'https://t.me/+tKlfzx7IWopmNWQ0',
           },
+          {
+            name: 'How to buy CET',
+            short_name: 'Buy guide',
+            url: '/#how-to-buy',
+          },
+          {
+            name: 'Compare vs AI tokens',
+            short_name: 'Compare',
+            url: '/#competition',
+          },
         ],
       },
       workbox: {

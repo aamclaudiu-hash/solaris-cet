@@ -1,0 +1,7 @@
+# Solaris CET — security disclosures (RFC 9116)
+# Replace or extend Contact when a dedicated security email is published.
+
+Contact: https://t.me/SolarisCET
+Preferred-Languages: en, ro
+Canonical: https://solaris-cet.com/.well-known/security.txt
+Policy: https://github.com/Solaris-CET/solaris-cet/blob/main/LICENSE

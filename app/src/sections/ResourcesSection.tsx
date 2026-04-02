@@ -2,6 +2,13 @@ import { useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { BarChart2, BookOpen, Brain, Globe, ExternalLink } from 'lucide-react';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
+import {
+  COINGECKO_SEARCH_CET_URL,
+  COINMARKETCAP_SEARCH_CET_URL,
+  TONVIEWER_CET_URL,
+  DEXSCREENER_CET_SEARCH_URL,
+  TONSCAN_CET_CONTRACT_URL,
+} from '@/lib/cetContract';
 import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
 
 interface Resource {
@@ -31,14 +38,16 @@ const categories: ResourceCategory[] = [
     resources: [
       {
         name: 'CoinGecko',
-        description: 'Live price charts, market cap, volume, and on-chain analytics for CET and the broader TON ecosystem.',
-        href: 'https://www.coingecko.com',
+        description:
+          'Search “Solaris CET” on CoinGecko for listings, charts, and volume — the same flow serious traders use for any new TON jetton.',
+        href: COINGECKO_SEARCH_CET_URL,
         tag: 'coingecko.com',
       },
       {
         name: 'CoinMarketCap',
-        description: 'Trusted global aggregator for token rankings, supply data, and the CoinMarketCap Learn academy.',
-        href: 'https://coinmarketcap.com',
+        description:
+          'CMC search for Solaris CET — rankings, supply context, and cross-exchange visibility when the asset is tracked.',
+        href: COINMARKETCAP_SEARCH_CET_URL,
         tag: 'coinmarketcap.com',
       },
       {
@@ -46,6 +55,13 @@ const categories: ResourceCategory[] = [
         description: 'The native TON decentralised exchange where CET trades. Swap TON → CET directly in your Tonkeeper wallet.',
         href: 'https://dedust.io',
         tag: 'dedust.io',
+      },
+      {
+        name: 'DEX Screener',
+        description:
+          'Search by CET contract address to surface TON pool charts and liquidity depth alongside other DEX aggregators.',
+        href: DEXSCREENER_CET_SEARCH_URL,
+        tag: 'dexscreener.com',
       },
     ],
   },
@@ -71,8 +87,15 @@ const categories: ResourceCategory[] = [
       {
         name: 'Tonscan Explorer',
         description: 'Real-time TON block explorer. Verify CET transactions, inspect contract state, and audit the DeDust pool on-chain.',
-        href: 'https://tonscan.org',
+        href: TONSCAN_CET_CONTRACT_URL,
         tag: 'tonscan.org',
+      },
+      {
+        name: 'Tonviewer',
+        description:
+          'Wallet-style TON explorer for the CET jetton — messages, holders, and transfers in a layout many mobile wallets deep-link to.',
+        href: TONVIEWER_CET_URL,
+        tag: 'tonviewer.com',
       },
     ],
   },
@@ -256,12 +279,13 @@ const ResourcesSection = () => {
         </div>
 
         {/* Quick Links bar */}
-        <div className="bento-card p-4 mb-10 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="bento-card p-4 mb-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {[
             { label: 'Buy CET', href: DEDUST_SWAP_URL, color: 'text-solaris-gold' },
             { label: 'Whitepaper', href: 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a', color: 'text-solaris-cyan' },
             { label: 'GitHub', href: 'https://github.com/Solaris-CET/solaris-cet', color: 'text-solaris-text' },
             { label: 'Telegram', href: 'https://t.me/SolarisCET', color: 'text-[#2AABEE]' },
+            { label: 'CET contract', href: TONSCAN_CET_CONTRACT_URL, color: 'text-emerald-400' },
           ].map(({ label, href, color }) => (
             <a
               key={label}
