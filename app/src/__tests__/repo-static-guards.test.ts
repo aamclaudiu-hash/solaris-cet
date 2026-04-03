@@ -122,12 +122,11 @@ describe("PWA manifest.json — icon paths resolve on disk", () => {
 });
 
 describe("TON Connect manifest — brand icon URL", () => {
-  it("iconUrl references shipped brand logo raster (basename)", () => {
+  it("iconUrl matches production brand logo absolute URL", () => {
     const raw = readFileSync(join(appPublic, "tonconnect-manifest.json"), "utf8");
-    const j = JSON.parse(raw) as { iconUrl?: string };
-    expect(j.iconUrl).toMatch(
-      new RegExp(`${SOLARIS_CET_LOGO_FILENAME.replace(/\./g, "\\.")}$`),
-    );
+    const j = JSON.parse(raw) as { iconUrl?: string; url?: string };
+    expect(j.iconUrl).toBe(productionBrandLogoUrl());
+    expect(j.url).toBe(`${PRODUCTION_SITE_ORIGIN}/`);
   });
 });
 

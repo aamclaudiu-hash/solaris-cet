@@ -509,7 +509,7 @@ function AppContent() {
 
 function App() {
   return (
-    <TonConnectUIProvider manifestUrl="https://solaris-cet.com/tonconnect-manifest.json">
+    <TonConnectUIProvider manifestUrl={`${PRODUCTION_SITE_ORIGIN}/tonconnect-manifest.json`}>
       <AppContent />
       <Analytics />
     </TonConnectUIProvider>
