@@ -1366,6 +1366,7 @@ export default function CetAiSearch() {
                             {chatHistory.length > 0 ? (
                               <button
                                 type="button"
+                                data-testid="cet-ai-copy-transcript"
                                 title={t.cetAi.copyTranscriptTitle}
                                 aria-label={t.cetAi.copyTranscriptAria}
                                 onClick={() => {
@@ -1602,6 +1603,7 @@ export default function CetAiSearch() {
               <div className="flex-grow relative">
                 <textarea
                   ref={modalInputRef}
+                  data-testid="cet-ai-modal-query"
                   value={query}
                   maxLength={CET_AI_MAX_QUERY_CHARS}
                   onChange={e => setQuery(e.target.value.slice(0, CET_AI_MAX_QUERY_CHARS))}
