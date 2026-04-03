@@ -71,6 +71,24 @@ test.describe('Solaris CET AI widget — desktop', () => {
     await expect(page.getByTestId('cet-ai-query-char-count')).toHaveText(`3/${CET_AI_MAX_QUERY_CHARS}`);
   });
 
+  test('modal follow-up shows character count when typing (offline)', async ({ page }) => {
+    await page.route('**/api/chat', (route) => route.abort('failed'));
+    const heroWidget = page
+      .locator('div.max-w-5xl')
+      .filter({ has: page.getByRole('heading', { name: /Solaris CET AI/i }) })
+      .first();
+    await heroWidget.scrollIntoViewIfNeeded();
+    const chip = heroWidget.getByRole('button', { name: /What is the RAV Protocol/i });
+    await chip.evaluate((el) =>
+      (el as HTMLElement).scrollIntoView({ block: 'center', inline: 'nearest' }),
+    );
+    await chip.evaluate((btn) => (btn as HTMLButtonElement).click());
+    await expect(page.getByTestId('cet-ai-modal-dialog')).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/No live API on this host/i)).toBeVisible({ timeout: 20_000 });
+    await page.getByTestId('cet-ai-modal-query').fill('x');
+    await expect(page.getByTestId('cet-ai-query-char-count')).toHaveText(`1/${CET_AI_MAX_QUERY_CHARS}`);
+  });
+
   test('Opening modal from a suggested chip shows dialog', async ({ page }) => {
     const heroWidget = page
       .locator('div.max-w-5xl')

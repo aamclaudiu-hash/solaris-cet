@@ -52,7 +52,7 @@ npm run dev          # Start dev server at http://localhost:5173
 npm run build        # Production build → app/dist/
 npm run preview      # Preview production build locally
 npm run lint         # Run ESLint
-npm run typecheck    # TypeScript (app + vite/api configs), same as CI
+npm run typecheck    # TypeScript: app, Vite/Node configs, Playwright specs (`tsconfig.e2e.json`), same as CI
 ```
 
 ---

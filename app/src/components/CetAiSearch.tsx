@@ -30,6 +30,7 @@ import {
 } from '@/lib/cetAiTelemetry';
 import { TONSCAN_CET_CONTRACT_URL } from '@/lib/cetContract';
 import { CET_AI_MAX_QUERY_CHARS } from '@/lib/cetAiConstants';
+import { cetAiQueryCharCountToneClass } from '@/lib/cetAiQueryUi';
 import {
   buildCopyForAiText,
   buildFullConversationHandoff,
@@ -211,11 +212,6 @@ function liveApiHttpHintForStatus(
   return null;
 }
 
-/** Tabular length / max (no i18n — digits universal). Amber when within 200 chars of cap. */
-function cetAiQueryCharCountClass(length: number, max: number): string {
-  return length >= max - 200 ? 'text-amber-400/90' : 'text-gray-600';
-}
-
 function CetAiQueryCharCountLine({
   id,
   length,
@@ -230,7 +226,7 @@ function CetAiQueryCharCountLine({
     <p
       id={id}
       data-testid="cet-ai-query-char-count"
-      className={`mt-1 text-right text-[10px] font-mono tabular-nums ${cetAiQueryCharCountClass(length, max)}`}
+      className={`mt-1 text-right text-[10px] font-mono tabular-nums ${cetAiQueryCharCountToneClass(length, max)}`}
     >
       {length}/{max}
     </p>

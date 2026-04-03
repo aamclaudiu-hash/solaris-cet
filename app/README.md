@@ -9,10 +9,10 @@ Run these from the **`app/`** directory (from the repo root: `cd app`). If your 
 ```bash
 npm ci
 npm run dev          # http://localhost:5173
-npm run typecheck    # same idea as CI (no emit)
+npm run typecheck    # `tsconfig.app` + `tsconfig.node` + `tsconfig.e2e` (Playwright specs), same as CI
 npm run lint
 npm run test         # Vitest
-npm run test:e2e     # Playwright (same as CI; needs `dist/` + preview, or use `webServer` in config)
+npm run test:e2e     # Playwright — run `npm run build` first (CI downloads `dist/`; local `verify:full` builds then previews)
 npm run build        # tsc -b + vite build
 npm run verify       # lint + typecheck + test + build (quick gate before push)
 npm run verify:full  # verify + Playwright E2E (full local check)
