@@ -62,13 +62,17 @@ function AppContent() {
     }
 
     const timer = setTimeout(() => {
+      // Let clicks reach the page as soon as the exit animation starts: the overlay
+      // stays visually on top while fading but must not intercept pointer events, and
+      // `main` must not stay `inert` until the tween finishes (felt like dead buttons).
+      loadingEl.style.pointerEvents = 'none';
+      setIsLoaded(true);
       gsap.to(loadingEl, {
         opacity: 0,
         duration: 0.75,
         ease: 'power3.out',
         onComplete: () => {
           loadingEl.style.display = 'none';
-          setIsLoaded(true);
         },
       });
     }, LOADING_DURATION_MS);
