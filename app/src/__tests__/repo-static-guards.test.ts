@@ -54,6 +54,14 @@ describe("Brand raster — SolarisLogoMark source of truth", () => {
   });
 });
 
+describe("index.html — critical image preloads for LCP", () => {
+  it("preloads Solaris brand raster and hero coin", () => {
+    const appIndexHtml = readFileSync(join(repoRoot, "app/index.html"), "utf8");
+    expect(appIndexHtml).toMatch(/rel="preload"[^>]+solaris-cet-logo\.jpg/s);
+    expect(appIndexHtml).toMatch(/rel="preload"[^>]+hero-coin\.png/s);
+  });
+});
+
 describe("OMEGA invariants", () => {
   it("sovereign: no scripts, no forbidden CDNs; canonical CET/TON/Cetățuia copy", () => {
     const sovereignHtml = readFileSync(join(repoRoot, "static/sovereign/index.html"), "utf8");
