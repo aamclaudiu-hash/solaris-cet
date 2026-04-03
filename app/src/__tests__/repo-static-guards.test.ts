@@ -9,6 +9,7 @@ import {
   productionBrandLogoUrl,
   productionOgImageUrl,
   productionSiteUrl,
+  productionTonConnectIconUrl,
 } from "@/lib/brandAssets";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -81,6 +82,17 @@ describe("Social preview — og-image raster", () => {
   });
 });
 
+describe("index.html — canonical production site URL", () => {
+  it("og:url, twitter:url, canonical link, and JSON-LD url fields use productionSiteUrl()", () => {
+    const appIndexHtml = readFileSync(join(repoRoot, "app/index.html"), "utf8");
+    const site = productionSiteUrl();
+    expect(appIndexHtml).toContain(`property="og:url" content="${site}"`);
+    expect(appIndexHtml).toContain(`name="twitter:url" content="${site}"`);
+    expect(appIndexHtml).toContain(`rel="canonical" href="${site}"`);
+    expect(appIndexHtml).toContain(`"url": "${site}"`);
+  });
+});
+
 describe("index.html — critical image preloads for LCP", () => {
   it("preloads Solaris brand raster and hero coin", () => {
     const appIndexHtml = readFileSync(join(repoRoot, "app/index.html"), "utf8");
@@ -128,10 +140,11 @@ describe("PWA manifest.json — icon paths resolve on disk", () => {
 });
 
 describe("TON Connect manifest — brand icon URL", () => {
-  it("iconUrl matches production brand logo absolute URL", () => {
+  it("iconUrl uses square icon-192.png (not portrait lockup); url matches productionSiteUrl", () => {
     const raw = readFileSync(join(appPublic, "tonconnect-manifest.json"), "utf8");
     const j = JSON.parse(raw) as { iconUrl?: string; url?: string };
-    expect(j.iconUrl).toBe(productionBrandLogoUrl());
+    expect(j.iconUrl).toBe(productionTonConnectIconUrl());
+    expect(j.iconUrl).not.toBe(productionBrandLogoUrl());
     expect(j.url).toBe(productionSiteUrl());
   });
 });
