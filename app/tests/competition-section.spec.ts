@@ -1,24 +1,5 @@
-import { test, expect, type Page } from '@playwright/test';
-
-async function waitForAppReady(page: Page) {
-  await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 4000 }).catch(() => {});
-}
-
-/**
- * `CompetitionSection` sits behind `LazyLoadWrapper` (near-screen gate). Scroll until the chunk mounts.
- */
-async function ensureCompetitionSectionAttached(page: Page) {
-  await expect
-    .poll(
-      async () => {
-        if ((await page.locator('#competition').count()) > 0) return true;
-        await page.evaluate(() => window.scrollBy(0, 700));
-        return false;
-      },
-      { timeout: 35_000, intervals: [100, 200, 300, 400] },
-    )
-    .toBe(true);
-}
+import { test, expect } from '@playwright/test';
+import { waitForAppReady, scrollUntilSelectorAttached } from './e2e-helpers';
 
 test.describe('Competition section', () => {
   test.setTimeout(60_000);
@@ -29,7 +10,7 @@ test.describe('Competition section', () => {
   });
 
   test('matrix and Recharts mount after scrolling to #competition', async ({ page }) => {
-    await ensureCompetitionSectionAttached(page);
+    await scrollUntilSelectorAttached(page, '#competition');
     const section = page.locator('#competition');
     await section.scrollIntoViewIfNeeded();
 
@@ -45,7 +26,7 @@ test.describe('Competition section', () => {
   test('deep link /#competition still reveals charts when in view', async ({ page }) => {
     await page.goto('/#competition');
     await waitForAppReady(page);
-    await ensureCompetitionSectionAttached(page);
+    await scrollUntilSelectorAttached(page, '#competition');
     const section = page.locator('#competition');
     await expect(section).toBeVisible({ timeout: 15000 });
     await section.scrollIntoViewIfNeeded();

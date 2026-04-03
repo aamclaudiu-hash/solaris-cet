@@ -1,8 +1,5 @@
-import { test, expect, type Page } from '@playwright/test';
-
-async function waitForAppReady(page: Page) {
-  await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 4000 }).catch(() => {});
-}
+import { test, expect } from '@playwright/test';
+import { waitForAppReady } from './e2e-helpers';
 
 test.describe('Header trust strip', () => {
   test.beforeEach(async ({ page }) => {
