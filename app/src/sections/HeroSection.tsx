@@ -251,6 +251,7 @@ const HeroSection: React.FC = () => {
               <div
                 role="region"
                 aria-label={t.hero.quickStatsAria}
+                data-testid="hero-quick-stats"
                 className="mt-6 flex flex-wrap items-start gap-6 sm:gap-8 justify-center lg:justify-start"
               >
                 <div className="text-center lg:text-left min-w-[5.5rem]">

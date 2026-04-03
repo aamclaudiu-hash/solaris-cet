@@ -12,6 +12,24 @@ test.describe('Domain pillars', () => {
     await waitForAppReady(page);
   });
 
+  test('hero quick stats show locale-formatted CET supply, TON, and Cetățuia link', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    const stats = page.getByTestId('hero-quick-stats');
+    await expect(stats).toBeVisible();
+    await expect(stats.getByText(/\d[\d\s.,]+\s*CET/)).toBeVisible();
+    await expect(stats.getByText('TON', { exact: true })).toBeVisible();
+    await expect(stats.getByRole('link', { name: 'Cetățuia' })).toBeVisible();
+    await expect(stats.getByRole('link', { name: 'Cetățuia' })).toHaveAttribute('href', '#authority-trust');
+  });
+
+  test('deep link /#hero leaves hero landmarks in the document', async ({ page }) => {
+    await page.goto('/#hero');
+    await waitForAppReady(page);
+    await expect(page.locator('#hero')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByTestId('hero-quick-stats')).toBeVisible();
+    await expect(page.getByTestId('hero-quick-stats').getByText('TON', { exact: true })).toBeVisible();
+  });
+
   test('tokenomics (#staking) shows 9,000 CET cap and TON in viewport', async ({ page }) => {
     const staking = page.locator('#staking');
     await expect(staking).toBeAttached({ timeout: 15_000 });
