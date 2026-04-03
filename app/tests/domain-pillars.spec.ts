@@ -30,6 +30,21 @@ test.describe('Domain pillars', () => {
     await expect(page.getByTestId('hero-quick-stats').getByText('TON', { exact: true })).toBeVisible();
   });
 
+  test('stats bento mounts network summary tiles after lazy load', async ({ page }) => {
+    await scrollUntilSelectorAttached(page, '#stats');
+    const stats = page.locator('#stats');
+    await stats.scrollIntoViewIfNeeded();
+    await expect(stats.getByText('NETWORK AT A GLANCE')).toBeVisible({ timeout: 15_000 });
+    await expect(stats.locator('.bento-stat')).toHaveCount(5);
+  });
+
+  test('deep link /#stats attaches bento grid after lazy band', async ({ page }) => {
+    await page.goto('/#stats');
+    await waitForAppReady(page);
+    await scrollUntilSelectorAttached(page, '#stats');
+    await expect(page.locator('#stats').locator('.bento-stat').first()).toBeVisible({ timeout: 15_000 });
+  });
+
   test('authority-trust section renders four pillar cards after lazy mount', async ({ page }) => {
     await scrollUntilSelectorAttached(page, '#authority-trust');
     const trust = page.locator('#authority-trust');
