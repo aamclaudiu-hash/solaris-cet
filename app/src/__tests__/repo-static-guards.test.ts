@@ -3,9 +3,11 @@ import { readFileSync, existsSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  PRODUCTION_SITE_ORIGIN,
+  OG_IMAGE_FILENAME,
   SOLARIS_CET_LOGO_FILENAME,
   productionBrandLogoUrl,
+  productionOgImageUrl,
+  productionSiteUrl,
 } from "@/lib/brandAssets";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -65,13 +67,16 @@ describe("Brand raster — SolarisLogoMark source of truth", () => {
 });
 
 describe("Social preview — og-image raster", () => {
-  const ogPath = join(appPublic, "og-image.png");
+  const ogPath = join(appPublic, OG_IMAGE_FILENAME);
 
-  it("og-image.png ships in app/public (og/twitter meta + JSON-LD)", () => {
+  it("og-image ships in app/public; meta URLs match productionOgImageUrl()", () => {
     expect(existsSync(ogPath), `missing ${ogPath}`).toBe(true);
     expect(statSync(ogPath).size).toBeGreaterThan(1000);
     const appIndexHtml = readFileSync(join(repoRoot, "app/index.html"), "utf8");
-    expect(appIndexHtml).toContain("og-image.png");
+    const og = productionOgImageUrl();
+    expect(appIndexHtml).toContain(`property="og:image" content="${og}"`);
+    expect(appIndexHtml).toContain(`name="twitter:image" content="${og}"`);
+    expect(appIndexHtml).toContain(`"image": "${og}"`);
   });
 });
 
@@ -126,7 +131,7 @@ describe("TON Connect manifest — brand icon URL", () => {
     const raw = readFileSync(join(appPublic, "tonconnect-manifest.json"), "utf8");
     const j = JSON.parse(raw) as { iconUrl?: string; url?: string };
     expect(j.iconUrl).toBe(productionBrandLogoUrl());
-    expect(j.url).toBe(`${PRODUCTION_SITE_ORIGIN}/`);
+    expect(j.url).toBe(productionSiteUrl());
   });
 });
 
