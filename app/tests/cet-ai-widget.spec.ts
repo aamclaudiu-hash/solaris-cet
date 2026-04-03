@@ -19,10 +19,11 @@ async function scrollCetAiHeroIntoView(page: Page): Promise<Locator> {
 async function assertCopyTranscriptMultiTurnOffline(page: Page, context: BrowserContext): Promise<void> {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.route('**/api/chat', (route) => route.abort('failed'));
-  await page.addInitScript(() => {
+  await page.evaluate(() => {
     localStorage.removeItem('cet-ai-chat-history');
   });
-  await page.reload();
+  // Prefer goto over reload: full reload has occasionally dropped the Vite preview (:4173) under load.
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
 
   const hero = await scrollCetAiHeroIntoView(page);
