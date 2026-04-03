@@ -1,6 +1,7 @@
 import { lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { PRODUCTION_SITE_ORIGIN } from '@/lib/brandAssetFilenames';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import Navigation from './components/Navigation';
 import { SolarisLogoMark } from './components/SolarisLogoMark';

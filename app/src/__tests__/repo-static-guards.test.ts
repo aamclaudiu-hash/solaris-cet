@@ -2,7 +2,11 @@ import { describe, it, expect } from "vitest";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SOLARIS_CET_LOGO_FILENAME } from "@/lib/brandAssetFilenames";
+import {
+  PRODUCTION_SITE_ORIGIN,
+  SOLARIS_CET_LOGO_FILENAME,
+  productionBrandLogoUrl,
+} from "@/lib/brandAssetFilenames";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const appPublic = join(dirname(fileURLToPath(import.meta.url)), "../../public");
@@ -52,6 +56,11 @@ describe("Brand raster — SolarisLogoMark source of truth", () => {
   it("brand logo raster ships in app/public (referenced by SolarisLogoMark)", () => {
     expect(existsSync(logoPath), `missing ${logoPath}`).toBe(true);
     expect(statSync(logoPath).size).toBeGreaterThan(5000);
+  });
+
+  it("index.html Organization JSON-LD logo URL matches productionBrandLogoUrl()", () => {
+    const appIndexHtml = readFileSync(join(repoRoot, "app/index.html"), "utf8");
+    expect(appIndexHtml).toContain(productionBrandLogoUrl());
   });
 });
 

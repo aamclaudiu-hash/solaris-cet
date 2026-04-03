@@ -32,6 +32,8 @@ E2E (Chromium): from `app/`, **`npm run test:e2e`** (install browsers once: `npx
 
 **CET AI (`src/lib/`):** `cetAiConstants.ts` (query length caps + near-limit band), `cetAiConversation.ts` (copy-for-AI / multi-turn handoff strings), `cetAiQueryUi.ts` (length indicator tone), plus `cetAiTelemetry.ts` and related mesh/burst helpers — see also `docs/PRODUCTION_LAYOUT.md`.
 
+**Brand raster (`src/lib/`):** `brandAssetFilenames.ts` holds the public logo filename (importable from `vite.config.ts` without Vite `ImportMeta` types); `brandAssets.ts` re-exports it and exposes `solarisCetLogoSrc()` for components (e.g. `SolarisLogoMark`).
+
 ## Env (Coolify / production / local)
 
 - **CET AI:** `GROK_API_KEY` / `GEMINI_API_KEY` (or `*_ENC` + `ENCRYPTION_SECRET`) — see `api/lib/crypto.ts` and `scripts/encrypt-key.mjs` in the repo root.
