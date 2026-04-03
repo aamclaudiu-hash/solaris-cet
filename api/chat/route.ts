@@ -17,6 +17,35 @@ const MAX_QUERY_LENGTH = 8_000;
 const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
 const MODEL = 'gpt-4o-mini';
 
+interface ConversationTurn {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+function normalizeConversation(raw: unknown): ConversationTurn[] {
+  if (!Array.isArray(raw)) return [];
+  const out: ConversationTurn[] = [];
+  for (const item of raw) {
+    if (out.length >= 24) break;
+    if (!item || typeof item !== 'object') continue;
+    const role = (item as { role?: unknown }).role;
+    const content = (item as { content?: unknown }).content;
+    if (role !== 'user' && role !== 'assistant') continue;
+    if (typeof content !== 'string') continue;
+    const c = content.trim();
+    if (!c) continue;
+    out.push({ role, content: c.slice(0, 8000) });
+  }
+  return out;
+}
+
+const SYSTEM_PROMPT_BASE =
+  'You are Solaris AI, an intelligent assistant for the Solaris CET token ' +
+  'project on the TON blockchain. Solaris CET has a fixed supply of 9,000 CET ' +
+  'and a 90-year mining horizon. It uses the BRAID Framework for verifiable AI ' +
+  'decision loops and the ReAct Protocol for autonomous agent orchestration. ' +
+  'Answer questions about the project concisely and accurately.';
+
 export default async function handler(request: Request): Promise<Response> {
   const origin = request.headers.get('origin');
   const allowedOrigin = getAllowedOrigin(origin);
@@ -44,9 +73,11 @@ export default async function handler(request: Request): Promise<Response> {
   }
 
   let query: string;
+  let conversation: ConversationTurn[] = [];
   try {
-    const body = (await request.json()) as { query?: string };
+    const body = (await request.json()) as { query?: string; conversation?: unknown };
     query = (body.query ?? '').trim();
+    conversation = normalizeConversation(body.conversation);
   } catch {
     return new Response(JSON.stringify({ message: 'Invalid request body' }), {
       status: 400,
@@ -84,12 +115,11 @@ export default async function handler(request: Request): Promise<Response> {
           {
             role: 'system',
             content:
-              'You are Solaris AI, an intelligent assistant for the Solaris CET token ' +
-              'project on the TON blockchain. Solaris CET has a fixed supply of 9,000 CET ' +
-              'and a 90-year mining horizon. It uses the BRAID Framework for verifiable AI ' +
-              'decision loops and the ReAct Protocol for autonomous agent orchestration. ' +
-              'Answer questions about the project concisely and accurately.',
+              (conversation.length > 0
+                ? 'MULTI-TURN: Prior user/assistant messages are included. Answer the latest user message in full; use earlier turns for follow-up context only.\n\n'
+                : '') + SYSTEM_PROMPT_BASE,
           },
+          ...conversation.map((t) => ({ role: t.role, content: t.content })),
           { role: 'user', content: query },
         ],
         max_tokens: 512,
@@ -112,7 +142,10 @@ export default async function handler(request: Request): Promise<Response> {
 
     return new Response(JSON.stringify({ response }), {
       status: 200,
-      headers: corsJsonHeaders(allowedOrigin),
+      headers: {
+        ...corsJsonHeaders(allowedOrigin),
+        'X-Cet-Ai-Source': 'live',
+      },
     });
   } catch (err) {
     console.error('Handler error:', err);

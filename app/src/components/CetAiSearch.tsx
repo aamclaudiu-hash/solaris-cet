@@ -147,6 +147,20 @@ function buildCopyForAiText(q: string, a: string, o: Translations['cetAi']): str
   return `${o.copyForAiQuestionLabel}\n${q}\n\n${o.copyForAiAnswerLabel}\n${a}\n\n${o.copyForAiInstructions}`;
 }
 
+/** Enter / ⌘+Enter / Ctrl+Enter submit; Shift+Enter stays newline (textarea). */
+function handleComposerEnterKeyDown(
+  e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  opts: { isProcessing: boolean; hasText: boolean },
+): void {
+  if (e.key !== 'Enter') return;
+  if (e.nativeEvent.isComposing) return;
+  if (e.shiftKey) return;
+  e.preventDefault();
+  if (!opts.isProcessing && opts.hasText) {
+    (e.currentTarget.form as HTMLFormElement | null)?.requestSubmit();
+  }
+}
+
 // --- FOLLOW-UP SUGGESTIONS by topic ---
 const FOLLOW_UP_BY_TOPIC: Record<string, string[]> = {
   price:       ['What drives CET price long-term?', 'How does DCBM stabilise price?', 'Where can I buy CET?'],
@@ -801,8 +815,15 @@ export default function CetAiSearch() {
               data-testid="cet-ai-hero-query"
               value={query}
               onChange={e => setQuery(e.target.value)}
+              onKeyDown={e =>
+                handleComposerEnterKeyDown(e, {
+                  isProcessing,
+                  hasText: Boolean(query.trim()),
+                })
+              }
+              disabled={isModalOpen}
               placeholder={t.cetAi.placeholder}
-              className="w-full min-h-11 px-4 md:px-6 py-3 md:py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-base md:text-base"
+              className="w-full min-h-11 px-4 md:px-6 py-3 md:py-4 bg-gray-950 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all text-base md:text-base disabled:opacity-40"
             />
           </div>
           <button
@@ -846,6 +867,7 @@ export default function CetAiSearch() {
           <DialogPrimitive.Content
             data-testid="cet-ai-modal-dialog"
             aria-describedby={undefined}
+            aria-busy={isProcessing}
             onOpenAutoFocus={e => {
               e.preventDefault();
               requestAnimationFrame(() => modalInputRef.current?.focus());
@@ -953,7 +975,7 @@ export default function CetAiSearch() {
 
                   {/* Answer-first (Claude-style): completed reply before technical trace */}
                   {phase === 'complete' && finalResponse && (
-                    <div className="flex justify-start animate-in fade-in duration-500 slide-in-from-bottom-2">
+                    <div className="flex justify-start motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500 motion-safe:slide-in-from-bottom-2">
                       <div className="bg-gradient-to-br from-green-950/80 to-black border border-green-500/30 rounded-2xl rounded-tl-sm p-5 md:p-6 w-full">
                         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                           <div className="flex items-center gap-2">
@@ -1189,15 +1211,12 @@ export default function CetAiSearch() {
                   ref={modalInputRef}
                   value={query}
                   onChange={e => setQuery(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key !== 'Enter') return;
-                    if (e.shiftKey) return;
-                    if (e.nativeEvent.isComposing) return;
-                    e.preventDefault();
-                    if (!isProcessing && query.trim()) {
-                      (e.currentTarget.form as HTMLFormElement | null)?.requestSubmit();
-                    }
-                  }}
+                  onKeyDown={e =>
+                    handleComposerEnterKeyDown(e, {
+                      isProcessing,
+                      hasText: Boolean(query.trim()),
+                    })
+                  }
                   disabled={isProcessing}
                   rows={2}
                   placeholder={phase === 'complete' ? t.cetAi.followUpPlaceholder : t.cetAi.placeholder}
