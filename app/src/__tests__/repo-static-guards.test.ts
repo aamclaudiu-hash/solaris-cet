@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   OG_IMAGE_FILENAME,
+  PRODUCTION_SITE_ORIGIN,
   SOLARIS_CET_LOGO_FILENAME,
   productionBrandLogoUrl,
   productionOgImageUrl,
@@ -25,8 +26,8 @@ const FORBIDDEN_CDN_PATTERNS = [
 describe("Public discovery — sitemap, security.txt, humans.txt", () => {
   it("static assets ship with expected content", () => {
     const xml = readFileSync(join(appPublic, "sitemap.xml"), "utf8");
-    expect(xml).toContain("https://solaris-cet.com/apocalypse/");
-    expect(xml).toContain("https://solaris-cet.com/sovereign/");
+    expect(xml).toContain(`${PRODUCTION_SITE_ORIGIN}/apocalypse/`);
+    expect(xml).toContain(`${PRODUCTION_SITE_ORIGIN}/sovereign/`);
 
     const sec = join(appPublic, ".well-known/security.txt");
     expect(existsSync(sec), "public/.well-known/security.txt must ship").toBe(true);
@@ -38,7 +39,7 @@ describe("Public discovery — sitemap, security.txt, humans.txt", () => {
     const hum = join(appPublic, "humans.txt");
     expect(existsSync(hum), "public/humans.txt must ship").toBe(true);
     const humBody = readFileSync(hum, "utf8");
-    expect(humBody).toContain("https://solaris-cet.com/");
+    expect(humBody).toContain(productionSiteUrl());
     expect(humBody).toContain("github.com/Solaris-CET");
   });
 });
