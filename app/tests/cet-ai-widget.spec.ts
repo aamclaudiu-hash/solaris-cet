@@ -37,6 +37,28 @@ test.describe('Solaris CET AI widget — desktop', () => {
     await expect(page.getByTestId('cet-ai-modal-dialog')).toBeVisible({ timeout: 8000 });
   });
 
+  test('CET AI modal wires aria-describedby to screen-reader instructions (English)', async ({
+    page,
+  }) => {
+    const heroWidget = page
+      .locator('div.max-w-5xl')
+      .filter({ has: page.getByRole('heading', { name: /Solaris CET AI/i }) })
+      .first();
+    await heroWidget.scrollIntoViewIfNeeded();
+    const chip = heroWidget.getByRole('button', { name: /What is the RAV Protocol/i });
+    await chip.evaluate((el) =>
+      (el as HTMLElement).scrollIntoView({ block: 'center', inline: 'nearest' }),
+    );
+    await chip.evaluate((btn) => (btn as HTMLButtonElement).click());
+    await expect(page.getByTestId('cet-ai-modal-dialog')).toBeVisible({ timeout: 8000 });
+    const dialog = page.getByTestId('cet-ai-modal-dialog');
+    await expect(dialog).toHaveAttribute('aria-describedby', 'cet-ai-dialog-desc');
+    const desc = page.locator('#cet-ai-dialog-desc');
+    await expect(desc).toBeAttached();
+    await expect(desc).toContainText(/CET AI dialog/i);
+    await expect(desc).toContainText(/Escape/i);
+  });
+
   test('Escape closes CET AI modal', async ({ page }) => {
     const heroWidget = page
       .locator('div.max-w-5xl')
@@ -115,5 +137,23 @@ test.describe('Locale query ?lang=', () => {
       timeout: 15_000,
     });
     await expect(page.getByRole('button', { name: /INIȚIAZĂ PROTOCOLUL/i })).toBeVisible();
+  });
+
+  test('?lang=ro modal exposes Romanian screen-reader dialog description', async ({ page }) => {
+    await page.getByTestId('cet-ai-hero').scrollIntoViewIfNeeded();
+    const chip = page.getByRole('button', { name: /Ce este protocolul RAV/i });
+    await chip.evaluate((el) =>
+      (el as HTMLElement).scrollIntoView({ block: 'center', inline: 'nearest' }),
+    );
+    await chip.evaluate((btn) => (btn as HTMLButtonElement).click());
+    await expect(page.getByTestId('cet-ai-modal-dialog')).toBeVisible({ timeout: 8000 });
+    await expect(page.getByTestId('cet-ai-modal-dialog')).toHaveAttribute(
+      'aria-describedby',
+      'cet-ai-dialog-desc',
+    );
+    const desc = page.locator('#cet-ai-dialog-desc');
+    await expect(desc).toBeAttached();
+    await expect(desc).toContainText(/Dialog CET AI/i);
+    await expect(desc).toContainText(/Escape/i);
   });
 });
