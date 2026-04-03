@@ -12,7 +12,17 @@ test.describe('Domain pillars', () => {
     await waitForAppReady(page);
   });
 
-  test('tokenomics (#staking) shows 9,000 CET cap in viewport', async ({ page }) => {
+  test('tokenomics (#staking) shows 9,000 CET cap and TON in viewport', async ({ page }) => {
+    const staking = page.locator('#staking');
+    await expect(staking).toBeAttached({ timeout: 15_000 });
+    await staking.scrollIntoViewIfNeeded();
+    await expect(staking.getByText('9,000').first()).toBeVisible({ timeout: 10_000 });
+    await expect(staking.getByText(/\s·\sTON$/)).toBeVisible({ timeout: 10_000 });
+  });
+
+  test('deep link /#staking keeps tokenomics metrics reachable', async ({ page }) => {
+    await page.goto('/#staking');
+    await waitForAppReady(page);
     const staking = page.locator('#staking');
     await expect(staking).toBeAttached({ timeout: 15_000 });
     await staking.scrollIntoViewIfNeeded();
@@ -24,5 +34,14 @@ test.describe('Domain pillars', () => {
     const rwa = page.locator('#rwa');
     await rwa.scrollIntoViewIfNeeded();
     await expect(rwa.getByText(/Cetățuia, Romania/i).first()).toBeVisible({ timeout: 15_000 });
+  });
+
+  test('deep link /#rwa attaches after scrolling into lazy band', async ({ page }) => {
+    await page.goto('/#rwa');
+    await waitForAppReady(page);
+    await scrollUntilSelectorAttached(page, '#rwa');
+    await expect(page.locator('#rwa').getByText(/Cetățuia, Romania/i).first()).toBeVisible({
+      timeout: 15_000,
+    });
   });
 });
