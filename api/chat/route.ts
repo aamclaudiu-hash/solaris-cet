@@ -12,6 +12,7 @@ import { corsJsonHeaders, corsPreflightHeaders, getAllowedOrigin } from '../lib/
 
 export const config = { runtime: 'edge' };
 
+/** Keep in sync with `app/src/lib/cetAiConstants.ts` (`CET_AI_MAX_QUERY_CHARS`). */
 const MAX_QUERY_LENGTH = 8_000;
 
 const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
