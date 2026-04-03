@@ -47,6 +47,9 @@ async function waitForServiceWorkerControllingClient(page: Page): Promise<void> 
  */
 
 test.describe('Offline PWA State', () => {
+  /** One preview + shared SW origin: serial reduces cross-test timing races on controller claim. */
+  test.describe.configure({ mode: 'serial' });
+
   test.use({ serviceWorkers: 'allow' });
 
   test('web app manifest is linked in <head>', async ({ page }) => {
@@ -124,18 +127,8 @@ test.describe('Offline PWA State', () => {
   });
 
   test('page is served from cache when offline', async ({ page, context }) => {
-    // First visit — populate the service worker cache
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    // Second load often required for the Workbox SW to claim the client.
-    await page.reload({ waitUntil: 'networkidle' });
-
-    await expect
-      .poll(
-        async () => page.evaluate(() => navigator.serviceWorker.controller !== null),
-        { timeout: 25_000, intervals: [200, 400, 800, 1600] },
-      )
-      .toBe(true);
+    await waitForServiceWorkerControllingClient(page);
 
     await context.setOffline(true);
 
@@ -147,15 +140,7 @@ test.describe('Offline PWA State', () => {
 
   test('core page content is available offline after initial load', async ({ page, context }) => {
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    await page.reload({ waitUntil: 'networkidle' });
-
-    await expect
-      .poll(
-        async () => page.evaluate(() => navigator.serviceWorker.controller !== null),
-        { timeout: 25_000, intervals: [200, 400, 800, 1600] },
-      )
-      .toBe(true);
+    await waitForServiceWorkerControllingClient(page);
 
     await context.setOffline(true);
     await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
