@@ -21,6 +21,7 @@ import OpenAI from 'openai';
 import { getAllowedOrigin } from '../lib/cors';
 import { resolveApiKey } from '../lib/crypto';
 import { CET_CONTRACT_ADDRESS } from '../../src/lib/cetContract';
+import { CET_AI_MAX_QUERY_CHARS } from '../../src/lib/cetAiConstants';
 import { DEDUST_POOL_ADDRESS } from '../../src/lib/dedustUrls';
 
 export const config = { runtime: 'edge' };
@@ -28,9 +29,6 @@ export const config = { runtime: 'edge' };
 /** AI model identifiers — update here to change versions across all call sites. */
 const GEMINI_MODEL = 'gemini-2.0-flash';
 const GROK_MODEL = 'grok-3-mini-beta';
-
-/** Same cap as root `api/chat` and the CET AI client (`CET_AI_MAX_QUERY_CHARS`). */
-const MAX_QUERY_LENGTH = 8000;
 
 interface DeDustAsset {
   type: 'native' | 'jetton';
@@ -78,7 +76,7 @@ function normalizeConversation(raw: unknown): ConversationTurn[] {
     if (typeof content !== 'string') continue;
     const c = content.trim();
     if (!c) continue;
-    out.push({ role, content: c.slice(0, 8000) });
+    out.push({ role, content: c.slice(0, CET_AI_MAX_QUERY_CHARS) });
   }
   return out;
 }
@@ -233,9 +231,9 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   const trimmedQuery = userQuery.trim();
-  if (trimmedQuery.length > MAX_QUERY_LENGTH) {
+  if (trimmedQuery.length > CET_AI_MAX_QUERY_CHARS) {
     return new Response(
-      JSON.stringify({ message: `Query must be at most ${MAX_QUERY_LENGTH} characters.` }),
+      JSON.stringify({ message: `Query must be at most ${CET_AI_MAX_QUERY_CHARS} characters.` }),
       {
         status: 400,
         headers: {

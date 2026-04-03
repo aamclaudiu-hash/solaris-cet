@@ -29,6 +29,12 @@ import {
   buildLoopCompleteBurstLogMessage,
 } from '@/lib/cetAiTelemetry';
 import { TONSCAN_CET_CONTRACT_URL } from '@/lib/cetContract';
+import { CET_AI_MAX_QUERY_CHARS } from '@/lib/cetAiConstants';
+import {
+  buildCopyForAiText,
+  buildFullConversationHandoff,
+  type CetAiChatEntry,
+} from '@/lib/cetAiConversation';
 
 // --- TYPE DEFINITIONS ---
 type ReActPhase =
@@ -54,12 +60,6 @@ interface MetricsData {
   confidence: number;
   latency: number;
   cetCost: number;
-}
-
-interface ChatEntry {
-  question: string;
-  answer: string;
-  confidence: number;
 }
 
 // --- CONFIDENCE SCORES per topic ---
@@ -103,7 +103,7 @@ const TOPIC_KEYWORDS: Record<string, string[]> = {
   team:        ['team', 'department', 'echipa', 'equipo', 'команда', '团队', 'mannschaft', 'equipe', '200,000', '200000', '200k', 'task agent', 'tasking', 'task specialists'],
 };
 
-function chatHistoryToConversation(history: ChatEntry[]): { role: 'user' | 'assistant'; content: string }[] {
+function chatHistoryToConversation(history: CetAiChatEntry[]): { role: 'user' | 'assistant'; content: string }[] {
   return history
     .flatMap((e) => [
       { role: 'user' as const, content: e.question },
@@ -126,7 +126,7 @@ interface CetAiFetchResult {
 async function fetchCetAiChat(
   query: string,
   signal: AbortSignal,
-  priorHistory: ChatEntry[],
+  priorHistory: CetAiChatEntry[],
 ): Promise<CetAiFetchResult> {
   const conversation = chatHistoryToConversation(priorHistory);
   const maxAttempts = 2;
@@ -211,25 +211,6 @@ function liveApiHttpHintForStatus(
   return null;
 }
 
-function buildCopyForAiText(q: string, a: string, o: Translations['cetAi']): string {
-  return `${o.copyForAiQuestionLabel}\n${q}\n\n${o.copyForAiAnswerLabel}\n${a}\n\n${o.copyForAiInstructions}`;
-}
-
-/** Multi-turn handoff: prior `chatHistory` blocks + current Q&A, same format as copy-for-AI. */
-function buildFullConversationHandoff(
-  history: ChatEntry[],
-  currentQuestion: string,
-  currentAnswer: string,
-  o: Translations['cetAi'],
-): string {
-  const parts: string[] = [];
-  for (const e of history) {
-    parts.push(buildCopyForAiText(e.question, e.answer, o));
-  }
-  parts.push(buildCopyForAiText(currentQuestion, currentAnswer, o));
-  return parts.join('\n\n---\n\n');
-}
-
 /** Enter / ⌘+Enter / Ctrl+Enter submit; Shift+Enter stays newline (textarea). */
 function handleComposerEnterKeyDown(
   e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -267,9 +248,6 @@ const FOLLOW_UP_BY_TOPIC: Record<string, string[]> = {
 
 /** RAV telemetry milestones (ms) — tuned for mobile attention span; ~5.3s to completion. */
 const CET_AI_PHASE_MS = [580, 1280, 2080, 2880, 3780, 4380, 4980, 5280] as const;
-
-/** Aligns with `conversation` / user message limits on `/api/chat` (edge handler). */
-const CET_AI_MAX_QUERY_CHARS = 8000;
 
 function buildContextualResponse(q: string, knowledge: CetAiKnowledge): { answer: string; confidence: number } {
   const lower = q.toLowerCase();
@@ -746,7 +724,7 @@ export default function CetAiSearch() {
   const [finalResponse, setFinalResponse] = useState('');
   const [cetAiConfidence, setCetAiConfidence] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [chatHistory, setChatHistory] = useLocalStorage<ChatEntry[]>('cet-ai-chat-history', []);
+  const [chatHistory, setChatHistory] = useLocalStorage<CetAiChatEntry[]>('cet-ai-chat-history', []);
   const [copiedResponse, setCopiedResponse] = useState(false);
   const [copiedForAi, setCopiedForAi] = useState(false);
   const [copiedTranscript, setCopiedTranscript] = useState(false);
@@ -876,7 +854,7 @@ export default function CetAiSearch() {
   }, [t.cetAi.generationStopped]);
 
   // --- CORE LOGIC: RAV + optional live /api/chat (Coolify/VPS) with local knowledge fallback ---
-  const processQuestion = useCallback((q: string, priorHistory: ChatEntry[] = []) => {
+  const processQuestion = useCallback((q: string, priorHistory: CetAiChatEntry[] = []) => {
     const question = q.trim().slice(0, CET_AI_MAX_QUERY_CHARS);
     if (!question) return;
 
@@ -1076,7 +1054,7 @@ export default function CetAiSearch() {
   const handleModalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim() || isProcessing) return;
-    const nextHistory: ChatEntry[] =
+    const nextHistory: CetAiChatEntry[] =
       finalResponse && submittedQuestion
         ? [...chatHistory, { question: submittedQuestion, answer: finalResponse, confidence: cetAiConfidence }]
         : chatHistory;

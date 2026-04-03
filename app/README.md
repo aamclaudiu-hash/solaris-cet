@@ -4,16 +4,19 @@ Vite + React 19 + TypeScript landing for Solaris CET on TON (RAV CET AI UI, TON 
 
 ## Commands
 
+Run these from the **`app/`** directory (from the repo root: `cd app`). If your shell is already `.../solaris-cet/app`, **do not** run `cd app` again — use `npm run …` directly.
+
 ```bash
 npm ci
 npm run dev          # http://localhost:5173
 npm run typecheck    # same idea as CI (no emit)
 npm run lint
 npm run test         # Vitest
+npm run test:e2e     # Playwright (same as CI; needs `dist/` + preview, or use `webServer` in config)
 npm run build        # tsc -b + vite build
 ```
 
-E2E (Chromium): from `app/`, `npx playwright test` (install browsers once: `npx playwright install --with-deps chromium`).
+E2E (Chromium): from `app/`, `npm run test:e2e` (install browsers once: `npx playwright install --with-deps chromium`). The Playwright config starts a preview server unless one is already running.
 
 ## Layout
 
