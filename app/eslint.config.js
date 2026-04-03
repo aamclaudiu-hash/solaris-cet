@@ -6,7 +6,14 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage', 'public/vendor/**']),
+  globalIgnores([
+    'dist',
+    'coverage',
+    'public/vendor/**',
+    /* Playwright output — must not be linted; missing dir must not break `eslint .` (ESLint 10 glob). */
+    'test-results/**',
+    'playwright-report/**',
+  ]),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
