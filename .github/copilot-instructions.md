@@ -106,7 +106,7 @@ Branch naming: `feature/`, `fix/`, `docs/`, `refactor/`, `test/`, `chore/`.
 Before opening a PR, verify (from `app/`):
 
 1. `npm run verify` passes (lint, typecheck, Vitest, production build) — same surface as local quality gate before CI
-2. For UI, navigation, or CET AI widget changes, also run `npm run test:e2e` or `npm run verify:full` (Playwright + preview)
+2. For UI, navigation, or CET AI widget changes, also run `npm run test:e2e` or `npm run verify:full` (runs `test:e2e:stable` after `verify`, aligned with CI single-worker E2E)
 3. The PR description follows the `.github/PULL_REQUEST_TEMPLATE.md` checklist
 
 ---
