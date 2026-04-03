@@ -18,7 +18,7 @@ npm run verify       # lint + typecheck + test + build (quick gate before push)
 npm run verify:full  # verify + Playwright E2E (full local check)
 ```
 
-E2E (Chromium): from `app/`, `npm run test:e2e` (install browsers once: `npx playwright install --with-deps chromium`). The Playwright config starts a preview server unless one is already running.
+E2E (Chromium): from `app/`, `npm run test:e2e` (install browsers once: `npx playwright install --with-deps chromium`). Config starts **`vite preview` only** — `dist/` must already exist (`npm run build` or run after `npm run verify`). CI supplies `dist/` from the build job.
 
 ## Layout
 

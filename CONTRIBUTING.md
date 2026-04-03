@@ -85,6 +85,7 @@ npm run test
 npm run verify
 
 # Playwright E2E (Chromium; prima dată: npx playwright install --with-deps chromium)
+# Necesită app/dist/: rulează mai întâi `npm run build` sau `npm run verify`, dacă nu folosești `verify:full`.
 npm run test:e2e
 
 # Verificare completă locală: verify + E2E (același tip de suite ca în CI, în ordine)
@@ -133,6 +134,8 @@ Folosim formatul **Conventional Commits**:
 | `ci`       | Modificări la configurația CI/CD                       |
 
 **Exemple:**
+
+Mesajul trebuie să descrie real schimbarea; nu folosi text placeholder copiat din șabloane de commit automate.
 
 ```bash
 feat(quantum-ai): add predictive mining algorithm
