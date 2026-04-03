@@ -165,41 +165,43 @@ const Navigation = () => {
       />
 
       <div className="w-full section-padding-x xl:px-12">
-        <div className="flex items-center justify-between h-16 xl:h-20 gap-2 sm:gap-3">
-          {/* Logo + desktop nav — grouped so long labels (e.g. RO “Aplicație CET”) never collide with the mark */}
-          <div className="flex min-w-0 flex-1 items-center gap-4 xl:gap-6 2xl:gap-8">
-            <a
-              href="#main-content"
-              className="group flex shrink-0 items-center"
-              aria-label="Solaris CET"
-            >
-              <div className="relative flex h-10 shrink-0 origin-left items-center justify-center transition-transform duration-500 ease-out group-hover:scale-[1.04] xl:h-11">
-                <SolarisLogoMark
-                  crop="full"
-                  priority
-                  className="h-10 xl:h-11 w-auto max-h-full drop-shadow-[0_0_14px_rgba(242,201,76,0.35)]"
-                />
-                <div className="pointer-events-none absolute inset-[-3px] rounded-xl bg-solaris-gold/18 blur-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              </div>
-            </a>
+        {/*
+          Below xl: flex [logo | CTAs] — nav is display:none (omitted from flow).
+          xl+: CSS grid [logo | nav | CTAs] — nav is centered only inside the middle track, so wide link rows
+          cannot shift left over the logo (flex+justify-center on a shared row caused that overlap + z-index clash).
+        */}
+        <div className="flex h-16 w-full items-center justify-between gap-2 sm:gap-3 xl:grid xl:h-20 xl:grid-cols-[auto_minmax(0,1fr)_auto] xl:items-center xl:gap-4 2xl:gap-6">
+          <a
+            href="#main-content"
+            className="group relative z-20 flex shrink-0 items-center"
+            aria-label="Solaris CET"
+          >
+            <div className="relative flex h-10 shrink-0 origin-left items-center justify-center transition-transform duration-500 ease-out group-hover:scale-[1.04] xl:h-11">
+              <SolarisLogoMark
+                crop="full"
+                priority
+                className="h-10 xl:h-11 w-auto max-h-full drop-shadow-[0_0_14px_rgba(242,201,76,0.35)]"
+              />
+              <div className="pointer-events-none absolute inset-[-3px] rounded-xl bg-solaris-gold/18 blur-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            </div>
+          </a>
 
-            {/* Desktop Navigation — shown only at xl (≥1280 px) to avoid overflow */}
-            <nav
-              className="hidden min-w-0 flex-1 xl:flex xl:items-center xl:justify-center xl:gap-4 2xl:gap-6"
-              aria-label={t.nav.primaryNavigation}
-            >
-              {navLinks.map((link) => (
-                <a
-                  key={link.navKey}
-                  href={link.href}
-                  className="shrink-0 text-sm text-solaris-muted transition-colors duration-300 hover:text-solaris-text relative group"
-                >
-                  {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-solaris-gold to-solaris-cyan transition-all duration-300 group-hover:w-full" />
-                </a>
-              ))}
-            </nav>
-          </div>
+          {/* Desktop Navigation — middle column only; cannot paint under the logo column */}
+          <nav
+            className="hidden min-w-0 overflow-x-auto overflow-y-visible [-ms-overflow-style:none] [scrollbar-width:none] xl:flex xl:flex-nowrap xl:items-center xl:justify-center xl:gap-4 2xl:gap-6 [&::-webkit-scrollbar]:hidden"
+            aria-label={t.nav.primaryNavigation}
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.navKey}
+                href={link.href}
+                className="shrink-0 text-sm text-solaris-muted transition-colors duration-300 hover:text-solaris-text relative group"
+              >
+                {link.label}
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-solaris-gold to-solaris-cyan transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+          </nav>
 
           {/* CTAs: persistent Buy on DeDust (< xl) + full desktop rail */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
