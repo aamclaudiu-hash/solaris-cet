@@ -101,12 +101,19 @@ test.describe('Solaris CET AI widget — mobile viewport', () => {
 });
 
 test.describe('Locale query ?lang=', () => {
-  test('?lang=ro shows Romanian CET AI title', async ({ page }) => {
-    await page.goto('/?lang=ro');
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.removeItem('solaris_lang');
+    });
+    await page.goto('/?lang=ro', { waitUntil: 'domcontentloaded' });
     await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+  });
+
+  test('?lang=ro applies Romanian CET AI chrome', async ({ page }) => {
     await page.getByTestId('cet-ai-hero').scrollIntoViewIfNeeded();
     await expect(page.getByRole('heading', { name: /Solaris CET AI/i }).first()).toBeVisible({
       timeout: 15_000,
     });
+    await expect(page.getByRole('button', { name: /INIȚIAZĂ PROTOCOLUL/i })).toBeVisible();
   });
 });
