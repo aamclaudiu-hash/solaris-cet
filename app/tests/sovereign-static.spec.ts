@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForAppReady } from './e2e-helpers';
 
 /**
  * OMEGA sovereign HTML — zero client JS, self-hosted font, supply invariant.
@@ -28,7 +29,7 @@ test.describe('OMEGA sovereign static surface', () => {
   test('main site footer navigates to sovereign surface', async ({ page }) => {
     // ?lang=en matches useLanguage E2E pattern so `landmarks.footer` aria-label matches the App wrapper.
     await page.goto('/?lang=en');
-    await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+    await waitForAppReady(page, { timeout: 5000 });
     // Match conversion-ui: scroll to document bottom so LazyLoadWrapper + ScrollFadeUp mount and fade in
     // (scrollIntoViewIfNeeded on the section alone can leave the lazy footer unmounted in some layouts).
     await page.evaluate(() => {

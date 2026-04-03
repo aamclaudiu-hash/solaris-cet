@@ -1,14 +1,13 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import { waitForAppReady, scrollUntilSelectorAttached } from './e2e-helpers';
 
 /**
  * Conversion UX — hero next-step row + mobile dock (PR 378/379 follow-up).
  */
 
-async function waitForAppReady(page: Page) {
-  await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 4000 }).catch(() => {});
-}
-
 test.describe('Conversion UI', () => {
+  test.setTimeout(60_000);
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await waitForAppReady(page);
@@ -38,10 +37,9 @@ test.describe('Conversion UI', () => {
   });
 
   test('authority-trust section mounts after scroll (lazy band)', async ({ page }) => {
-    await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
-    await expect(page.locator('#stats')).toBeAttached({ timeout: 20000 });
-    await page.evaluate(() => window.scrollTo({ top: 2200, behavior: 'instant' }));
-    await expect(page.locator('#authority-trust')).toBeVisible({ timeout: 20000 });
+    await scrollUntilSelectorAttached(page, '#authority-trust');
+    await expect(page.locator('#stats')).toBeAttached({ timeout: 20_000 });
+    await expect(page.locator('#authority-trust')).toBeVisible({ timeout: 20_000 });
   });
 
   test('footer includes in-page link to trust pillars', async ({ page }) => {

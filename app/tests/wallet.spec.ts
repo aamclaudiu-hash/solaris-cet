@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForAppReady } from './e2e-helpers';
 
 /**
  * Wallet Connection E2E tests
@@ -15,12 +16,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Wallet Connection', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    // The loading overlay is animated out after ~1.8 s; wait for it to hide.
-    // If no overlay is present (e.g., it was already removed by a previous test
-    // run in the same browser context), the catch is intentional and safe.
-    await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 4000 }).catch(() => {
-      // Intentional: the overlay may already be hidden on context reuse across tests.
-    });
+    await waitForAppReady(page);
   });
 
   test('connect wallet button is visible in desktop nav', async ({ page }) => {

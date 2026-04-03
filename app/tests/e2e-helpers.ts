@@ -1,7 +1,8 @@
 import { expect, type Page } from '@playwright/test';
 
-export async function waitForAppReady(page: Page) {
-  await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 4000 }).catch(() => {});
+export async function waitForAppReady(page: Page, options?: { timeout?: number }) {
+  const timeout = options?.timeout ?? 4000;
+  await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout }).catch(() => {});
 }
 
 /**

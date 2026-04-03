@@ -1,4 +1,5 @@
 import { test, expect, type Page, type BrowserContext, type Locator } from '@playwright/test';
+import { waitForAppReady } from './e2e-helpers';
 import { CET_AI_MAX_QUERY_CHARS } from '../src/lib/cetAiConstants';
 import type { LangCode } from '../src/i18n/translations';
 
@@ -24,7 +25,7 @@ async function assertCopyTranscriptMultiTurnOffline(page: Page, context: Browser
   });
   // Prefer goto over reload: full reload has occasionally dropped the Vite preview (:4173) under load.
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+  await waitForAppReady(page, { timeout: 5000 });
 
   const hero = await scrollCetAiHeroIntoView(page);
   const chip = hero.getByRole('button', { name: /What is the RAV Protocol/i });
@@ -60,7 +61,7 @@ test.describe('Solaris CET AI widget — desktop', () => {
       localStorage.setItem('solaris_lang', 'en');
     });
     await page.goto('/');
-    await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+    await waitForAppReady(page, { timeout: 5000 });
   });
 
   test('CET AI title and initiate control are visible', async ({ page }) => {
@@ -169,7 +170,7 @@ test.describe('Solaris CET AI widget — mobile viewport', () => {
       localStorage.setItem('solaris_lang', 'en');
     });
     await page.goto('/');
-    await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+    await waitForAppReady(page, { timeout: 5000 });
   });
 
   test('CET AI controls usable at phone width', async ({ page }) => {
@@ -303,7 +304,7 @@ for (const L of CET_AI_LOCALE_FIXTURES) {
         localStorage.removeItem('solaris_lang');
       });
       await page.goto(`/?lang=${L.code}`, { waitUntil: 'domcontentloaded' });
-      await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+      await waitForAppReady(page, { timeout: 5000 });
     });
 
     test(`?lang=${L.code} applies locale CET AI chrome`, async ({ page }) => {
