@@ -10,7 +10,7 @@ test.describe('OMEGA sovereign static surface', () => {
     await expect(page).toHaveTitle(/Sovereign static node/i);
     await expect(page.getByRole('heading', { name: /Sovereign static node/i })).toBeVisible();
     await expect(page.getByText(/9,000/)).toBeVisible();
-    await expect(page.getByText(/Cetățuia, Romania/i)).toBeVisible();
+    await expect(page.locator('strong').filter({ hasText: /Cetățuia, Romania/i })).toBeVisible();
     const scripts = await page.locator('script').count();
     expect(scripts).toBe(0);
   });

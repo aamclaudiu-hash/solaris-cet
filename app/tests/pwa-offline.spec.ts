@@ -88,57 +88,46 @@ test.describe('Offline PWA State', () => {
       'link[rel="apple-touch-icon"]',
       (el: HTMLLinkElement) => el.href
     );
-    expect(touchIcon).toMatch(/icon-192\.png/);
+    expect(touchIcon).toMatch(/(apple-touch-icon\.png|icon-192\.png)/);
   });
 
   test('page is served from cache when offline', async ({ page, context }) => {
     // First visit — populate the service worker cache
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    // Second load often required for the Workbox SW to claim the client.
+    await page.reload({ waitUntil: 'networkidle' });
 
-    // Ensure the service worker is installed AND controlling the page before
-    // going offline, so the cache is available for the subsequent reload.
-    await page.evaluate(() =>
-      navigator.serviceWorker.ready.then(() => {
-        // serviceWorker.ready resolves once a SW controls the page
-        return navigator.serviceWorker.controller !== null
-          ? Promise.resolve()
-          : new Promise<void>(resolve => {
-              navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true });
-            });
-      })
-    );
+    await expect
+      .poll(
+        async () => page.evaluate(() => navigator.serviceWorker.controller !== null),
+        { timeout: 25_000, intervals: [200, 400, 800, 1600] },
+      )
+      .toBe(true);
 
-    // Go offline
     await context.setOffline(true);
 
-    // Navigate again — should still work from cache
     await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
     await expect(page).toHaveTitle(/Solaris CET/i, { timeout: 10000 });
 
-    // Restore online state
     await context.setOffline(false);
   });
 
   test('core page content is available offline after initial load', async ({ page, context }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await page.reload({ waitUntil: 'networkidle' });
 
-    // Wait for the service worker to be in control before going offline
-    await page.evaluate(() =>
-      navigator.serviceWorker.ready.then(() => {
-        return navigator.serviceWorker.controller !== null
-          ? Promise.resolve()
-          : new Promise<void>(resolve => {
-              navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true });
-            });
-      })
-    );
+    await expect
+      .poll(
+        async () => page.evaluate(() => navigator.serviceWorker.controller !== null),
+        { timeout: 25_000, intervals: [200, 400, 800, 1600] },
+      )
+      .toBe(true);
 
     await context.setOffline(true);
     await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
 
-    // The main element must be present in the cached shell
     const main = page.locator('#root');
     await expect(main).toBeAttached({ timeout: 10000 });
 

@@ -293,7 +293,8 @@ function phaseOrderIndex(currentPhase: string): number {
 }
 
 // --- Markdown renderer for CET AI responses ---
-// Supports: fenced ```code```, **bold**, *italic*, `code`, lists, [label](url), bare https links
+// Supports: fenced ```code```, # / ## / ### headings, **bold**, *italic*, `code`, lists,
+// blockquotes (>), pipe tables, --- hr, [label](url), bare https links
 function parseFencedCodeBlocks(text: string): Array<{ type: 'md' | 'code'; lang?: string; content: string }> {
   const re = /```(\w*)\n?([\s\S]*?)```/g;
   const out: Array<{ type: 'md' | 'code'; lang?: string; content: string }> = [];
@@ -315,58 +316,34 @@ function parseFencedCodeBlocks(text: string): Array<{ type: 'md' | 'code'; lang?
   return out;
 }
 
-function MarkdownBodyChunk({ text }: { text: string }) {
-  const renderLine = (line: string, key: number) => {
-    const h2 = line.match(/^##\s+(.+)$/);
-    if (h2) {
-      return (
-        <h3
-          key={key}
-          className="text-yellow-200/95 font-bold text-base md:text-lg tracking-tight mt-4 mb-2 border-b border-yellow-500/25 pb-1"
-        >
-          {renderInline(h2[1])}
-        </h3>
-      );
-    }
-    const h3 = line.match(/^###\s+(.+)$/);
-    if (h3) {
-      return (
-        <h4 key={key} className="text-yellow-200/95 font-bold text-sm md:text-base tracking-tight mt-3 mb-1 border-b border-yellow-500/20 pb-1">
-          {renderInline(h3[1])}
-        </h4>
-      );
-    }
-    // Check for numbered list item
-    const numberedMatch = line.match(/^(\d+)\.\s+(.*)/);
-    if (numberedMatch) {
-      return (
-        <li key={key} className="flex gap-2 items-start">
-          <span className="text-yellow-500 font-bold shrink-0 min-w-[1.2em]">{numberedMatch[1]}.</span>
-          <span>{renderInline(numberedMatch[2])}</span>
-        </li>
-      );
-    }
-    // Check for bullet list item
-    if (line.startsWith('- ') || line.startsWith('• ')) {
-      return (
-        <li key={key} className="flex gap-2 items-start">
-          <span className="text-yellow-500 mt-1.5 shrink-0">▸</span>
-          <span>{renderInline(line.slice(2))}</span>
-        </li>
-      );
-    }
-    // Checkbox items
-    if (line.startsWith('- ✅') || line.startsWith('- 🔄') || line.startsWith('- 🔮')) {
-      return (
-        <li key={key} className="flex gap-2 items-start">
-          <span className="shrink-0">{line.slice(2, 4)}</span>
-          <span>{renderInline(line.slice(4))}</span>
-        </li>
-      );
-    }
-    return <p key={key} className="leading-relaxed">{renderInline(line)}</p>;
-  };
+function isMarkdownTableSeparatorLine(line: string): boolean {
+  const t = line.trim();
+  if (!t.includes('|') || !t.includes('-')) return false;
+  return /^[\s|:-]+$/.test(t) && !/[0-9a-zA-Z]/.test(t);
+}
 
+function splitMarkdownPipeRow(line: string): string[] {
+  const t = line.trim().replace(/^\|/, '').replace(/\|$/, '');
+  return t.split('|').map((c) => c.trim());
+}
+
+function tryParsePipeTable(lines: string[]): { headers: string[]; rows: string[][] } | null {
+  if (lines.length < 2) return null;
+  if (!isMarkdownTableSeparatorLine(lines[1])) return null;
+  const headers = splitMarkdownPipeRow(lines[0]);
+  if (headers.length < 2) return null;
+  const n = headers.length;
+  const rows = lines.slice(2).map((row) => {
+    const cells = splitMarkdownPipeRow(row);
+    if (cells.length === n) return cells;
+    const next = [...cells];
+    while (next.length < n) next.push('');
+    return next.slice(0, n);
+  });
+  return { headers, rows };
+}
+
+function MarkdownBodyChunk({ text }: { text: string }) {
   const renderInline = (raw: string): React.ReactNode => {
     let key = 0;
     const parts: React.ReactNode[] = [];
@@ -416,11 +393,151 @@ function MarkdownBodyChunk({ text }: { text: string }) {
     return <>{parts}</>;
   };
 
+  const renderLine = (line: string, key: number) => {
+    const trimmed = line.trim();
+    if (/^[-*_]{3,}$/.test(trimmed)) {
+      return <hr key={key} className="my-4 border-white/10" />;
+    }
+    const h1 = line.match(/^#\s+(.+)$/);
+    if (h1) {
+      return (
+        <h2
+          key={key}
+          className="text-yellow-100 font-bold text-lg md:text-xl tracking-tight mt-4 mb-2"
+        >
+          {renderInline(h1[1])}
+        </h2>
+      );
+    }
+    const h2 = line.match(/^##\s+(.+)$/);
+    if (h2) {
+      return (
+        <h3
+          key={key}
+          className="text-yellow-200/95 font-bold text-base md:text-lg tracking-tight mt-4 mb-2 border-b border-yellow-500/25 pb-1"
+        >
+          {renderInline(h2[1])}
+        </h3>
+      );
+    }
+    const h3 = line.match(/^###\s+(.+)$/);
+    if (h3) {
+      return (
+        <h4 key={key} className="text-yellow-200/95 font-bold text-sm md:text-base tracking-tight mt-3 mb-1 border-b border-yellow-500/20 pb-1">
+          {renderInline(h3[1])}
+        </h4>
+      );
+    }
+    const bq = line.match(/^\s*>\s?(.*)$/);
+    if (bq && /^\s*>/.test(line)) {
+      return (
+        <blockquote
+          key={key}
+          className="border-l-2 border-yellow-500/35 pl-3 my-1.5 text-gray-300 leading-relaxed"
+        >
+          {renderInline(bq[1])}
+        </blockquote>
+      );
+    }
+    const numberedMatch = line.match(/^(\d+)\.\s+(.*)/);
+    if (numberedMatch) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="text-yellow-500 font-bold shrink-0 min-w-[1.2em]">{numberedMatch[1]}.</span>
+          <span>{renderInline(numberedMatch[2])}</span>
+        </li>
+      );
+    }
+    if (line.startsWith('- ✅')) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="shrink-0">✅</span>
+          <span>{renderInline(line.replace(/^-\s*✅\s*/, ''))}</span>
+        </li>
+      );
+    }
+    if (line.startsWith('- 🔄')) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="shrink-0">🔄</span>
+          <span>{renderInline(line.replace(/^-\s*🔄\s*/, ''))}</span>
+        </li>
+      );
+    }
+    if (line.startsWith('- 🔮')) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="shrink-0">🔮</span>
+          <span>{renderInline(line.replace(/^-\s*🔮\s*/, ''))}</span>
+        </li>
+      );
+    }
+    if (line.startsWith('- ') || line.startsWith('• ')) {
+      return (
+        <li key={key} className="flex gap-2 items-start">
+          <span className="text-yellow-500 mt-1.5 shrink-0">▸</span>
+          <span>{renderInline(line.slice(2))}</span>
+        </li>
+      );
+    }
+    return <p key={key} className="leading-relaxed">{renderInline(line)}</p>;
+  };
+
   const paragraphs = text.split(/\n\n+/);
   return (
     <div className="space-y-3 text-sm leading-relaxed">
       {paragraphs.map((para, pi) => {
         const lines = para.split('\n').filter(l => l.trim() !== '');
+        const tableParsed = tryParsePipeTable(lines);
+        if (tableParsed) {
+          return (
+            <div key={pi} className="my-3 overflow-x-auto rounded-lg">
+              <table className="min-w-full text-xs border-collapse border border-white/10">
+                <thead>
+                  <tr className="bg-white/[0.04]">
+                    {tableParsed.headers.map((h, hi) => (
+                      <th
+                        key={hi}
+                        className="border border-white/10 px-2 py-2 text-left font-mono text-yellow-200/90 align-top"
+                      >
+                        {renderInline(h)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableParsed.rows.map((row, ri) => (
+                    <tr key={ri} className="odd:bg-white/[0.02]">
+                      {row.map((cell, ci) => (
+                        <td
+                          key={ci}
+                          className="border border-white/10 px-2 py-1.5 text-gray-300 align-top"
+                        >
+                          {renderInline(cell)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        }
+        if (lines.length > 0 && lines.every(l => /^\s*>/.test(l))) {
+          const inner = lines.map(l => l.replace(/^\s*>\s?/, ''));
+          return (
+            <blockquote
+              key={pi}
+              className="border-l-2 border-yellow-500/40 pl-3 my-2 text-gray-300 space-y-1.5"
+            >
+              {inner.map((line, li) => (
+                <p key={li} className="leading-relaxed">
+                  {renderInline(line)}
+                </p>
+              ))}
+            </blockquote>
+          );
+        }
         const hasList = lines.some(
           l => l.startsWith('- ') || l.startsWith('• ') || /^\d+\.\s/.test(l)
         );
@@ -1435,7 +1552,7 @@ export default function CetAiSearch() {
                 />
                 {isProcessing && (
                   <div className="absolute right-4 top-4">
-                    <div className="w-4 h-4 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-yellow-500 border-t-transparent rounded-full motion-safe:animate-spin" />
                   </div>
                 )}
               </div>
