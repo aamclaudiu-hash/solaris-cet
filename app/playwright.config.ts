@@ -14,12 +14,13 @@ export default defineConfig({
   /* Retry on CI to reduce flakiness */
   retries: process.env.CI ? 2 : 0,
   /**
-   * Default 1 worker: all tests share one Vite preview on :4173; higher parallelism often
-   * yields `net::ERR_CONNECTION_REFUSED` locally. Override with `PW_WORKERS=4 npm run test:e2e`.
+   * CI: 1 worker (stable with one preview). Local: Playwright default parallelism unless `PW_WORKERS`
+   * is set — use e.g. `PW_WORKERS=1 npm run test:e2e` if you see `ERR_CONNECTION_REFUSED` on :4173.
    */
   workers: (() => {
+    if (process.env.CI) return 1;
     const raw = process.env.PW_WORKERS;
-    if (raw === undefined || raw === '') return 1;
+    if (raw === undefined || raw === '') return undefined;
     const n = Number.parseInt(raw, 10);
     return Number.isFinite(n) && n >= 1 ? n : 1;
   })(),
