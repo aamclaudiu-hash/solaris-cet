@@ -1,11 +1,15 @@
-import { SOLARIS_CET_LOGO_FILENAME } from './brandAssetFilenames';
+import {
+  PRODUCTION_SITE_ORIGIN,
+  SOLARIS_CET_LOGO_FILENAME,
+  productionBrandLogoUrl,
+} from './brandAssetFilenames';
 
-export { SOLARIS_CET_LOGO_FILENAME };
+export { PRODUCTION_SITE_ORIGIN, SOLARIS_CET_LOGO_FILENAME, productionBrandLogoUrl };
 
 /**
- * When renaming the logo file: update `brandAssetFilenames.ts`, `.gitignore` `!app/public/…`,
- * `app/index.html` (preload + Organization `logo` URL), and `app/public/tonconnect-manifest.json` `iconUrl`.
- * PWA precache uses `SOLARIS_CET_LOGO_FILENAME` via `vite.config.ts` `includeAssets`.
+ * When renaming the logo file: update `brandAssetFilenames.ts` (`SOLARIS_CET_LOGO_FILENAME`,
+ * `productionBrandLogoUrl`), `.gitignore` `!app/public/…`, `app/index.html` (preload + JSON-LD),
+ * and `app/public/tonconnect-manifest.json` `iconUrl`. PWA precache: `vite.config.ts` `includeAssets`.
  */
 
 /** URL for `<img src>` / preload (respects Vite `base`). */
