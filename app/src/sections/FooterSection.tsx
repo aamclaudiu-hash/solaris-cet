@@ -251,10 +251,10 @@ const FooterSection = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex items-center gap-3">
               <div
-                className="relative w-9 h-9 shrink-0 flex items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03] shadow-[0_0_24px_rgba(242,201,76,0.12)] solaris-icon-glow motion-reduce:animate-none animate-logo-breathe p-1.5"
+                className="relative w-9 h-9 shrink-0 flex items-center justify-center overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] shadow-[0_0_24px_rgba(242,201,76,0.12)] solaris-icon-glow motion-reduce:animate-none animate-logo-breathe p-0"
                 aria-hidden
               >
-                <SolarisLogoMark className="drop-shadow-[0_0_8px_rgba(242,201,76,0.35)]" />
+                <SolarisLogoMark className="h-full w-full drop-shadow-[0_0_8px_rgba(242,201,76,0.35)]" />
               </div>
               <span className="font-display font-semibold text-lg text-solaris-text">
                 Solaris <span className="text-solaris-gold">CET</span>

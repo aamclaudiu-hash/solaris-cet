@@ -75,8 +75,8 @@ const AgentBridge = () => {
           <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-solaris-gold text-solaris-dark text-[9px] font-mono font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
             RAV BRIDGE
           </div>
-          <div className="w-10 h-10 rounded-xl bg-solaris-gold/10 flex items-center justify-center p-1.5">
-            <SolarisLogoMark className="animate-logo-breathe motion-reduce:animate-none drop-shadow-[0_0_8px_rgba(242,201,76,0.4)]" />
+          <div className="w-10 h-10 overflow-hidden rounded-xl bg-solaris-gold/10 flex items-center justify-center p-0">
+            <SolarisLogoMark className="h-full w-full animate-logo-breathe motion-reduce:animate-none drop-shadow-[0_0_8px_rgba(242,201,76,0.4)]" />
           </div>
           <div className="hud-label text-solaris-gold text-[9px]">SOLARIS CET</div>
           <div className="font-display font-bold text-sm text-gradient-gold">9,000</div>

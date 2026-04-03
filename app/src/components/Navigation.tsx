@@ -273,8 +273,8 @@ const Navigation = () => {
         >
           <SheetHeader className="p-6 sm:p-8 pb-4 border-b border-white/6 text-left shrink-0">
             <SheetTitle className="font-display text-lg text-solaris-text tracking-tight flex items-center gap-3">
-              <span className="relative w-9 h-9 shrink-0 flex items-center justify-center">
-                <SolarisLogoMark />
+              <span className="relative w-9 h-9 shrink-0 flex items-center justify-center overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02]">
+                <SolarisLogoMark className="h-full w-full" />
               </span>
               <span>
                 Solaris <span className="text-solaris-gold">CET</span>

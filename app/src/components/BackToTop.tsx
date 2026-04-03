@@ -42,7 +42,7 @@ const BackToTop = () => {
       `}
     >
       <span
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-slate-950/90 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+        className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-950/90 p-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
         aria-hidden
       >
         <SolarisLogoMark className="h-full w-full drop-shadow-[0_0_6px_rgba(242,201,76,0.45)]" />
