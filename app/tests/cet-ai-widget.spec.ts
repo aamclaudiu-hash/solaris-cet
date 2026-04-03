@@ -191,6 +191,26 @@ test.describe('Solaris CET AI widget — mobile viewport', () => {
     await expect(page.getByText('What is the CET supply?', { exact: true })).toBeVisible({ timeout: 3000 });
   });
 
+  test('hero query shows character count when typing', async ({ page }) => {
+    await page.getByTestId('cet-ai-hero').scrollIntoViewIfNeeded();
+    await page.getByTestId('cet-ai-hero-query').fill('xy');
+    await expect(page.getByTestId('cet-ai-query-char-count')).toHaveText(`2/${CET_AI_MAX_QUERY_CHARS}`);
+  });
+
+  test('modal follow-up shows character count when typing (offline)', async ({ page }) => {
+    await page.route('**/api/chat', (route) => route.abort('failed'));
+    await page.getByTestId('cet-ai-hero').scrollIntoViewIfNeeded();
+    const chip = page.getByRole('button', { name: /What is the RAV Protocol/i });
+    await chip.evaluate((el) =>
+      (el as HTMLElement).scrollIntoView({ block: 'center', inline: 'nearest' }),
+    );
+    await chip.evaluate((btn) => (btn as HTMLButtonElement).click());
+    await expect(page.getByTestId('cet-ai-modal-dialog')).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/No live API on this host/i)).toBeVisible({ timeout: 20_000 });
+    await page.getByTestId('cet-ai-modal-query').fill('m');
+    await expect(page.getByTestId('cet-ai-query-char-count')).toHaveText(`1/${CET_AI_MAX_QUERY_CHARS}`);
+  });
+
   test('Copy full transcript after follow-up (offline, multi-turn)', async ({ page, context }) => {
     await assertCopyTranscriptMultiTurnOffline(page, context);
   });

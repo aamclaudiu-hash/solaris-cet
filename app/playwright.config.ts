@@ -36,10 +36,9 @@ export default defineConfig({
      --strictPort ensures the command fails immediately if 4173 is taken,
      so baseURL/webServer.url never silently point at the wrong port. */
   webServer: {
-    /* Local: build so preview matches source. CI: dist comes from the build job artifact — preview only. */
-    command: process.env.CI
-      ? 'npm run preview -- --port 4173 --strictPort'
-      : 'npm run build && npm run preview -- --port 4173 --strictPort',
+    /* Preview only — run `npm run build` (or `npm run verify`) first so `dist/` exists. A second build
+       here after `verify:full` was redundant and could fail with ENOTEMPTY on `dist/vendor/onnxruntime`. */
+    command: 'npm run preview -- --port 4173 --strictPort',
     url: 'http://localhost:4173',
     /* Local: allow reusing `npm run preview` if already running (run `npm run build` after UI changes). */
     reuseExistingServer: !process.env.CI,

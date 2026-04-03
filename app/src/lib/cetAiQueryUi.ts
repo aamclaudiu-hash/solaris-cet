@@ -1,7 +1,13 @@
+import {
+  CET_AI_QUERY_NEAR_LIMIT_REMAINING_CHARS,
+} from './cetAiConstants';
+
 /**
  * Tailwind classes for the CET AI query length indicator (hero + modal).
- * Amber when within 200 characters of the cap (aligned with UX in `CetAiSearch`).
+ * Amber when within `CET_AI_QUERY_NEAR_LIMIT_REMAINING_CHARS` of `max`.
  */
 export function cetAiQueryCharCountToneClass(length: number, max: number): string {
-  return length >= max - 200 ? 'text-amber-400/90' : 'text-gray-600';
+  return length >= max - CET_AI_QUERY_NEAR_LIMIT_REMAINING_CHARS
+    ? 'text-amber-400/90'
+    : 'text-gray-600';
 }
