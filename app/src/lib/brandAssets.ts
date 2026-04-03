@@ -1,9 +1,12 @@
+import { SOLARIS_CET_LOGO_FILENAME } from './brandAssetFilenames';
+
+export { SOLARIS_CET_LOGO_FILENAME };
+
 /**
- * Canonical public filenames for Solaris CET brand rasters.
- * Keep in sync with `app/index.html` preload / JSON-LD and `app/public/tonconnect-manifest.json`
- * absolute URLs (same basename).
+ * When renaming the logo file: update `brandAssetFilenames.ts`, `.gitignore` `!app/public/…`,
+ * `app/index.html` (preload + Organization `logo` URL), and `app/public/tonconnect-manifest.json` `iconUrl`.
+ * PWA precache uses `SOLARIS_CET_LOGO_FILENAME` via `vite.config.ts` `includeAssets`.
  */
-export const SOLARIS_CET_LOGO_FILENAME = 'solaris-cet-logo.jpg' as const;
 
 /** URL for `<img src>` / preload (respects Vite `base`). */
 export function solarisCetLogoSrc(): string {

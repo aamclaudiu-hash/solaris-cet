@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SOLARIS_CET_LOGO_FILENAME } from "@/lib/brandAssets";
+import { SOLARIS_CET_LOGO_FILENAME } from "@/lib/brandAssetFilenames";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const appPublic = join(dirname(fileURLToPath(import.meta.url)), "../../public");

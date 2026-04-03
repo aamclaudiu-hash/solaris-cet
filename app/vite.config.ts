@@ -1,6 +1,7 @@
 import { execSync } from "node:child_process"
 import fs from "node:fs"
 import path from "path"
+import { SOLARIS_CET_LOGO_FILENAME } from "./src/lib/brandAssetFilenames"
 import { DEDUST_POOL_DEPOSIT_URL } from "./src/lib/dedustUrls"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
@@ -125,7 +126,7 @@ export default defineConfig({
         'favicon.svg',
         'icon-192.png',
         'icon-512.png',
-        'solaris-cet-logo.jpg',
+        SOLARIS_CET_LOGO_FILENAME,
         'offline.html',
       ],
       manifest: {
