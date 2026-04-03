@@ -49,6 +49,7 @@
     "pretest:e2e": "node ../scripts/check-dist-for-e2e.mjs",
     "test:e2e": "playwright test",
     "test:e2e:stable": "PW_WORKERS=1 npm run test:e2e",
+    "test:e2e:fresh": "npm run build && npm run test:e2e:stable",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build",
     "verify:full": "npm run verify && npm run test:e2e:stable",
     "continue": "bash ../scripts/continue-from-here.sh",

@@ -2,6 +2,9 @@
 /**
  * Fail fast before Playwright when app/dist is missing (local `npm run test:e2e` without build).
  * CI downloads dist into app/dist before E2E — this passes there.
+ *
+ * If you changed React/components and tests fail on new selectors, rebuild first:
+ *   cd app && npm run test:e2e:fresh
  */
 import { existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';

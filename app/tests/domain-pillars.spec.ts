@@ -30,6 +30,21 @@ test.describe('Domain pillars', () => {
     await expect(page.getByTestId('hero-quick-stats').getByText('TON', { exact: true })).toBeVisible();
   });
 
+  test('authority-trust section renders four pillar cards after lazy mount', async ({ page }) => {
+    await scrollUntilSelectorAttached(page, '#authority-trust');
+    const trust = page.locator('#authority-trust');
+    await trust.scrollIntoViewIfNeeded();
+    await expect(trust).toBeVisible({ timeout: 15_000 });
+    await expect(trust.locator('.authority-pillar')).toHaveCount(4);
+  });
+
+  test('deep link /#authority-trust attaches after scrolling into lazy band', async ({ page }) => {
+    await page.goto('/#authority-trust');
+    await waitForAppReady(page);
+    await scrollUntilSelectorAttached(page, '#authority-trust');
+    await expect(page.locator('#authority-trust').locator('.authority-pillar')).toHaveCount(4);
+  });
+
   test('tokenomics (#staking) shows 9,000 CET cap and TON in viewport', async ({ page }) => {
     const staking = page.locator('#staking');
     await expect(staking).toBeAttached({ timeout: 15_000 });
