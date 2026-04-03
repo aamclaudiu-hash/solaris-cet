@@ -166,35 +166,40 @@ const Navigation = () => {
 
       <div className="w-full section-padding-x xl:px-12">
         <div className="flex items-center justify-between h-16 xl:h-20 gap-2 sm:gap-3">
-          {/* Logo */}
-          <a
-            href="#main-content"
-            className="flex items-center group min-w-0 shrink"
-            aria-label="Solaris CET"
-          >
-            <div className="relative h-10 xl:h-11 shrink-0 flex items-center justify-center transition-transform duration-500 ease-out group-hover:scale-[1.04]">
-              <SolarisLogoMark
-                crop="full"
-                priority
-                className="h-10 xl:h-11 w-auto max-h-full drop-shadow-[0_0_14px_rgba(242,201,76,0.35)]"
-              />
-              <div className="pointer-events-none absolute inset-[-3px] rounded-xl bg-solaris-gold/18 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-          </a>
+          {/* Logo + desktop nav — grouped so long labels (e.g. RO “Aplicație CET”) never collide with the mark */}
+          <div className="flex min-w-0 flex-1 items-center gap-4 xl:gap-6 2xl:gap-8">
+            <a
+              href="#main-content"
+              className="group flex shrink-0 items-center"
+              aria-label="Solaris CET"
+            >
+              <div className="relative flex h-10 shrink-0 origin-left items-center justify-center transition-transform duration-500 ease-out group-hover:scale-[1.04] xl:h-11">
+                <SolarisLogoMark
+                  crop="full"
+                  priority
+                  className="h-10 xl:h-11 w-auto max-h-full drop-shadow-[0_0_14px_rgba(242,201,76,0.35)]"
+                />
+                <div className="pointer-events-none absolute inset-[-3px] rounded-xl bg-solaris-gold/18 blur-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </div>
+            </a>
 
-          {/* Desktop Navigation — shown only at xl (≥1280 px) to avoid overflow */}
-          <nav className="hidden xl:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <a
-                key={link.navKey}
-                href={link.href}
-                className="text-sm text-solaris-muted hover:text-solaris-text transition-colors duration-300 relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-solaris-gold to-solaris-cyan transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-          </nav>
+            {/* Desktop Navigation — shown only at xl (≥1280 px) to avoid overflow */}
+            <nav
+              className="hidden min-w-0 flex-1 xl:flex xl:items-center xl:justify-center xl:gap-4 2xl:gap-6"
+              aria-label={t.nav.primaryNavigation}
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.navKey}
+                  href={link.href}
+                  className="shrink-0 text-sm text-solaris-muted transition-colors duration-300 hover:text-solaris-text relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-solaris-gold to-solaris-cyan transition-all duration-300 group-hover:w-full" />
+                </a>
+              ))}
+            </nav>
+          </div>
 
           {/* CTAs: persistent Buy on DeDust (< xl) + full desktop rail */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
