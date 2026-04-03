@@ -5,6 +5,14 @@ import type { LangCode } from '../src/i18n/translations';
 /** All `LangCode` values except default English — each must have a row in `CET_AI_LOCALE_FIXTURES`. */
 type NonEnLang = Exclude<LangCode, 'en'>;
 
+/** Stable anchor for hero chips (avoids ambiguous `max-w-5xl` + heading filters under load). */
+async function scrollCetAiHeroIntoView(page: Page): Promise<Locator> {
+  const hero = page.getByTestId('cet-ai-hero');
+  await expect(hero).toBeVisible({ timeout: 15_000 });
+  await hero.scrollIntoViewIfNeeded();
+  return hero;
+}
+
 /**
  * Offline multi-turn flow: chip → follow-up → copy full transcript; asserts clipboard handoff.
  */
@@ -17,8 +25,8 @@ async function assertCopyTranscriptMultiTurnOffline(page: Page, context: Browser
   await page.reload();
   await page.locator('.loading-overlay').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
 
-  await page.getByTestId('cet-ai-hero').scrollIntoViewIfNeeded();
-  const chip = page.getByRole('button', { name: /What is the RAV Protocol/i });
+  const hero = await scrollCetAiHeroIntoView(page);
+  const chip = hero.getByRole('button', { name: /What is the RAV Protocol/i });
   await chip.evaluate((el: HTMLElement) =>
     el.scrollIntoView({ block: 'center', inline: 'nearest' }),
   );
@@ -40,14 +48,6 @@ async function assertCopyTranscriptMultiTurnOffline(page: Page, context: Browser
   expect(text).toContain('What is the RAV Protocol');
   expect(text).toContain('Second turn CET transcript handoff');
   expect(text).toContain('## Question');
-}
-
-/** Stable anchor for hero chips (avoids ambiguous `max-w-5xl` + heading filters under load). */
-async function scrollCetAiHeroIntoView(page: Page): Promise<Locator> {
-  const hero = page.getByTestId('cet-ai-hero');
-  await expect(hero).toBeVisible({ timeout: 15_000 });
-  await hero.scrollIntoViewIfNeeded();
-  return hero;
 }
 
 /**
@@ -147,11 +147,7 @@ test.describe('Solaris CET AI widget — desktop', () => {
 
   test('static mode shows offline hint when /api/chat fails', async ({ page }) => {
     await page.route('**/api/chat', (route) => route.abort('failed'));
-    const heroWidget = page
-      .locator('div.max-w-5xl')
-      .filter({ has: page.getByRole('heading', { name: /Solaris CET AI/i }) })
-      .first();
-    await heroWidget.scrollIntoViewIfNeeded();
+    const heroWidget = await scrollCetAiHeroIntoView(page);
     const chip = heroWidget.getByRole('button', { name: /What is the RAV Protocol/i });
     await chip.evaluate((el: HTMLElement) =>
       el.scrollIntoView({ block: 'center', inline: 'nearest' }),
