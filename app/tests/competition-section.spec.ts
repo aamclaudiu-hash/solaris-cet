@@ -8,13 +8,16 @@ async function waitForAppReady(page: Page) {
  * `CompetitionSection` sits behind `LazyLoadWrapper` (near-screen gate). Scroll until the chunk mounts.
  */
 async function ensureCompetitionSectionAttached(page: Page) {
-  const deadline = Date.now() + 35_000;
-  while (Date.now() < deadline) {
-    if ((await page.locator('#competition').count()) > 0) return;
-    await page.evaluate(() => window.scrollBy(0, 700));
-    await page.waitForTimeout(120);
-  }
-  throw new Error('Timed out waiting for #competition (lazy section never mounted)');
+  await expect
+    .poll(
+      async () => {
+        if ((await page.locator('#competition').count()) > 0) return true;
+        await page.evaluate(() => window.scrollBy(0, 700));
+        return false;
+      },
+      { timeout: 35_000, intervals: [100, 200, 300, 400] },
+    )
+    .toBe(true);
 }
 
 test.describe('Competition section', () => {
