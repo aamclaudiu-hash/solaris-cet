@@ -194,7 +194,7 @@ jobs:
 
       - name: Run Playwright E2E tests
         working-directory: app
-        run: npm run test:e2e
+        run: npm run test:e2e:stable
 
       - name: Upload Playwright report
         if: always()

@@ -53,6 +53,9 @@ npm run build        # Production build → app/dist/
 npm run preview      # Preview production build locally
 npm run lint         # Run ESLint
 npm run typecheck    # TypeScript: app, Vite/Node configs, Playwright specs (`tsconfig.e2e.json`), same as CI
+npm run verify       # lint + typecheck + Vitest + production build (CI quality gate)
+npm run test:e2e:stable   # Playwright E2E (1 worker; avoids preview port contention)
+npm run verify:full  # verify + test:e2e:stable (full local gate; CI E2E step uses the same script)
 ```
 
 ---
