@@ -1,9 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { cetAiQueryCharCountToneClass } from '@/lib/cetAiQueryUi';
+import { cetAiQueryCharCountToneClass, formatCetAiQueryCharCountAria } from '@/lib/cetAiQueryUi';
 import {
   CET_AI_MAX_QUERY_CHARS,
   CET_AI_QUERY_NEAR_LIMIT_REMAINING_CHARS,
 } from '@/lib/cetAiConstants';
+
+describe('formatCetAiQueryCharCountAria', () => {
+  it('replaces placeholders', () => {
+    expect(formatCetAiQueryCharCountAria('A {current} B {max}', 3, 8000)).toBe('A 3 B 8000');
+  });
+});
 
 describe('cetAiQueryCharCountToneClass', () => {
   it('uses neutral gray when above the near-limit band', () => {

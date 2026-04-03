@@ -30,7 +30,7 @@ import {
 } from '@/lib/cetAiTelemetry';
 import { TONSCAN_CET_CONTRACT_URL } from '@/lib/cetContract';
 import { CET_AI_MAX_QUERY_CHARS } from '@/lib/cetAiConstants';
-import { cetAiQueryCharCountToneClass } from '@/lib/cetAiQueryUi';
+import { cetAiQueryCharCountToneClass, formatCetAiQueryCharCountAria } from '@/lib/cetAiQueryUi';
 import {
   buildCopyForAiText,
   buildFullConversationHandoff,
@@ -216,16 +216,19 @@ function CetAiQueryCharCountLine({
   id,
   length,
   max,
+  ariaTemplate,
 }: {
   id: string;
   length: number;
   max: number;
+  ariaTemplate: string;
 }): React.ReactNode {
   if (length === 0) return null;
   return (
     <p
       id={id}
       data-testid="cet-ai-query-char-count"
+      aria-label={formatCetAiQueryCharCountAria(ariaTemplate, length, max)}
       className={`mt-1 text-right text-[10px] font-mono tabular-nums ${cetAiQueryCharCountToneClass(length, max)}`}
     >
       {length}/{max}
@@ -1159,6 +1162,7 @@ export default function CetAiSearch() {
                 id="cet-ai-hero-char-count"
                 length={query.length}
                 max={CET_AI_MAX_QUERY_CHARS}
+                ariaTemplate={t.cetAi.queryCharCountAria}
               />
             ) : null}
           </div>
@@ -1633,6 +1637,7 @@ export default function CetAiSearch() {
                   id="cet-ai-modal-char-count"
                   length={query.length}
                   max={CET_AI_MAX_QUERY_CHARS}
+                  ariaTemplate={t.cetAi.queryCharCountAria}
                 />
                 {isProcessing && (
                   <div className="absolute right-4 top-4">

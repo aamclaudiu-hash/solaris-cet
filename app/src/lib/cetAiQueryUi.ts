@@ -11,3 +11,12 @@ export function cetAiQueryCharCountToneClass(length: number, max: number): strin
     ? 'text-amber-400/90'
     : 'text-gray-600';
 }
+
+/** Interpolate `{current}` and `{max}` in `translations.cetAi.queryCharCountAria`. */
+export function formatCetAiQueryCharCountAria(
+  template: string,
+  current: number,
+  max: number,
+): string {
+  return template.replaceAll('{current}', String(current)).replaceAll('{max}', String(max));
+}

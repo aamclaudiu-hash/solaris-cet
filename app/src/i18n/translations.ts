@@ -347,6 +347,8 @@ export interface Translations {
     copyTranscriptAria: string;
     copyTranscriptTitle: string;
     copyTranscriptAnnounce: string;
+    /** `aria-label` for length counter; use `{current}` and `{max}` placeholders. */
+    queryCharCountAria: string;
     sendQuestionAria: string;
     verifyOnTonscanTitle: string;
     /** Short submit label in CET AI dialog (visible on sm+). */
@@ -662,6 +664,7 @@ const translations: Record<LangCode, Translations> = {
       copyTranscriptAria: 'Copy full conversation transcript',
       copyTranscriptTitle: 'Copy all prior Q&A and this answer (multi-turn handoff)',
       copyTranscriptAnnounce: 'Full transcript copied to clipboard.',
+      queryCharCountAria: 'Characters: {current} of {max}.',
       sendQuestionAria: 'Send question',
       verifyOnTonscanTitle: 'Verify on TonScan',
       sendCompact: 'SEND',
@@ -1016,6 +1019,7 @@ const translations: Record<LangCode, Translations> = {
       copyTranscriptAria: 'Copiar transcripto completo de la conversación',
       copyTranscriptTitle: 'Copiar todos los pares pregunta/respuesta de esta sesión',
       copyTranscriptAnnounce: 'Transcripto completo copiado al portapapeles.',
+      queryCharCountAria: 'Caracteres: {current} de {max}.',
       sendQuestionAria: 'Enviar pregunta',
       verifyOnTonscanTitle: 'Verificar en TonScan',
       sendCompact: 'ENVIAR',
@@ -1362,6 +1366,7 @@ const translations: Record<LangCode, Translations> = {
       copyTranscriptAria: '复制完整对话记录',
       copyTranscriptTitle: '复制本会话中所有问答（多轮交接）',
       copyTranscriptAnnounce: '完整对话已复制到剪贴板。',
+      queryCharCountAria: '字符数：{current} / {max}。',
       sendQuestionAria: '发送问题',
       verifyOnTonscanTitle: '在 TonScan 验证',
       sendCompact: '发送',
@@ -1715,6 +1720,7 @@ const translations: Record<LangCode, Translations> = {
       copyTranscriptAria: 'Копировать полный транскрипт диалога',
       copyTranscriptTitle: 'Копировать все пары вопрос/ответ этой сессии',
       copyTranscriptAnnounce: 'Полный транскрипт скопирован в буфер обмена.',
+      queryCharCountAria: 'Символов: {current} из {max}.',
       sendQuestionAria: 'Отправить вопрос',
       verifyOnTonscanTitle: 'Проверить на TonScan',
       sendCompact: 'ОТПРАВИТЬ',
@@ -2069,6 +2075,7 @@ const translations: Record<LangCode, Translations> = {
       copyTranscriptAria: 'Copiază transcriptul complet al conversației',
       copyTranscriptTitle: 'Copiază toate întrebările și răspunsurile din această sesiune',
       copyTranscriptAnnounce: 'Transcriptul complet a fost copiat în clipboard.',
+      queryCharCountAria: 'Caractere: {current} din {max}.',
       sendQuestionAria: 'Trimite întrebarea',
       verifyOnTonscanTitle: 'Verifică pe TonScan',
       sendCompact: 'TRIMITE',
@@ -2423,6 +2430,7 @@ const translations: Record<LangCode, Translations> = {
       copyTranscriptAria: 'Copiar transcrição completa da conversa',
       copyTranscriptTitle: 'Copiar todos os pares pergunta/resposta desta sessão',
       copyTranscriptAnnounce: 'Transcrição completa copiada para a área de transferência.',
+      queryCharCountAria: 'Caracteres: {current} de {max}.',
       sendQuestionAria: 'Enviar pergunta',
       verifyOnTonscanTitle: 'Verificar no TonScan',
       sendCompact: 'ENVIAR',
@@ -2777,6 +2785,7 @@ const translations: Record<LangCode, Translations> = {
       copyTranscriptAria: 'Gesamtes Gespräch kopieren',
       copyTranscriptTitle: 'Alle Fragen und Antworten dieser Sitzung kopieren',
       copyTranscriptAnnounce: 'Vollständiges Transkript in die Zwischenablage kopiert.',
+      queryCharCountAria: 'Zeichen: {current} von {max}.',
       sendQuestionAria: 'Frage senden',
       verifyOnTonscanTitle: 'Auf TonScan prüfen',
       sendCompact: 'SENDEN',
