@@ -23,7 +23,7 @@ function BenchmarkTooltip({ active, payload, label }: TooltipContentProps<number
   const metric = typeof label === 'string' ? label : String(label ?? '');
   const skill = standardSkillBurst(skillSeedFromLabel(metric));
   return (
-    <div className="rounded-xl border border-white/12 bg-[#0D0E17] px-3 py-2.5 text-xs shadow-depth max-w-[min(100vw-24px,320px)]">
+    <div className="rounded-xl border border-white/12 bg-[#0D0E17] px-3 py-2.5 text-xs shadow-depth w-max max-w-[min(320px,calc(100dvw-1.5rem))]">
       <div className="font-semibold text-solaris-text mb-1.5">{metric}</div>
       <ul className="space-y-1 font-mono text-[10px]">
         {payload.map((entry: TooltipPayloadEntry) => {

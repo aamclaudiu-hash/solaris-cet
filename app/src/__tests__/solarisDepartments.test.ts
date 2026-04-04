@@ -1,7 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { solarisDepartments } from '@/data/solarisDepartments';
+import { MESH_ID_TO_AGENT_BOARD_LABEL } from '@/lib/agentBoardSkillMix';
 
 describe('solarisDepartments — agent mesh registry', () => {
+  it('every registry dept has an AgentBoard / chart short label', () => {
+    solarisDepartments.forEach((d) => {
+      expect(MESH_ID_TO_AGENT_BOARD_LABEL[d.id], d.id).toBeTruthy();
+    });
+  });
+
   it('10 depts, 200k agents, roles/skills invariants, global uniqueness', () => {
     expect(solarisDepartments).toHaveLength(10);
     const total = solarisDepartments.reduce((s, d) => s + d.agentCount, 0);

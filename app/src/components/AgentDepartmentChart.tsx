@@ -1,5 +1,7 @@
 import { RadialBarChart, RadialBar, Tooltip, ResponsiveContainer } from 'recharts';
 import { Brain } from 'lucide-react';
+import { solarisDepartments } from '@/data/solarisDepartments';
+import { MESH_ID_TO_AGENT_BOARD_LABEL } from '@/lib/agentBoardSkillMix';
 import {
   skillFlashForBoardDept,
   skillSeedFromLabel,
@@ -7,20 +9,26 @@ import {
   meshStandardBurstFromKey,
 } from '@/lib/meshSkillFeed';
 
-// ─── Department data ──────────────────────────────────────────────────────
+// ─── Department data (headcount from registry; labels match AgentBoard / meshSkillFeed) ─
 
-const DEPT_DATA = [
-  { name: 'Customer Ops', agents: 48_000, fill: '#2EE7FF' },
-  { name: 'Engineering',  agents: 34_000, fill: '#60A5FA' },
-  { name: 'Sales',        agents: 27_000, fill: '#34D399' },
-  { name: 'Data & AI',    agents: 21_000, fill: '#A78BFA' },
-  { name: 'Finance',      agents: 18_000, fill: '#F2C94C' },
-  { name: 'Marketing',    agents: 17_000, fill: '#FB923C' },
-  { name: 'Product',      agents: 13_000, fill: '#F472B6' },
-  { name: 'Security',     agents: 10_000, fill: '#F87171' },
-  { name: 'Legal',        agents:  7_000, fill: '#FBBF24' },
-  { name: 'Research',     agents:  5_000, fill: '#6EE7B7' },
-];
+const CHART_FILLS = [
+  '#2EE7FF',
+  '#60A5FA',
+  '#34D399',
+  '#A78BFA',
+  '#F2C94C',
+  '#FB923C',
+  '#F472B6',
+  '#F87171',
+  '#FBBF24',
+  '#6EE7B7',
+] as const;
+
+const DEPT_DATA = solarisDepartments.map((d, i) => ({
+  name: MESH_ID_TO_AGENT_BOARD_LABEL[d.id] ?? d.name,
+  agents: d.agentCount,
+  fill: CHART_FILLS[i] ?? '#94a3b8',
+}));
 
 const TOTAL = DEPT_DATA.reduce((s, d) => s + d.agents, 0);
 
@@ -43,7 +51,7 @@ const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Toolti
   const skillSalt = skillSeedFromLabel(d.name);
   const skillLine = skillFlashForBoardDept(d.name, skillSalt);
   return (
-    <div className="bg-[#0D0E17] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth max-w-[min(100vw-24px,280px)]">
+    <div className="bg-[#0D0E17] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth w-max max-w-[min(280px,calc(100dvw-1.5rem))]">
       <div className="font-bold mb-1" style={{ color: d.fill }}>{d.name}</div>
       <div className="text-solaris-text">{d.agents.toLocaleString()} agents</div>
       <div className="text-solaris-muted">{d.pct}% of total</div>

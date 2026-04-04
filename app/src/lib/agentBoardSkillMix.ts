@@ -15,6 +15,11 @@ export const AGENT_BOARD_DEPT_TO_MESH_ID: Record<string, string> = {
   Research: 'research',
 };
 
+/** Inverse of {@link AGENT_BOARD_DEPT_TO_MESH_ID} — one board label per mesh id. */
+export const MESH_ID_TO_AGENT_BOARD_LABEL: Record<string, string> = Object.fromEntries(
+  Object.entries(AGENT_BOARD_DEPT_TO_MESH_ID).map(([label, id]) => [id, label])
+);
+
 const MAX_BOARD_LEN = 158;
 
 export function truncateBoardSkillMessage(s: string): string {
