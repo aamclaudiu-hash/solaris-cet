@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
-import {
-  Users, Code2, TrendingUp, Brain, Coins,
-  Globe, Palette, Shield, FileCheck, Crown,
-  MessageCircle, Lightbulb, CheckCircle, AlertTriangle, Dna,
-} from 'lucide-react';
+import { MessageCircle, Lightbulb, CheckCircle, AlertTriangle, Dna } from 'lucide-react';
 import { useAgentBoard, type EventKind } from '../hooks/useAgentBoard';
 import { AGENT_BOARD_DEPT_TO_MESH_ID } from '@/lib/agentBoardSkillMix';
 import {
@@ -16,30 +12,7 @@ import {
   meshWhisperForBoardCollab,
   meshStandardBurstForBoardCollab,
 } from '@/lib/meshSkillFeed';
-
-// ─── Department display config ───────────────────────────────────────────
-
-interface DeptDisplay {
-  name: string;
-  short: string;
-  color: string;
-  bg: string;
-  bar: string;
-  icon: typeof Users;
-}
-
-const DEPT_DISPLAY: Record<string, DeptDisplay> = {
-  'Customer Ops': { name: 'Customer Ops', short: 'CX',  color: 'text-cyan-400',     bg: 'bg-cyan-400/10',     bar: 'bg-cyan-400',      icon: Users      },
-  'Engineering':  { name: 'Engineering',  short: 'ENG', color: 'text-blue-400',     bg: 'bg-blue-400/10',     bar: 'bg-blue-400',      icon: Code2      },
-  'Sales':        { name: 'Sales',        short: 'SLS', color: 'text-emerald-400',  bg: 'bg-emerald-400/10',  bar: 'bg-emerald-400',   icon: TrendingUp },
-  'Data & AI':    { name: 'Data & AI',    short: 'AI',  color: 'text-purple-400',   bg: 'bg-purple-400/10',   bar: 'bg-purple-400',    icon: Brain      },
-  'Finance':      { name: 'Finance',      short: 'FIN', color: 'text-solaris-gold', bg: 'bg-solaris-gold/10', bar: 'bg-solaris-gold',  icon: Coins      },
-  'Marketing':    { name: 'Marketing',    short: 'MKT', color: 'text-orange-400',   bg: 'bg-orange-400/10',   bar: 'bg-orange-400',    icon: Globe      },
-  'Product':      { name: 'Product',      short: 'PRD', color: 'text-pink-400',     bg: 'bg-pink-400/10',     bar: 'bg-pink-400',      icon: Palette    },
-  'Security':     { name: 'Security',     short: 'SEC', color: 'text-red-400',      bg: 'bg-red-400/10',      bar: 'bg-red-400',       icon: Shield     },
-  'Legal':        { name: 'Legal',        short: 'LGL', color: 'text-amber-400',    bg: 'bg-amber-400/10',    bar: 'bg-amber-400',     icon: FileCheck  },
-  'Research':     { name: 'Research',     short: 'R&D', color: 'text-solaris-cyan', bg: 'bg-solaris-cyan/10', bar: 'bg-solaris-cyan',  icon: Crown      },
-};
+import { agentBoardDeptUiRow, isAgentBoardDeptLabel } from '@/lib/agentBoardDeptUi';
 
 const KIND_CONFIG: Record<EventKind, { icon: typeof MessageCircle; label: string; color: string; bg: string }> = {
   solved:  { icon: CheckCircle,   label: 'SOLVED',  color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
@@ -105,11 +78,14 @@ const AgentBoard = () => {
       {/* Feed */}
       <ul className="divide-y divide-white/4" aria-live="polite" aria-label={t.sectionAria.agentBoardFeed}>
         {events.map((ev) => {
-          const dept = DEPT_DISPLAY[ev.dept] ?? DEPT_DISPLAY['Engineering'];
+          const deptName = ev.dept;
+          const dept = agentBoardDeptUiRow(deptName);
           const DeptIcon = dept.icon;
           const kc = KIND_CONFIG[ev.kind];
           const KindIcon = kc.icon;
-          const meshDeptId = AGENT_BOARD_DEPT_TO_MESH_ID[ev.dept];
+          const meshDeptId = isAgentBoardDeptLabel(deptName)
+            ? AGENT_BOARD_DEPT_TO_MESH_ID[deptName]
+            : undefined;
           const instanceBurst = meshStandardBurstForBoardLiveAgent(
             ev.agentId,
             ev.dept,

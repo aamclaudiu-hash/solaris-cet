@@ -1,4 +1,5 @@
 import type { LangCode } from "@/i18n/translations"
+import { CET_FIXED_SUPPLY_CAP, TASK_AGENT_MESH_TOTAL } from "@/lib/domainPillars"
 
 /** Replace `{key}` placeholders in i18n strings (e.g. `{sample}`, `{honest}`). */
 export function interpolatePlaceholders(
@@ -45,7 +46,12 @@ export function formatCetDecimal(
   }).format(amount)
 }
 
-/** Display string for fixed 9,000 CET supply in the active UI locale. */
+/** Display string for fixed CET supply cap in the active UI locale. */
 export function formatCetSupplyWithSuffix(lang: LangCode): string {
-  return `${formatCetInteger(9000, lang)} CET`
+  return `${formatCetInteger(CET_FIXED_SUPPLY_CAP, lang)} CET`
+}
+
+/** Locale-formatted ~200k task-agent headcount with trailing + (hero ticker, etc.). */
+export function formatTaskAgentMeshHeadline(lang: LangCode): string {
+  return `${formatCetInteger(TASK_AGENT_MESH_TOTAL, lang)}+`
 }

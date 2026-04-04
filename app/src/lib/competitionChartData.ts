@@ -1,3 +1,5 @@
+import { CET_FIXED_SUPPLY_CAP } from '@/lib/domainPillars';
+
 /**
  * Chart series for `CompetitionCharts` — kept separate for tests and copy parity with the comparison matrix.
  * CET row must stay aligned with immutable supply / throughput messaging.
@@ -12,7 +14,7 @@ export const COMPETITION_TPS_CHART_ROWS = [
 ] as const;
 
 export const COMPETITION_SCARCITY_CHART_ROWS = [
-  { name: 'CET', value: 9_000, isCET: true },
+  { name: 'CET', value: CET_FIXED_SUPPLY_CAP, isCET: true },
   { name: 'TAO', value: 21_000_000, isCET: false },
   { name: 'ASI', value: 4_600_000_000, isCET: false },
   { name: 'FET', value: 1_150_000_000, isCET: false },

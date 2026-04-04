@@ -6,6 +6,7 @@ import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { meshStandardBurstFromKey, meshWhisperFromKey } from '@/lib/meshSkillFeed';
 import { useLanguage } from '../hooks/useLanguage';
+import { CET_FIXED_SUPPLY_CAP, ENTERPRISE_DEPARTMENT_LANES, TASK_AGENT_MESH_TOTAL } from '@/lib/domainPillars';
 
 /** Overrides global `.bento-card:hover` (translate/scale/shadow) with the bento gold glow spec. */
 const BENTO_TILE_INTERACTION =
@@ -16,9 +17,9 @@ const BENTO_TILE_INTERACTION =
 const STATS = [
   {
     id: 'agents',
-    value: 200_000,
+    value: TASK_AGENT_MESH_TOTAL,
     label: 'Task-specialist AI agents',
-    sublabel: '~200k narrow agents for routing, retrieval & validation · 10 departments · orchestrated for CET AI',
+    sublabel: `~200k narrow agents for routing, retrieval & validation · ${ENTERPRISE_DEPARTMENT_LANES} departments · orchestrated for CET AI`,
     suffix: '',
     icon: Users,
     color: 'text-solaris-gold',
@@ -31,7 +32,7 @@ const STATS = [
   },
   {
     id: 'supply',
-    value: 9_000,
+    value: CET_FIXED_SUPPLY_CAP,
     label: 'Fixed Total Supply',
     sublabel: 'Forever. No minting. No inflation. Each CET = 0.011% of all value.',
     suffix: ' CET',

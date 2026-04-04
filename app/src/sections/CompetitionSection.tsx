@@ -5,6 +5,7 @@ import GlowOrbs from '../components/GlowOrbs';
 import { ChartLazyFallback } from '@/components/ChartLazyFallback';
 import { useNearScreen } from '@/hooks/useNearScreen';
 import { useLanguage } from '../hooks/useLanguage';
+import { CET_FIXED_SUPPLY_CAP, TASK_AGENT_MESH_TOTAL } from '@/lib/domainPillars';
 
 const CompetitionCharts = lazy(() => import('@/components/CompetitionCharts'));
 
@@ -32,14 +33,16 @@ interface Competitor {
   isCET?: boolean;
 }
 
+const fmtIntEn = (n: number) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n);
+
 const competitors: Competitor[] = [
   {
     name: 'Solaris CET',
     symbol: 'CET',
     chain: 'TON',
-    supply: '9,000',
+    supply: fmtIntEn(CET_FIXED_SUPPLY_CAP),
     tps: '100,000',
-    agents: '200,000',
+    agents: fmtIntEn(TASK_AGENT_MESH_TOTAL),
     rwa: true,
     dualAi: true,
     mining: true,

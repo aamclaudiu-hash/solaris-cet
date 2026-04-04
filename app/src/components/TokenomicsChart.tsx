@@ -1,5 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { Coins } from 'lucide-react';
+import { CET_FIXED_SUPPLY_CAP } from '@/lib/domainPillars';
 import { skillSeedFromLabel, standardSkillBurst } from '@/lib/meshSkillFeed';
 
 const BENTO_TILE_INTERACTION =
@@ -30,7 +31,7 @@ const CustomTooltip = ({ active, payload }: TooltipProps) => {
       <div className="font-bold mb-1" style={{ color: d.color }}>{d.name}</div>
       <div className="text-solaris-text text-base font-bold">{d.pct.toFixed(2)}%</div>
       <div className="text-solaris-muted mt-1 text-[10px] leading-relaxed">{d.description}</div>
-      <div className="text-solaris-muted mt-1">{((d.pct / 100) * 9000).toFixed(0)} CET</div>
+      <div className="text-solaris-muted mt-1">{((d.pct / 100) * CET_FIXED_SUPPLY_CAP).toFixed(0)} CET</div>
       <p
         className="mt-2 pt-2 border-t border-fuchsia-500/20 text-[9px] text-fuchsia-200/85 leading-snug line-clamp-3"
         title={skill}

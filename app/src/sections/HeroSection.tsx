@@ -11,7 +11,7 @@ import { SolarisLogoMark } from '../components/SolarisLogoMark';
 import { TooltipProvider } from '../components/ui/tooltip';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useLanguage } from '../hooks/useLanguage';
-import { formatCetSupplyWithSuffix } from '@/lib/numerals';
+import { formatCetSupplyWithSuffix, formatTaskAgentMeshHeadline } from '@/lib/numerals';
 import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
 import { renderSimpleBold } from '@/lib/renderSimpleBold';
 
@@ -34,8 +34,8 @@ const WAVE_BAR_HEIGHTS = [
 ] as const;
 
 const TICKER_DATA = [
-  { label: 'AI AGENTS', value: '200,000+' },
-  { label: 'SUPPLY', value: '9,000 CET' },
+  { label: 'AI AGENTS', value: '' }, // filled in useMemo from domain headcount
+  { label: 'SUPPLY', value: '' }, // filled in useMemo from formatCetSupplyWithSuffix
   { label: 'NETWORK', value: 'TON' },
   { label: 'MAX TPS', value: '100,000' },
   { label: 'FINALITY', value: '2.0s' },
@@ -74,9 +74,12 @@ const HeroSection: React.FC = () => {
 
   const tickerRows = useMemo(() => {
     const supply = formatCetSupplyWithSuffix(lang);
-    return TICKER_DATA.map((row) =>
-      row.label === 'SUPPLY' ? { ...row, value: supply } : row,
-    );
+    const agents = formatTaskAgentMeshHeadline(lang);
+    return TICKER_DATA.map((row) => {
+      if (row.label === 'SUPPLY') return { ...row, value: supply };
+      if (row.label === 'AI AGENTS') return { ...row, value: agents };
+      return row;
+    });
   }, [lang]);
 
   const handleMiningOperation = useCallback(async () => {
@@ -386,7 +389,11 @@ const HeroSection: React.FC = () => {
                 </div>
 
                 <div className="space-y-4 sm:space-y-5">
-                  <StatRow label="TASK AGENTS (ROUTING)" value="200,000+" colorClass="text-yellow-500" />
+                  <StatRow
+                    label="TASK AGENTS (ROUTING)"
+                    value={formatTaskAgentMeshHeadline(lang)}
+                    colorClass="text-yellow-500"
+                  />
                   <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full" />
                   <StatRow label="THROUGHPUT" value="~100,000 TPS" />
                   <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full" />
