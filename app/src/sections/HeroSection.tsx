@@ -137,7 +137,7 @@ const HeroSection: React.FC = () => {
     <TooltipProvider>
       <section
         ref={containerRef}
-        className="relative min-h-screen bg-slate-950 overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center"
+        className="relative min-h-dvh bg-slate-950 overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center"
       >
         {/* Ambient background: gradient mesh + orbs + particles */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden>

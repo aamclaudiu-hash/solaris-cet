@@ -132,7 +132,8 @@ const Navigation = () => {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-[1000] border-b transition-all duration-500',
+        /* transform-gpu: Chromium composites fixed + backdrop-filter more reliably */
+        'fixed top-0 left-0 right-0 z-[1000] border-b transition-all duration-500 transform-gpu backface-hidden',
         isScrolled
           ? 'bg-slate-950/88 backdrop-blur-2xl border-white/6 shadow-[0_1px_0_rgba(242,201,76,0.06),0_8px_32px_rgba(0,0,0,0.4)]'
           : 'bg-slate-950/50 backdrop-blur-xl border-white/[0.05]',

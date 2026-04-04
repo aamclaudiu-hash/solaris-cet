@@ -42,11 +42,6 @@
   color: #000;
 }
 
-/* Mobile tap highlight removal */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
 /* Range input styling */
 input[type="range"] {
   -webkit-appearance: none;

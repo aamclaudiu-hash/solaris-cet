@@ -227,7 +227,7 @@ function AppContent() {
 
       <div
         ref={mainRef}
-        className="relative min-h-screen overflow-x-clip bg-slate-950 text-white/90"
+        className="relative min-h-dvh overflow-x-clip bg-slate-950 text-white/90"
         aria-hidden={!isLoaded}
         inert={!isLoaded ? true : undefined}
       >
