@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { NAV_PRIMARY_IN_PAGE } from '@/lib/navPrimaryHrefs';
 import { waitForAppReady, scrollUntilSelectorAttached } from './e2e-helpers';
+import { E2E_I18N_START } from './navPrimaryE2eCases';
 
 /**
  * Off-canvas sheet (`#mobile-menu`) mirrors desktop `NAV_PRIMARY_IN_PAGE` links.
@@ -10,7 +11,7 @@ test.describe('Primary navigation (mobile sheet)', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto('/');
+    await page.goto(E2E_I18N_START);
     await waitForAppReady(page);
   });
 

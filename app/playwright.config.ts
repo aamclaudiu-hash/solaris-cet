@@ -14,15 +14,23 @@ export default defineConfig({
   /* Retry on CI to reduce flakiness */
   retries: process.env.CI ? 2 : 0,
   /**
-   * CI: 1 worker (stable with one preview). Local: Playwright default parallelism unless `PW_WORKERS`
-   * is set — use e.g. `PW_WORKERS=1 npm run test:e2e` if you see `ERR_CONNECTION_REFUSED` on :4173.
+   * Workers: optional `PW_WORKERS` (integer ≥ 1). CI defaults to 1 (one preview on :4173); set repo
+   * variable `E2E_WORKERS` in GitHub Actions to override. Local default is Playwright parallelism;
+   * use `PW_WORKERS=1` (see `test:e2e:stable`) if you see `ERR_CONNECTION_REFUSED` on :4173.
    */
   workers: (() => {
-    if (process.env.CI) return 1;
     const raw = process.env.PW_WORKERS;
-    if (raw === undefined || raw === '') return undefined;
-    const n = Number.parseInt(raw, 10);
-    return Number.isFinite(n) && n >= 1 ? n : 1;
+    const parsed =
+      raw === undefined || raw === ''
+        ? undefined
+        : (() => {
+            const n = Number.parseInt(raw, 10);
+            return Number.isFinite(n) && n >= 1 ? n : undefined;
+          })();
+    if (process.env.CI) {
+      return parsed ?? 1;
+    }
+    return parsed;
   })(),
   /* Reporter */
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
