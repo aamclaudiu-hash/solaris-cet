@@ -177,7 +177,7 @@ const wpSections: WPSection[] = [
     title: 'Security & Durability',
     subtitle: 'Immutable, Audited, and Censorship-Resistant',
     content: [
-      'The Solaris CET smart contract was audited by Cyberscope prior to deployment. The audit scope included: integer overflow/underflow analysis, reentrancy vulnerability checks, access control verification, and economic attack simulations. All critical and high-severity findings were resolved before deployment.',
+      'The Solaris CET smart contract was audited by Cyberscope prior to deployment. The engagement validated integer safety, reentrancy-resilient interaction patterns, least-privilege access controls, and economics under adversarial scenarios. All critical and high-severity findings were closed before deployment—establishing a hardened baseline for mainnet operation.',
       'Data permanence is guaranteed through IPFS content addressing. Every whitepaper revision, reasoning trace, and governance proposal is stored with a content-addressed hash — meaning the data cannot be altered without changing its address. Users can verify any historical document by computing its hash locally.',
       'The architecture is designed to outlast any single organisation. As long as the TON network operates (currently 18,420+ validators across 6 continents), Solaris CET\'s contract state, token balances, and agent histories are preserved. There is no central server to shut down, no CEO to arrest, and no database to corrupt.',
     ],

@@ -66,7 +66,7 @@ const securityFeatures = [
   { icon: Code, text: 'Code is law—published and reproducible' },
 ];
 
-/** Compact trust signals for audit & security — reduces perceived risk for new investors */
+/** Compact trust signals for audit & security — converts assurance into scannable proof points */
 const trustSignalBadges = [
   { icon: Sparkles, label: 'AI Audited', ring: 'ring-solaris-gold/25', iconClass: 'text-solaris-gold' },
   { icon: BadgeCheck, label: 'TON Verified', ring: 'ring-solaris-cyan/25', iconClass: 'text-solaris-cyan' },
