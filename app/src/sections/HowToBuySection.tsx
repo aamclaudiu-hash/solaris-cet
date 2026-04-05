@@ -281,7 +281,7 @@ const HowToBuySection = () => {
               href={DEDUST_SWAP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-solaris-gold text-solaris-dark font-semibold text-sm hover:bg-solaris-gold/90 active:scale-95 transition-all duration-200"
+              className="shrink-0 btn-filled-gold text-sm"
             >
               <ArrowRightLeft className="w-4 h-4" />
               Swap on DeDust

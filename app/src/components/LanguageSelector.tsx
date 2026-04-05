@@ -17,11 +17,11 @@ const LanguageSelector = () => {
 
   return (
     <div
-      className="flex items-center gap-1"
+      className="flex items-center gap-2"
       title={shortSkillWhisper(skillSeedFromLabel(`langSelector|${lang}`))}
     >
-      <Globe className="w-3.5 h-3.5 text-solaris-muted" />
-      <div className="flex items-center gap-0.5">
+      <Globe className="w-4 h-4 text-solaris-muted shrink-0" />
+      <div className="flex items-center gap-1">
         {SUPPORTED_LANGS.map((code) => (
           <button
             key={code}

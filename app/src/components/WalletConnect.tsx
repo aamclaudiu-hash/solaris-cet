@@ -65,10 +65,12 @@ const WalletConnect = () => {
 
   return (
     <div
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 min-h-[44px]"
       title={standardSkillBurst(skillSeedFromLabel('walletConnect|tonMesh'))}
     >
-      <TonConnectButton className="ton-connect-btn" />
+      <div className="touch-manipulation">
+        <TonConnectButton className="ton-connect-btn" />
+      </div>
       {wallet && (
         import.meta.env.PROD ? (
           <a
