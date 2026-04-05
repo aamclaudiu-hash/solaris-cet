@@ -39,7 +39,19 @@ Operational notes for the static SPA + Docker/nginx deploy (Coolify → VPS). **
 
 **Behaviour:** UI should degrade gracefully (DeDust link, cached copy if available).
 
-**Actions:** Check DeDust/API reachability; verify CSP `connect-src` in `app/index.html` still allows `https://api.dedust.io` if endpoints change.
+**Optimisation (April 2026):** The frontend now consumes indexed data from `api/state.json` (small footprint) and only fetches small price deltas from DeDust. This avoids the 23MB `v2/pools` payload which caused `ERR_ABORTED` in earlier builds.
+
+**Actions:** 
+1. Check DeDust/API reachability.
+2. Verify `app/vite.config.ts` proxy settings if running in dev.
+3. Verify CSP `connect-src` in `app/index.html` still allows `https://api.dedust.io`.
+
+### 4. TON Connect / Wallet issues
+
+**Actions:**
+1. Ensure `tonconnect-manifest.json` is in `public/`.
+2. In dev, Vite proxy must be configured correctly to avoid CORS.
+3. Verify `manifestUrl` logic in `App.tsx` (uses local origin in dev, production origin in prod).
 
 ### 4. ONNX / CET AI worker fails
 
