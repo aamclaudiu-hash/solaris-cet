@@ -12,7 +12,7 @@ export function useSmoothAnchors() {
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      let anchor = target.tagName.toLowerCase() === 'a' ? (target as HTMLAnchorElement) : target.closest('a');
+      const anchor = target.tagName.toLowerCase() === 'a' ? (target as HTMLAnchorElement) : target.closest('a');
 
       if (!anchor) return;
 
