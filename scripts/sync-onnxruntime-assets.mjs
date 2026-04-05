@@ -9,7 +9,11 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
-const src = join(root, "app", "node_modules", "onnxruntime-web", "dist");
+// Try app/node_modules (old structure) or root node_modules (new workspace structure)
+let src = join(root, "app", "node_modules", "onnxruntime-web", "dist");
+if (!existsSync(src)) {
+  src = join(root, "node_modules", "onnxruntime-web", "dist");
+}
 const dest = join(root, "app", "public", "vendor", "onnxruntime");
 
 if (!existsSync(src)) {

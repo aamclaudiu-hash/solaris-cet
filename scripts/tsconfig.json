@@ -8,7 +8,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "include": ["*.ts", "../app/src/lib/cetContract.ts", "../app/src/lib/dedustUrls.ts"]
 }

@@ -1,0 +1,8 @@
+{
+  "name": "solaris-cet-api",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "openai": "^6.33.0"
+  }
+}
