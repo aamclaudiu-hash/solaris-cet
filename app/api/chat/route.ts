@@ -103,7 +103,8 @@ function buildChatMessages(
 async function fetchOnChainContext(): Promise<OnChainContext | null> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    // Increase timeout for the 23MB pools JSON
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
 
     const [poolsRes, pricesRes] = await Promise.all([
       fetch('https://api.dedust.io/v2/pools', { signal: controller.signal }),

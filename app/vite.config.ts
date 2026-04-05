@@ -296,17 +296,40 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
+    port: 5173,
+    strictPort: true,
+    // Add cors to allow all origins in dev, though proxy usually handles it.
+    cors: true,
+    // hmr: { overlay: false }, // optional, if the overlay is annoying
     proxy: {
       '/api-dedust': {
         target: 'https://api.dedust.io',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api-dedust/, ''),
+        // Increase timeouts for slow external APIs to prevent ERR_ABORTED
+        proxyTimeout: 10000,
+        timeout: 10000,
       },
       '/api-country': {
         target: 'https://api.country.is',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api-country/, ''),
+        proxyTimeout: 5000,
+        timeout: 5000,
       },
     },
+  },
+  optimizeDeps: {
+    // Explicitly include heavy dependencies to avoid on-the-fly pre-bundling
+    // which can cause server restarts and aborted requests.
+    include: [
+      'react',
+      'react-dom',
+      'gsap',
+      'lucide-react',
+      '@tonconnect/ui-react',
+      'recharts',
+    ],
   },
 });

@@ -1,26 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import { chainStatePromise } from '@/lib/chain-state';
 
 import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
-import { DEDUST_POOL_ADDRESS } from '@/lib/dedustUrls';
-const CET_DECIMALS = 9;
 const REFRESH_INTERVAL_MS = 60_000;
-
-interface DeDustAsset {
-  type: 'native' | 'jetton';
-  address?: string;
-}
-
-interface DeDustPoolStats {
-  volume_24h: string;
-  fees_24h: string;
-}
-
-interface DeDustPool {
-  address: string;
-  assets: [DeDustAsset, DeDustAsset];
-  reserves: [string, string];
-  stats?: DeDustPoolStats;
-}
 
 interface DeDustPrice {
   address: string;
@@ -68,27 +50,28 @@ export function useLivePoolData(): PoolData {
     try {
       const signal = createTimeoutSignal(8000);
       const isDev = import.meta.env.DEV;
-      const poolsUrl = isDev ? '/api-dedust/v2/pools' : 'https://api.dedust.io/v2/pools';
       const pricesUrl = isDev ? '/api-dedust/v2/prices' : 'https://api.dedust.io/v2/prices';
 
-      const [poolsRes, pricesRes] = await Promise.all([
-        fetch(poolsUrl, { signal }),
+      // Fetch chain state (cached promise) and live prices (small 1.1 KB)
+      const [state, pricesRes] = await Promise.all([
+        chainStatePromise,
         fetch(pricesUrl, { signal }),
       ]);
 
-      if (!poolsRes.ok || !pricesRes.ok) {
-        throw new Error('Failed to fetch DeDust data');
+      if (!pricesRes.ok) {
+        throw new Error('Failed to fetch DeDust prices');
       }
 
-      const pools: DeDustPool[] = await poolsRes.json();
       const prices: DeDustPrice[] = await pricesRes.json();
 
       // Get TON USD price from prices endpoint
       const tonEntry = prices.find((p) => p.address === 'native');
       const tonPriceUsd = tonEntry ? parseFloat(tonEntry.price) : null;
 
-      // Find the CET/TON pool by address
-      const cetPool = pools.find((p) => p.address === DEDUST_POOL_ADDRESS);
+      // Use reserves from state.json (cached/indexed)
+      const { pool } = state;
+      const reserveTon = pool.reserveTon ? parseFloat(pool.reserveTon) : null;
+      const reserveCet = pool.reserveCet ? parseFloat(pool.reserveCet) : null;
 
       // Look up CET price directly from prices endpoint
       const cetAddressLower = CET_CONTRACT_ADDRESS.toLowerCase();
@@ -100,27 +83,18 @@ export function useLivePoolData(): PoolData {
       let tvlUsd: number | null = null;
       let volume24hUsd: number | null = null;
 
-      if (cetPool && tonPriceUsd) {
-        // Determine which reserve index corresponds to TON vs CET
-        const tonIndex = cetPool.assets[0].type === 'native' ? 0 : 1;
-        const cetIndex = tonIndex === 0 ? 1 : 0;
-
-        const tonReserve = parseFloat(cetPool.reserves[tonIndex]) / 1e9;
-        const cetReserve = parseFloat(cetPool.reserves[cetIndex]) / 10 ** CET_DECIMALS;
-
+      if (reserveTon !== null && reserveCet !== null && tonPriceUsd) {
         // Calculate CET price from reserves if not available in prices endpoint
-        if (priceUsd === null && cetReserve > 0) {
-          priceUsd = (tonReserve / cetReserve) * tonPriceUsd;
+        if (priceUsd === null && reserveCet > 0) {
+          priceUsd = (reserveTon / reserveCet) * tonPriceUsd;
         }
 
         // TVL = 2× the TON side (symmetric pool)
-        tvlUsd = tonReserve * tonPriceUsd * 2;
+        tvlUsd = reserveTon * tonPriceUsd * 2;
 
-        // 24 h volume (in nanoTON → TON → USD)
-        if (cetPool.stats?.volume_24h) {
-          const volumeTon = parseFloat(cetPool.stats.volume_24h) / 1e9;
-          volume24hUsd = volumeTon * tonPriceUsd;
-        }
+        // Note: volume_24h is not in state.json yet, so we'll skip it or 
+        // rely on a future indexer update to include it.
+        volume24hUsd = null; 
       }
 
       setData({

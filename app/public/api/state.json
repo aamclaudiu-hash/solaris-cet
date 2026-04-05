@@ -3,7 +3,7 @@
     "symbol": "CET",
     "name": "SOLARIS CET",
     "contract": "EQBbUfeIo6yrNRButZGdf4WRJZZ3IDkN8kHJbsKlu3xxypWX",
-    "totalSupply": null,
+    "totalSupply": "9",
     "decimals": 9
   },
   "pool": {
@@ -13,5 +13,5 @@
     "lpSupply": null,
     "priceTonPerCet": null
   },
-  "updatedAt": "2026-03-21T14:24:13Z"
+  "updatedAt": "2026-04-05T13:27:02.098Z"
 }
