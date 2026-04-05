@@ -75,13 +75,20 @@
     /* Chrome / Edge: native scrollbars, form controls, and form-factor UI match dark canvas */
     color-scheme: dark;
     @apply min-h-dvh bg-slate-950;
+    min-height: 100vh;
+    /* Chrome: avoid layout shift when scrollbars appear/disappear */
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: #334155 #020617;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   
   body {
     @apply min-h-dvh bg-slate-950 font-sans text-white/90 antialiased;
+    min-height: 100vh;
     overflow-x: hidden;
+    overscroll-behavior-x: none;
     font-feature-settings: "ss01" on, "cv01" on;
     /* Chromium: consistent legibility on LCD + mobile */
     text-rendering: optimizeLegibility;
@@ -102,6 +109,13 @@
   
   .font-mono {
     font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
   }
 
   ::-webkit-scrollbar {
@@ -184,6 +198,16 @@
       0 20px 50px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
+
+  @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .glass-container,
+    .section-glass,
+    .glass-card,
+    .glass-card-gold,
+    .bento-card {
+      background-color: rgba(2, 6, 23, 0.88);
+    }
+  }
   
   .hud-label {
     font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -250,10 +274,16 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    opacity: 0.032;
+    opacity: 0.024;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     z-index: 2;
+  }
+
+  @media (max-width: 767px) {
+    .noise-overlay {
+      display: none;
+    }
   }
   
   .section-pinned {
