@@ -38,6 +38,7 @@ const ResourcesSection = lazy(() => import('./sections/ResourcesSection'));
 const FAQSection = lazy(() => import('./sections/FAQSection'));
 const FooterSection = lazy(() => import('./sections/FooterSection'));
 import { LanguageContext, useLanguageState } from './hooks/useLanguage';
+import { useSmoothAnchors } from './hooks/useSmoothAnchors';
 import './App.css';
 import { shortSkillWhisper, skillSeedFromLabel } from './lib/meshSkillFeed';
 
@@ -54,6 +55,8 @@ function AppContent() {
   const snapTriggerRef = useRef<ScrollTrigger | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const langState = useLanguageState();
+
+  useSmoothAnchors();
 
   useEffect(() => {
     const loadingEl = loadingRef.current;

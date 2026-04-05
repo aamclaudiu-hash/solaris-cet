@@ -343,6 +343,39 @@
     box-shadow: 0 0 40px -4px rgba(255, 200, 100, 0.3);
   }
 
+  /* Magnetic hover base */
+  .btn-magnetic {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .btn-magnetic::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    transform: translate(var(--mouse-x, 0), var(--mouse-y, 0));
+  }
+
+  .btn-magnetic:hover::after {
+    opacity: 1;
+  }
+
+  /* Complex Neon Glow Pulse on interaction */
+  .glow-pulse-hover {
+    transition: text-shadow 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .glow-pulse-hover:hover {
+    box-shadow: 0 0 20px rgba(242, 201, 76, 0.5), inset 0 0 10px rgba(242, 201, 76, 0.2);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    border-color: rgba(242, 201, 76, 0.9);
+  }
+
   /* Prevent text selection during rapid interaction */
   .touch-manipulation {
     -webkit-tap-highlight-color: transparent;
