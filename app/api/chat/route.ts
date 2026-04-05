@@ -23,6 +23,7 @@ import { resolveApiKey } from '../lib/crypto';
 import { CET_CONTRACT_ADDRESS } from '../../src/lib/cetContract';
 import { CET_AI_MAX_QUERY_CHARS } from '../../src/lib/cetAiConstants';
 import { DEDUST_POOL_ADDRESS } from '../../src/lib/dedustUrls';
+import { TOKEN_DECIMALS } from '../../src/constants/token';
 
 export const config = { runtime: 'edge' };
 
@@ -136,7 +137,7 @@ async function fetchOnChainContext(): Promise<OnChainContext | null> {
       const cetIndex = tonIndex === 0 ? 1 : 0;
 
       const tonReserve = parseFloat(cetPool.reserves[tonIndex]) / 1e9;
-      const cetReserve = parseFloat(cetPool.reserves[cetIndex]) / 1e9;
+      const cetReserve = parseFloat(cetPool.reserves[cetIndex]) / Math.pow(10, TOKEN_DECIMALS);
 
       if (cetPriceUsd === null && cetReserve > 0) {
         cetPriceUsd = (tonReserve / cetReserve) * tonPriceUsd;

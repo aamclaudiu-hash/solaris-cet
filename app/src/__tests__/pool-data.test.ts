@@ -1,13 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
 import { DEDUST_POOL_ADDRESS } from '@/lib/dedustUrls';
+import { TOKEN_DECIMALS } from '@/constants/token';
 
 /**
  * Pure helpers aligned with `use-live-pool-data` reserve / volume parsing.
  * `createTimeoutSignal` is covered in `timeout-signal.test.ts`.
  */
 
-const CET_DECIMALS = 9;
+const CET_DECIMALS = TOKEN_DECIMALS;
 const REFRESH_INTERVAL_MS = 60_000;
 
 function deriveCetPriceFromReserves(
@@ -32,10 +33,10 @@ function deriveVolume24hUsd(volumeRaw: string, tonPriceUsd: number): number {
 
 describe('DeDust pool — formulas & live-pool config', () => {
   it('formulas, integration, contract addresses, refresh, PoolData shape', () => {
-    expect(deriveCetPriceFromReserves(String(1e9), String(1e9), 3)).toBeCloseTo(3, 6);
-    expect(deriveCetPriceFromReserves(String(100e9), String(9000e9), 3)).toBeCloseTo((100 / 9000) * 3, 6);
+    expect(deriveCetPriceFromReserves(String(1e9), String(10 ** CET_DECIMALS), 3)).toBeCloseTo(3, 6);
+    expect(deriveCetPriceFromReserves(String(100e9), String(9000 * 10 ** CET_DECIMALS), 3)).toBeCloseTo((100 / 9000) * 3, 6);
     expect(deriveCetPriceFromReserves(String(100e9), '0', 3)).toBeNull();
-    const r = { ton: String(100e9), cet: String(9000e9) };
+    const r = { ton: String(100e9), cet: String(9000 * 10 ** CET_DECIMALS) };
     const p3 = deriveCetPriceFromReserves(r.ton, r.cet, 3);
     const p6 = deriveCetPriceFromReserves(r.ton, r.cet, 6);
     expect(p6).toBeCloseTo((p3 ?? 0) * 2, 6);
@@ -50,7 +51,7 @@ describe('DeDust pool — formulas & live-pool config', () => {
 
     const tonPriceUsd = 3.2;
     const tonReserveRaw = String(800e9);
-    const cetReserveRaw = String(9000e9);
+    const cetReserveRaw = String(9000 * 10 ** CET_DECIMALS);
     const volume24hRaw = String(180e9);
     expect(deriveCetPriceFromReserves(tonReserveRaw, cetReserveRaw, tonPriceUsd)).toBeCloseTo(
       (800 / 9000) * tonPriceUsd,
@@ -62,7 +63,7 @@ describe('DeDust pool — formulas & live-pool config', () => {
     // String nano parse parity (was pool-math parseReserve)
     expect(parseFloat(String(5000 * 1e9)) / 1e9).toBeCloseTo(5000, 0);
     const tonR = String(1000 * 1e9);
-    const cetR = String(200 * 1e9);
+    const cetR = String(200 * 10 ** CET_DECIMALS);
     const cetInTon = parseFloat(tonR) / 1e9 / (parseFloat(cetR) / 10 ** CET_DECIMALS);
     expect(cetInTon).toBeCloseTo(5, 6);
 
@@ -77,7 +78,7 @@ describe('DeDust pool — formulas & live-pool config', () => {
 
     expect(DEDUST_POOL_ADDRESS).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
     expect(CET_CONTRACT_ADDRESS).toMatch(/^EQ[A-Za-z0-9_-]{46}$/);
-    expect(CET_DECIMALS).toBe(9);
+    expect(CET_DECIMALS).toBe(6);
     expect(REFRESH_INTERVAL_MS).toBe(60_000);
 
     const INITIAL_STATE = {

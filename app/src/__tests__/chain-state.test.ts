@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { CET_CONTRACT_ADDRESS } from "@/lib/cetContract";
 import { DEDUST_POOL_ADDRESS } from "@/lib/dedustUrls";
+import { TOKEN_DECIMALS } from "@/constants/token";
 import type {
   ChainState,
   ChainTokenState,
@@ -12,8 +13,8 @@ function makeToken(overrides: Partial<ChainTokenState> = {}): ChainTokenState {
     symbol: "CET",
     name: "Cetățuia Ecosystem Token",
     contract: CET_CONTRACT_ADDRESS,
-    totalSupply: "9000.000000000",
-    decimals: 9,
+    totalSupply: "9000.000000",
+    decimals: TOKEN_DECIMALS,
     ...overrides,
   };
 }
@@ -42,7 +43,7 @@ describe("chain-state", () => {
   it("makers, literals, EQ addresses, parseSupply, cetPriceInTon, display formatting", () => {
     const t = makeToken();
     expect(t.symbol).toBe("CET");
-    expect(t.decimals).toBe(9);
+    expect(t.decimals).toBe(6);
     expect(makeToken({ totalSupply: null }).totalSupply).toBeNull();
 
     const p = makePool();
@@ -64,8 +65,8 @@ describe("chain-state", () => {
         symbol: "CET",
         name: "Solaris CET",
         contract: CET_CONTRACT_ADDRESS,
-        totalSupply: "9000.000000000",
-        decimals: 9,
+        totalSupply: "9000.000000",
+        decimals: 6,
       },
       pool: {
         address: DEDUST_POOL_ADDRESS,
@@ -88,7 +89,7 @@ describe("chain-state", () => {
       const num = Number(raw);
       return Number.isFinite(num) ? num : null;
     }
-    expect(parseSupply("9000.000000000")).toBe(9000);
+    expect(parseSupply("9000.000000")).toBe(9000);
     expect(parseSupply(null)).toBeNull();
     expect(parseSupply("not-a-number")).toBeNull();
 

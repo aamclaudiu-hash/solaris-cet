@@ -28,6 +28,12 @@ export const config = { runtime: 'edge' };
 const GEMINI_MODEL = 'gemini-2.0-flash';
 const GROK_MODEL = 'grok-3-mini-beta';
 
+/** 
+ * CET token decimals. 
+ * TON native uses 9, but CET jetton uses 6.
+ */
+const CET_DECIMALS = 6;
+
 interface DeDustAsset {
   type: 'native' | 'jetton';
   address?: string;
@@ -134,7 +140,7 @@ async function fetchOnChainContext(): Promise<OnChainContext | null> {
       const cetIndex = tonIndex === 0 ? 1 : 0;
 
       const tonReserve = parseFloat(cetPool.reserves[tonIndex]) / 1e9;
-      const cetReserve = parseFloat(cetPool.reserves[cetIndex]) / 1e9;
+      const cetReserve = parseFloat(cetPool.reserves[cetIndex]) / Math.pow(10, CET_DECIMALS);
 
       if (cetPriceUsd === null && cetReserve > 0) {
         cetPriceUsd = (tonReserve / cetReserve) * tonPriceUsd;

@@ -6,7 +6,7 @@
 import { describe, it, expect } from "vitest";
 
 describe("DeDust pool price calculations", () => {
-  const CET_DECIMALS = 9;
+  const CET_DECIMALS = 6;
 
   it("CET USD price from reserves, TVL 2× TON side, 24h volume USD", () => {
     const tonReserveNano = 1e9;
