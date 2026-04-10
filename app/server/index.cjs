@@ -170,6 +170,21 @@ async function serveApi(req, res, reqUrl) {
 const server = http.createServer(async (req, res) => {
   try {
     const reqUrl = getRequestUrl(req);
+    const p = reqUrl.pathname;
+    if (
+      p.startsWith('/wp-admin') ||
+      p.startsWith('/wp-content') ||
+      p.startsWith('/wp-includes') ||
+      p.startsWith('/wordpress') ||
+      p === '/wp-login.php' ||
+      p === '/xmlrpc.php'
+    ) {
+      res.statusCode = 404;
+      setSecurityHeaders(res);
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.end(JSON.stringify({ error: 'Not found' }));
+      return;
+    }
     if (await tryServeStatic(req, reqUrl, res)) return;
     if (reqUrl.pathname.startsWith('/api/')) {
       if (await serveApi(req, res, reqUrl)) return;

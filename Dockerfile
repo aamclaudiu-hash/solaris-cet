@@ -12,14 +12,20 @@ COPY static/ /static/
 
 # Build the frontend app.
 COPY app/ ./
-RUN npm run build
+RUN npm run build && npm run api:build && npm prune --omit=dev
 
-FROM nginx:1.27-alpine AS runner
+FROM node:22-alpine AS runner
 
-# SPA routing support and lightweight static serving.
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-EXPOSE 80
+ENV NODE_ENV=production
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/.api-dist /app/.api-dist
+COPY --from=builder /app/server /app/server
+
+EXPOSE 3000
+
+CMD ["node", "server/index.cjs"]
