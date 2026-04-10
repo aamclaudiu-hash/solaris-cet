@@ -119,7 +119,6 @@ pulls/
 /zi*
 
 # Root-level package manifests and TS configs (belong inside app/)
-/package.json
 /tsconfig.json
 /tsconfig.app.json
 /tsconfig.node.json
