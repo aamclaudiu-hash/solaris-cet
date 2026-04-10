@@ -70,13 +70,31 @@ async function encryptApiKey(secret, plaintext) {
   return toBase64Url(combined);
 }
 
-const [, , secret, rawKey] = process.argv;
+async function readStdin() {
+  return await new Promise((resolve, reject) => {
+    const chunks = [];
+    process.stdin.on('data', (c) => chunks.push(Buffer.from(c)));
+    process.stdin.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    process.stdin.on('error', reject);
+  });
+}
+
+const argv = process.argv.slice(2);
+const useStdin = argv.includes('--stdin');
+const cleaned = argv.filter((x) => x !== '--stdin');
+const secret = cleaned[0] || process.env.ENCRYPTION_SECRET;
+let rawKey = cleaned[1] || process.env.RAW_API_KEY;
+
+if (useStdin) {
+  rawKey = (await readStdin()).trim();
+}
 
 if (!secret || !rawKey) {
   console.error('Usage: node scripts/encrypt-key.mjs <ENCRYPTION_SECRET> <RAW_API_KEY>');
+  console.error('   or: ENCRYPTION_SECRET=... node scripts/encrypt-key.mjs --stdin   (paste key on stdin)');
   console.error('');
   console.error('Example:');
-  console.error('  node scripts/encrypt-key.mjs "my-strong-passphrase" "AIzaSyA-..."');
+  console.error('  ENCRYPTION_SECRET="my-strong-passphrase" node scripts/encrypt-key.mjs --stdin');
   process.exit(1);
 }
 
