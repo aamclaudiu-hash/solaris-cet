@@ -26,11 +26,10 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Security audit
         working-directory: app
@@ -56,13 +55,13 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Restore Vite build cache
         uses: actions/cache@v5
         with:
           path: app/node_modules/.vite
-          key: vite-cache-${{ runner.os }}-${{ hashFiles('app/package-lock.json', 'app/vite.config.ts') }}
+          key: vite-cache-${{ runner.os }}-${{ hashFiles('package-lock.json', 'app/vite.config.ts') }}
           restore-keys: |
             vite-cache-${{ runner.os }}-
 
@@ -71,8 +70,7 @@ jobs:
         run: npm ci
 
       - name: Build application
-        working-directory: app
-        run: npm run build
+        run: npm run build --workspace=app
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
@@ -92,4 +90,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-

@@ -39,23 +39,19 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Security audit
-        working-directory: app
         run: npm audit --audit-level=high
 
       - name: Run ESLint
-        working-directory: app
-        run: npm run lint
+        run: npm run lint --workspace=app
 
       - name: TypeScript type-check
-        working-directory: app
-        run: npm run typecheck
+        run: npm run typecheck --workspace=app
 
   # ── Stage 1b (parallel): Unit tests ───────────────────────────────────────
   unit-test:
@@ -72,15 +68,13 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Run unit tests with coverage
-        working-directory: app
-        run: npm run test:coverage
+        run: npm run test:coverage --workspace=app
 
       - name: Upload coverage report
         if: always()
@@ -106,23 +100,21 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Restore Vite build cache
         uses: actions/cache@v5
         with:
           path: app/node_modules/.vite
-          key: vite-cache-${{ runner.os }}-${{ hashFiles('app/package-lock.json', 'app/vite.config.ts') }}
+          key: vite-cache-${{ runner.os }}-${{ hashFiles('package-lock.json', 'app/vite.config.ts') }}
           restore-keys: |
             vite-cache-${{ runner.os }}-
 
       - name: Install dependencies
-        working-directory: app
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build application
-        working-directory: app
-        run: npm run build
+        run: npm run build --workspace=app
 
       # Immutable performance budget (main entry chunk). Raise only with explicit review — production UX depends on it.
       - name: Check main bundle size budget
@@ -163,18 +155,17 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Cache Playwright browsers
         uses: actions/cache@v5
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('app/package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Install Playwright browsers
         working-directory: app
@@ -194,10 +185,9 @@ jobs:
 
       # Optional repo variable `E2E_WORKERS` (e.g. 2) — forwarded as PW_WORKERS; empty/unset → 1 worker in CI.
       - name: Run Playwright E2E tests
-        working-directory: app
         env:
           PW_WORKERS: ${{ vars.E2E_WORKERS }}
-        run: npm run test:e2e
+        run: npm run test:e2e --workspace=app
 
       - name: Upload Playwright report
         if: always()

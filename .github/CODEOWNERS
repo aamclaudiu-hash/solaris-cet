@@ -27,7 +27,7 @@ app/vite.config.ts          @Solaris-CET/maintainers
 app/tailwind.config.js      @Solaris-CET/maintainers
 app/tsconfig*.json          @Solaris-CET/maintainers
 app/package.json            @Solaris-CET/maintainers
-app/package-lock.json       @Solaris-CET/maintainers
+package-lock.json           @Solaris-CET/maintainers
 
 # CI/CD workflows — changes here affect the whole pipeline
 .github/workflows/          @Solaris-CET/maintainers

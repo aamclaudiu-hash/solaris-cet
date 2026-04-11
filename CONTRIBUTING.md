@@ -52,55 +52,55 @@ Contribuțiile sunt binevenite în mai multe forme:
 ```bash
 # 1. Clonează repository-ul
 git clone https://github.com/Solaris-CET/solaris-cet.git
-cd solaris-cet/app
+cd solaris-cet
 
 # 2. Instalează dependențele
-npm install
+npm ci --legacy-peer-deps
 
 # 3. Pornește serverul de dezvoltare
-npm run dev
+npm run app:dev
 ```
 
 ### Comenzi disponibile
 
 ```bash
 # Server de dezvoltare (http://localhost:5173)
-npm run dev
+npm run app:dev
 
 # Build de producție
-npm run build
+npm run app:build
 
 # Preview build local
-npm run preview
+npm run start --workspace=app
 
 # Linting
-npm run lint
+npm run lint --workspace=app
 
 # Verificare TypeScript (același lucru ca în CI)
-npm run typecheck
+npm run typecheck --workspace=app
 
 # Teste unit (Vitest)
-npm run test
+npm run test --workspace=app
 
 # Poartă rapidă înainte de push: lint + typecheck + test + build
-npm run verify
+npm run app:verify
 
 # Playwright E2E (Chromium; prima dată: npx playwright install --with-deps chromium)
 # Necesită app/dist/: `pretest:e2e` verifică existența lui; altfel rulează mai întâi `npm run build` sau `npm run verify`, dacă nu folosești `verify:full`.
-npm run test:e2e
+npm run app:test:e2e
 # Dacă apare `ERR_CONNECTION_REFUSED` pe preview-ul local (:4173), limitează worker-ii: `PW_WORKERS=1 npm run test:e2e` (echivalent: `npm run test:e2e:stable`)
 
-# Verificare completă locală: verify + E2E stabil (`test:e2e:stable`, un worker — aliniat cu CI)
-npm run verify:full
+# Verificare completă locală: verify + E2E stabil (un worker — aliniat cu CI)
+npm run app:verify && PW_WORKERS=1 npm run app:test:e2e
 ```
 
 ### Verificare monorepo (înainte de PR sau release)
 
 | Zonă | Comandă |
 |------|---------|
-| **Frontend** (lint + typecheck + test + build, ca porțiunea critică din CI) | Din `app/`: `npm ci && npm run verify` |
-| **E2E Chromium** (toate spec-urile Playwright; ~6 min cu 1 worker; necesită `dist/`) | Din `app/`: `npm ci && npm run build && PW_WORKERS=1 npm run test:e2e` (prima dată: `npx playwright install --with-deps chromium`) |
-| **Contracte TON** (`contracts/`) | Din `contracts/`: `npm ci && npm test` |
+| **Frontend** (lint + typecheck + test + build) | Din repo root: `npm ci --legacy-peer-deps && npm run app:verify` |
+| **E2E Chromium** (Playwright; ~6 min cu 1 worker; necesită `dist/`) | Din repo root: `npm ci --legacy-peer-deps && npm run app:build && PW_WORKERS=1 npm run app:test:e2e` (prima dată: `npx playwright install --with-deps chromium` din `app/`) |
+| **Contracte TON** (`contracts/`) | Din repo root: `npm ci --legacy-peer-deps && npm run contracts:test && npm run contracts:typecheck` |
 
 **CI GitHub:** job-ul Playwright rulează `npm run test:e2e` cu `PW_WORKERS` din variabila de repository **`E2E_WORKERS`** (opțional; necompletată → 1 worker). Local, `verify:full` folosește în continuare `test:e2e:stable` (un worker, predictibil).
 

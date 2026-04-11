@@ -17,10 +17,6 @@ jobs:
     permissions:
       contents: read
 
-    defaults:
-      run:
-        working-directory: contracts
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -30,16 +26,16 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: contracts/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Typecheck (build + tsc)
-        run: npm run typecheck
+        run: npm run typecheck --workspace=contracts
 
       - name: Run test suite
-        run: npm run test:ci
+        run: npm run test:ci --workspace=contracts
 
       - name: Upload build artifacts
         if: always()
