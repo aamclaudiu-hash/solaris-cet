@@ -360,34 +360,6 @@ const TokenomicsSection = () => {
             ))}
           </div>
 
-          {/* Distribution */}
-          <div className={`p-5 lg:p-6 border-t border-white/10 bg-black/20 ${BENTO_TILE_INTERACTION}`}>
-            <div className="hud-label mb-3">Distribution</div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-solaris-muted text-sm">Mining (90 years)</span>
-                  <span className="font-mono tabular-nums text-cyan-300 font-semibold text-sm">66.66%</span>
-                </div>
-                <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-cyan-400 to-amber-400 rounded-full animate-gradient-shift"
-                    style={{ width: '66.66%' }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-solaris-muted text-sm">Team & Advisors</span>
-                  <span className="font-mono tabular-nums text-emerald-400 font-semibold text-sm">0.33%</span>
-                </div>
-                <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <div className="h-full bg-emerald-400 rounded-full" style={{ width: '0.33%' }} />
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div className="p-4 sm:p-5 border-t border-white/10 bg-black/30">
             <Suspense fallback={<ChartLazyFallback />}>
               <TokenomicsChart />
