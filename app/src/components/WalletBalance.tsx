@@ -38,11 +38,22 @@ export default function WalletBalance({ className }: { className?: string }) {
     const run = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/wallet/balance?address=${encodeURIComponent(address)}`, {
+        const preferred = await fetch(`/api/ton/balance?address=${encodeURIComponent(address)}`, {
           signal: controller.signal,
           cache: 'no-store',
         });
-        const json = (await res.json()) as WalletBalanceResponse;
+        if (preferred.ok) {
+          const json = (await preferred.json()) as WalletBalanceResponse;
+          if (!alive) return;
+          setData(json);
+          return;
+        }
+
+        const fallback = await fetch(`/api/wallet/balance?address=${encodeURIComponent(address)}`, {
+          signal: controller.signal,
+          cache: 'no-store',
+        });
+        const json = (await fallback.json()) as WalletBalanceResponse;
         if (!alive) return;
         setData(json);
       } catch {
@@ -100,4 +111,3 @@ export default function WalletBalance({ className }: { className?: string }) {
     </div>
   );
 }
-

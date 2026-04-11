@@ -52,6 +52,7 @@ const apiRoutes = new Map([
   ['/api/metrics', 'api/metrics/route.js'],
   ['/api/cache', 'api/cache/route.js'],
   ['/api/wallet/balance', 'api/wallet/balance/route.js'],
+  ['/api/ton/balance', 'api/ton/balance/route.js'],
   ['/api/auth', 'api/auth/route.js'],
   ['/api/audit', 'api/audit/route.js'],
   ['/api/gdpr', 'api/gdpr/route.js'],

@@ -21,6 +21,15 @@ function isUniqueViolation(err: unknown): boolean {
 
 const JWT_TTL_SECONDS = 60 * 60;
 
+function clientIp(req: Request): string | null {
+  const xf = req.headers.get('x-forwarded-for');
+  if (xf) {
+    const first = xf.split(',')[0]?.trim();
+    if (first) return first.slice(0, 200);
+  }
+  return null;
+}
+
 export default async function handler(req: Request): Promise<Response> {
   const origin = req.headers.get('origin');
   const allowedOrigin = getAllowedOrigin(origin);
@@ -54,6 +63,28 @@ export default async function handler(req: Request): Promise<Response> {
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': allowedOrigin, Vary: 'Origin' },
       });
     }
+
+    if (typeof decoded.sid === 'string') {
+      try {
+        const db = getDb();
+        const [s] = await db
+          .select()
+          .from(schema.sessions)
+          .where(eq(schema.sessions.id, decoded.sid));
+        if (!s || s.revokedAt || s.expiresAt.getTime() <= Date.now()) {
+          return new Response(JSON.stringify({ error: 'Invalid session' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': allowedOrigin, Vary: 'Origin' },
+          });
+        }
+      } catch {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': allowedOrigin, Vary: 'Origin' },
+        });
+      }
+    }
+
     return new Response(JSON.stringify({ user: { wallet: decoded.wallet } }), {
       status: 200,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': allowedOrigin, Vary: 'Origin' },
@@ -108,7 +139,23 @@ export default async function handler(req: Request): Promise<Response> {
 
     if (existing) {
       const secret = process.env.JWT_SECRET?.trim();
-      const token = secret ? await signJwt({ wallet: walletAddress }, secret, JWT_TTL_SECONDS) : undefined;
+      let token: string | undefined;
+      if (secret) {
+        try {
+          const [session] = await db
+            .insert(schema.sessions)
+            .values({
+              userId: existing.id,
+              expiresAt: new Date(Date.now() + JWT_TTL_SECONDS * 1000),
+              ip: clientIp(req),
+              userAgent: req.headers.get('user-agent')?.slice(0, 300) ?? null,
+            })
+            .returning();
+          token = await signJwt({ wallet: walletAddress, sid: session.id }, secret, JWT_TTL_SECONDS);
+        } catch {
+          token = await signJwt({ wallet: walletAddress }, secret, JWT_TTL_SECONDS);
+        }
+      }
       return new Response(JSON.stringify({ ...existing, token }), {
         status: 200,
         headers: {
@@ -133,7 +180,23 @@ export default async function handler(req: Request): Promise<Response> {
           .returning();
 
         const secret = process.env.JWT_SECRET?.trim();
-        const token = secret ? await signJwt({ wallet: walletAddress }, secret, JWT_TTL_SECONDS) : undefined;
+        let token: string | undefined;
+        if (secret) {
+          try {
+            const [session] = await db
+              .insert(schema.sessions)
+              .values({
+                userId: newUser.id,
+                expiresAt: new Date(Date.now() + JWT_TTL_SECONDS * 1000),
+                ip: clientIp(req),
+                userAgent: req.headers.get('user-agent')?.slice(0, 300) ?? null,
+              })
+              .returning();
+            token = await signJwt({ wallet: walletAddress, sid: session.id }, secret, JWT_TTL_SECONDS);
+          } catch {
+            token = await signJwt({ wallet: walletAddress }, secret, JWT_TTL_SECONDS);
+          }
+        }
         return new Response(JSON.stringify({ ...newUser, token }), {
           status: 201,
           headers: {

@@ -4,21 +4,14 @@ Vite + React 19 + TypeScript landing for Solaris CET on TON (RAV CET AI UI, TON 
 
 ## Commands
 
-Run these from the **`app/`** directory (from the repo root: `cd app`). If your shell is already `.../solaris-cet/app`, **do not** run `cd app` again — use `npm run …` directly.
+Recommended: run installs and scripts from the **repo root** (monorepo workspaces; single lockfile at root).
 
 ```bash
+cd /root/solaris-cet
 npm ci
-npm run dev          # http://localhost:5173
-npm run typecheck    # `tsconfig.app` + `tsconfig.node` + `tsconfig.e2e` (Playwright specs), same as CI
-npm run lint
-npm run test         # Vitest
-npm run test:e2e     # Playwright — run `npm run build` first (CI downloads `dist/`; local `verify:full` builds then previews)
-npm run build        # tsc -b + vite build
-npm run api:build    # compile `api/**` routes to `.api-dist/` for the Node server
-npm run start:node   # serve `dist/` + proxy `/api/*` to compiled routes (production-like local)
-npm run start:full   # build + api:build + start:node (single command for Coolify/VPS)
-npm run verify       # lint + typecheck + test + build (quick gate before push)
-npm run verify:full  # verify + Playwright E2E cu 1 worker local (test:e2e:stable)
+npm run app:dev          # http://localhost:5173
+npm run app:verify       # lint + typecheck + test + build
+npm run app:test:e2e     # Playwright
 ```
 
 E2E (Chromium): from `app/`, **`npm run test:e2e`** (install browsers once: `npx playwright install --with-deps chromium`). **`pretest:e2e`** fails fast if `app/dist/index.html` is missing (with a hint). Calling **`npx playwright test` directly** skips that guard — prefer the npm script. Config starts **`npm run preview:e2e`** (Vite preview on **127.0.0.1:4173** with a larger Node heap) — `dist/` must already exist (`npm run build` or run after `npm run verify`). CI supplies `dist/` from the build job.

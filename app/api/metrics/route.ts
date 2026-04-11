@@ -34,12 +34,23 @@ export default async function handler(req: Request): Promise<Response> {
     return new Response('method not allowed', { status: 405 });
   }
 
-  const dbConfigured = Boolean(process.env.DATABASE_URL?.trim());
+  const hasDbUrl = Boolean(process.env.DATABASE_URL?.trim());
+  const hasEncSecret = Boolean(process.env.ENCRYPTION_SECRET?.trim());
+  const hasGrokPlain = Boolean(process.env.GROK_API_KEY?.trim());
+  const hasGrokEnc = Boolean(process.env.GROK_API_KEY_ENC?.trim());
+  const hasGeminiPlain = Boolean(process.env.GEMINI_API_KEY?.trim());
+  const hasGeminiEnc = Boolean(process.env.GEMINI_API_KEY_ENC?.trim());
+  const hasTonRpcUrl = Boolean(process.env.TONCENTER_RPC_URL?.trim());
+  const hasTonApiKey = Boolean(process.env.TONCENTER_API_KEY?.trim());
+  const hasJwt = Boolean(process.env.JWT_SECRET?.trim());
+  const hasUpstashUrl = Boolean(process.env.UPSTASH_REDIS_REST_URL?.trim());
+  const hasUpstashToken = Boolean(process.env.UPSTASH_REDIS_REST_TOKEN?.trim());
+
   const aiConfigured = Boolean(
-    (process.env.GROK_API_KEY?.trim() || process.env.GROK_API_KEY_ENC?.trim()) &&
-      (process.env.GEMINI_API_KEY?.trim() || process.env.GEMINI_API_KEY_ENC?.trim()),
+    (hasGrokPlain || (hasGrokEnc && hasEncSecret)) && (hasGeminiPlain || (hasGeminiEnc && hasEncSecret)),
   );
-  const tonConfigured = Boolean(process.env.TONCENTER_RPC_URL?.trim() || process.env.TONCENTER_API_KEY?.trim());
+  const dbConfigured = hasDbUrl;
+  const tonConfigured = hasTonRpcUrl;
   const now = Math.floor(Date.now() / 1000);
 
   const lines = [
@@ -58,9 +69,41 @@ export default async function handler(req: Request): Promise<Response> {
     '# HELP solaris_ton_configured TON RPC/indexer env configured.',
     '# TYPE solaris_ton_configured gauge',
     `solaris_ton_configured ${tonConfigured ? 1 : 0}`,
+    '# HELP solaris_env_database_url_present DATABASE_URL present.',
+    '# TYPE solaris_env_database_url_present gauge',
+    `solaris_env_database_url_present ${hasDbUrl ? 1 : 0}`,
+    '# HELP solaris_env_encryption_secret_present ENCRYPTION_SECRET present.',
+    '# TYPE solaris_env_encryption_secret_present gauge',
+    `solaris_env_encryption_secret_present ${hasEncSecret ? 1 : 0}`,
+    '# HELP solaris_env_grok_key_present GROK_API_KEY present.',
+    '# TYPE solaris_env_grok_key_present gauge',
+    `solaris_env_grok_key_present ${hasGrokPlain ? 1 : 0}`,
+    '# HELP solaris_env_grok_key_enc_present GROK_API_KEY_ENC present.',
+    '# TYPE solaris_env_grok_key_enc_present gauge',
+    `solaris_env_grok_key_enc_present ${hasGrokEnc ? 1 : 0}`,
+    '# HELP solaris_env_gemini_key_present GEMINI_API_KEY present.',
+    '# TYPE solaris_env_gemini_key_present gauge',
+    `solaris_env_gemini_key_present ${hasGeminiPlain ? 1 : 0}`,
+    '# HELP solaris_env_gemini_key_enc_present GEMINI_API_KEY_ENC present.',
+    '# TYPE solaris_env_gemini_key_enc_present gauge',
+    `solaris_env_gemini_key_enc_present ${hasGeminiEnc ? 1 : 0}`,
+    '# HELP solaris_env_jwt_secret_present JWT_SECRET present.',
+    '# TYPE solaris_env_jwt_secret_present gauge',
+    `solaris_env_jwt_secret_present ${hasJwt ? 1 : 0}`,
+    '# HELP solaris_env_toncenter_rpc_url_present TONCENTER_RPC_URL present.',
+    '# TYPE solaris_env_toncenter_rpc_url_present gauge',
+    `solaris_env_toncenter_rpc_url_present ${hasTonRpcUrl ? 1 : 0}`,
+    '# HELP solaris_env_toncenter_api_key_present TONCENTER_API_KEY present.',
+    '# TYPE solaris_env_toncenter_api_key_present gauge',
+    `solaris_env_toncenter_api_key_present ${hasTonApiKey ? 1 : 0}`,
+    '# HELP solaris_env_upstash_url_present UPSTASH_REDIS_REST_URL present.',
+    '# TYPE solaris_env_upstash_url_present gauge',
+    `solaris_env_upstash_url_present ${hasUpstashUrl ? 1 : 0}`,
+    '# HELP solaris_env_upstash_token_present UPSTASH_REDIS_REST_TOKEN present.',
+    '# TYPE solaris_env_upstash_token_present gauge',
+    `solaris_env_upstash_token_present ${hasUpstashToken ? 1 : 0}`,
     '',
   ];
 
   return response(lines.join('\n'), allowedOrigin);
 }
-

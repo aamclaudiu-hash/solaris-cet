@@ -34,12 +34,20 @@ export default async function handler(req: Request): Promise<Response> {
     return jsonResponse({ error: 'Method not allowed' }, allowedOrigin, 405);
   }
 
-  const dbConfigured = Boolean(process.env.DATABASE_URL?.trim());
+  const hasDbUrl = Boolean(process.env.DATABASE_URL?.trim());
+  const hasEncSecret = Boolean(process.env.ENCRYPTION_SECRET?.trim());
+  const hasGrokPlain = Boolean(process.env.GROK_API_KEY?.trim());
+  const hasGrokEnc = Boolean(process.env.GROK_API_KEY_ENC?.trim());
+  const hasGeminiPlain = Boolean(process.env.GEMINI_API_KEY?.trim());
+  const hasGeminiEnc = Boolean(process.env.GEMINI_API_KEY_ENC?.trim());
+  const hasTonRpcUrl = Boolean(process.env.TONCENTER_RPC_URL?.trim());
+  const hasTonApiKey = Boolean(process.env.TONCENTER_API_KEY?.trim());
+
+  const dbConfigured = hasDbUrl;
   const aiConfigured = Boolean(
-    (process.env.GROK_API_KEY?.trim() || process.env.GROK_API_KEY_ENC?.trim()) &&
-      (process.env.GEMINI_API_KEY?.trim() || process.env.GEMINI_API_KEY_ENC?.trim()),
+    (hasGrokPlain || (hasGrokEnc && hasEncSecret)) && (hasGeminiPlain || (hasGeminiEnc && hasEncSecret)),
   );
-  const tonConfigured = Boolean(process.env.TONCENTER_RPC_URL?.trim() || process.env.TONCENTER_API_KEY?.trim());
+  const tonConfigured = hasTonRpcUrl;
 
   return jsonResponse(
     {
@@ -49,9 +57,22 @@ export default async function handler(req: Request): Promise<Response> {
         ai: aiConfigured ? 'configured' : 'missing',
         ton: tonConfigured ? 'configured' : 'missing',
       },
+      env: {
+        db: { databaseUrl: hasDbUrl },
+        ai: {
+          grokKey: hasGrokPlain,
+          grokKeyEnc: hasGrokEnc,
+          geminiKey: hasGeminiPlain,
+          geminiKeyEnc: hasGeminiEnc,
+          encryptionSecret: hasEncSecret,
+        },
+        ton: {
+          rpcUrl: hasTonRpcUrl,
+          apiKey: hasTonApiKey,
+        },
+      },
       time: new Date().toISOString(),
     },
     allowedOrigin,
   );
 }
-

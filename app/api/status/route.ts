@@ -34,22 +34,39 @@ export default async function handler(req: Request): Promise<Response> {
     return jsonResponse({ error: 'Method not allowed' }, allowedOrigin, 405);
   }
 
+  const hasEncSecret = Boolean(process.env.ENCRYPTION_SECRET?.trim());
+  const hasGrokPlain = Boolean(process.env.GROK_API_KEY?.trim());
+  const hasGrokEnc = Boolean(process.env.GROK_API_KEY_ENC?.trim());
+  const hasGeminiPlain = Boolean(process.env.GEMINI_API_KEY?.trim());
+  const hasGeminiEnc = Boolean(process.env.GEMINI_API_KEY_ENC?.trim());
+
   const hasAiKey = Boolean(
-    (process.env.GROK_API_KEY?.trim() || process.env.GROK_API_KEY_ENC?.trim()) &&
-      (process.env.GEMINI_API_KEY?.trim() || process.env.GEMINI_API_KEY_ENC?.trim()),
+    (hasGrokPlain || (hasGrokEnc && hasEncSecret)) && (hasGeminiPlain || (hasGeminiEnc && hasEncSecret)),
   );
 
-  const hasTonRpc = Boolean(process.env.TONCENTER_RPC_URL?.trim() || process.env.TONCENTER_API_KEY?.trim());
+  const hasTonRpc = Boolean(process.env.TONCENTER_RPC_URL?.trim());
 
   return jsonResponse(
     {
       ok: true,
       ai: hasAiKey ? 'configured' : 'missing_keys',
       ton: hasTonRpc ? 'configured' : 'not_configured',
+      env: {
+        ai: {
+          grokKey: hasGrokPlain,
+          grokKeyEnc: hasGrokEnc,
+          geminiKey: hasGeminiPlain,
+          geminiKeyEnc: hasGeminiEnc,
+          encryptionSecret: hasEncSecret,
+        },
+        ton: {
+          rpcUrl: hasTonRpc,
+          apiKey: Boolean(process.env.TONCENTER_API_KEY?.trim()),
+        },
+      },
       time: new Date().toISOString(),
     },
     allowedOrigin,
     200,
   );
 }
-

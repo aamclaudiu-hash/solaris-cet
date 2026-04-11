@@ -126,6 +126,12 @@ pulls/
 /vite.config.ts
 /eslint.config.js
 /tailwind.config.js
+
+# Workspace/doc lockfiles (canonical lockfile lives at repo root)
+/app/package-lock.json
+/contracts/package-lock.json
+/scripts/package-lock.json
+/docs/**/package-lock.json
 app/coverage/
 
 # Local environment variables (never commit)

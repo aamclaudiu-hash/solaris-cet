@@ -58,6 +58,27 @@ export const transactions = pgTable(
   (t) => [index('transactions_user_id_idx').on(t.userId)],
 );
 
+/** Auth sessions (JWT issuance tracking / revocation) */
+export const sessions = pgTable(
+  'sessions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    ip: text('ip'),
+    userAgent: text('user_agent'),
+  },
+  (t) => [
+    index('sessions_user_id_idx').on(t.userId),
+    index('sessions_expires_at_idx').on(t.expiresAt),
+  ],
+);
+
 export const auditLogs = pgTable(
   'audit_logs',
   {
@@ -76,5 +97,7 @@ export type MiningSession = typeof miningSessions.$inferSelect;
 export type NewMiningSession = typeof miningSessions.$inferInsert;
 export type Transaction = typeof transactions.$inferSelect;
 export type NewTransaction = typeof transactions.$inferInsert;
+export type Session = typeof sessions.$inferSelect;
+export type NewSession = typeof sessions.$inferInsert;
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type NewAuditLog = typeof auditLogs.$inferInsert;

@@ -10,9 +10,33 @@
   "engines": {
     "node": ">=22"
   },
+  "scripts": {
+    "app:dev": "npm run dev --workspace=app",
+    "app:build": "npm run build --workspace=app",
+    "app:verify": "npm run verify --workspace=app",
+    "app:test:e2e": "npm run test:e2e --workspace=app",
+    "app:test:e2e:stable": "PW_WORKERS=1 npm run test:e2e --workspace=app",
+    "contracts:test": "npm test --workspace=contracts",
+    "contracts:typecheck": "npx tsc --noEmit -p contracts/tsconfig.json"
+  },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "axios": "^1.15.0",
     "typescript": "~6.0.2",
-    "vite": "^8.0.3"
+    "vite": "^8.0.8"
+  },
+  "overrides": {
+    "lodash-es": "4.18.1",
+    "esbuild": "0.27.7",
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.27.7"
+    },
+    "langium": "4.2.2",
+    "workbox-build": {
+      "@rollup/plugin-terser": "1.0.0"
+    },
+    "@rollup/plugin-terser": {
+      "serialize-javascript": "7.0.5"
+    }
   }
 }

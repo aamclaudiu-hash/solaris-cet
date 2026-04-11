@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useMemo, memo, lazy, Suspense } from 'react';
+import React, { useRef, useLayoutEffect, useMemo, memo, lazy, Suspense, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { Zap, ShieldCheck, TrendingUp, CheckCircle, ChevronDown, Rocket } from 'lucide-react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -29,6 +29,28 @@ const TICKER_DATA = [
   { label: 'RWA BACKING', value: 'CETĂȚUIA, RO' },
 ];
 
+type HeroStatState = {
+  totalSupply: number;
+  marketCap: number;
+  aiAgents: number;
+};
+
+type PublicStateJson = {
+  token?: {
+    totalSupply?: string | number;
+  };
+};
+
+function parseTotalSupply(input: unknown): number | null {
+  if (!input || typeof input !== 'object') return null;
+  const token = (input as PublicStateJson).token;
+  if (!token || typeof token !== 'object') return null;
+  const raw = (token as { totalSupply?: unknown }).totalSupply;
+  const n = typeof raw === 'string' ? Number(raw) : typeof raw === 'number' ? raw : NaN;
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return n;
+}
+
 const HeroSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleContainerRef = useRef<HTMLDivElement>(null);
@@ -37,6 +59,11 @@ const HeroSection: React.FC = () => {
 
   const prefersReducedMotion = useReducedMotion();
   const { t, lang } = useLanguage();
+  const [stats, setStats] = useState<HeroStatState>({
+    totalSupply: 9000,
+    marketCap: 214500,
+    aiAgents: 200000,
+  });
 
   const tickerRows = useMemo(() => {
     const supply = formatCetSupplyWithSuffix(lang);
@@ -79,6 +106,30 @@ const HeroSection: React.FC = () => {
 
     return () => ctx.revert();
   }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let alive = true;
+    const run = async () => {
+      try {
+        const res = await fetch('/api/state.json', { cache: 'no-store', signal: controller.signal });
+        if (!res.ok) return;
+        const json = (await res.json()) as unknown;
+        const totalSupply = parseTotalSupply(json);
+        if (!alive) return;
+        if (totalSupply != null) {
+          setStats((prev) => ({ ...prev, totalSupply }));
+        }
+      } catch {
+        void 0;
+      }
+    };
+    void run();
+    return () => {
+      alive = false;
+      controller.abort();
+    };
+  }, []);
 
   return (
     <TooltipProvider>
@@ -149,9 +200,9 @@ const HeroSection: React.FC = () => {
               data-testid="hero-quick-stats"
               className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-16 w-full max-w-4xl border-y border-white/5 py-8 bg-white/[0.01] backdrop-blur-md rounded-3xl mb-6 shadow-2xl"
             >
-              <AnimatedCounter value={9000} label="Total Supply" suffix=" CET" />
-              <AnimatedCounter value={214500} label="Market Cap" prefix="$" />
-              <AnimatedCounter value={200000} label="AI Agents" />
+              <AnimatedCounter value={stats.totalSupply} label="Total Supply" suffix=" CET" />
+              <AnimatedCounter value={stats.marketCap} label="Market Cap" prefix="$" />
+              <AnimatedCounter value={stats.aiAgents} label="AI Agents" />
               <div className="sm:col-span-3 flex flex-wrap justify-center items-center gap-3 sm:gap-4 opacity-90 mt-2">
                 <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono text-solaris-muted">
                   TON
