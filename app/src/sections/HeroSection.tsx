@@ -10,6 +10,8 @@ import SolarRaysCoinsCanvas from '../components/SolarRaysCoinsCanvas';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { useLivePoolData } from '@/hooks/use-live-pool-data';
 import { useCommunityProof } from '@/hooks/use-community-proof';
+import CetAiSearch from '../components/CetAiSearch';
+import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
 
 const TICKER_DATA = [
   { label: 'AI AGENTS', value: '' },
@@ -107,7 +109,10 @@ const HeroSection: React.FC = () => {
     let alive = true;
     const run = async () => {
       try {
-        const res = await fetch('/api/state.json', { cache: 'no-store', signal: controller.signal });
+        const res = await fetch(`${import.meta.env.BASE_URL}api/state.json`, {
+          cache: 'no-store',
+          signal: controller.signal,
+        });
         if (!res.ok) return;
         const json = (await res.json()) as unknown;
         const totalSupply = parseTotalSupply(json);
@@ -160,7 +165,7 @@ const HeroSection: React.FC = () => {
                RWA · CETĂȚUIA ROMÂNIEI · TON
             </div>
 
-            <h1 className="font-display text-white leading-[1.02] tracking-[-0.04em] mb-5 drop-shadow-2xl text-[clamp(42px,5.4vw,86px)]">
+            <h1 className="font-display text-white leading-[1.02] tracking-[-0.04em] mb-5 drop-shadow-2xl text-[44px] sm:text-[52px] md:text-[62px] lg:text-[74px] xl:text-[86px]">
               Primul Token RWA Ancorat în{' '}
               <span className="text-gradient-gold">Cetățuia României</span>
               <span className="text-solaris-gold"> — 9,000 CET.</span>
@@ -172,7 +177,7 @@ const HeroSection: React.FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-10 sm:mb-12 w-full sm:w-auto px-4">
-              <div className="w-full sm:w-auto animate-gold-pulse">
+              <div className="w-full sm:w-auto hero-cta-pulse">
                 <TonConnectButton className="ton-connect-btn" />
               </div>
 
@@ -228,12 +233,33 @@ const HeroSection: React.FC = () => {
                 wrapperClassName="[&>div[title]]:cursor-help"
                 meshTitleKey="Proxy: comunitate Telegram"
               />
+
+              <div className="col-span-3 flex items-center justify-center gap-8 text-xs text-slate-300/90">
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-teal-400" aria-hidden />
+                  <span>TON</span>
+                </span>
+                <a
+                  href="#authority-trust"
+                  className="text-solaris-gold font-semibold hover:text-solaris-gold/90 underline underline-offset-4"
+                >
+                  Cetățuia
+                </a>
+              </div>
             </div>
 
             <div
               data-testid="hero-next-steps"
               className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 w-full max-w-4xl px-4"
             >
+              <a
+                href={DEDUST_SWAP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors"
+              >
+                DeDust
+              </a>
               <a
                 href="#staking"
                 className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors"
@@ -246,6 +272,10 @@ const HeroSection: React.FC = () => {
               >
                 How to Buy
               </a>
+            </div>
+
+            <div className="w-full mt-6 px-4">
+              <CetAiSearch />
             </div>
 
             
