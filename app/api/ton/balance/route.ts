@@ -39,6 +39,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   const url = new URL(req.url);
   const addressParam = url.searchParams.get('address') ?? '';
+  const includeJetton = ['1', 'true', 'yes'].includes((url.searchParams.get('jetton') ?? '').toLowerCase());
   const address = parseTonAddress(addressParam);
   if (!address) {
     return jsonResponse({ ok: false, error: 'Invalid address' }, allowedOrigin, 400);
@@ -54,12 +55,18 @@ export default async function handler(req: Request): Promise<Response> {
       const tonBalanceNano = (await c.getBalance(address)).toString();
       let cetBalanceNano: string | null = null;
 
-      const master = parseTonAddress(CET_JETTON_MASTER_ADDRESS);
-      if (master) {
-        const openedMaster = c.open(JettonMaster.create(master));
-        const jettonWalletAddress = await openedMaster.getWalletAddress(address);
-        const openedWallet = c.open(JettonWallet.create(jettonWalletAddress));
-        cetBalanceNano = (await openedWallet.getBalance()).toString();
+      if (includeJetton) {
+        try {
+          const master = parseTonAddress(CET_JETTON_MASTER_ADDRESS);
+          if (master) {
+            const openedMaster = c.open(JettonMaster.create(master));
+            const jettonWalletAddress = await openedMaster.getWalletAddress(address);
+            const openedWallet = c.open(JettonWallet.create(jettonWalletAddress));
+            cetBalanceNano = (await openedWallet.getBalance()).toString();
+          }
+        } catch {
+          cetBalanceNano = null;
+        }
       }
 
       return { tonBalanceNano, cetBalanceNano };
