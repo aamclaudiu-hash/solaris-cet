@@ -3,7 +3,7 @@ export const config = { runtime: 'nodejs' };
 import { getAllowedOrigin } from '../../lib/cors';
 import { CET_JETTON_MASTER_ADDRESS } from '../../../src/constants/token';
 import { getTonClient, parseTonAddress } from '../../lib/ton';
-import { JettonMaster, JettonWallet } from '@ton/ton';
+import { JettonMaster, JettonWallet, TonClient } from '@ton/ton';
 
 function jsonResponse(body: unknown, allowedOrigin: string, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -50,23 +50,39 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   try {
-    const tonBalanceNano = (await client.getBalance(address)).toString();
-    let cetBalanceNano: string | null = null;
+    const run = async (c: TonClient) => {
+      const tonBalanceNano = (await c.getBalance(address)).toString();
+      let cetBalanceNano: string | null = null;
 
-    const master = parseTonAddress(CET_JETTON_MASTER_ADDRESS);
-    if (master) {
-      const openedMaster = client.open(JettonMaster.create(master));
-      const jettonWalletAddress = await openedMaster.getWalletAddress(address);
-      const openedWallet = client.open(JettonWallet.create(jettonWalletAddress));
-      cetBalanceNano = (await openedWallet.getBalance()).toString();
+      const master = parseTonAddress(CET_JETTON_MASTER_ADDRESS);
+      if (master) {
+        const openedMaster = c.open(JettonMaster.create(master));
+        const jettonWalletAddress = await openedMaster.getWalletAddress(address);
+        const openedWallet = c.open(JettonWallet.create(jettonWalletAddress));
+        cetBalanceNano = (await openedWallet.getBalance()).toString();
+      }
+
+      return { tonBalanceNano, cetBalanceNano };
+    };
+
+    let result: { tonBalanceNano: string; cetBalanceNano: string | null };
+    try {
+      result = await run(client);
+    } catch {
+      const endpointRaw = process.env.TONCENTER_RPC_URL?.trim();
+      if (!endpointRaw) throw new Error('missing_endpoint');
+      const u = new URL(endpointRaw);
+      u.searchParams.delete('api_key');
+      const fallback = new TonClient({ endpoint: u.toString() });
+      result = await run(fallback);
     }
 
     return jsonResponse(
       {
         ok: true,
         address: address.toString(),
-        tonBalanceNano,
-        cetBalanceNano,
+        tonBalanceNano: result.tonBalanceNano,
+        cetBalanceNano: result.cetBalanceNano,
         source: 'ton-sdk',
       },
       allowedOrigin,

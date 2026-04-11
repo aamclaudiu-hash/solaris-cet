@@ -54,32 +54,40 @@ export default async function handler(req: Request): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), 4500);
   try {
-    const res = await fetch(rpcUrl.toString(), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: '1',
-        jsonrpc: '2.0',
-        method: 'getAddressBalance',
-        params: { address },
-      }),
-      signal: controller.signal,
-    });
+    const fetchBalance = async (urlString: string) => {
+      const res = await fetch(urlString, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: '1',
+          jsonrpc: '2.0',
+          method: 'getAddressBalance',
+          params: { address },
+        }),
+        signal: controller.signal,
+      });
 
-    const json = (await res.json()) as { ok?: boolean; result?: string; error?: unknown };
-    if (!res.ok || json?.result == null) {
-      return jsonResponse(
-        { ok: false, address, error: 'unavailable', cetBalanceNano: null },
-        allowedOrigin,
-        200,
-      );
+      const json = (await res.json()) as { ok?: boolean; result?: string; error?: unknown };
+      if (!res.ok || json?.result == null) return null;
+      return String(json.result);
+    };
+
+    let tonBalanceNano: string | null = await fetchBalance(rpcUrl.toString());
+    if (tonBalanceNano == null && apiKey) {
+      const u = new URL(rpcUrl.toString());
+      u.searchParams.delete('api_key');
+      tonBalanceNano = await fetchBalance(u.toString());
+    }
+
+    if (tonBalanceNano == null) {
+      return jsonResponse({ ok: false, address, error: 'unavailable', cetBalanceNano: null }, allowedOrigin, 200);
     }
 
     return jsonResponse(
       {
         ok: true,
         address,
-        tonBalanceNano: String(json.result),
+        tonBalanceNano,
         cetBalanceNano: null,
       },
       allowedOrigin,
@@ -91,4 +99,3 @@ export default async function handler(req: Request): Promise<Response> {
     clearTimeout(id);
   }
 }
-
