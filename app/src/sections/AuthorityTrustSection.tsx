@@ -1,13 +1,9 @@
-import { useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import { ShieldCheck, Link2, MapPin, Eye } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import GlowOrbs from '../components/GlowOrbs';
 import { renderSimpleBold } from '@/lib/renderSimpleBold';
 import { DEDUST_SWAP_URL } from '@/lib/dedustUrls';
-
-gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Four trust pillars (Vibe Founder playbook): technical proof, on-chain truth,
@@ -15,8 +11,6 @@ gsap.registerPlugin(ScrollTrigger);
  */
 const AuthorityTrustSection = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
 
   const listedOn = [
     { label: 'Freshcoins', href: 'https://freshcoins.io' },
@@ -57,36 +51,8 @@ const AuthorityTrustSection = () => {
     },
   ] as const;
 
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const ctx = gsap.context(() => {
-      const cards = gridRef.current?.querySelectorAll('.authority-pillar');
-      if (cards?.length) {
-        gsap.fromTo(
-          cards,
-          { y: 36, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.08,
-            duration: 0.75,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          },
-        );
-      }
-    }, section);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="authority-trust"
       aria-label={t.sectionAria.authorityTrust}
       className="relative scroll-mt-24 py-16 sm:py-20 lg:py-24 overflow-hidden"
@@ -115,10 +81,7 @@ const AuthorityTrustSection = () => {
           </div>
         </div>
 
-        <div
-          ref={gridRef}
-          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-5"
-        >
+        <ScrollStaggerFadeUp className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-5">
           {pillars.map((p) => {
             const Icon = p.icon;
             return (
@@ -144,7 +107,7 @@ const AuthorityTrustSection = () => {
               </article>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         <div className="mt-10 lg:mt-12 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5">
           <div className="bento-card p-5 border border-white/8 shadow-depth">

@@ -1,5 +1,5 @@
-import { useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import { Users, Coins, Zap, Clock, Shield, TrendingUp, Globe, ArrowRight } from 'lucide-react';
 import AnimatedCounter from '../components/AnimatedCounter';
 import GlowOrbs from '../components/GlowOrbs';
@@ -28,8 +28,6 @@ const TRUST_BADGES = [
  */
 const StatsBento = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const bentoRef   = useRef<HTMLDivElement>(null);
 
   const stats = [
     {
@@ -96,36 +94,9 @@ const StatsBento = () => {
 
   const [agentStat, ...smallStats] = stats;
 
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const ctx = gsap.context(() => {
-      const cards = bentoRef.current?.querySelectorAll('.bento-stat');
-      if (cards) {
-        gsap.fromTo(cards,
-          { y: 48, opacity: 0, scale: 0.95 },
-          {
-            y: 0, opacity: 1, scale: 1,
-            stagger: { each: 0.1, from: 'start' },
-            duration: 0.9,
-            ease: 'expo.out',
-            scrollTrigger: {
-              trigger: bentoRef.current,
-              start: 'top 82%',
-              end: 'top 40%',
-              scrub: false,
-            },
-          }
-        );
-      }
-    }, section);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="stats"
-      ref={sectionRef}
       aria-label={t.sectionAria.statsBento}
       className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
@@ -146,12 +117,13 @@ const StatsBento = () => {
         </div>
 
         {/* Bento grid — asymmetric 12-col layout */}
-        <div ref={bentoRef} className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 auto-rows-min w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 auto-rows-min w-full">
           {/* ── Large hero stat — AI Agents ── */}
-          <div
-            className={`bento-stat bento-card lg:col-span-6 lg:row-span-2 p-8 lg:p-10 ${agentStat.border} shadow-depth ${BENTO_TILE_INTERACTION}`}
-            title={`${meshStandardBurstFromKey('statsBento|agents|heroPanel')}\n—\n${meshWhisperFromKey('statsBento|agents|heroWhisper')}`}
-          >
+          <ScrollFadeUp className="lg:col-span-6 lg:row-span-2">
+            <div
+              className={`bento-stat bento-card p-8 lg:p-10 ${agentStat.border} shadow-depth ${BENTO_TILE_INTERACTION}`}
+              title={`${meshStandardBurstFromKey('statsBento|agents|heroPanel')}\n—\n${meshWhisperFromKey('statsBento|agents|heroWhisper')}`}
+            >
             {/* Ambient glow */}
             <div
               className="absolute top-0 right-0 w-64 h-64 rounded-full pointer-events-none"
@@ -191,18 +163,16 @@ const StatsBento = () => {
             >
               {t.statsBento.meetAgents} <ArrowRight className="w-4 h-4 text-solaris-gold" />
             </a>
-          </div>
+            </div>
+          </ScrollFadeUp>
 
           {/* ── 3 stats + trust — right stack ── */}
           <div className="lg:col-span-6 flex flex-col gap-4 lg:gap-5">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
-              {smallStats.map(stat => {
+            <ScrollStaggerFadeUp className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+              {smallStats.map((stat) => {
                 const Icon = stat.icon;
                 return (
-                  <div
-                    key={stat.id}
-                    className={`bento-stat bento-card p-6 ${stat.border} shadow-depth ${BENTO_TILE_INTERACTION}`}
-                  >
+                  <div key={stat.id} className={`bento-stat bento-card p-6 ${stat.border} shadow-depth ${BENTO_TILE_INTERACTION}`}>
                     <div
                       className="absolute top-0 left-0 w-32 h-32 rounded-full pointer-events-none"
                       style={{ background: `radial-gradient(circle, ${stat.glow} 0%, transparent 70%)`, filter: 'blur(24px)', transform: 'translate(-30%, -30%)' }}
@@ -236,7 +206,7 @@ const StatsBento = () => {
                   </div>
                 );
               })}
-            </div>
+            </ScrollStaggerFadeUp>
 
             {/* Trust bar */}
             <div

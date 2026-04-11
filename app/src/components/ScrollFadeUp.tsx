@@ -18,7 +18,7 @@ export type ScrollFadeUpProps = {
 export function ScrollFadeUp({
   children,
   className,
-  threshold = 0.12,
+  threshold = 0.15,
   rootMargin = '0px 0px -6% 0px',
 }: ScrollFadeUpProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -66,8 +66,8 @@ export function ScrollFadeUp({
       ref={ref}
       className={cn(
         !prefersReducedMotion &&
-          'transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
-        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+          'transition-[opacity,transform] duration-600 ease-out',
+        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]',
         className
       )}
     >
