@@ -221,6 +221,61 @@
     );
     background-size: 3px 3px;
   }
+
+  /* ── Quantum ambient glow — CSS-only, zero JS ──────────────── */
+  .quantum-ambient-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      /* Cyan pulse — dreapta sus */
+      radial-gradient(
+        ellipse 40% 30% at 78% 18%,
+        rgba(46, 231, 255, 0.07) 0%,
+        transparent 70%
+      ),
+      /* Magenta ghost — stânga jos */
+      radial-gradient(
+        ellipse 35% 25% at 18% 75%,
+        rgba(212, 0, 255, 0.05) 0%,
+        transparent 65%
+      ),
+      /* Violet center — entanglement aura */
+      radial-gradient(
+        ellipse 60% 40% at 50% 50%,
+        rgba(127, 0, 255, 0.03) 0%,
+        transparent 72%
+      );
+    animation: quantum-breathe 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes quantum-breathe {
+    0% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.7;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quantum-ambient-glow {
+      animation: none;
+      opacity: 0.8;
+    }
+  }
+
+  /* ── Fluid typography scale ─────────────────────────────────── */
+  :root {
+    --text-hero: clamp(2.4rem, 5.5vw + 0.5rem, 5.5rem);
+    --text-h1: clamp(1.8rem, 3.8vw + 0.4rem, 3.5rem);
+    --text-h2: clamp(1.4rem, 2.8vw + 0.2rem, 2.4rem);
+    --text-h3: clamp(1.1rem, 1.8vw + 0.15rem, 1.6rem);
+    --text-body: clamp(0.9rem, 1.1vw + 0.1rem, 1.1rem);
+  }
 }
 
 @layer components {
@@ -430,6 +485,43 @@
     border: 1px solid rgba(242, 201, 76, 0.45);
     color: #f5d76e;
     box-shadow: 0 0 32px -8px rgba(255, 200, 100, 0.2);
+  }
+
+  /* ── Quantum particle badge — pentru hero status badge ─────── */
+  .quantum-badge {
+    position: relative;
+    overflow: hidden;
+  }
+  .quantum-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(46, 231, 255, 0.18) 40%,
+      rgba(212, 0, 255, 0.12) 60%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: quantum-sweep 4s linear infinite;
+  }
+
+  @keyframes quantum-sweep {
+    0% {
+      background-position: -100% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quantum-badge::before {
+      animation: none;
+      opacity: 0.5;
+    }
   }
 
   .btn-gold:hover {

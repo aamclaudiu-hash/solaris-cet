@@ -7,6 +7,7 @@ import { formatCetSupplyWithSuffix, formatTaskAgentMeshHeadline } from '@/lib/nu
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
 import { TonConnectButton } from '@tonconnect/ui-react';
 import SolarRaysCoinsCanvas from '../components/SolarRaysCoinsCanvas';
+import QuantumFieldCanvas from '../components/QuantumFieldCanvas';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { useLivePoolData } from '@/hooks/use-live-pool-data';
 import { useCommunityProof } from '@/hooks/use-community-proof';
@@ -167,12 +168,22 @@ const HeroSection: React.FC = () => {
         className="relative min-h-dvh bg-[color:var(--solaris-void)] overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center pt-20 pb-16 lg:pb-24 lg:pt-16"
       >
         <div ref={backgroundRef} className="absolute inset-0 z-0 overflow-hidden pointer-events-none will-change-transform" aria-hidden>
-          <div className="absolute inset-0 bg-[color:var(--solaris-void)]" />
+          {/* Layer 1 — fond de bază */}
+          <div className="absolute inset-0 bg-[#020510]" />
+
+          {/* Layer 2 — Quantum field (stele + particule cyan/magenta + entanglement) — desktop only */}
           <div className="absolute inset-0 hidden sm:block">
+            <QuantumFieldCanvas />
+          </div>
+
+          {/* Layer 3 — Solar rays + coins aurii — desktop, blended peste quantum */}
+          <div className="absolute inset-0 hidden sm:block" style={{ mixBlendMode: 'screen', opacity: 0.75 }}>
             <SolarRaysCoinsCanvas />
           </div>
+
+          {/* Layer 2+3 mobile — gradient static optimizat */}
           <div className="absolute inset-0 sm:hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_22%,rgba(242,201,76,0.16)_0%,transparent_55%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_22%,rgba(242,201,76,0.16)_0%,transparent_55%),radial-gradient(circle_at_80%_70%,rgba(46,231,255,0.08)_0%,transparent_50%)]" />
             <img
               src="/hero-coin.png"
               alt=""
@@ -181,15 +192,22 @@ const HeroSection: React.FC = () => {
               decoding="async"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/70 to-black" />
-          <div className="absolute inset-0 opacity-10 hero-film-grain mix-blend-overlay" />
+
+          {/* Layer 4 — vignette gradient pentru lizibilitate text */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#020510]/20 via-[#020510]/55 to-[#020510]" />
+
+          {/* Layer 5 — grain cinematic */}
+          <div className="absolute inset-0 opacity-[0.06] hero-film-grain mix-blend-overlay hidden sm:block" />
+
+          {/* Layer 6 — ambient quantum glow (CSS, fără JS) */}
+          <div className="quantum-ambient-glow" aria-hidden />
         </div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 xl:px-12 flex flex-col gap-12 lg:gap-16 pt-12 md:pt-16">
           
           <div ref={titleContainerRef} className="flex flex-col items-center text-center w-full max-w-4xl mx-auto">
             
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-solaris-gold/25 bg-solaris-gold/10 text-solaris-gold text-[10px] sm:text-xs font-semibold tracking-widest uppercase mb-8 shadow-[0_0_18px_rgba(242,201,76,0.15)]">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-solaris-gold/25 bg-solaris-gold/10 quantum-badge text-solaris-gold text-[10px] sm:text-xs font-semibold tracking-widest uppercase mb-8 shadow-[0_0_18px_rgba(242,201,76,0.15)]">
                <span className="w-1.5 h-1.5 rounded-full bg-solaris-gold animate-pulse" />
                RWA · CETĂȚUIA ROMÂNIEI · TON
             </div>
