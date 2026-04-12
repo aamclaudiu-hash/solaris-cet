@@ -35,6 +35,7 @@ export default function HierarchyGraph({
   const [failed, setFailed] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [renderDiagram, setRenderDiagram] = useState(false);
+  const [isSourceOpen, setIsSourceOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -184,7 +185,12 @@ export default function HierarchyGraph({
               Render is optional to keep performance tight. Use the Render button if you want the SVG.
             </div>
           )}
-          <details className="group">
+          <details
+            className="group"
+            onToggle={(e) => {
+              setIsSourceOpen((e.currentTarget as HTMLDetailsElement).open);
+            }}
+          >
             <summary className="cursor-pointer select-none text-solaris-text text-xs font-mono">
               <span className="text-solaris-muted">Source</span> ·{' '}
               <span className="group-open:hidden">expand</span>
@@ -197,7 +203,7 @@ export default function HierarchyGraph({
         </div>
       )}
 
-      {lines.length > 0 && (
+      {lines.length > 0 && !isSourceOpen && (
         <div className="mt-3 text-[10px] font-mono text-solaris-muted/90 line-clamp-4">
           {lines.join(' · ')}
         </div>

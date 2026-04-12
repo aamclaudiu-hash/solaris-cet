@@ -126,7 +126,7 @@ const TokenomicsSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="section-pinned section-glass flex items-center justify-center overflow-hidden mesh-bg section-padding-x"
+      className="section-pinned section-glass flex items-center justify-center xl:overflow-hidden mesh-bg section-padding-x"
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[50vh] grid-floor opacity-20" />

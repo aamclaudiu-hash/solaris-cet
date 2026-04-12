@@ -118,7 +118,7 @@ const IntelligenceCoreSection = () => {
       ref={sectionRef}
       id="intelligence"
       aria-label={t.sectionAria.intelligenceCore}
-      className="section-pinned section-glass flex items-center justify-center section-padding-x"
+      className="section-pinned section-glass flex flex-col items-start justify-start gap-10 py-16 xl:flex-row xl:items-center xl:justify-center xl:py-0 section-padding-x"
     >
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -135,7 +135,7 @@ const IntelligenceCoreSection = () => {
       {/* Left Info Card */}
       <div
         ref={leftCardRef}
-        className="absolute left-[7vw] top-[26vh] w-[min(34vw,480px)] z-10"
+        className="relative z-10 w-full max-w-[520px] mx-auto xl:mx-0 xl:absolute xl:left-[7vw] xl:top-[26vh] xl:w-[min(34vw,480px)]"
       >
         <div className="bento-card p-6 lg:p-8 holo-card border border-solaris-gold/20">
           <div className="flex items-center gap-3 mb-5">
@@ -195,10 +195,10 @@ const IntelligenceCoreSection = () => {
       {/* Right Hologram Card */}
       <div
         ref={rightCardRef}
-        className="absolute right-[7vw] top-[24vh] w-[min(36vw,520px)] h-[min(50vh,420px)] z-10"
+        className="relative z-10 w-full max-w-[560px] mx-auto xl:mx-0 xl:absolute xl:right-[7vw] xl:top-[24vh] xl:w-[min(36vw,520px)] xl:h-[min(50vh,420px)]"
         style={{ perspective: '1000px' }}
       >
-        <div className="bento-card crt-terminal h-full flex flex-col items-center justify-center relative overflow-hidden p-6">
+        <div className="bento-card crt-terminal flex flex-col items-center justify-center relative overflow-hidden p-6 xl:h-full">
           {/* Terminal-style ReAct demo */}
           <div className="w-full font-mono text-sm">
             <div className="flex items-center gap-2 mb-4">
@@ -268,7 +268,7 @@ const IntelligenceCoreSection = () => {
       </div>
 
       {/* HUD Chips */}
-      <div ref={chipsRef} className="absolute inset-0 pointer-events-none z-20">
+      <div ref={chipsRef} className="hidden xl:block absolute inset-0 pointer-events-none z-20">
         <div className="hud-chip absolute right-[12vw] top-[18vh] bento-card px-4 py-2 flex items-center gap-2 animate-float shadow-depth">
           <Lightbulb className="w-4 h-4 text-solaris-gold" />
           <span className="font-mono text-sm text-solaris-text">Thought</span>
@@ -290,7 +290,7 @@ const IntelligenceCoreSection = () => {
       </div>
 
       {/* AgentBridge visualization */}
-      <div className="absolute bottom-[4vh] left-1/2 -translate-x-1/2 w-[min(80vw,800px)] z-10">
+      <div className="relative z-10 w-full max-w-[820px] mx-auto xl:absolute xl:bottom-[4vh] xl:left-1/2 xl:-translate-x-1/2 xl:w-[min(80vw,800px)]">
         <AgentBridge />
       </div>
     </section>

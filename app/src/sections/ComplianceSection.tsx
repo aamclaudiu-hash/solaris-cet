@@ -97,7 +97,7 @@ const ComplianceSection = () => {
     <section
       ref={sectionRef}
       aria-label={t.sectionAria.compliance}
-      className="section-pinned section-glass flex items-center justify-center section-padding-x"
+      className="section-pinned section-glass flex flex-col items-start justify-start gap-10 py-16 xl:flex-row xl:items-center xl:justify-center xl:py-0 section-padding-x"
     >
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -111,7 +111,7 @@ const ComplianceSection = () => {
       {/* Left Compliance Card */}
       <div
         ref={leftCardRef}
-        className="absolute left-[7vw] top-[26vh] w-[min(38vw,520px)] z-10"
+        className="relative z-10 w-full max-w-[560px] mx-auto xl:mx-0 xl:absolute xl:left-[7vw] xl:top-[26vh] xl:w-[min(38vw,520px)]"
       >
         <div className="bento-card p-6 lg:p-8 holo-card border border-white/10">
           <div className="flex items-center gap-3 mb-5">
@@ -154,10 +154,10 @@ const ComplianceSection = () => {
       {/* Right Hologram Card */}
       <div
         ref={rightCardRef}
-        className="absolute right-[7vw] top-[24vh] w-[min(38vw,540px)] h-[min(52vh,440px)] z-10"
+        className="relative z-10 w-full max-w-[580px] mx-auto xl:mx-0 xl:absolute xl:right-[7vw] xl:top-[24vh] xl:w-[min(38vw,540px)] xl:h-[min(52vh,440px)]"
         style={{ perspective: '1000px' }}
       >
-        <div className="bento-card h-full flex flex-col items-center justify-center relative overflow-hidden">
+        <div className="bento-card flex flex-col items-center justify-center relative overflow-hidden xl:h-full">
           {/* Central icon */}
           <div className="relative">
             <div className="w-24 h-24 rounded-2xl bg-emerald-400/10 flex items-center justify-center mb-4">
@@ -196,7 +196,7 @@ const ComplianceSection = () => {
       </div>
 
       {/* Badge Chips */}
-      <div ref={badgesRef} className="absolute inset-0 pointer-events-none z-20">
+      <div ref={badgesRef} className="hidden xl:block absolute inset-0 pointer-events-none z-20">
         <div className="badge-chip absolute right-[10vw] top-[16vh] bento-card px-4 py-2 flex items-center gap-2 animate-float shadow-depth">
           <FileCheck className="w-4 h-4 text-emerald-400" />
           <span className="font-mono text-sm text-solaris-text">Audit Ready</span>
@@ -210,7 +210,7 @@ const ComplianceSection = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-4 left-4 right-4 z-[25] max-w-3xl mx-auto pointer-events-auto">
+      <div className="relative z-[25] w-full max-w-3xl mx-auto pointer-events-auto xl:absolute xl:bottom-4 xl:left-4 xl:right-4">
         <MeshSkillRibbon variant="compact" saltOffset={1580} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />
       </div>
     </section>

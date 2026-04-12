@@ -104,7 +104,7 @@ const NovaAppSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="section-pinned section-glass flex items-center justify-center overflow-hidden mesh-bg section-padding-x"
+      className="section-pinned section-glass flex flex-col items-start justify-start gap-10 py-16 xl:flex-row xl:items-center xl:justify-center xl:py-0 xl:overflow-hidden mesh-bg section-padding-x"
     >
       {/* Background grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -118,9 +118,9 @@ const NovaAppSection = () => {
       {/* Phone Card - Center Left */}
       <div
         ref={phoneRef}
-        className="absolute left-[8vw] top-[18vh] w-[min(28vw,380px)] h-[min(62vh,520px)] z-10"
+        className="relative z-10 w-full max-w-[420px] mx-auto xl:mx-0 xl:absolute xl:left-[8vw] xl:top-[18vh] xl:w-[min(28vw,380px)] xl:h-[min(62vh,520px)]"
       >
-        <div className="bento-card h-full p-4 relative overflow-hidden">
+        <div className="bento-card p-4 relative overflow-hidden xl:h-full">
           {/* Gold accent bar */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-solaris-gold via-solaris-gold to-transparent" />
 
@@ -183,7 +183,7 @@ const NovaAppSection = () => {
       {/* Right Text Panel */}
       <div
         ref={textPanelRef}
-        className="absolute right-[8vw] top-[26vh] w-[min(32vw,420px)] z-10"
+        className="relative z-10 w-full max-w-[520px] mx-auto xl:mx-0 xl:absolute xl:right-[8vw] xl:top-[26vh] xl:w-[min(32vw,420px)]"
       >
         <div className="bento-card p-6 lg:p-8">
           <div className="flex items-center gap-3 mb-5">
@@ -226,7 +226,7 @@ const NovaAppSection = () => {
       {/* Stats Ticker - Bottom */}
       <div
         ref={tickerRef}
-        className="absolute left-1/2 top-[78vh] -translate-x-1/2 w-[min(80vw,1100px)] z-10"
+        className="relative z-10 w-full max-w-[1100px] mx-auto xl:absolute xl:left-1/2 xl:top-[78vh] xl:-translate-x-1/2 xl:w-[min(80vw,1100px)]"
       >
         <div className="bento-card p-4 overflow-hidden">
           <div className="flex animate-ticker">

@@ -341,7 +341,7 @@
     overflow: hidden;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1279px) {
     .section-pinned {
       height: auto;
       min-height: 100svh;
