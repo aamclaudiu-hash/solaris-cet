@@ -198,7 +198,8 @@ const Navigation = () => {
         className="absolute bottom-0 left-0 h-[1px] transition-none"
         style={{
           width: `${scrollProgress}%`,
-          background: 'linear-gradient(90deg, #F2C94C, #2EE7FF, #a78bfa, #F2C94C)',
+          background:
+            'linear-gradient(90deg, var(--solaris-gold), var(--solaris-cyan), rgb(167 139 250), var(--solaris-gold))',
           backgroundSize: '200% 100%',
           animation: 'text-shimmer 3s linear infinite',
           boxShadow: '0 0 6px rgba(242,201,76,0.4)',

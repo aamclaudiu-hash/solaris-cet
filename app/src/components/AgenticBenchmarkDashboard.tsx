@@ -23,7 +23,7 @@ function BenchmarkTooltip({ active, payload, label }: TooltipContentProps<number
   const metric = typeof label === 'string' ? label : String(label ?? '');
   const skill = standardSkillBurst(skillSeedFromLabel(metric));
   return (
-    <div className="rounded-xl border border-white/12 bg-[#0D0E17] px-3 py-2.5 text-xs shadow-depth w-max max-w-[min(320px,calc(100dvw-1.5rem))]">
+    <div className="rounded-xl border border-white/12 bg-[color:var(--solaris-panel)] px-3 py-2.5 text-xs shadow-depth w-max max-w-[min(320px,calc(100dvw-1.5rem))]">
       <div className="font-semibold text-solaris-text mb-1.5">{metric}</div>
       <ul className="space-y-1 font-mono text-[10px]">
         {payload.map((entry: TooltipPayloadEntry) => {
@@ -83,30 +83,37 @@ const AgenticBenchmarkDashboard = () => (
           margin={{ top: 8, right: 8, left: 4, bottom: 8 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" horizontal={false} />
-          <XAxis type="number" domain={[0, 100]} tick={{ fill: '#a6a9b6', fontSize: 10 }} axisLine={false} tickLine={false} />
+          <XAxis type="number" domain={[0, 100]} tick={{ fill: 'var(--solaris-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
           <YAxis
             type="category"
             dataKey="metric"
             width={126}
-            tick={{ fill: '#e8eaf2', fontSize: 10 }}
+            tick={{ fill: 'var(--solaris-text)', fontSize: 10 }}
             axisLine={false}
             tickLine={false}
           />
           <Tooltip
-            content={(props) => (
+            content={(props: unknown) => (
               <BenchmarkTooltip {...(props as TooltipContentProps<number, string>)} />
             )}
             cursor={{ fill: 'rgba(255,255,255,0.04)' }}
           />
           <Legend
             wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
-            formatter={(value) => (
-              <span className="text-solaris-muted">
-                {value === 'solaris' ? 'Solaris (200k + RAV)' : value === 'standard' ? 'Standard AI app' : 'Agent marketplace'}
-              </span>
-            )}
+            formatter={(value: unknown) => {
+              const v = typeof value === 'string' ? value : String(value);
+              return (
+                <span className="text-solaris-muted">
+                  {v === 'solaris'
+                    ? 'Solaris (200k + RAV)'
+                    : v === 'standard'
+                      ? 'Standard AI app'
+                      : 'Agent marketplace'}
+                </span>
+              );
+            }}
           />
-          <Bar dataKey="solaris" name="solaris" fill="#F2C94C" radius={[0, 4, 4, 0]} maxBarSize={14} />
+          <Bar dataKey="solaris" name="solaris" fill="var(--solaris-gold)" radius={[0, 4, 4, 0]} maxBarSize={14} />
           <Bar dataKey="standard" name="standard" fill="rgba(255,255,255,0.18)" radius={[0, 4, 4, 0]} maxBarSize={14} />
           <Bar dataKey="marketplace" name="marketplace" fill="rgba(46,231,255,0.35)" radius={[0, 4, 4, 0]} maxBarSize={14} />
         </BarChart>

@@ -12,22 +12,22 @@ import {
 // ─── Department data (headcount from registry; labels match AgentBoard / meshSkillFeed) ─
 
 const CHART_FILLS = [
-  '#2EE7FF',
-  '#60A5FA',
-  '#34D399',
-  '#A78BFA',
-  '#F2C94C',
-  '#FB923C',
-  '#F472B6',
-  '#F87171',
-  '#FBBF24',
-  '#6EE7B7',
+  'var(--solaris-cyan)',
+  'var(--solaris-cyan)',
+  'var(--solaris-cyan)',
+  'var(--solaris-cyan)',
+  'var(--solaris-gold)',
+  'var(--solaris-gold)',
+  'var(--solaris-gold)',
+  'var(--solaris-gold)',
+  'var(--solaris-gold)',
+  'var(--solaris-cyan)',
 ] as const;
 
 const DEPT_DATA = solarisDepartments.map((d, i) => ({
   name: MESH_ID_TO_AGENT_BOARD_LABEL[d.id] ?? d.name,
   agents: d.agentCount,
-  fill: CHART_FILLS[i] ?? '#94a3b8',
+  fill: CHART_FILLS[i] ?? 'var(--solaris-muted)',
 }));
 
 const TOTAL = DEPT_DATA.reduce((s, d) => s + d.agents, 0);
@@ -51,7 +51,7 @@ const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Toolti
   const skillSalt = skillSeedFromLabel(d.name);
   const skillLine = skillFlashForBoardDept(d.name, skillSalt);
   return (
-    <div className="bg-[#0D0E17] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth w-max max-w-[min(280px,calc(100dvw-1.5rem))]">
+    <div className="bg-[color:var(--solaris-panel)] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth w-max max-w-[min(280px,calc(100dvw-1.5rem))]">
       <div className="font-bold mb-1" style={{ color: d.fill }}>{d.name}</div>
       <div className="text-solaris-text">{d.agents.toLocaleString()} agents</div>
       <div className="text-solaris-muted">{d.pct}% of total</div>

@@ -1216,21 +1216,21 @@ export default function CetAiSearch() {
       {/* ── Full-screen CET AI modal (Radix Dialog — focus trap, Esc) ───────── */}
       <DialogPrimitive.Root
         open={isModalOpen}
-        onOpenChange={open => {
+        onOpenChange={(open: boolean) => {
           if (!open) handleClose();
         }}
       >
         <DialogPrimitive.Portal>
-          <DialogPrimitive.Overlay className="fixed inset-0 z-[9999] bg-[#020202]/98 backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+          <DialogPrimitive.Overlay className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
           <DialogPrimitive.Content
             data-testid="cet-ai-modal-dialog"
             aria-describedby="cet-ai-dialog-desc"
             aria-busy={isProcessing}
-            onOpenAutoFocus={e => {
+            onOpenAutoFocus={(e: Event) => {
               e.preventDefault();
               requestAnimationFrame(() => modalInputRef.current?.focus());
             }}
-            onCloseAutoFocus={e => e.preventDefault()}
+            onCloseAutoFocus={(e: Event) => e.preventDefault()}
             className="fixed inset-0 z-[9999] flex flex-col font-sans pt-[env(safe-area-inset-top,0px)] outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
           >
           <DialogPrimitive.Title className="sr-only">{t.cetAi.title}</DialogPrimitive.Title>

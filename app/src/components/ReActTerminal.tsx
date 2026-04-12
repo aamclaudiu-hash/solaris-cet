@@ -44,7 +44,7 @@ function parseReActSteps(text: string): ReActStep[] {
       phase: 'THOUGHT',
       label: 'DIAGNOSTIC INTERN',
       content: thoughtMatch[1].trim(),
-      color: '#F2C94C',
+      color: 'var(--solaris-gold)',
     });
   }
   if (actionMatch?.[1]?.trim()) {
@@ -52,7 +52,7 @@ function parseReActSteps(text: string): ReActStep[] {
       phase: 'ACTION',
       label: 'DECODARE ORACOL',
       content: actionMatch[1].trim(),
-      color: '#F97316',
+      color: 'rgb(249 115 22)',
     });
   }
   if (observationMatch?.[1]?.trim()) {
@@ -60,7 +60,7 @@ function parseReActSteps(text: string): ReActStep[] {
       phase: 'OBSERVATION',
       label: 'DIRECTIVĂ DE ACȚIUNE',
       content: observationMatch[1].trim(),
-      color: '#34D399',
+      color: 'rgb(52 211 153)',
     });
   }
 
@@ -70,7 +70,7 @@ function parseReActSteps(text: string): ReActStep[] {
       phase: 'ACTION',
       label: 'ORACLE RESPONSE',
       content: text.trim(),
-      color: '#2EE7FF',
+      color: 'var(--solaris-cyan)',
     });
   }
 

@@ -34,7 +34,7 @@ const PHYSICAL_ASSET_PLACEHOLDER_BG =
       <rect fill="url(#pa)" width="1920" height="800"/>
       <rect fill="url(#grain)" width="1920" height="800"/>
       <ellipse cx="960" cy="620" rx="900" ry="120" fill="rgba(16,185,129,0.08)"/>
-      <text x="960" y="380" text-anchor="middle" fill="rgba(110,231,183,0.35)" font-family="ui-sans-serif,system-ui,sans-serif" font-size="22" font-weight="600">Physical asset image — placeholder</text>
+      <text x="960" y="380" text-anchor="middle" fill="rgba(242,201,76,0.22)" font-family="ui-sans-serif,system-ui,sans-serif" font-size="22" font-weight="700">Cetățuia, Romania</text>
       <text x="960" y="420" text-anchor="middle" fill="rgba(148,163,184,0.45)" font-family="ui-monospace,monospace" font-size="14">Cetățuia, Romania · agricultural land</text>
     </svg>`
   );

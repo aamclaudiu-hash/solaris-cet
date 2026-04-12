@@ -43,17 +43,17 @@ function SolarisVectorFallback({
     >
       <defs>
         <linearGradient id={gGold} x1="6" y1="10" x2="58" y2="54">
-          <stop stopColor="#FFF8E7" />
-          <stop offset="0.35" stopColor="#F2C94C" />
-          <stop offset="1" stopColor="#8B6914" />
+          <stop stopColor="rgba(255, 248, 231, 1)" />
+          <stop offset="0.35" stopColor="var(--solaris-gold)" />
+          <stop offset="1" stopColor="rgba(139, 105, 20, 1)" />
         </linearGradient>
         <linearGradient id={gCyan} x1="4" y1="60" x2="60" y2="4">
-          <stop stopColor="#67E8F9" />
-          <stop offset="1" stopColor="#0891B2" />
+          <stop stopColor="rgba(103, 232, 249, 1)" />
+          <stop offset="1" stopColor="rgba(8, 145, 178, 1)" />
         </linearGradient>
         <radialGradient id={gVoid} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#0f172a" />
-          <stop offset="100%" stopColor="#020617" />
+          <stop offset="0%" stopColor="rgba(15, 23, 42, 1)" />
+          <stop offset="100%" stopColor="var(--solaris-dark)" />
         </radialGradient>
       </defs>
       <circle cx="32" cy="32" r="29" stroke={`url(#${gGold})`} strokeWidth="2.25" />
@@ -70,7 +70,7 @@ function SolarisVectorFallback({
         <line x1="23.5" y1="40.5" x2="19.2" y2="44.8" />
       </g>
       <circle cx="32" cy="32" r="5.2" fill={`url(#${gGold})`} />
-      <circle cx="32" cy="32" r="2.1" fill="#020617" opacity={0.35} />
+      <circle cx="32" cy="32" r="2.1" fill="var(--solaris-dark)" opacity={0.35} />
     </svg>
   );
 }

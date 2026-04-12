@@ -62,9 +62,9 @@ const AgentBridge = () => {
                 left: `${left}%`,
                 width: i === 0 ? 10 : 7,
                 height: i === 0 ? 10 : 7,
-                background: ['#2EE7FF', '#F2C94C', '#10b981'][i],
+                background: ['var(--solaris-cyan)', 'var(--solaris-gold)', 'rgb(16 185 129)'][i],
                 opacity: 0.85,
-                boxShadow: `0 0 8px ${['#2EE7FF', '#F2C94C', '#10b981'][i]}`,
+                boxShadow: `0 0 8px ${['var(--solaris-cyan)', 'var(--solaris-gold)', 'rgb(16 185 129)'][i]}`,
               }}
             />
           ))}
@@ -102,9 +102,9 @@ const AgentBridge = () => {
                 left: `${left}%`,
                 width: i === 0 ? 10 : 7,
                 height: i === 0 ? 10 : 7,
-                background: ['#10b981', '#F2C94C', '#a78bfa'][i],
+                background: ['rgb(16 185 129)', 'var(--solaris-gold)', 'rgb(167 139 250)'][i],
                 opacity: 0.85,
-                boxShadow: `0 0 8px ${['#10b981', '#F2C94C', '#a78bfa'][i]}`,
+                boxShadow: `0 0 8px ${['rgb(16 185 129)', 'var(--solaris-gold)', 'rgb(167 139 250)'][i]}`,
               }}
             />
           ))}

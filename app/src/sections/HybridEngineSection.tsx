@@ -147,10 +147,10 @@ const HybridEngineSection = () => {
           {/* Circuit decoration top right */}
           <div className="absolute top-0 right-0 w-32 h-32 opacity-15 pointer-events-none overflow-hidden rounded-[18px]">
             <svg viewBox="0 0 128 128" className="w-full h-full">
-              <path d="M128,0 L80,0 L80,30 L50,30 L50,60 L20,60 L20,90 L0,90" stroke="#2EE7FF" strokeWidth="1" fill="none" strokeDasharray="4,6" />
-              <circle cx="80" cy="30" r="4" fill="#2EE7FF" />
-              <circle cx="50" cy="60" r="4" fill="#F2C94C" />
-              <circle cx="20" cy="90" r="4" fill="#2EE7FF" />
+              <path d="M128,0 L80,0 L80,30 L50,30 L50,60 L20,60 L20,90 L0,90" stroke="var(--solaris-cyan)" strokeWidth="1" fill="none" strokeDasharray="4,6" />
+              <circle cx="80" cy="30" r="4" fill="var(--solaris-cyan)" />
+              <circle cx="50" cy="60" r="4" fill="var(--solaris-gold)" />
+              <circle cx="20" cy="90" r="4" fill="var(--solaris-cyan)" />
             </svg>
           </div>
 
@@ -205,9 +205,9 @@ const HybridEngineSection = () => {
                     />
                     <defs>
                       <linearGradient id="flowGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#F2C94C" />
-                        <stop offset="50%" stopColor="#2EE7FF" />
-                        <stop offset="100%" stopColor="#F2C94C" />
+                        <stop offset="0%" stopColor="var(--solaris-gold)" />
+                        <stop offset="50%" stopColor="var(--solaris-cyan)" />
+                        <stop offset="100%" stopColor="var(--solaris-gold)" />
                       </linearGradient>
                     </defs>
                   </svg>

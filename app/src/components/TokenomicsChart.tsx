@@ -33,7 +33,7 @@ const CustomTooltip = ({ active, payload, lang }: TooltipProps & { lang: LangCod
   if (!d) return null;
   const skill = standardSkillBurst(skillSeedFromLabel(`tokenomics|pie|${d.id}`));
   return (
-    <div className="bg-[#0D0E17] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth max-w-[min(90vw,280px)]">
+    <div className="bg-[color:var(--solaris-panel)] border border-white/10 rounded-xl px-4 py-3 text-xs font-mono shadow-depth max-w-[min(90vw,280px)]">
       <div className="font-bold mb-1" style={{ color: d.color }}>
         {d.name}
       </div>
@@ -196,8 +196,8 @@ const TokenomicsChart = () => {
                     paddingAngle={2}
                     isAnimationActive={!prefersReducedMotion}
                     onMouseLeave={() => setActiveIndex(null)}
-                    onMouseEnter={(_, index) => setActiveIndex(index)}
-                    onClick={(_, index) => {
+                    onMouseEnter={(_e: unknown, index: number) => setActiveIndex(index)}
+                    onClick={(_e: unknown, index: number) => {
                       const item = distributionVisible[index];
                       if (!item) return;
                       setSelectedId((prev) => (prev === item.id ? null : item.id));

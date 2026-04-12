@@ -235,7 +235,7 @@ const ResourcesSection = () => {
               { label: 'Buy CET', href: DEDUST_SWAP_URL, color: 'text-solaris-gold' },
               { label: 'Whitepaper', href: 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a', color: 'text-solaris-cyan' },
               { label: 'GitHub', href: 'https://github.com/Solaris-CET/solaris-cet', color: 'text-solaris-text' },
-              { label: 'Telegram', href: 'https://t.me/SolarisCET', color: 'text-[#2AABEE]' },
+              { label: 'Telegram', href: 'https://t.me/SolarisCET', color: 'text-solaris-cyan' },
               { label: 'CET contract', href: TONSCAN_CET_CONTRACT_URL, color: 'text-emerald-400' },
             ].map(({ label, href, color }) => (
               <a

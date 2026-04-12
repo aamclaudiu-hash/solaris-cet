@@ -358,8 +358,8 @@ const HeroSection: React.FC = () => {
           aria-label={t.hero.liveTickerAria}
           className="relative lg:absolute lg:bottom-0 w-full overflow-hidden py-4 md:py-6 border-t border-white/10 bg-slate-950/80 backdrop-blur-2xl mt-6 lg:mt-0 shadow-[0_-24px_80px_-28px_rgba(46,231,255,0.07)]"
         >
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-10 sm:w-16 bg-gradient-to-r from-[#020510] to-transparent" aria-hidden />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-10 sm:w-16 bg-gradient-to-l from-[#020510] to-transparent" aria-hidden />
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-10 sm:w-16 bg-gradient-to-r from-[color:var(--solaris-void)] to-transparent" aria-hidden />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-10 sm:w-16 bg-gradient-to-l from-[color:var(--solaris-void)] to-transparent" aria-hidden />
           <div className="flex min-w-max animate-ticker whitespace-nowrap group/ticker">
             {[...tickerRows, ...tickerRows].map((item, i) => (
               <div

@@ -64,6 +64,23 @@
     --type-h3: clamp(20px, 2.25vw, 32px);
     --type-body: clamp(15px, 1.2vw, 18px);
 
+    --text-hero: var(--type-h1);
+    --text-h1: var(--type-h2);
+    --text-h2: var(--type-h3);
+    --text-h3: clamp(18px, 1.7vw, 26px);
+    --text-body: var(--type-body);
+    --text-small: clamp(13px, 0.95vw, 15px);
+    --text-mono: clamp(12px, 0.95vw, 14px);
+
+    --z-base: 1;
+    --z-ambient: 2;
+    --z-content: 10;
+    --z-sticky: 50;
+    --z-nav: 1000;
+    --z-modal: 1100;
+    --z-toast: 1200;
+    --z-cursor: 9999;
+
     /* MobileConversionDock: must match `main` padding-bottom (< xl) and BackToTop offset. */
     --mobile-conversion-dock-reserve: 5.75rem;
     --back-to-top-bottom: calc(

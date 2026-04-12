@@ -173,7 +173,7 @@ const TokenomicsSection = () => {
 
       <div ref={cardRef} className="relative z-10 w-full max-w-[1100px]">
         {/* Bank dashboard shell */}
-        <div className="rounded-2xl border border-white/[0.12] bg-[#05070a]/90 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] overflow-hidden">
+        <div className="rounded-2xl border border-white/[0.12] bg-[color:var(--solaris-panel)] backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] overflow-hidden">
           {/* Header strip */}
           <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between px-5 py-4 md:px-6 border-b border-white/10 bg-black/50">
             <div className="flex items-start gap-3">
@@ -196,7 +196,7 @@ const TokenomicsSection = () => {
           {/* Investor KPI row: Fixed Supply (amber) vs RAV (cyan/violet) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 lg:divide-x lg:divide-white/10">
             <div
-              className={`p-5 sm:p-6 border-b lg:border-b-0 border-white/10 bg-gradient-to-br from-amber-950/50 via-[#0a0b0f] to-transparent ${BENTO_TILE_INTERACTION}`}
+              className={`p-5 sm:p-6 border-b lg:border-b-0 border-white/10 bg-gradient-to-br from-amber-950/50 via-[color:var(--solaris-panel)] to-transparent ${BENTO_TILE_INTERACTION}`}
             >
               <div className="flex items-center gap-2 mb-4">
                 <Lock className="w-4 h-4 text-amber-400" aria-hidden />
@@ -219,7 +219,7 @@ const TokenomicsSection = () => {
             </div>
 
             <div
-              className={`p-5 sm:p-6 bg-gradient-to-br from-cyan-950/35 via-violet-950/20 to-[#0a0b0f] crt-terminal ${BENTO_TILE_INTERACTION}`}
+              className={`p-5 sm:p-6 bg-gradient-to-br from-cyan-950/35 via-violet-950/20 to-[color:var(--solaris-panel)] crt-terminal ${BENTO_TILE_INTERACTION}`}
             >
               <div className="flex items-center gap-2 mb-4">
                 <Cpu className="w-4 h-4 text-cyan-300" aria-hidden />
@@ -269,8 +269,8 @@ const TokenomicsSection = () => {
                   />
                   <defs>
                     <linearGradient id="tokenomicsRingGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#F2C94C" />
-                      <stop offset="100%" stopColor="#2EE7FF" />
+                      <stop offset="0%" stopColor="var(--solaris-gold)" />
+                      <stop offset="100%" stopColor="var(--solaris-cyan)" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -352,7 +352,7 @@ const TokenomicsSection = () => {
             ].map(cell => (
               <div
                 key={cell.label}
-                className={`bg-[#080a0f] p-3 md:p-4 text-center ${BENTO_TILE_INTERACTION}`}
+                className={`bg-[color:var(--solaris-panel)] p-3 md:p-4 text-center ${BENTO_TILE_INTERACTION}`}
               >
                 <div className="hud-label text-[9px] mb-1">{cell.label}</div>
                 <div className={`font-mono tabular-nums text-sm font-semibold ${cell.valueClass}`}>{cell.value}</div>

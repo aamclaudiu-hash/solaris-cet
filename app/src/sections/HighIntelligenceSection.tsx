@@ -18,11 +18,11 @@ interface ReasoningStep {
 }
 
 const phaseColors: Record<string, string> = {
-  OBSERVE: '#2EE7FF',
-  THINK: '#F2C94C',
-  PLAN: '#A78BFA',
-  ACT: '#F97316',
-  VERIFY: '#34D399',
+  OBSERVE: 'var(--solaris-cyan)',
+  THINK: 'var(--solaris-gold)',
+  PLAN: 'rgb(167 139 250)',
+  ACT: 'rgb(249 115 22)',
+  VERIFY: 'rgb(52 211 153)',
 };
 
 function buildReasoningSteps(query: string): ReasoningStep[] {
@@ -369,7 +369,7 @@ const QuantumEntropyCetAi = () => {
     setQubits(initQubits());
   };
 
-  const colorsCollapsed = ['#34D399', '#F2C94C'];
+  const colorsCollapsed = ['rgb(52 211 153)', 'var(--solaris-gold)'];
 
   return (
     <div className="bento-card p-6 h-full flex flex-col gap-4">
@@ -405,7 +405,7 @@ const QuantumEntropyCetAi = () => {
             const r = 14;
             const x2 = cx + r * Math.cos(q.angle);
             const y2 = cy + r * Math.sin(q.angle);
-            const color = q.collapsed ? colorsCollapsed[q.value] : '#2EE7FF';
+            const color = q.collapsed ? colorsCollapsed[q.value] : 'var(--solaris-cyan)';
             return (
               <div key={q.id} className="flex flex-col items-center gap-1">
                 <svg width="40" height="40" viewBox="0 0 40 40">

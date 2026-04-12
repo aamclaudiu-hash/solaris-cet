@@ -22,8 +22,8 @@ const GITHUB_URL = 'https://github.com/Solaris-CET/solaris-cet';
 const WHITEPAPER_URL = 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a';
 
 const socialLinks = [
-  { icon: X, href: 'https://twitter.com/SolarisCET', label: 'X', color: 'hover:text-[#1DA1F2] hover:bg-[#1DA1F2]/10' },
-  { icon: Send, href: 'https://t.me/SolarisCET', label: 'Telegram', color: 'hover:text-[#2AABEE] hover:bg-[#2AABEE]/10' },
+  { icon: X, href: 'https://twitter.com/SolarisCET', label: 'X', color: 'hover:text-solaris-cyan hover:bg-solaris-cyan/10' },
+  { icon: Send, href: 'https://t.me/SolarisCET', label: 'Telegram', color: 'hover:text-solaris-cyan hover:bg-solaris-cyan/10' },
   { icon: Globe, href: GITHUB_URL, label: 'GitHub', color: 'hover:text-solaris-text hover:bg-white/10' },
   { icon: Globe, href: DEDUST_SWAP_URL, label: 'DeDust', color: 'hover:text-solaris-gold hover:bg-solaris-gold/10' },
 ];
@@ -205,8 +205,8 @@ const FooterSection = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Send className="w-4 h-4 text-[#2AABEE]" />
-                <span className="hud-label text-[#2AABEE]">Join the Community</span>
+                <Send className="w-4 h-4 text-solaris-cyan" />
+                <span className="hud-label text-solaris-cyan">Join the Community</span>
               </div>
               <p className="text-solaris-text">Get live updates, talk to the team, and follow the 200,000-agent build in real time.</p>
               <p className="text-solaris-muted text-xs mt-1">Telegram · Free · No spam · Instant access</p>
@@ -214,7 +214,7 @@ const FooterSection = () => {
                 <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2 text-[11px] font-mono text-solaris-muted">
-                      <Send className="w-3.5 h-3.5 text-[#2AABEE]" />
+                      <Send className="w-3.5 h-3.5 text-solaris-cyan" />
                       <span>{t.communityProof.telegramMembers}</span>
                     </div>
                     <Users className="w-4 h-4 text-solaris-gold/80" aria-hidden />
@@ -259,7 +259,7 @@ const FooterSection = () => {
                 href="https://t.me/SolarisCET"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2AABEE]/10 border border-[#2AABEE]/30 text-[#2AABEE] font-semibold text-sm hover:bg-[#2AABEE]/20 transition-all duration-200 active:scale-95"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-solaris-cyan/10 border border-solaris-cyan/30 text-solaris-cyan font-semibold text-sm hover:bg-solaris-cyan/20 transition-all duration-200 active:scale-95"
               >
                 <Send className="w-4 h-4" />
                 Join Telegram Channel

@@ -11,12 +11,12 @@ import { useLanguage } from '../hooks/useLanguage';
 
 
 const steps = [
-  { phase: 'THOUGHT', icon: '🧠', text: 'Analyzing blockchain data patterns...', color: '#F2C94C' },
-  { phase: 'ACTION', icon: '⚡', text: 'Query DeDust pool liquidity metrics', color: '#2EE7FF' },
-  { phase: 'OBSERVE', icon: '👁', text: 'Pool TVL: $2.4M | 24h Vol: $180K', color: '#34D399' },
-  { phase: 'THOUGHT', icon: '🧠', text: 'High liquidity confirms token utility', color: '#F2C94C' },
-  { phase: 'ACTION', icon: '⚡', text: 'Execute optimal swap route...', color: '#2EE7FF' },
-  { phase: 'OBSERVE', icon: '👁', text: 'Swap completed. Slippage: 0.12%', color: '#34D399' },
+  { phase: 'THOUGHT', icon: '🧠', text: 'Analyzing blockchain data patterns...', color: 'var(--solaris-gold)' },
+  { phase: 'ACTION', icon: '⚡', text: 'Query DeDust pool liquidity metrics', color: 'var(--solaris-cyan)' },
+  { phase: 'OBSERVE', icon: '👁', text: 'Pool TVL: $2.4M | 24h Vol: $180K', color: 'rgba(52, 211, 153, 1)' },
+  { phase: 'THOUGHT', icon: '🧠', text: 'High liquidity confirms token utility', color: 'var(--solaris-gold)' },
+  { phase: 'ACTION', icon: '⚡', text: 'Execute optimal swap route...', color: 'var(--solaris-cyan)' },
+  { phase: 'OBSERVE', icon: '👁', text: 'Swap completed. Slippage: 0.12%', color: 'rgba(52, 211, 153, 1)' },
 ];
 
 const IntelligenceCoreSection = () => {
