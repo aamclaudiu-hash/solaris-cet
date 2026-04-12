@@ -26,24 +26,28 @@ const AuthorityTrustSection = () => {
 
   const pillars = [
     {
+      id: 'audit',
       icon: ShieldCheck,
       title: t.authorityTrust.pillar1Title,
       body: t.authorityTrust.pillar1Body,
       accent: 'from-amber-500/15 to-transparent',
     },
     {
+      id: 'onchain',
       icon: Link2,
       title: t.authorityTrust.pillar2Title,
       body: t.authorityTrust.pillar2Body,
       accent: 'from-cyan-500/12 to-transparent',
     },
     {
+      id: 'geo',
       icon: MapPin,
       title: t.authorityTrust.pillar3Title,
       body: t.authorityTrust.pillar3Body,
       accent: 'from-emerald-500/12 to-transparent',
     },
     {
+      id: 'ops',
       icon: Eye,
       title: t.authorityTrust.pillar4Title,
       body: t.authorityTrust.pillar4Body,
@@ -86,7 +90,7 @@ const AuthorityTrustSection = () => {
             const Icon = p.icon;
             return (
               <article
-                key={p.title}
+                key={p.id}
                 className="authority-pillar group relative rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl p-6 sm:p-7 shadow-[0_8px_40px_rgba(0,0,0,0.25)] hover:border-solaris-gold/25 hover:bg-white/[0.05] hover:-translate-y-1.5 transition-all duration-[250ms]"
               >
                 <div

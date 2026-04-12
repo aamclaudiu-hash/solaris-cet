@@ -56,7 +56,7 @@ export const RWA_DOCUMENTS: readonly RwaDocument[] = [
     title: 'Audit report (public)',
     docType: 'audit',
     publishedAt: '2026-03-31',
-    url: '/AUDIT_REPORT_2026-03-31.md',
+    url: 'https://raw.githubusercontent.com/Solaris-CET/solaris-cet/main/AUDIT_REPORT_2026-03-31.md',
   },
   {
     id: 'ipfs-proof',
@@ -133,4 +133,3 @@ export function timelineChipClass(status: RwaTimelineStatus): string {
   if (status === 'active') return 'bg-amber-500/10 text-amber-200 border-amber-500/25';
   return 'bg-cyan-500/10 text-cyan-200 border-cyan-500/25';
 }
-
