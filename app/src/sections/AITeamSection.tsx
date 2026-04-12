@@ -29,7 +29,7 @@ const AITeamSection = () => {
     <section
       id="team"
       aria-label={t.sectionAria.aiTeamStructure}
-      className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
+      className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />
 

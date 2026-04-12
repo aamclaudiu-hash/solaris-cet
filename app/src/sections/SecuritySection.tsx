@@ -79,7 +79,7 @@ const SecuritySection = () => {
     <section
       id="security"
       aria-label={t.sectionAria.security}
-      className="relative section-glass py-24 lg:py-32 overflow-hidden"
+      className="relative section-glass py-20 lg:py-28 overflow-hidden"
     >
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

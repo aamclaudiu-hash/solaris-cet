@@ -52,6 +52,7 @@
 
     --solaris-gold: #f2c94c;
     --solaris-cyan: #2ee7ff;
+    --solaris-violet: #7f00ff;
     --solaris-dark: #020617;
     --solaris-void: #020510;
     --solaris-panel: #0d0e17;
@@ -286,7 +287,61 @@
   .section-glass {
     position: relative;
     @apply bg-white/5 backdrop-blur-lg backdrop-saturate-150 border border-white/10;
+    isolation: isolate;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .section-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 90% 55% at 20% 10%, rgba(46, 231, 255, 0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 55% at 78% 16%, rgba(127, 0, 255, 0.06) 0%, transparent 58%),
+      radial-gradient(ellipse 85% 60% at 60% 92%, rgba(242, 201, 76, 0.05) 0%, transparent 62%);
+    opacity: 0.8;
+    mix-blend-mode: screen;
+    z-index: 0;
+  }
+
+  .section-glass::after {
+    content: '';
+    position: absolute;
+    inset: -40% 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(46, 231, 255, 0.08) 42%,
+        rgba(127, 0, 255, 0.06) 52%,
+        transparent 70%
+      );
+    opacity: 0;
+    mix-blend-mode: screen;
+    transform: translate3d(0, -20%, 0);
+    z-index: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .section-glass:hover::after {
+      opacity: 0.22;
+      animation: section-scanline 2.8s ease-in-out infinite;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-glass::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  @keyframes section-scanline {
+    0% { transform: translate3d(0, -22%, 0); }
+    50% { transform: translate3d(0, 6%, 0); }
+    100% { transform: translate3d(0, -22%, 0); }
   }
 
   .glass-card {
@@ -422,6 +477,216 @@
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     z-index: 2;
+  }
+
+  .cosmic-backdrop {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(1200px 700px at 18% 18%, rgba(46, 231, 255, 0.09) 0%, transparent 62%),
+      radial-gradient(900px 620px at 86% 26%, rgba(127, 0, 255, 0.08) 0%, transparent 60%),
+      radial-gradient(880px 560px at 70% 86%, rgba(242, 201, 76, 0.07) 0%, transparent 60%),
+      radial-gradient(680px 520px at 32% 82%, rgba(255, 255, 255, 0.02) 0%, transparent 62%),
+      linear-gradient(180deg, rgba(2, 5, 16, 0.86) 0%, rgba(2, 5, 16, 0.98) 60%, rgba(2, 6, 23, 1) 100%);
+  }
+
+  .cosmic-backdrop::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(46, 231, 255, 0.09) 0%, transparent 44%),
+      radial-gradient(circle at 80% 22%, rgba(127, 0, 255, 0.08) 0%, transparent 48%),
+      radial-gradient(circle at 62% 78%, rgba(242, 201, 76, 0.06) 0%, transparent 52%);
+    opacity: 0.85;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    filter: blur(0.2px);
+  }
+
+  .cosmic-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, rgba(46, 231, 255, 0.06) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(0deg, rgba(127, 0, 255, 0.05) 0 1px, transparent 1px 64px);
+    opacity: 0.12;
+    mix-blend-mode: screen;
+    mask-image: radial-gradient(circle at 50% 30%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 68%);
+    transform: translate3d(0, 0, 0);
+    will-change: background-position, opacity;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cosmic-backdrop::before {
+      animation: cosmic-drift 28s ease-in-out infinite;
+    }
+
+    .cosmic-backdrop::after {
+      animation: cosmic-grid-shift 18s linear infinite;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .cosmic-backdrop {
+      background:
+        radial-gradient(700px 520px at 20% 18%, rgba(46, 231, 255, 0.08) 0%, transparent 58%),
+        radial-gradient(680px 520px at 85% 22%, rgba(127, 0, 255, 0.06) 0%, transparent 58%),
+        linear-gradient(180deg, rgba(2, 5, 16, 0.9) 0%, rgba(2, 6, 23, 1) 100%);
+    }
+
+    .cosmic-backdrop::after {
+      opacity: 0.06;
+    }
+  }
+
+  @keyframes cosmic-drift {
+    0% { transform: translate3d(-1.2%, -0.8%, 0) scale(1.02); }
+    50% { transform: translate3d(1.2%, 0.9%, 0) scale(1.04); }
+    100% { transform: translate3d(-1.2%, -0.8%, 0) scale(1.02); }
+  }
+
+  @keyframes cosmic-grid-shift {
+    0% { background-position: 0 0, 0 0; opacity: 0.1; }
+    50% { background-position: 180px 0, 0 140px; opacity: 0.14; }
+    100% { background-position: 360px 0, 0 280px; opacity: 0.1; }
+  }
+
+  .cosmic-burst {
+    position: absolute;
+    height: min(70vw, 720px);
+    width: min(70vw, 720px);
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at center, rgba(255, 255, 255, 0.08) 0%, transparent 38%),
+      radial-gradient(circle at center, rgba(46, 231, 255, 0.18) 0%, transparent 55%),
+      radial-gradient(circle at center, rgba(127, 0, 255, 0.14) 0%, transparent 62%);
+    filter: blur(0.2px);
+    mix-blend-mode: screen;
+    animation: cosmic-burst-pulse 7.2s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cosmic-burst {
+      animation: none;
+    }
+  }
+
+  @keyframes cosmic-burst-pulse {
+    0% { transform: translate3d(0,0,0) scale(0.96); opacity: 0.45; }
+    45% { transform: translate3d(0,0,0) scale(1.06); opacity: 0.62; }
+    100% { transform: translate3d(0,0,0) scale(0.96); opacity: 0.45; }
+  }
+
+  .cosmic-shockwave {
+    position: absolute;
+    inset: -40%;
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at center, transparent 0 56%, rgba(46, 231, 255, 0.18) 58%, transparent 66%),
+      radial-gradient(circle at center, transparent 0 60%, rgba(242, 201, 76, 0.12) 62%, transparent 70%);
+    opacity: 0.2;
+    mix-blend-mode: screen;
+    animation: cosmic-shockwave 9.5s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cosmic-shockwave {
+      animation: none;
+      opacity: 0.1;
+    }
+  }
+
+  @keyframes cosmic-shockwave {
+    0% { transform: scale(0.9); filter: blur(0px); opacity: 0.1; }
+    40% { transform: scale(1.05); filter: blur(0.4px); opacity: 0.22; }
+    100% { transform: scale(0.9); filter: blur(0px); opacity: 0.1; }
+  }
+
+  .cosmic-event-stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(46, 231, 255, 0.18);
+    background:
+      radial-gradient(circle at 30% 30%, rgba(46, 231, 255, 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 70% 70%, rgba(127, 0, 255, 0.1) 0%, transparent 55%),
+      rgba(0, 0, 0, 0.22);
+    color: rgba(226, 232, 240, 0.92);
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+      0 20px 60px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transform: translateZ(0);
+    opacity: 0.9;
+  }
+
+  .cosmic-event-stamp::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(46, 231, 255, 0.95) 0%, rgba(242, 201, 76, 0.35) 55%, transparent 70%);
+    box-shadow: 0 0 18px rgba(46, 231, 255, 0.32);
+  }
+
+  .cosmic-event-stamp::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(110deg, transparent 0%, rgba(46, 231, 255, 0.18) 40%, rgba(127, 0, 255, 0.12) 55%, transparent 100%);
+    background-size: 240% 100%;
+    background-position: -140% 0;
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cosmic-event-stamp {
+      animation: cosmic-stamp-float 6.2s ease-in-out infinite;
+    }
+
+    .cosmic-event-stamp::after {
+      opacity: 1;
+      animation: cosmic-stamp-sheen 5.4s ease-in-out infinite;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cosmic-event-stamp,
+    .cosmic-event-stamp::after {
+      animation: none;
+    }
+
+    .cosmic-event-stamp::after {
+      opacity: 0;
+    }
+  }
+
+  @keyframes cosmic-stamp-float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+    100% { transform: translateY(0); }
+  }
+
+  @keyframes cosmic-stamp-sheen {
+    0% { background-position: -140% 0; opacity: 0.0; }
+    12% { opacity: 0.35; }
+    50% { opacity: 0.55; }
+    88% { opacity: 0.35; }
+    100% { background-position: 220% 0; opacity: 0.0; }
   }
 
   @media (max-width: 767px) {
@@ -634,6 +899,111 @@
     box-shadow: 0 0 20px rgba(242, 201, 76, 0.5), inset 0 0 10px rgba(242, 201, 76, 0.2);
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
     border-color: rgba(242, 201, 76, 0.9);
+  }
+
+  .btn-quantum,
+  .ton-connect-btn button {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transform: translateZ(0);
+  }
+
+  .btn-quantum::before,
+  .ton-connect-btn button::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(
+      110deg,
+      transparent 0%,
+      rgba(46, 231, 255, 0.16) 38%,
+      rgba(127, 0, 255, 0.12) 55%,
+      rgba(242, 201, 76, 0.1) 68%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    background-position: -120% 0;
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    filter: blur(0.2px);
+    transition: opacity 0.25s ease;
+  }
+
+  .btn-quantum::after,
+  .ton-connect-btn button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow:
+      0 0 0 1px rgba(46, 231, 255, 0.12) inset,
+      0 0 0 1px rgba(212, 0, 255, 0.06);
+    transition: opacity 0.25s ease;
+  }
+
+  .btn-quantum:hover::before,
+  .btn-quantum:focus-visible::before,
+  .ton-connect-btn button:hover::before,
+  .ton-connect-btn button:focus-visible::before {
+    opacity: 1;
+    animation: btn-quantum-sheen 1.35s ease-out 1;
+  }
+
+  .btn-quantum:hover::after,
+  .btn-quantum:focus-visible::after,
+  .ton-connect-btn button:hover::after,
+  .ton-connect-btn button:focus-visible::after {
+    opacity: 1;
+  }
+
+  .btn-quantum-float {
+    will-change: transform, filter;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-quantum-float {
+      animation: btn-quantum-float 5.5s ease-in-out infinite;
+    }
+  }
+
+  @keyframes btn-quantum-sheen {
+    0% {
+      background-position: -120% 0;
+    }
+    100% {
+      background-position: 220% 0;
+    }
+  }
+
+  @keyframes btn-quantum-float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-quantum::before,
+    .btn-quantum::after,
+    .ton-connect-btn button::before,
+    .ton-connect-btn button::after {
+      animation: none;
+      transition: none;
+    }
+
+    .btn-quantum-float {
+      animation: none;
+    }
   }
 
   /* Prevent text selection during rapid interaction */

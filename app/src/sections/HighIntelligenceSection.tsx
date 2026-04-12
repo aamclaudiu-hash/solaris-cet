@@ -559,7 +559,7 @@ const HighIntelligenceSection = () => {
     <section
       ref={sectionRef}
       id="high-intelligence"
-      className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
+      className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

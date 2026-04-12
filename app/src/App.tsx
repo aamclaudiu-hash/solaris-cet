@@ -258,6 +258,8 @@ function AppContent() {
         aria-hidden={!isLoaded}
         inert={!isLoaded ? true : undefined}
       >
+        <div className="cosmic-backdrop" aria-hidden />
+
         {/* Ambient solar glow — fixed, behind sections */}
         <div
           className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
@@ -305,7 +307,7 @@ function AppContent() {
           <section
             id="hero"
             aria-label={langState.t.landmarks.hero}
-            className="relative z-10 py-24"
+            className="relative z-10"
           >
             <ErrorBoundary>
               {/* Hero: GSAP entrance only (no pin — avoids scroll-jacking); ScrollFadeUp here caused double opacity */}
@@ -317,8 +319,15 @@ function AppContent() {
           <section
             id="problem-agriculture"
             aria-label={langState.t.landmarks.problemAgriculture}
-            className="relative z-[15] py-24"
+            className="relative z-[15]"
           >
+            <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+              <div className="cosmic-burst -top-[10%] left-[10%] opacity-35" />
+              <div className="cosmic-burst bottom-[-20%] right-[-10%] opacity-25" style={{ animationDelay: '1.4s' }} />
+            </div>
+            <div className="cosmic-event-stamp absolute right-5 top-6 sm:right-8 sm:top-8" aria-hidden>
+              EVENT · QUANTUM LATTICE
+            </div>
             <div className="relative z-[15]">
               <LazyLoadWrapper>
                 <ScrollFadeUp>
@@ -362,7 +371,7 @@ function AppContent() {
           <section
             id="nova-app"
             aria-label={langState.t.landmarks.novaApp}
-            className="relative z-40 scroll-mt-24 py-24"
+            className="relative z-40 scroll-mt-24"
           >
             <ErrorBoundary>
               <ScrollFadeUp>
@@ -375,8 +384,15 @@ function AppContent() {
           <section
             id="staking"
             aria-label={langState.t.landmarks.tokenomics}
-            className="relative z-50 scroll-mt-24 py-24"
+            className="relative z-50 scroll-mt-24"
           >
+            <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+              <div className="cosmic-burst -top-[18%] left-1/2 -translate-x-1/2 opacity-30" style={{ animationDelay: '0.6s' }} />
+              <div className="cosmic-shockwave" />
+            </div>
+            <div className="cosmic-event-stamp absolute left-5 top-6 sm:left-8 sm:top-8" aria-hidden>
+              EVENT · BIG BANG 9,000 CET
+            </div>
             <ErrorBoundary>
               <ScrollFadeUp>
                 <TokenomicsSection />
@@ -387,7 +403,7 @@ function AppContent() {
           {/* 5. RWA — Cetățuia, real estate */}
           <section
             aria-label={langState.t.landmarks.rwa}
-            className="relative z-[55] py-24"
+            className="relative z-[55]"
           >
             <LazyLoadWrapper>
               <ScrollFadeUp>
@@ -399,7 +415,7 @@ function AppContent() {
           {/* 6. Roadmap (id matches nav #roadmap) */}
           <section
             aria-label={langState.t.landmarks.roadmap}
-            className="relative z-[70] scroll-mt-24 py-24"
+            className="relative z-[70] scroll-mt-24"
           >
             <LazyLoadWrapper>
               <ScrollFadeUp>
@@ -530,7 +546,7 @@ function AppContent() {
           <section
             aria-label={langState.t.landmarks.footer}
             data-testid="footer-landmark-section"
-            className="relative z-[113] py-24"
+            className="relative z-[113]"
           >
             <LazyLoadWrapper>
               <ScrollFadeUp>

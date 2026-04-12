@@ -230,7 +230,7 @@ const HeroSection: React.FC = () => {
 
               <a
                 href="#whitepaper"
-                className="hidden sm:inline-flex btn-gold glow-pulse-hover"
+                className="hidden sm:inline-flex btn-gold glow-pulse-hover btn-quantum btn-quantum-float"
               >
                 <FileText size={18} className="shrink-0" aria-hidden />
                 Citește Whitepaper
@@ -303,19 +303,19 @@ const HeroSection: React.FC = () => {
                 href={DEDUST_SWAP_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors btn-quantum"
               >
                 DeDust
               </a>
               <a
                 href="#staking"
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors btn-quantum"
               >
                 Tokenomics
               </a>
               <a
                 href="#how-to-buy"
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors btn-quantum"
               >
                 How to Buy
               </a>
