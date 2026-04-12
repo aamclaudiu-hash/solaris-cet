@@ -2134,6 +2134,9 @@ const translations: Record<LangCode, Translations> = {
       sendCompact: 'ОТПРАВИТЬ',
       heroCapabilityNote:
         'Пока /api/chat не развёрнут здесь, ответы из встроенной базы; подключите API для Grok × Gemini.',
+      privacyNotice:
+        'Конфиденциальность: не вводите персональные данные. В TASK 05–10 этот диалог не сохраняется на сервере.',
+      retryButton: 'ПОВТОРИТЬ',
       sourceBadgeLive: 'Живой API',
       sourceBadgeLocal: 'Встроенная база',
       ravTraceToggle: 'Трассировка протокола RAV (техн.)',
@@ -3007,6 +3010,9 @@ const translations: Record<LangCode, Translations> = {
       sendCompact: 'ENVIAR',
       heroCapabilityNote:
         'Enquanto /api/chat não estiver ativo aqui, as respostas usam conhecimento integrado; faça deploy da API para Grok × Gemini.',
+      privacyNotice:
+        'Privacidade: não insira dados pessoais. Em TASK 05–10, esta conversa não é armazenada no servidor.',
+      retryButton: 'TENTAR DE NOVO',
       sourceBadgeLive: 'API ao vivo',
       sourceBadgeLocal: 'Conhecimento integrado',
       ravTraceToggle: 'Rastreio do protocolo RAV (técnico)',
@@ -3442,6 +3448,9 @@ const translations: Record<LangCode, Translations> = {
       sendCompact: 'SENDEN',
       heroCapabilityNote:
         'Solange /api/chat hier nicht aktiv ist, nutzen Antworten eingebautes Wissen; deployen Sie die API für Grok × Gemini.',
+      privacyNotice:
+        'Datenschutz: keine persönlichen Daten eingeben. In TASK 05–10 wird dieses Gespräch serverseitig nicht gespeichert.',
+      retryButton: 'ERNEUT VERSUCHEN',
       sourceBadgeLive: 'Live-API',
       sourceBadgeLocal: 'Eingebautes Wissen',
       ravTraceToggle: 'RAV-Protokoll-Trace (technisch)',

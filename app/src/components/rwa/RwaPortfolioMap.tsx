@@ -35,6 +35,7 @@ export function RwaPortfolioMap({
   } | null>(null);
 
   const [viewport, setViewport] = useState<Viewport>({ zoom: 1.2, x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   const selection = useMemo(() => {
     return projects.find((p) => p.id === selectedProjectId) ?? null;
@@ -51,6 +52,7 @@ export function RwaPortfolioMap({
   const onPointerDown = (e: PointerEvent) => {
     if (e.button !== 0) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    setIsDragging(true);
     dragRef.current = {
       isDown: true,
       startX: e.clientX,
@@ -70,6 +72,7 @@ export function RwaPortfolioMap({
 
   const onPointerUp = () => {
     if (dragRef.current) dragRef.current.isDown = false;
+    setIsDragging(false);
   };
 
   return (
@@ -133,7 +136,7 @@ export function RwaPortfolioMap({
           style={{
             transform: `translate3d(${viewport.x}px, ${viewport.y}px, 0) scale(${viewport.zoom})`,
             transformOrigin: '50% 50%',
-            transition: dragRef.current?.isDown ? 'none' : 'transform 160ms ease-out',
+            transition: isDragging ? 'none' : 'transform 160ms ease-out',
           }}
         >
           <div
