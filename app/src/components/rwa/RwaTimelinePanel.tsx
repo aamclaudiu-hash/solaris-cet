@@ -1,0 +1,76 @@
+import { Calendar, ChevronDown } from 'lucide-react';
+import type { RwaTimelineEvent } from '@/lib/rwaPortfolio';
+import { timelineChipClass } from '@/lib/rwaPortfolio';
+
+export function RwaTimelinePanel({
+  events,
+  title = 'Timeline',
+}: {
+  events: readonly RwaTimelineEvent[];
+  title?: string;
+}) {
+  return (
+    <section className="bento-card border border-white/10 p-6 shadow-depth" aria-label="RWA timeline">
+      <div className="flex items-start justify-between gap-4 mb-5">
+        <div>
+          <h3 className="font-display font-bold text-base text-solaris-text">{title}</h3>
+          <p className="text-solaris-muted text-sm mt-1 max-w-2xl">
+            Milestones are linked for deep navigation and can be expanded for details.
+          </p>
+        </div>
+        <div className="hidden sm:flex items-center gap-2 text-[10px] font-mono text-solaris-muted">
+          <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400/80" aria-hidden="true" />
+          COMPLETE
+          <span className="inline-flex h-2 w-2 rounded-full bg-amber-300/80 ml-3" aria-hidden="true" />
+          ACTIVE
+          <span className="inline-flex h-2 w-2 rounded-full bg-cyan-300/80 ml-3" aria-hidden="true" />
+          PLANNED
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {events.map((e) => (
+          <details
+            key={e.id}
+            id={`milestone-${e.slug}`}
+            className="group rounded-xl border border-white/10 bg-black/30 px-4 py-3 open:bg-black/40"
+          >
+            <summary className="list-none cursor-pointer flex items-start justify-between gap-3 [&::-webkit-details-marker]:hidden">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 w-9 h-9 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center shrink-0">
+                  <Calendar className="w-4 h-4 text-solaris-gold" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <a
+                      href={`#milestone-${e.slug}`}
+                      className="font-display font-semibold text-solaris-text hover:underline underline-offset-4"
+                    >
+                      {e.title}
+                    </a>
+                    <span
+                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-mono ${timelineChipClass(
+                        e.status,
+                      )}`}
+                    >
+                      {e.status.toUpperCase()}
+                    </span>
+                  </div>
+                  <p className="text-xs text-solaris-muted mt-0.5">{e.date}</p>
+                </div>
+              </div>
+              <ChevronDown
+                className="w-4 h-4 text-solaris-muted mt-2 group-open:rotate-180 transition-transform"
+                aria-hidden="true"
+              />
+            </summary>
+            <div className="mt-3 pt-3 border-t border-white/10">
+              <p className="text-sm text-solaris-muted leading-relaxed">{e.description}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+

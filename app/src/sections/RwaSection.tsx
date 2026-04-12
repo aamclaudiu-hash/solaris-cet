@@ -6,6 +6,11 @@ import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 import { useLanguage } from '../hooks/useLanguage';
 import { PredictiveTerrainHeatmap } from '@/components/PredictiveTerrainHeatmap';
+import { useMemo, useState } from 'react';
+import { RwaPortfolioMap } from '@/components/rwa/RwaPortfolioMap';
+import { RwaTimelinePanel } from '@/components/rwa/RwaTimelinePanel';
+import { RwaDocumentsPanel } from '@/components/rwa/RwaDocumentsPanel';
+import { RWA_DOCUMENTS, RWA_PROJECTS, RWA_TIMELINE, statusChipClass } from '@/lib/rwaPortfolio';
 
 /** Inline SVG placeholder — replace with on-site photography of Cetățuia land when available */
 const PHYSICAL_ASSET_PLACEHOLDER_BG =
@@ -84,6 +89,24 @@ const RWA_PILLARS = [
  */
 const RwaSection = () => {
   const { t } = useLanguage();
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(RWA_PROJECTS[0]?.id ?? null);
+
+  const selectedProject = useMemo(() => {
+    return RWA_PROJECTS.find((p) => p.id === selectedProjectId) ?? RWA_PROJECTS[0] ?? null;
+  }, [selectedProjectId]);
+
+  const selectedDocuments = useMemo(() => {
+    if (!selectedProject) return [];
+    const ids = new Set(selectedProject.documentIds);
+    return RWA_DOCUMENTS.filter((d) => ids.has(d.id));
+  }, [selectedProject]);
+
+  const selectedTimeline = useMemo(() => {
+    if (!selectedProject) return [];
+    const ids = new Set(selectedProject.timelineIds);
+    return RWA_TIMELINE.filter((e) => ids.has(e.id));
+  }, [selectedProject]);
+
   return (
     <section
       id="rwa"
@@ -184,6 +207,71 @@ const RwaSection = () => {
 
         <PredictiveTerrainHeatmap />
 
+        <ScrollFadeUp>
+          <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div className="lg:col-span-8">
+              <RwaPortfolioMap
+                projects={RWA_PROJECTS}
+                selectedProjectId={selectedProject?.id ?? null}
+                onSelectProject={setSelectedProjectId}
+              />
+            </div>
+            <aside className="lg:col-span-4 bento-card border border-white/10 p-6 shadow-depth" aria-label="RWA project details">
+              {selectedProject ? (
+                <>
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-display font-bold text-base text-solaris-text">{selectedProject.title}</h3>
+                      <p className="text-solaris-muted text-sm mt-1 leading-relaxed">{selectedProject.summary}</p>
+                    </div>
+                    <span
+                      className={`shrink-0 inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-mono ${statusChipClass(
+                        selectedProject.status,
+                      )}`}
+                    >
+                      {selectedProject.status.toUpperCase()}
+                    </span>
+                  </div>
+
+                  <dl className="mt-5 space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <dt className="text-[10px] font-mono uppercase tracking-widest text-solaris-muted">Region</dt>
+                      <dd className="text-xs text-solaris-text">{selectedProject.region}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <dt className="text-[10px] font-mono uppercase tracking-widest text-solaris-muted">Type</dt>
+                      <dd className="text-xs text-solaris-text">{selectedProject.projectType.replace(/_/g, ' ')}</dd>
+                    </div>
+                  </dl>
+
+                  <div className="mt-6 flex flex-col gap-3">
+                    <a
+                      href="#documente"
+                      className="inline-flex min-h-11 items-center justify-center rounded-xl bg-solaris-gold/10 border border-solaris-gold/30 text-solaris-gold text-sm font-semibold hover:bg-solaris-gold/20 transition-colors"
+                    >
+                      Jump to documents
+                    </a>
+                    <a
+                      href={selectedTimeline[0] ? `#milestone-${selectedTimeline[0].slug}` : '#rwa'}
+                      className="inline-flex min-h-11 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-solaris-text text-sm font-semibold hover:bg-white/10 transition-colors"
+                    >
+                      Jump to timeline
+                    </a>
+                  </div>
+
+                  <div className="mt-6 rounded-xl border border-white/10 bg-black/30 px-4 py-3">
+                    <p className="text-[11px] font-mono text-solaris-muted leading-relaxed">
+                      Proof bundle: IPFS + TON references. Always verify claims against linked artifacts.
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div className="text-solaris-muted text-sm">No project selected.</div>
+              )}
+            </aside>
+          </div>
+        </ScrollFadeUp>
+
         {/* Four pillars */}
         <ScrollStaggerFadeUp className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {RWA_PILLARS.map(pillar => {
@@ -227,6 +315,15 @@ const RwaSection = () => {
             </a>
           </div>
         </ScrollFadeUp>
+
+        <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ScrollFadeUp>
+            <RwaTimelinePanel events={selectedTimeline} />
+          </ScrollFadeUp>
+          <ScrollFadeUp>
+            <RwaDocumentsPanel documents={selectedDocuments} />
+          </ScrollFadeUp>
+        </div>
 
         <div className="mt-10 max-w-3xl">
           <MeshSkillRibbon variant="compact" saltOffset={2140} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />

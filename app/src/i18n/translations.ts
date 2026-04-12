@@ -436,6 +436,10 @@ export interface Translations {
     sendCompact: string;
     /** Persistent footnote under the hero CET AI widget (before any request). */
     heroCapabilityNote: string;
+    /** Visible privacy note: do not input personal data; no server-side storage in TASK 05–10. */
+    privacyNotice: string;
+    /** Retry action label when live /api/chat fails or rate limits. */
+    retryButton: string;
     /** Modal header pill when the last reply used live /api/chat (X-Cet-Ai-Source: live). */
     sourceBadgeLive: string;
     /** Modal header pill when the reply used built-in knowledge or non-live API. */
@@ -831,6 +835,9 @@ const translations: Record<LangCode, Translations> = {
       sendCompact: 'SEND',
       heroCapabilityNote:
         'Until /api/chat is live on this host, answers use built-in Solaris facts; deploy the API for Grok × Gemini.',
+      privacyNotice:
+        'Privacy: do not enter personal data. In TASK 05–10, this conversation is not stored server-side.',
+      retryButton: 'RETRY',
       sourceBadgeLive: 'Live API',
       sourceBadgeLocal: 'Built-in knowledge',
       ravTraceToggle: 'RAV protocol trace (technical)',
@@ -1266,6 +1273,9 @@ const translations: Record<LangCode, Translations> = {
       sendCompact: 'ENVIAR',
       heroCapabilityNote:
         'Hasta que /api/chat esté activo aquí, las respuestas usan conocimiento integrado; despliega la API para Grok × Gemini.',
+      privacyNotice:
+        'Privacidad: no introduzcas datos personales. En TASK 05–10 esta conversación no se guarda en el servidor.',
+      retryButton: 'REINTENTAR',
       sourceBadgeLive: 'API en vivo',
       sourceBadgeLocal: 'Conocimiento integrado',
       ravTraceToggle: 'Traza del protocolo RAV (técnica)',
@@ -1690,6 +1700,9 @@ const translations: Record<LangCode, Translations> = {
       sendCompact: '发送',
       heroCapabilityNote:
         '在 /api/chat 未部署前，回答来自内置知识；部署后可使用 Grok × Gemini。',
+      privacyNotice:
+        '隐私提示：请勿输入个人信息。在 TASK 05–10 中，对话不会在服务器端保存。',
+      retryButton: '重试',
       sourceBadgeLive: '实时 API',
       sourceBadgeLocal: '内置知识',
       ravTraceToggle: 'RAV 协议追踪（技术）',
@@ -2556,6 +2569,9 @@ const translations: Record<LangCode, Translations> = {
       sendCompact: 'TRIMITE',
       heroCapabilityNote:
         'Până când /api/chat e activ aici, răspunsurile folosesc cunoștințe integrate; deploy API pentru Grok × Gemini.',
+      privacyNotice:
+        'Confidențialitate: nu introduce date personale. În TASK 05–10, conversația nu este salvată pe server.',
+      retryButton: 'REÎNCEARCĂ',
       sourceBadgeLive: 'API live',
       sourceBadgeLocal: 'Cunoștințe integrate',
       ravTraceToggle: 'Trace protocol RAV (tehnic)',
