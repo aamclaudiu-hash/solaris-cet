@@ -1,8 +1,9 @@
-import { useState, useRef, useLayoutEffect, useMemo } from 'react';
-import { gsap } from 'gsap';
+import { useState, useRef, useMemo } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import { useLanguage } from '../hooks/useLanguage';
 import type { FaqContent } from '../i18n/faqContent.types';
 
@@ -68,54 +69,7 @@ const FAQSection = () => {
   const faqs = useMemo(() => buildFaqs(t.faqContent), [lang]);
   /* eslint-enable react-hooks/exhaustive-deps */
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current,
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: 'top 82%',
-            end: 'top 55%',
-            scrub: true,
-          },
-        }
-      );
-
-      const items = listRef.current?.querySelectorAll('.faq-item');
-      if (items) {
-        gsap.fromTo(
-          items,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 0.7,
-            scrollTrigger: {
-              trigger: listRef.current,
-              start: 'top 80%',
-              end: 'top 30%',
-              scrub: true,
-            },
-          }
-        );
-      }
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent, i: number) => {
     if (e.key === 'ArrowDown') {
@@ -139,7 +93,6 @@ const FAQSection = () => {
   return (
     <section
       id="faq"
-      ref={sectionRef}
       aria-label={t.sectionAria.faq}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
@@ -147,7 +100,7 @@ const FAQSection = () => {
 
       <div className="relative z-10 section-padding-x max-w-4xl mx-auto w-full">
         {/* Section heading */}
-        <div ref={headingRef} className="max-w-2xl mb-16 max-md:mx-auto max-md:text-center">
+        <ScrollFadeUp className="max-w-2xl mb-16 max-md:mx-auto max-md:text-center">
           <div className="flex items-center gap-3 mb-4 max-md:justify-center">
             <div className="w-10 h-10 rounded-xl bg-cyan-400/10 flex items-center justify-center">
               <HelpCircle className="w-5 h-5 text-cyan-400" />
@@ -163,12 +116,13 @@ const FAQSection = () => {
           <p className="text-solaris-muted text-base lg:text-lg leading-relaxed">
             {t.faqContent.subtitle}
           </p>
-        </div>
+        </ScrollFadeUp>
 
         {/* FAQ accordion */}
-        <div ref={listRef} className="flex flex-col gap-3" role="list">
-          {faqs.map((faq, i) => (
-            <div key={i} className="faq-item bento-card border border-white/8 overflow-hidden" role="listitem">
+        <div ref={listRef} role="list">
+          <ScrollStaggerFadeUp className="flex flex-col gap-3">
+            {faqs.map((faq, i) => (
+              <div key={i} className="faq-item bento-card border border-white/8 overflow-hidden" role="listitem">
               <button
                 id={`faq-btn-${i}`}
                 className="faq-trigger w-full flex items-center justify-between p-5 sm:p-6 md:p-7 text-left group transition-all duration-300"
@@ -227,8 +181,9 @@ const FAQSection = () => {
                   )}
                 </div>
               </div>
-            </div>
-          ))}
+              </div>
+            ))}
+          </ScrollStaggerFadeUp>
         </div>
 
         <div className="mt-10 max-w-3xl mx-auto">

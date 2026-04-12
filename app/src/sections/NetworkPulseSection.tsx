@@ -1,9 +1,10 @@
-import { useRef, useLayoutEffect, useState, useEffect } from 'react';
-import { gsap } from 'gsap';
+import { useState, useEffect } from 'react';
 import { Activity, Layers, Cpu, Globe, Lock, TrendingUp } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
 import { useLanguage } from '../hooks/useLanguage';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 
 // ─── Live network stats that increment over time ──────────────────────────
 
@@ -97,8 +98,6 @@ function formatLive(n: number, unit: string): string {
  */
 const NetworkPulseSection = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const gridRef    = useRef<HTMLDivElement>(null);
 
   const [counts, setCounts] = useState<number[]>(LIVE_STATS.map(s => s.base));
   const [pulse, setPulse]   = useState(false);
@@ -112,36 +111,9 @@ const NetworkPulseSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP entrance
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const ctx = gsap.context(() => {
-      const cards = gridRef.current?.querySelectorAll('.pulse-card');
-      if (cards) {
-        gsap.fromTo(cards,
-          { y: 40, opacity: 0, scale: 0.96 },
-          {
-            y: 0, opacity: 1, scale: 1,
-            stagger: { each: 0.08, from: 'start' },
-            duration: 0.8,
-            ease: 'expo.out',
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: 'top 82%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      }
-    }, section);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="network-pulse"
-      ref={sectionRef}
       aria-label={t.sectionAria.networkPulse}
       className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
@@ -153,7 +125,7 @@ const NetworkPulseSection = () => {
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-12 flex-wrap gap-4">
+        <ScrollFadeUp className="flex items-center justify-between mb-12 flex-wrap gap-4">
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className={`w-2.5 h-2.5 rounded-full bg-emerald-400 transition-opacity duration-500 ${pulse ? 'opacity-100' : 'opacity-40'}`}
@@ -172,10 +144,10 @@ const NetworkPulseSection = () => {
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-emerald-400 font-mono text-xs font-bold">MAINNET · BLOCK #{Math.floor(counts[0]).toLocaleString()}</span>
           </div>
-        </div>
+        </ScrollFadeUp>
 
         {/* Stats grid */}
-        <div ref={gridRef} className="grid grid-cols-2 lg:grid-cols-3 gap-5">
+        <ScrollStaggerFadeUp className="grid grid-cols-2 lg:grid-cols-3 gap-5">
           {LIVE_STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
@@ -223,7 +195,7 @@ const NetworkPulseSection = () => {
               </div>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         {/* Bottom note */}
         <p className="text-solaris-muted/40 text-[11px] font-mono text-center mt-6">

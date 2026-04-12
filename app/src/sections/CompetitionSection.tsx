@@ -1,9 +1,10 @@
-import { lazy, Suspense, useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import { lazy, Suspense } from 'react';
 import { CheckCircle, XCircle, Minus, Trophy, Zap, Shield, Brain, Coins } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import { ChartLazyFallback } from '@/components/ChartLazyFallback';
 import { useNearScreen } from '@/hooks/useNearScreen';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import { useLanguage } from '../hooks/useLanguage';
 import { CET_FIXED_SUPPLY_CAP, TASK_AGENT_MESH_TOTAL } from '@/lib/domainPillars';
 
@@ -135,10 +136,6 @@ const CompetitionSection = () => {
   const { t } = useLanguage();
   const cs = t.competitionSection;
   const { isNearScreen: chartsNearViewport, fromRef: chartsGateRef } = useNearScreen({ distance: '320px' });
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const tableRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
 
   const advantageCards = [
     { icon: Coins, title: cs.advScarcityTitle, body: cs.advScarcityBody, color: 'text-solaris-gold', bg: 'bg-solaris-gold/10', border: 'border-solaris-gold/20' },
@@ -161,62 +158,16 @@ const CompetitionSection = () => {
     { label: cs.rowAuditKyc, key: 'auditKyc' as const },
   ];
 
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current,
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: { trigger: headingRef.current, start: 'top 82%', end: 'top 55%', scrub: true },
-        },
-      );
-      gsap.fromTo(
-        tableRef.current,
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: { trigger: tableRef.current, start: 'top 80%', end: 'top 45%', scrub: true },
-        },
-      );
-      const cards = cardsRef.current?.querySelectorAll('.adv-card');
-      if (cards) {
-        gsap.fromTo(
-          cards,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.12,
-            duration: 0.7,
-            scrollTrigger: { trigger: cardsRef.current, start: 'top 80%', end: 'top 30%', scrub: true },
-          },
-        );
-      }
-    }, section);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="competition"
-      ref={sectionRef}
       aria-label={t.sectionAria.competition}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       <GlowOrbs variant="gold" />
 
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
-        <div ref={headingRef} className="max-w-3xl mb-16">
+        <ScrollFadeUp className="max-w-3xl mb-16">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
               <Trophy className="w-5 h-5 text-solaris-gold" />
@@ -232,9 +183,9 @@ const CompetitionSection = () => {
             <span className="text-solaris-text font-semibold">{cs.introEmphasis}</span>
             {cs.introTail}
           </p>
-        </div>
+        </ScrollFadeUp>
 
-        <div ref={tableRef} className="mb-16 overflow-x-auto">
+        <ScrollFadeUp className="mb-16 overflow-x-auto">
           <table className="w-full min-w-[700px] border-collapse">
             <thead>
               <tr>
@@ -292,9 +243,9 @@ const CompetitionSection = () => {
             </tbody>
           </table>
           <p className="text-solaris-muted/50 text-[11px] mt-2 font-mono max-w-4xl">{cs.dataDisclaimer}</p>
-        </div>
+        </ScrollFadeUp>
 
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <ScrollStaggerFadeUp className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {advantageCards.map((adv) => {
             const Icon = adv.icon;
             return (
@@ -310,7 +261,7 @@ const CompetitionSection = () => {
               </div>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         <div ref={chartsGateRef} className="mt-16">
           {!chartsNearViewport ? (

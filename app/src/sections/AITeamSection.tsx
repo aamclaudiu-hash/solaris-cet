@@ -1,11 +1,12 @@
-import { lazy, Suspense, useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import { lazy, Suspense } from 'react';
 import { Brain, TrendingUp, ChevronDown } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import AnimatedCounter from '../components/AnimatedCounter';
 import AgentBoard from '../components/AgentBoard';
 import LiveAgentStats from '../components/LiveAgentStats';
 import { ChartLazyFallback } from '../components/ChartLazyFallback';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 
 const AgentDepartmentChart = lazy(() => import('../components/AgentDepartmentChart'));
 import { solarisDepartments } from '@/data/solarisDepartments';
@@ -24,76 +25,9 @@ const TOTAL_AGENTS = departments.reduce((s, d) => s + d.agentCount, 0);
 
 const AITeamSection = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current,
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: 'top 82%',
-            end: 'top 55%',
-            scrub: true,
-          },
-        }
-      );
-
-      gsap.fromTo(
-        statsRef.current,
-        { y: 24, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: 'top 85%',
-            end: 'top 60%',
-            scrub: true,
-          },
-        }
-      );
-
-      const cards = cardsRef.current?.querySelectorAll('.team-card');
-      if (cards) {
-        gsap.fromTo(
-          cards,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.08,
-            duration: 0.7,
-            scrollTrigger: {
-              trigger: cardsRef.current,
-              start: 'top 80%',
-              end: 'top 20%',
-              scrub: true,
-            },
-          }
-        );
-      }
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="team"
-      ref={sectionRef}
       aria-label={t.sectionAria.aiTeamStructure}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
@@ -109,7 +43,7 @@ const AITeamSection = () => {
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
 
         {/* Section heading */}
-        <div ref={headingRef} className="max-w-3xl mb-10">
+        <ScrollFadeUp className="max-w-3xl mb-10">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
               <Brain className="w-5 h-5 text-solaris-gold" />
@@ -127,40 +61,37 @@ const AITeamSection = () => {
             Solaris CET matches that scale entirely through autonomous agents: 200,000 specialists
             operating 24/7, across 10 departments, at the speed of thought.
           </p>
-        </div>
+        </ScrollFadeUp>
 
         <MeshSkillRibbon saltOffset={60} />
 
         {/* Grand-total stat bar */}
-        <div ref={statsRef} className="glass-card-gold p-6 mb-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-          <div>
-            <div className="hud-label text-solaris-gold mb-1">TOTAL WORKFORCE</div>
-            <div className="font-display font-black text-4xl lg:text-5xl text-solaris-gold">
-              <AnimatedCounter end={TOTAL_AGENTS} className="tabular-nums" meshTitleKey="aiTeam|counter|totalAgents" />
+        <ScrollFadeUp>
+          <div className="glass-card-gold p-6 mb-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div>
+              <div className="hud-label text-solaris-gold mb-1">TOTAL WORKFORCE</div>
+              <div className="font-display font-black text-4xl lg:text-5xl text-solaris-gold">
+                <AnimatedCounter end={TOTAL_AGENTS} className="tabular-nums" meshTitleKey="aiTeam|counter|totalAgents" />
+              </div>
+              <div className="text-solaris-muted text-xs mt-1">Autonomous Agents Deployed</div>
             </div>
-            <div className="text-solaris-muted text-xs mt-1">Autonomous Agents Deployed</div>
-          </div>
-          <div>
-            <div className="hud-label text-solaris-cyan mb-1">DEPARTMENTS</div>
-            <div className="font-display font-black text-4xl lg:text-5xl text-solaris-cyan">
-              <AnimatedCounter end={10} className="tabular-nums" meshTitleKey="aiTeam|counter|departments" />
+            <div>
+              <div className="hud-label text-solaris-cyan mb-1">DEPARTMENTS</div>
+              <div className="font-display font-black text-4xl lg:text-5xl text-solaris-cyan">
+                <AnimatedCounter end={10} className="tabular-nums" meshTitleKey="aiTeam|counter|departments" />
+              </div>
+              <div className="text-solaris-muted text-xs mt-1">Enterprise Divisions</div>
             </div>
-            <div className="text-solaris-muted text-xs mt-1">Enterprise Divisions</div>
-          </div>
-          <div>
-            <div className="hud-label text-emerald-400 mb-1">UPTIME</div>
-            <div className="font-display font-black text-4xl lg:text-5xl text-emerald-400">
-              24/7
+            <div>
+              <div className="hud-label text-emerald-400 mb-1">UPTIME</div>
+              <div className="font-display font-black text-4xl lg:text-5xl text-emerald-400">24/7</div>
+              <div className="text-solaris-muted text-xs mt-1">Always On — No Sleep, No Breaks</div>
             </div>
-            <div className="text-solaris-muted text-xs mt-1">Always On — No Sleep, No Breaks</div>
           </div>
-        </div>
+        </ScrollFadeUp>
 
         {/* Department matrix — 1 col narrow phones, 2 cols sm+, 5 cols lg+; Lucide + gold frame + hover scale */}
-        <div
-          ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4"
-        >
+        <ScrollStaggerFadeUp className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {departments.map((dept) => {
             const DeptIcon = dept.icon;
 
@@ -249,7 +180,7 @@ const AITeamSection = () => {
               </article>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         {/* Live Agent Activity Board */}
         <div className="mt-10">

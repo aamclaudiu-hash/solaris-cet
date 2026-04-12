@@ -1,5 +1,5 @@
-import { useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import { BarChart2, BookOpen, Brain, Globe, ExternalLink } from 'lucide-react';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
 import {
@@ -193,59 +193,9 @@ const colorMap: Record<string, { bg: string; text: string; border: string; hud: 
 };
 
 const ResourcesSection = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current,
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: 'top 82%',
-            end: 'top 55%',
-            scrub: true,
-          },
-        }
-      );
-
-      const columns = gridRef.current?.querySelectorAll('.resource-column');
-      if (columns) {
-        gsap.fromTo(
-          columns,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.15,
-            duration: 0.7,
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: 'top 80%',
-              end: 'top 35%',
-              scrub: true,
-            },
-          }
-        );
-      }
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="resources"
-      ref={sectionRef}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
       {/* Background decorations */}
@@ -257,7 +207,7 @@ const ResourcesSection = () => {
 
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
         {/* Section heading */}
-        <div ref={headingRef} className="max-w-2xl mb-16">
+        <ScrollFadeUp className="max-w-2xl mb-16">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-solaris-cyan/10 flex items-center justify-center">
               <Globe className="w-5 h-5 text-solaris-cyan" />
@@ -276,34 +226,33 @@ const ResourcesSection = () => {
             latest research, and learning to build AI agents — these are the trusted platforms
             used by the Solaris community.
           </p>
-        </div>
+        </ScrollFadeUp>
 
         {/* Quick Links bar */}
-        <div className="bento-card p-4 mb-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {[
-            { label: 'Buy CET', href: DEDUST_SWAP_URL, color: 'text-solaris-gold' },
-            { label: 'Whitepaper', href: 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a', color: 'text-solaris-cyan' },
-            { label: 'GitHub', href: 'https://github.com/Solaris-CET/solaris-cet', color: 'text-solaris-text' },
-            { label: 'Telegram', href: 'https://t.me/SolarisCET', color: 'text-[#2AABEE]' },
-            { label: 'CET contract', href: TONSCAN_CET_CONTRACT_URL, color: 'text-emerald-400' },
-          ].map(({ label, href, color }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center justify-center gap-2 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm font-semibold ${color}`}
-            >
-              {label} ↗
-            </a>
-          ))}
-        </div>
+        <ScrollFadeUp>
+          <div className="bento-card p-4 mb-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {[
+              { label: 'Buy CET', href: DEDUST_SWAP_URL, color: 'text-solaris-gold' },
+              { label: 'Whitepaper', href: 'https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a', color: 'text-solaris-cyan' },
+              { label: 'GitHub', href: 'https://github.com/Solaris-CET/solaris-cet', color: 'text-solaris-text' },
+              { label: 'Telegram', href: 'https://t.me/SolarisCET', color: 'text-[#2AABEE]' },
+              { label: 'CET contract', href: TONSCAN_CET_CONTRACT_URL, color: 'text-emerald-400' },
+            ].map(({ label, href, color }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm font-semibold ${color}`}
+              >
+                {label} ↗
+              </a>
+            ))}
+          </div>
+        </ScrollFadeUp>
 
         {/* Resource columns */}
-        <div
-          ref={gridRef}
-          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-        >
+        <ScrollStaggerFadeUp className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const c = colorMap[cat.color];
@@ -348,7 +297,7 @@ const ResourcesSection = () => {
               </div>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         <div className="mt-12 max-w-3xl">
           <MeshSkillRibbon variant="compact" saltOffset={1810} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />

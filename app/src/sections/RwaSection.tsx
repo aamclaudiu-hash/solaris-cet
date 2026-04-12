@@ -1,5 +1,5 @@
-import { useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import { MapPin, Leaf, Shield, TrendingUp, Layers, Sun, Landmark } from 'lucide-react';
 import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
@@ -84,59 +84,9 @@ const RWA_PILLARS = [
  */
 const RwaSection = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const gridRef    = useRef<HTMLDivElement>(null);
-  const physicalAssetRef = useRef<HTMLDivElement>(null);
-  const pillarsRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const ctx = gsap.context(() => {
-      // Stats grid entrance
-      gsap.fromTo(
-        gridRef.current?.querySelectorAll('.rwa-stat') ?? [],
-        { y: 30, opacity: 0, scale: 0.95 },
-        {
-          y: 0, opacity: 1, scale: 1,
-          stagger: { each: 0.07 },
-          duration: 0.7,
-          ease: 'expo.out',
-          scrollTrigger: { trigger: gridRef.current, start: 'top 82%', toggleActions: 'play none none none' },
-        }
-      );
-      // Physical asset panel
-      gsap.fromTo(
-        physicalAssetRef.current?.querySelectorAll('.physical-asset-animate') ?? [],
-        { y: 28, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          stagger: { each: 0.08 },
-          duration: 0.75,
-          ease: 'expo.out',
-          scrollTrigger: { trigger: physicalAssetRef.current, start: 'top 85%', toggleActions: 'play none none none' },
-        }
-      );
-      // Pillars entrance
-      gsap.fromTo(
-        pillarsRef.current?.querySelectorAll('.rwa-pillar') ?? [],
-        { x: -24, opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          stagger: { each: 0.1 },
-          duration: 0.7,
-          ease: 'expo.out',
-          scrollTrigger: { trigger: pillarsRef.current, start: 'top 80%', toggleActions: 'play none none none' },
-        }
-      );
-    }, section);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="rwa"
-      ref={sectionRef}
       aria-label={t.sectionAria.rwa}
       className="relative section-glass py-20 lg:py-28 overflow-hidden mesh-bg"
     >
@@ -146,7 +96,7 @@ const RwaSection = () => {
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
 
         {/* Header */}
-        <div className="mb-14">
+        <ScrollFadeUp className="mb-14">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-emerald-400/10 flex items-center justify-center">
               <Leaf className="w-5 h-5 text-emerald-400" />
@@ -162,15 +112,15 @@ const RwaSection = () => {
             Productive agricultural land in Cetățuia, Romania — managed by 200,000 AI agents —
             provides structural backing that no competitor can replicate.
           </p>
-        </div>
+        </ScrollFadeUp>
 
         {/* Physical asset — token ↔ land (not digital air) */}
-        <div
-          id="physical-asset"
-          ref={physicalAssetRef}
-          className="relative mb-12 rounded-2xl overflow-hidden border border-emerald-400/25 shadow-depth min-h-[min(52vh,420px)]"
-          aria-labelledby="physical-asset-heading"
-        >
+        <ScrollFadeUp>
+          <div
+            id="physical-asset"
+            className="relative mb-12 rounded-2xl overflow-hidden border border-emerald-400/25 shadow-depth min-h-[min(52vh,420px)]"
+            aria-labelledby="physical-asset-heading"
+          >
           <div
             className="absolute inset-0 bg-cover bg-center scale-105 motion-safe:transition-transform duration-700"
             style={{
@@ -180,7 +130,7 @@ const RwaSection = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none" aria-hidden="true" />
           <div className="relative z-10 p-7 md:p-10 lg:p-12 flex flex-col justify-end min-h-[min(52vh,420px)] max-w-3xl">
-            <div className="physical-asset-animate flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-400/15 border border-emerald-400/25 flex items-center justify-center">
                 <Landmark className="w-5 h-5 text-emerald-300" aria-hidden="true" />
               </div>
@@ -188,27 +138,28 @@ const RwaSection = () => {
             </div>
             <h3
               id="physical-asset-heading"
-              className="physical-asset-animate font-display font-bold text-2xl md:text-3xl text-white mb-4 drop-shadow-sm"
+              className="font-display font-bold text-2xl md:text-3xl text-white mb-4 drop-shadow-sm"
             >
               The token is tied to{' '}
               <span className="text-emerald-300">real soil</span>, not screens
             </h3>
-            <p className="physical-asset-animate text-solaris-muted text-sm md:text-base leading-relaxed mb-3">
+            <p className="text-solaris-muted text-sm md:text-base leading-relaxed mb-3">
               CET is designed as a claim on productive agricultural land in{' '}
               <strong className="text-solaris-text font-semibold">Cetățuia, Romania</strong>
               — the same jurisdiction and asset class referenced in RWA documentation. Each unit in the 9,000 CET supply maps to a
               fractional economic interest in that land-backed stack: crop yield, verified operations, and on-chain attestations
               (IPFS + TON) are the bridge between the token and the field.
             </p>
-            <p className="physical-asset-animate text-emerald-200/85 text-sm md:text-[15px] leading-relaxed border-l-2 border-emerald-400/40 pl-4">
+            <p className="text-emerald-200/85 text-sm md:text-[15px] leading-relaxed border-l-2 border-emerald-400/40 pl-4">
               This is structural backing: the project is not &ldquo;digital air&rdquo; — it is explicitly anchored in a named
               location and a tangible asset class you can verify independently.
             </p>
           </div>
-        </div>
+          </div>
+        </ScrollFadeUp>
 
         {/* Stats grid */}
-        <div ref={gridRef} className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+        <ScrollStaggerFadeUp className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {RWA_STATS.map(stat => {
             const Icon = stat.icon;
             return (
@@ -229,12 +180,12 @@ const RwaSection = () => {
               </div>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         <PredictiveTerrainHeatmap />
 
         {/* Four pillars */}
-        <div ref={pillarsRef} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <ScrollStaggerFadeUp className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {RWA_PILLARS.map(pillar => {
             const Icon = pillar.icon;
             return (
@@ -247,33 +198,35 @@ const RwaSection = () => {
               </div>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         {/* IPFS proof CTA */}
-        <div className="mt-10 bento-card p-6 border border-solaris-gold/20 flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
-          <div className="shrink-0 w-12 h-12 rounded-2xl bg-solaris-gold/10 flex items-center justify-center">
-            <Shield className="w-6 h-6 text-solaris-gold" />
+        <ScrollFadeUp>
+          <div className="mt-10 bento-card p-6 border border-solaris-gold/20 flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+            <div className="shrink-0 w-12 h-12 rounded-2xl bg-solaris-gold/10 flex items-center justify-center">
+              <Shield className="w-6 h-6 text-solaris-gold" />
+            </div>
+            <div className="flex-1">
+              <div className="hud-label text-solaris-gold mb-1">VERIFIED ON-CHAIN</div>
+              <p className="text-solaris-muted text-sm leading-relaxed">
+                All RWA documentation is immutably stored on IPFS and anchored to TON Layer 1.
+                The whitepaper CID{' '}
+                <code className="text-solaris-cyan text-[11px] font-mono bg-white/5 px-1.5 py-0.5 rounded">
+                  bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a
+                </code>
+                {' '}is the on-chain proof of the agricultural backing.
+              </p>
+            </div>
+            <a
+              href="https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 px-5 py-2.5 rounded-xl bg-solaris-gold/10 border border-solaris-gold/30 text-solaris-gold text-sm font-semibold hover:bg-solaris-gold/20 transition-colors"
+            >
+              View IPFS Proof ↗
+            </a>
           </div>
-          <div className="flex-1">
-            <div className="hud-label text-solaris-gold mb-1">VERIFIED ON-CHAIN</div>
-            <p className="text-solaris-muted text-sm leading-relaxed">
-              All RWA documentation is immutably stored on IPFS and anchored to TON Layer 1.
-              The whitepaper CID{' '}
-              <code className="text-solaris-cyan text-[11px] font-mono bg-white/5 px-1.5 py-0.5 rounded">
-                bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a
-              </code>
-              {' '}is the on-chain proof of the agricultural backing.
-            </p>
-          </div>
-          <a
-            href="https://scarlet-past-walrus-15.mypinata.cloud/ipfs/bafkreieggm2l7favvjw4amybbobastjo6kcrdi33gzcvtzrur5opoivd3a"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 px-5 py-2.5 rounded-xl bg-solaris-gold/10 border border-solaris-gold/30 text-solaris-gold text-sm font-semibold hover:bg-solaris-gold/20 transition-colors"
-          >
-            View IPFS Proof ↗
-          </a>
-        </div>
+        </ScrollFadeUp>
 
         <div className="mt-10 max-w-3xl">
           <MeshSkillRibbon variant="compact" saltOffset={2140} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />

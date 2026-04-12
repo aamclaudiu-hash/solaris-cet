@@ -1,5 +1,5 @@
-import { useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import { TrendingUp, ExternalLink, BarChart2 } from 'lucide-react';
 import MeshSkillRibbon from '@/components/MeshSkillRibbon';
 import { productionSiteUrl } from '@/lib/brandAssets';
@@ -124,76 +124,9 @@ const categoryConfig: CategoryConfig[] = [
 
 const EcosystemIndexSection = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const featuredRef = useRef<HTMLDivElement>(null);
-  const categoriesRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current,
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: 'top 82%',
-            end: 'top 55%',
-            scrub: true,
-          },
-        }
-      );
-
-      gsap.fromTo(
-        featuredRef.current,
-        { y: 24, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          scrollTrigger: {
-            trigger: featuredRef.current,
-            start: 'top 85%',
-            end: 'top 60%',
-            scrub: true,
-          },
-        }
-      );
-
-      const groups = categoriesRef.current?.querySelectorAll('.category-group');
-      if (groups) {
-        gsap.fromTo(
-          groups,
-          { y: 36, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.12,
-            duration: 0.7,
-            scrollTrigger: {
-              trigger: categoriesRef.current,
-              start: 'top 80%',
-              end: 'top 30%',
-              scrub: true,
-            },
-          }
-        );
-      }
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="ecosystem-index"
-      ref={sectionRef}
       aria-label={t.sectionAria.ecosystemIndex}
       className="relative section-glass py-24 lg:py-32 overflow-hidden mesh-bg"
     >
@@ -206,7 +139,7 @@ const EcosystemIndexSection = () => {
 
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
         {/* Section heading */}
-        <div ref={headingRef} className="max-w-2xl mb-12">
+        <ScrollFadeUp className="max-w-2xl mb-12">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-solaris-gold/10 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-solaris-gold" />
@@ -225,7 +158,7 @@ const EcosystemIndexSection = () => {
             that define the market — from Layer-1 blockchains to stablecoins, DeFi protocols,
             and the CoinMarketCap 20 Index.
           </p>
-        </div>
+        </ScrollFadeUp>
 
         {/* CET unique value callout */}
         <div className="glass-card-gold p-5 mb-8 flex items-start gap-4">
@@ -243,7 +176,7 @@ const EcosystemIndexSection = () => {
         </div>
 
         {/* CMC20 Index featured card */}
-        <div ref={featuredRef} className="mb-14">
+        <ScrollFadeUp className="mb-14">
           <a
             href="https://app.reserve.org/bsc/index-dtf/0x2f8a339b5889ffac4c5a956787cda593b3c36867/overview"
             target="_blank"
@@ -275,10 +208,10 @@ const EcosystemIndexSection = () => {
               <ExternalLink className="w-4 h-4 text-solaris-gold opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           </a>
-        </div>
+        </ScrollFadeUp>
 
         {/* Project grid grouped by category */}
-        <div ref={categoriesRef} className="space-y-10">
+        <ScrollStaggerFadeUp className="space-y-10">
           {categoryConfig.map((cat) => {
             const catProjects = projects.filter((p) => p.category === cat.id);
             return (
@@ -310,7 +243,7 @@ const EcosystemIndexSection = () => {
               </div>
             );
           })}
-        </div>
+        </ScrollStaggerFadeUp>
 
         <div className="mt-10 max-w-3xl">
           <MeshSkillRibbon variant="compact" saltOffset={1180} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />

@@ -1,5 +1,5 @@
-import { useRef, useLayoutEffect } from 'react';
-import { gsap } from 'gsap';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
+import { ScrollStaggerFadeUp } from '@/components/ScrollStaggerFadeUp';
 import {
   Shield,
   CheckCircle,
@@ -75,99 +75,9 @@ const trustSignalBadges = [
 
 const SecuritySection = () => {
   const { t } = useLanguage();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const leftColumnRef = useRef<HTMLDivElement>(null);
-  const badgeGridRef = useRef<HTMLDivElement>(null);
-  const shieldRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      // Left column animation
-      gsap.fromTo(
-        leftColumnRef.current,
-        { y: 24, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: leftColumnRef.current,
-            start: 'top 80%',
-            end: 'top 55%',
-            scrub: true,
-          },
-        }
-      );
-
-      // Shield icon animation
-      gsap.fromTo(
-        shieldRef.current,
-        { rotateZ: -6, scale: 0.9, opacity: 0 },
-        {
-          rotateZ: 0,
-          scale: 1,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: shieldRef.current,
-            start: 'top 80%',
-            end: 'top 60%',
-            scrub: true,
-          },
-        }
-      );
-
-      // Trust signal pills + audit badge grid
-      const trustSignals = badgeGridRef.current?.querySelectorAll('.trust-signal-badge');
-      if (trustSignals) {
-        gsap.fromTo(
-          trustSignals,
-          { y: 16, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.07,
-            duration: 0.5,
-            scrollTrigger: {
-              trigger: badgeGridRef.current,
-              start: 'top 80%',
-              end: 'top 50%',
-              scrub: true,
-            },
-          }
-        );
-      }
-      const badges = badgeGridRef.current?.querySelectorAll('.audit-badge');
-      if (badges) {
-        gsap.fromTo(
-          badges,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 0.6,
-            scrollTrigger: {
-              trigger: badgeGridRef.current,
-              start: 'top 80%',
-              end: 'top 50%',
-              scrub: true,
-            },
-          }
-        );
-      }
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
       id="security"
-      ref={sectionRef}
       aria-label={t.sectionAria.security}
       className="relative section-glass py-24 lg:py-32 overflow-hidden"
     >
@@ -180,10 +90,9 @@ const SecuritySection = () => {
       <div className="relative z-10 section-padding-x max-w-7xl mx-auto w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Column */}
-          <div ref={leftColumnRef}>
+          <ScrollFadeUp>
             {/* Shield Icon */}
             <div
-              ref={shieldRef}
               className="w-16 h-16 rounded-2xl bg-emerald-400/10 flex items-center justify-center mb-6"
             >
               <Shield className="w-8 h-8 text-emerald-400" />
@@ -215,10 +124,10 @@ const SecuritySection = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </ScrollFadeUp>
 
           {/* Right Column - Badge Grid */}
-          <div ref={badgeGridRef}>
+          <ScrollFadeUp>
             {/* Trust signals — audit & security */}
             <div
               className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 backdrop-blur-sm"
@@ -228,17 +137,17 @@ const SecuritySection = () => {
               <span className="text-solaris-muted text-[10px] font-mono uppercase tracking-[0.2em] shrink-0">
                 Trust signals
               </span>
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3 sm:justify-end">
+              <ScrollStaggerFadeUp className="flex flex-wrap items-center gap-2 sm:gap-3 sm:justify-end">
                 {trustSignalBadges.map(({ icon: Icon, label, ring, iconClass }) => (
                   <div
                     key={label}
-                    className={`trust-signal-badge inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-solaris-text shadow-depth ring-1 ${ring} transition-colors hover:border-white/20`}
+                    className={`inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-solaris-text shadow-depth ring-1 ${ring} transition-colors hover:border-white/20`}
                   >
                     <Icon className={`h-3.5 w-3.5 shrink-0 ${iconClass}`} aria-hidden />
                     <span>{label}</span>
                   </div>
                 ))}
-              </div>
+              </ScrollStaggerFadeUp>
             </div>
 
             <ByzantineConsensusVisualization />
@@ -269,12 +178,12 @@ const SecuritySection = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-            {auditBadges.map((badge) => (
-              <div
-                key={badge.label}
-                className="audit-badge bento-card p-5 hover:border-solaris-gold/30 transition-all duration-300 group"
-              >
+            <ScrollStaggerFadeUp className="grid grid-cols-2 gap-4">
+              {auditBadges.map((badge) => (
+                <div
+                  key={badge.label}
+                  className="bento-card p-5 hover:border-solaris-gold/30 transition-all duration-300 group"
+                >
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${
                     badge.color === 'gold'
@@ -314,10 +223,10 @@ const SecuritySection = () => {
                     {badge.linkLabel}
                   </a>
                 )}
-              </div>
-            ))}
-            </div>
-          </div>
+                </div>
+              ))}
+            </ScrollStaggerFadeUp>
+          </ScrollFadeUp>
         </div>
 
         <div className="mt-12 max-w-3xl">

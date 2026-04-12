@@ -1,5 +1,4 @@
-import { useRef, useLayoutEffect, useState } from 'react';
-import { gsap } from 'gsap';
+import { useState } from 'react';
 import { Download, FileText, ArrowRight, Globe, X, Send, Copy, CheckCircle, Zap, Shield, Users, CalendarClock } from 'lucide-react';
 import { SolarisLogoMark } from '../components/SolarisLogoMark';
 import SocialShare from '../components/SocialShare';
@@ -10,6 +9,7 @@ import TeamFlipCard from '../components/TeamFlipCard';
 import { useCommunityProof } from '../hooks/use-community-proof';
 import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
 import { toast } from 'sonner';
+import { ScrollFadeUp } from '@/components/ScrollFadeUp';
 import {
   DEDUST_POOL_ADDRESS,
   DEDUST_POOL_DEPOSIT_URL,
@@ -41,11 +41,6 @@ const FooterSection = () => {
     { id: 'sovereign', label: t.footerNav.sovereignNoJs, href: '/sovereign/', icon: Shield },
     { id: 'github', label: t.footerNav.github, href: GITHUB_URL, icon: Globe },
   ];
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const ctaCardRef = useRef<HTMLDivElement>(null);
-  const newsletterRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
-
   const [copiedPool, setCopiedPool] = useState(false);
   const [copiedContract, setCopiedContract] = useState(false);
 
@@ -65,43 +60,9 @@ const FooterSection = () => {
     }).catch(() => {/* clipboard access denied – fail silently */});
   };
 
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ctaCardRef.current,
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.8,
-          scrollTrigger: { trigger: ctaCardRef.current, start: 'top 85%', end: 'top 60%', scrub: true },
-        }
-      );
-      gsap.fromTo(
-        newsletterRef.current,
-        { y: 24, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.8,
-          scrollTrigger: { trigger: newsletterRef.current, start: 'top 85%', end: 'top 65%', scrub: true },
-        }
-      );
-      gsap.fromTo(
-        footerRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1, duration: 0.6,
-          scrollTrigger: { trigger: footerRef.current, start: 'top 90%', end: 'top 75%', scrub: true },
-        }
-      );
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     // Landmark `landmarks.footer` + `data-testid="footer-landmark-section"` live on App.tsx wrapper; avoid nested <section>.
-    <div ref={sectionRef} className="relative section-glass pt-16 pb-8">
+    <div className="relative section-glass pt-16 pb-8">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-0 right-0 h-[30vh] grid-floor opacity-10" />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-solaris-gold/20 to-transparent" />
@@ -109,42 +70,44 @@ const FooterSection = () => {
 
       <div className="relative z-10 section-padding-x max-w-6xl mx-auto w-full">
         {/* CTA Card */}
-        <div ref={ctaCardRef} className="bento-card p-8 lg:p-12 mb-12 text-center relative overflow-hidden holo-card border border-solaris-gold/30 shadow-depth">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(242,201,76,0.06)_0%,_transparent_70%)] pointer-events-none" />
-          <div className="relative z-10">
-            <div className="hud-label text-solaris-gold mb-4 flex items-center justify-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-solaris-gold animate-pulse" />
-              AI BRIDGE TO HIGH INTELLIGENCE
-            </div>
-            <h2 className="font-display font-bold text-[clamp(28px,3.5vw,44px)] text-solaris-text mb-4">
-              Start mining in <span className="text-gradient-gold">minutes</span>.
-            </h2>
-            <p className="text-solaris-muted text-base lg:text-lg mb-8 max-w-lg mx-auto">
-              Download the Solaris CET App. Connect a wallet. Begin earning on the bridge between current AI and High Intelligence.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href="https://t.me/+tKlfzx7IWopmNWQ0"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-filled-gold flex items-center gap-2 group"
-              >
-                <Download className="w-4 h-4" />
-                Start Mining on Telegram
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </a>
-              <a
-                href={WHITEPAPER_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-gold flex items-center gap-2"
-              >
-                <FileText className="w-4 h-4" />
-                Read the Whitepaper
-              </a>
+        <ScrollFadeUp>
+          <div className="bento-card p-8 lg:p-12 mb-12 text-center relative overflow-hidden holo-card border border-solaris-gold/30 shadow-depth">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(242,201,76,0.06)_0%,_transparent_70%)] pointer-events-none" />
+            <div className="relative z-10">
+              <div className="hud-label text-solaris-gold mb-4 flex items-center justify-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-solaris-gold animate-pulse" />
+                AI BRIDGE TO HIGH INTELLIGENCE
+              </div>
+              <h2 className="font-display font-bold text-[clamp(28px,3.5vw,44px)] text-solaris-text mb-4">
+                Start mining in <span className="text-gradient-gold">minutes</span>.
+              </h2>
+              <p className="text-solaris-muted text-base lg:text-lg mb-8 max-w-lg mx-auto">
+                Download the Solaris CET App. Connect a wallet. Begin earning on the bridge between current AI and High Intelligence.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <a
+                  href="https://t.me/+tKlfzx7IWopmNWQ0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-filled-gold flex items-center gap-2 group"
+                >
+                  <Download className="w-4 h-4" />
+                  Start Mining on Telegram
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </a>
+                <a
+                  href={WHITEPAPER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-gold flex items-center gap-2"
+                >
+                  <FileText className="w-4 h-4" />
+                  Read the Whitepaper
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollFadeUp>
 
         {/* Founder Card */}
         <TeamFlipCard
@@ -202,7 +165,8 @@ const FooterSection = () => {
         </div>
 
         {/* Newsletter */}
-        <div ref={newsletterRef} className="bento-card p-6 lg:p-8 mb-12">
+        <ScrollFadeUp>
+        <div className="bento-card p-6 lg:p-8 mb-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -277,9 +241,11 @@ const FooterSection = () => {
             </div>
           </div>
         </div>
+        </ScrollFadeUp>
 
         {/* Footer */}
-        <footer ref={footerRef} className="pt-8 border-t border-white/10">
+        <ScrollFadeUp>
+        <footer className="pt-8 border-t border-white/10">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="flex items-center gap-3">
               <div
@@ -365,6 +331,7 @@ const FooterSection = () => {
             Architected by Claudiu
           </p>
         </footer>
+        </ScrollFadeUp>
       </div>
     </div>
   );
