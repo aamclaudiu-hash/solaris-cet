@@ -22,6 +22,9 @@ const LOCUS_A = [
   'Wavefunction-forged (metaphor)', 'Coherence-singularity stabilised (conceptual)', 'Qubit-parallel (metaphor)',
   'Fault-tolerant (conceptual)', 'Error-correction hardened (conceptual)', 'Hybrid quantum-classical (conceptual)',
   'QNN-backprop tuned (conceptual)', 'Quantum-kernel shaped (conceptual)',
+  'Aether-nova coalesced (metaphor)', 'Lumina-apex forged (metaphor)', 'Psi-tempered (metaphor)',
+  'QFT-aware (conceptual)', 'Phase-estimation ready (conceptual)', 'QAOA-tuned (conceptual)', 'VQE-calibrated (conceptual)',
+  'Surface-code aligned (conceptual)', 'Magic-state budgeted (conceptual)', 'Randomised compiling hardened (conceptual)',
 ] as const;
 
 const LOCUS_B = [
@@ -58,6 +61,8 @@ const LOCUS_C = [
   'via hypermorphic skill fusion loops (conceptual)', 'through superposition-style exploration (metaphor)',
   'with topological protection motifs (conceptual)', 'via Grover-like query amplification (metaphor)',
   'with Shor-style factoring threat models (conceptual)',
+  'via morphogenic adiabatic annealing (metaphor)',
+  'via phase-estimation oracles (conceptual)', 'through QFT-style transforms (conceptual)',
 ] as const;
 
 const LOCUS_D = [
