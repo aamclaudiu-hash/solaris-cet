@@ -201,6 +201,9 @@ export interface Translations {
     /** Trust pillars — authority & conversion (Vibe Founder playbook). */
     authorityTrust: string;
   };
+  meshSkillRibbonUi: {
+    sampleLabel: string;
+  };
   /** shadcn-style UI primitives (may be unused but kept i18n-ready). */
   ui: {
     toggleSidebar: string;
@@ -625,6 +628,9 @@ const translations: Record<LangCode, Translations> = {
       bftNodeByzantine: 'Byzantine / faulty (isolated in model)',
       bftNodeHonest: 'Honest validator (illustrative)',
       authorityTrust: 'Authority and trust pillars',
+    },
+    meshSkillRibbonUi: {
+      sampleLabel: 'Mesh skill sample · live rotation',
     },
     ui: {
       toggleSidebar: 'Toggle Sidebar',
@@ -1064,6 +1070,9 @@ const translations: Record<LangCode, Translations> = {
       bftNodeHonest: 'Validador honesto (ilustrativo)',
       authorityTrust: 'Pilares de autoridad y confianza',
     },
+    meshSkillRibbonUi: {
+      sampleLabel: 'Muestra de skill mesh · rotación en vivo',
+    },
     ui: {
       toggleSidebar: 'Alternar barra lateral',
       paginationNav: 'Paginación',
@@ -1501,6 +1510,9 @@ const translations: Record<LangCode, Translations> = {
       bftNodeHonest: '诚实验证者（示意）',
       authorityTrust: '信任与权威支柱',
     },
+    meshSkillRibbonUi: {
+      sampleLabel: '网格技能示例 · 实时轮换',
+    },
     ui: {
       toggleSidebar: '切换侧边栏',
       paginationNav: '分页导航',
@@ -1927,6 +1939,9 @@ const translations: Record<LangCode, Translations> = {
       bftNodeByzantine: 'Византийский / сбойный (изолирован в модели)',
       bftNodeHonest: 'Честный валидатор (иллюстрация)',
       authorityTrust: 'Столпы доверия и авторитета',
+    },
+    meshSkillRibbonUi: {
+      sampleLabel: 'Образец mesh-навыка · живая ротация',
     },
     ui: {
       toggleSidebar: 'Переключить боковую панель',
@@ -2362,6 +2377,9 @@ const translations: Record<LangCode, Translations> = {
       bftNodeByzantine: 'Bizantin / defecțiune (izolat în model)',
       bftNodeHonest: 'Validator cinstit (ilustrativ)',
       authorityTrust: 'Pilonii de autoritate și încredere',
+    },
+    meshSkillRibbonUi: {
+      sampleLabel: 'Exemplu skill mesh · rotație live',
     },
     ui: {
       toggleSidebar: 'Comută bara laterală',
@@ -2801,6 +2819,9 @@ const translations: Record<LangCode, Translations> = {
       bftNodeHonest: 'Validador honesto (ilustrativo)',
       authorityTrust: 'Pilares de autoridade e confiança',
     },
+    meshSkillRibbonUi: {
+      sampleLabel: 'Amostra de skill mesh · rotação ao vivo',
+    },
     ui: {
       toggleSidebar: 'Alternar barra lateral',
       paginationNav: 'Paginação',
@@ -3238,6 +3259,9 @@ const translations: Record<LangCode, Translations> = {
       bftNodeByzantine: 'Byzantinisch / fehlerhaft (im Modell isoliert)',
       bftNodeHonest: 'Ehrlicher Validator (illustrativ)',
       authorityTrust: 'Vertrauens- und Autoritätssäulen',
+    },
+    meshSkillRibbonUi: {
+      sampleLabel: 'Mesh-Skill-Beispiel · Live-Rotation',
     },
     ui: {
       toggleSidebar: 'Seitenleiste umschalten',

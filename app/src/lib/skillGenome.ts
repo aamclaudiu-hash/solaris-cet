@@ -16,6 +16,12 @@ const LOCUS_A = [
   'Differentially private', 'Homotopy-continuous', 'Manifold-projected', 'Symplectic-respecting',
   'Meta-learned', 'Self-play forged', 'Contrastive-aligned', 'Sparse-activated',
   'Fourier-sparse', 'Wavelet-localised', 'Attention-sparsified', 'Mixture-of-depth-routed',
+  'Ultra-coherent', 'HyperMorphic-fused', 'Planck-transmuted (conceptual)', 'CoherenceMax-tuned',
+  'QuantumSkillGenesis-grade', 'Hyper-entangled transfer-ready',
+  'Topologically protected (conceptual)', 'Grover-accelerated (conceptual)', 'Shor-aware (conceptual)',
+  'Wavefunction-forged (metaphor)', 'Coherence-singularity stabilised (conceptual)', 'Qubit-parallel (metaphor)',
+  'Fault-tolerant (conceptual)', 'Error-correction hardened (conceptual)', 'Hybrid quantum-classical (conceptual)',
+  'QNN-backprop tuned (conceptual)', 'Quantum-kernel shaped (conceptual)',
 ] as const;
 
 const LOCUS_B = [
@@ -49,6 +55,9 @@ const LOCUS_C = [
   'under cross-locale legal deltas', 'via hardware attestation hooks', 'through supply-chain SBOM links',
   'with quantum-inspired annealing (classical sim)', 'under game-theoretic audit games', 'via neural CRF bridges',
   'through self-consistency sampling', 'with constitutional classifier stacks', 'under energy-aware scheduling',
+  'via hypermorphic skill fusion loops (conceptual)', 'through superposition-style exploration (metaphor)',
+  'with topological protection motifs (conceptual)', 'via Grover-like query amplification (metaphor)',
+  'with Shor-style factoring threat models (conceptual)',
 ] as const;
 
 const LOCUS_D = [
