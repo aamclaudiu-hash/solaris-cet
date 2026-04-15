@@ -14,10 +14,7 @@ q
 
 ```bash
 cd /root/solaris-cet
-npm run app:verify
-PW_WORKERS=1 npm run app:test:e2e
-npm run contracts:test
-npm run contracts:typecheck
+npm run verify:all
 ```
 
 ## 2) Git save (commit + push)

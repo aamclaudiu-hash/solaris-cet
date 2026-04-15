@@ -6,7 +6,7 @@ Small Node utilities used from the **repository root** (not the Vite app in `app
 
 | File | Purpose |
 |------|---------|
-| [check-dist-for-e2e.mjs](./check-dist-for-e2e.mjs) | `pretest:e2e` from `app/` — fails fast if `app/dist/index.html` is missing. Runs before `npm run test:e2e` and `npm run test:e2e:stable` (which calls `test:e2e`), so it also guards `npm run verify:full`. Build first: `npm run app:build` or `npm run app:verify` (run from repo root). |
+| [check-dist-for-e2e.mjs](./check-dist-for-e2e.mjs) | `pretest:e2e` from `app/` — fails fast if `app/dist/index.html` is missing. Runs before `npm run test:e2e` and `npm run test:e2e:stable` (which calls `test:e2e`). Build first: `npm run app:build` / `npm run app:verify` or use `npm run verify:all` (run from repo root). |
 | [encrypt-key.mjs](./encrypt-key.mjs) | Encrypt API keys for production env (`*_ENC` + `ENCRYPTION_SECRET`); see header comment for usage |
 | [sync-sovereign-to-public.mjs](./sync-sovereign-to-public.mjs) | Copies `static/sovereign/` → `app/public/sovereign/` (runs `prebuild` / `predev` in `app/` for OMEGA zero-JS surface at `/sovereign/`) |
 | [ton-indexer.ts](./ton-indexer.ts) | DeDust / TON indexer (used by `.github/workflows/ton-indexer.yml`) |
