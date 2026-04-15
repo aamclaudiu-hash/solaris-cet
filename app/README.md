@@ -37,6 +37,7 @@ E2E (Chromium): from `app/`, **`npm run test:e2e`** (install browsers once: `npx
 ## Env (Coolify / production / local)
 
 - **CET AI:** `GROK_API_KEY` / `GEMINI_API_KEY` (or `*_ENC` + `ENCRYPTION_SECRET`) — see `api/lib/crypto.ts` and `scripts/encrypt-key.mjs` in the repo root.
+- **CET AI web retrieval (optional):** `CET_AI_ENABLE_WEB=1`, `CET_AI_WEB_ALLOWLIST=...`, `TAVILY_API_KEY` (or `TAVILY_API_KEY_ENC` + `ENCRYPTION_SECRET`).
 - **Auth API:** database URL expected by `db/client` (see Drizzle config).
 - **JWT (optional):** `JWT_SECRET` enables `/api/auth` token issuance and protects `/api/gdpr` and audit attribution.
 - **Rate limiting / cache (optional):** `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` enable `/api/chat` rate limiting and `/api/cache`.

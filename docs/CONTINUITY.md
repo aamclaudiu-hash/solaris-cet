@@ -42,7 +42,7 @@ Public community links (e.g. Telegram, GitHub) are listed on the live site. **Do
 
 ## CI expectations
 
-- `.github/workflows/ci.yml` enforces lint, tests, and a **main bundle size budget** (see workflow).
+- `.github/workflows/ci.yml` enforces lint, tests, and a **main bundle size budget (gzip)** (see workflow).
 - Lighthouse thresholds for static `dist/` are in `app/lighthouserc.cjs` and mirrored in `.github/workflows/lighthouse-ci.yml` so PRs cannot silently weaken gates by editing only one file.
 
 ## TLS / HSTS
