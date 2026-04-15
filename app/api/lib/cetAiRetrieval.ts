@@ -1,3 +1,5 @@
+import { resolveApiKey } from './crypto';
+
 export type CetAiRetrievalSource = {
   id: string;
   title: string;
@@ -77,9 +79,9 @@ function isAllowedUrl(urlString: string, allowlist: string[]): boolean {
 async function tavilySearch(
   query: string,
   allowlist: string[],
+  apiKey: string | undefined,
+  enabled: boolean,
 ): Promise<CetAiRetrievalSource[]> {
-  const apiKey = process.env.TAVILY_API_KEY;
-  const enabled = process.env.CET_AI_ENABLE_WEB === '1';
   if (!enabled || !apiKey) return [];
 
   const controller = new AbortController();
@@ -141,7 +143,13 @@ export async function buildCetAiRetrievalBlock(
     }));
 
   const allowlist = parseAllowlist(process.env.CET_AI_WEB_ALLOWLIST);
-  const web = await tavilySearch(query, allowlist);
+  const enabled = process.env.CET_AI_ENABLE_WEB === '1';
+  const tavilyKey = await resolveApiKey(
+    process.env.TAVILY_API_KEY_ENC,
+    process.env.TAVILY_API_KEY,
+    process.env.ENCRYPTION_SECRET,
+  );
+  const web = await tavilySearch(query, allowlist, tavilyKey, enabled);
 
   const sources = [...curated, ...web].slice(0, 5);
   if (sources.length === 0) return { block: '', sources: [] };

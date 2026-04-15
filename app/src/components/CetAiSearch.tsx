@@ -1507,7 +1507,10 @@ export default function CetAiSearch() {
                           )}
                         </div>
                         {responseSources.length > 0 ? (
-                          <div className="mt-5 rounded-xl border border-gray-800/90 bg-black/25 px-4 py-3">
+                          <div
+                            data-testid="cet-ai-sources"
+                            className="mt-5 rounded-xl border border-gray-800/90 bg-black/25 px-4 py-3"
+                          >
                             <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mb-2">
                               {t.cetAi.sourcesLabel}
                             </p>
@@ -1518,6 +1521,7 @@ export default function CetAiSearch() {
                                     href={s.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    data-testid="cet-ai-source-link"
                                     className="inline-flex items-center gap-2 text-xs text-gray-300 hover:text-cyan-300 transition-colors break-all"
                                     title={s.title}
                                   >
