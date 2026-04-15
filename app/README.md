@@ -10,13 +10,14 @@ Recommended: run installs and scripts from the **repo root** (monorepo workspace
 cd /root/solaris-cet
 npm ci
 npm run app:dev          # http://localhost:5173
-npm run app:verify       # lint + typecheck + test + build
+npm run verify:fast      # audit + typecheck + unit + build (monorepo)
+npm run verify:all       # verify:fast + Playwright E2E stable
 npm run app:test:e2e     # Playwright
 ```
 
 E2E (Chromium): from `app/`, **`npm run test:e2e`** (install browsers once: `npx playwright install --with-deps chromium`). **`pretest:e2e`** fails fast if `app/dist/index.html` is missing (with a hint). Calling **`npx playwright test` directly** skips that guard — prefer the npm script. Config starts **`npm run preview:e2e`** (Vite preview on **127.0.0.1:4173** with a larger Node heap) — `dist/` must already exist (`npm run build` or run after `npm run verify`). CI supplies `dist/` from the build job.
 
-**Workers:** **`PW_WORKERS`** (integer ≥ 1) overrides Playwright parallelism. **GitHub Actions** runs **`npm run test:e2e`** with **`PW_WORKERS`** from the repository variable **`E2E_WORKERS`** (unset or empty → **1** worker on CI). **`npm run test:e2e:stable`** forces one worker locally. **`npm run verify:full`** uses **`test:e2e:stable`** for predictable local runs.
+**Workers:** **`PW_WORKERS`** (integer ≥ 1) overrides Playwright parallelism. **GitHub Actions** runs **`npm run test:e2e`** with **`PW_WORKERS`** from the repository variable **`E2E_WORKERS`** (unset or empty → **1** worker on CI). **`npm run test:e2e:stable`** (in `app/`) forces one worker locally; from repo root use **`npm run verify:all`** for the stable full gate.
 
 ## Layout
 
