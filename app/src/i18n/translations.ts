@@ -420,6 +420,7 @@ export interface Translations {
     /** Screen reader announcement when CET AI finishes (aria-live). */
     announceCetAiReady: string;
     askNextLabel: string;
+    sourcesLabel: string;
     copyForAiQuestionLabel: string;
     copyForAiAnswerLabel: string;
     copyForAiInstructions: string;
@@ -824,6 +825,7 @@ const translations: Record<LangCode, Translations> = {
       copyForAiAriaLabel: 'Copy question and answer as handoff for another assistant',
       announceCetAiReady: 'CET AI response ready.',
       askNextLabel: 'Ask next:',
+      sourcesLabel: 'Sources',
       copyForAiQuestionLabel: '## Question',
       copyForAiAnswerLabel: '## Answer',
       copyForAiInstructions:
@@ -1265,6 +1267,7 @@ const translations: Record<LangCode, Translations> = {
       copyForAiAriaLabel: 'Copiar pregunta y respuesta como contexto para otro asistente',
       announceCetAiReady: 'Respuesta del Oráculo lista.',
       askNextLabel: 'Siguiente pregunta:',
+      sourcesLabel: 'Fuentes',
       copyForAiQuestionLabel: '## Pregunta',
       copyForAiAnswerLabel: '## Respuesta',
       copyForAiInstructions:
@@ -1695,6 +1698,7 @@ const translations: Record<LangCode, Translations> = {
       copyForAiAriaLabel: '复制问答作为其他助手的上下文',
       announceCetAiReady: '预言机回复已就绪。',
       askNextLabel: '继续问：',
+      sourcesLabel: '来源',
       copyForAiQuestionLabel: '## 问题',
       copyForAiAnswerLabel: '## 回答',
       copyForAiInstructions:
@@ -2132,6 +2136,7 @@ const translations: Record<LangCode, Translations> = {
       copyForAiAriaLabel: 'Скопировать вопрос и ответ для другого ассистента',
       announceCetAiReady: 'Ответ Оракула готов.',
       askNextLabel: 'Спросить дальше:',
+      sourcesLabel: 'Источники',
       copyForAiQuestionLabel: '## Вопрос',
       copyForAiAnswerLabel: '## Ответ',
       copyForAiInstructions:
@@ -2573,6 +2578,7 @@ const translations: Record<LangCode, Translations> = {
       copyForAiAriaLabel: 'Copiază întrebarea și răspunsul pentru alt asistent',
       announceCetAiReady: 'Răspunsul Oracolului este gata.',
       askNextLabel: 'Întreabă în continuare:',
+      sourcesLabel: 'Surse',
       copyForAiQuestionLabel: '## Întrebare',
       copyForAiAnswerLabel: '## Răspuns',
       copyForAiInstructions:
@@ -3014,6 +3020,7 @@ const translations: Record<LangCode, Translations> = {
       copyForAiAriaLabel: 'Copiar pergunta e resposta para outro assistente',
       announceCetAiReady: 'Resposta do Oráculo pronta.',
       askNextLabel: 'Pergunte a seguir:',
+      sourcesLabel: 'Fontes',
       copyForAiQuestionLabel: '## Pergunta',
       copyForAiAnswerLabel: '## Resposta',
       copyForAiInstructions:
@@ -3455,6 +3462,7 @@ const translations: Record<LangCode, Translations> = {
       copyForAiAriaLabel: 'Frage und Antwort für einen anderen Assistenten kopieren',
       announceCetAiReady: 'Orakel-Antwort bereit.',
       askNextLabel: 'Als Nächstes fragen:',
+      sourcesLabel: 'Quellen',
       copyForAiQuestionLabel: '## Frage',
       copyForAiAnswerLabel: '## Antwort',
       copyForAiInstructions:
