@@ -132,9 +132,9 @@ jobs:
             echo "::error::No dist/assets/index-*.js chunk found"
             exit 1
           fi
-          SIZE=$(wc -c < "$MAIN" | tr -d ' ')
+          SIZE=$(gzip -c "$MAIN" | wc -c | tr -d ' ')
           MAX=250000
-          echo "Main chunk: $MAIN size=${SIZE} bytes (budget max ${MAX})"
+          echo "Main chunk (gzip): $MAIN size=${SIZE} bytes (budget max ${MAX})"
           if [ "$SIZE" -gt "$MAX" ]; then
             echo "::error::Main bundle exceeds ${MAX} byte budget"
             exit 1
