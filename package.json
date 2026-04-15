@@ -16,10 +16,13 @@
     "app:verify": "npm run verify --workspace=app",
     "app:test:e2e": "npm run test:e2e --workspace=app",
     "app:test:e2e:stable": "PW_WORKERS=1 npm run test:e2e --workspace=app",
+    "audit:prod": "npm audit --omit=dev",
     "api:typecheck": "npm run typecheck --workspace=api",
     "contracts:test": "npm test --workspace=contracts",
     "contracts:typecheck": "npx tsc --noEmit -p contracts/tsconfig.json",
-    "scripts:typecheck": "npm run typecheck --workspace=scripts"
+    "scripts:typecheck": "npm run typecheck --workspace=scripts",
+    "verify:fast": "npm run audit:prod && npm run api:typecheck && npm run scripts:typecheck && npm run contracts:test && npm run contracts:typecheck && npm run app:verify",
+    "verify:all": "npm run verify:fast && npm run app:test:e2e:stable"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
