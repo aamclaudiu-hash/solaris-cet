@@ -186,7 +186,7 @@ function AppContent() {
     const routeToSectionId: Record<string, string> = {
       '/mining': 'mining',
       '/rwa': 'rwa',
-      '/cet-ai': 'nova-app',
+      '/cet-ai': 'cet-ai',
     };
     const targetId = routeToSectionId[path];
     if (!targetId) return;
