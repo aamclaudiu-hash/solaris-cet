@@ -217,7 +217,7 @@ const HeroSection: React.FC = () => {
 
             <h1 className="font-display text-white leading-[1.02] tracking-[-0.04em] mb-5 drop-shadow-2xl type-h1">
               Primul token RWA ancorat în{' '}
-              <span className="text-gradient-aurora">Cetățuia României</span>
+              <span className="text-gradient-aurora">Cetățuia, România</span>
               <span className="text-solaris-gold"> — 9,000 CET.</span>
               <span className="block text-white">Imutabil.</span>
             </h1>
