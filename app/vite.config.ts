@@ -191,6 +191,8 @@ export default defineConfig({
           '**/assets/three-*.js*',
           '**/assets/three-stdlib-*.js*',
           '**/assets/@react-three/**',
+          '**/assets/postprocessing-*.js*',
+          '**/assets/@react-three/postprocessing-*.js*',
         ],
         /**
          * SPA shell for client routes (must stay index.html — not offline.html, or SPA breaks).
