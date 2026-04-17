@@ -59,9 +59,11 @@ function ScrollStoryOverlay({ routePath }: { routePath: string }) {
     const el = overlayRef.current;
     if (!el) return;
     if (reduced) return;
-    const isAudit =
-      typeof navigator !== 'undefined' &&
-      (navigator.webdriver === true || /HeadlessChrome/i.test(navigator.userAgent));
+    const isAudit = (() => {
+      if (typeof navigator === 'undefined') return false;
+      const navAny = navigator as Navigator & { webdriver?: boolean };
+      return navAny.webdriver === true || /HeadlessChrome/i.test(navigator.userAgent);
+    })();
     if (isAudit) return;
 
     const ctx = gsap.context(() => {
