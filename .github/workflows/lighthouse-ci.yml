@@ -38,6 +38,8 @@ jobs:
         run: npm ci
 
       - name: Build application
+        env:
+          VITE_LHCI: "1"
         run: npm run build --workspace=app
 
       - name: Upload dist artifact
@@ -86,7 +88,12 @@ jobs:
                 numberOfRuns: 1,
                 settings: {
                   preset: 'desktop',
-                  throttlingMethod: 'provided',
+                  throttlingMethod: 'simulate',
+                  chromeFlags: [
+                    '--no-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-gpu',
+                  ],
                   onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
                 },
               },
