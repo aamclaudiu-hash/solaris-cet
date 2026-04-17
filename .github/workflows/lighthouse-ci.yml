@@ -86,7 +86,12 @@ jobs:
                 numberOfRuns: 1,
                 settings: {
                   preset: 'desktop',
-                  throttlingMethod: 'provided',
+                  throttlingMethod: 'simulate',
+                  chromeFlags: [
+                    '--no-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-gpu',
+                  ],
                   onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
                 },
               },
