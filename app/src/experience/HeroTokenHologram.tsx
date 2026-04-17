@@ -13,14 +13,78 @@ function AgentsMesh({ count, pointerScale }: { count: number; pointerScale: numb
   const targetPointerRef = useRef(new THREE.Vector2(0, 0));
   const smoothedPointerRef = useRef(new THREE.Vector2(0, 0));
   const material = useMemo(() => {
-    const m = new THREE.PointsMaterial({
-      size: 0.012,
-      color: new THREE.Color('#7CF7FF'),
+    const vertexShader = `
+uniform float uTime;
+uniform vec2 uPointer;
+uniform float uStrength;
+uniform float uRadius;
+uniform float uTwist;
+uniform float uPointSize;
+varying float vGlow;
+
+float hash13(vec3 p) {
+  p = fract(p * 0.1031);
+  p += dot(p, p.yzx + 33.33);
+  return fract((p.x + p.y) * p.z);
+}
+
+void main() {
+  vec3 p = position;
+  vec3 center = vec3(uPointer.x * 1.45, uPointer.y * 0.95, 0.0);
+  vec3 d = p - center;
+  float dist = length(d) + 1e-4;
+  float falloff = exp(-dist * uRadius);
+
+  vec3 rep = (d / dist) * (falloff * uStrength);
+  vec3 swirl = vec3(-d.z, 0.0, d.x) * (falloff * uTwist);
+
+  float n = hash13(p * 2.2 + vec3(uTime * 0.05, -uTime * 0.03, uTime * 0.04));
+  float wave = sin((p.y + p.x * 0.35 + p.z * 0.22) * 1.35 + uTime * 0.7) * 0.5 + 0.5;
+  vec3 jitter = normalize(p) * (n - 0.5) * 0.06 + normalize(p) * wave * 0.02;
+
+  vec3 pp = p + rep + swirl + jitter;
+
+  vec4 mvPosition = modelViewMatrix * vec4(pp, 1.0);
+  gl_Position = projectionMatrix * mvPosition;
+  float size = uPointSize * (1.0 + falloff * 1.65);
+  gl_PointSize = size * (280.0 / max(1.0, -mvPosition.z));
+  vGlow = clamp(0.35 + falloff * 1.2, 0.0, 1.5);
+}
+`;
+
+    const fragmentShader = `
+precision highp float;
+uniform vec3 uColor;
+uniform float uOpacity;
+varying float vGlow;
+
+void main() {
+  vec2 uv = gl_PointCoord - 0.5;
+  float r = length(uv);
+  float core = smoothstep(0.5, 0.12, r);
+  float halo = smoothstep(0.5, 0.0, r) * 0.35;
+  float alpha = (core + halo) * uOpacity * vGlow;
+  vec3 col = uColor * (0.7 + vGlow * 0.55);
+  gl_FragColor = vec4(col, alpha);
+}
+`;
+
+    const m = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uPointer: { value: new THREE.Vector2(0, 0) },
+        uStrength: { value: 0.34 },
+        uRadius: { value: 1.35 },
+        uTwist: { value: 0.12 },
+        uPointSize: { value: 2.35 },
+        uColor: { value: new THREE.Color('#7CF7FF') },
+        uOpacity: { value: 0.55 },
+      },
+      vertexShader,
+      fragmentShader,
       transparent: true,
-      opacity: 0.8,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
-      sizeAttenuation: true,
     });
     return m;
   }, []);
@@ -55,13 +119,18 @@ function AgentsMesh({ count, pointerScale }: { count: number; pointerScale: numb
   useFrame((state) => {
     const p = pointsRef.current;
     if (!p) return;
-    const t = state.clock.elapsedTime;
     targetPointerRef.current.set(state.pointer.x, state.pointer.y);
     smoothedPointerRef.current.lerp(targetPointerRef.current, 0.08);
     const px = smoothedPointerRef.current.x;
     const py = smoothedPointerRef.current.y;
-    p.rotation.y = t * 0.06 + px * 0.18 * pointerScale;
-    p.rotation.x = Math.sin(t * 0.18) * 0.08 + py * 0.14 * pointerScale;
+    p.rotation.y = state.clock.elapsedTime * 0.035;
+    p.rotation.x = Math.sin(state.clock.elapsedTime * 0.14) * 0.05;
+
+    const m = p.material as THREE.ShaderMaterial;
+    (m.uniforms.uTime.value as number) = state.clock.elapsedTime;
+    (m.uniforms.uPointer.value as THREE.Vector2).set(px * pointerScale, py * pointerScale);
+    (m.uniforms.uStrength.value as number) = 0.32 * pointerScale;
+    (m.uniforms.uTwist.value as number) = 0.12 * pointerScale;
   });
 
   return <points ref={pointsRef} geometry={geometry} material={material} />;
