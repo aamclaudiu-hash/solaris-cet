@@ -11,6 +11,7 @@ import CursorGlow from './components/CursorGlow';
 import { InteractionEffectsManager } from '@/components/InteractionEffectsManager';
 import { CinematicBackground } from '@/components/CinematicBackground';
 import RouteSignatureLayer from './components/RouteSignatureLayer';
+import ScrollStoryOverlay from './components/ScrollStoryOverlay';
 import BackToTop from './components/BackToTop';
 import MobileConversionDock from './components/MobileConversionDock';
 import PwaInstallPrompt from './components/PwaInstallPrompt';
@@ -307,6 +308,7 @@ function AppContent() {
       >
         <CinematicBackground />
         <RouteSignatureLayer routePath={routePath} />
+        <ScrollStoryOverlay routePath={routePath} />
 
         {/* Ambient solar glow — fixed, behind sections */}
         <div
