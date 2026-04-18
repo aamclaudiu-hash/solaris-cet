@@ -14,10 +14,6 @@ concurrency:
 permissions:
   contents: read
 
-concurrency:
-  group: lhci-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   # ── 1. Build ──────────────────────────────────────────────────────────────
   build:
