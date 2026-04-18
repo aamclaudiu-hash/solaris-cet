@@ -201,9 +201,7 @@ jobs:
           path: app/dist
 
       - name: Run Playwright E2E tests
-        env:
-          PW_WORKERS: ${{ vars.E2E_WORKERS || '2' }}
-        run: npm run app:test:e2e
+        run: npm run app:test:e2e:stable
 
       - name: Upload Playwright report
         if: always()
