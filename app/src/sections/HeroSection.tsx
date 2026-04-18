@@ -118,6 +118,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
 
   const enableHologram = holoQuality !== null && !isAutomated;
   const allowWebglDecor = !prefersReducedMotion && !isMobile && !isAutomated;
+  const isDemoRoute = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    return path === '/demo';
+  }, []);
+  const superCinematic =
+    cinematic && isDemoRoute && isDesktop && !isMobile && !prefersReducedMotion && !isAutomated;
 
   useLayoutEffect(() => {
     if (isMobile || prefersReducedMotion) {
