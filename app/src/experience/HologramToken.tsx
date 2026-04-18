@@ -38,6 +38,7 @@ uniform float uNoiseAmount;
 uniform float uFresnelPow;
 uniform float uGlitch;
 uniform float uPulse;
+uniform float uBeat;
 
 varying vec3 vWorldPos;
 varying vec3 vNormalW;
@@ -72,17 +73,17 @@ void main() {
   vec2 p = vUv * 12.0 + vec2(uTime * 0.08, -uTime * 0.05);
   float n = noise(p);
 
-  float glitch = uGlitch * (0.35 + 0.65 * sin(uTime * 1.7));
+  float glitch = uGlitch * (0.35 + 0.65 * sin(uTime * 1.7)) * (0.75 + uBeat * 0.95);
   vec2 uvG = vUv + vec2((n - 0.5) * 0.02 * glitch, 0.0);
   float stripe = smoothstep(0.48, 0.52, fract((uvG.y + uTime * 0.12) * 18.0));
 
   float pointerPulse = 0.18 * (1.0 - smoothstep(0.0, 0.9, length(uPointer)));
-  float pulse = 0.12 * sin(uTime * 1.4 + vLocalPos.y * 2.2) + 0.12 * uPulse;
+  float pulse = 0.12 * sin(uTime * 1.4 + vLocalPos.y * 2.2) + 0.12 * uPulse * (0.75 + uBeat * 0.85);
   float aura = fresnel + scan * 0.85 + pointerPulse + pulse;
 
   vec3 base = mix(uColorA, uColorB, clamp(0.15 + 0.85 * (0.5 + 0.5 * sin(vWorldPos.y * 0.8 + uTime * 0.6)), 0.0, 1.0));
   base += uNoiseAmount * (n - 0.5) * vec3(0.8, 1.0, 1.2);
-  base += stripe * 0.06 * vec3(0.2, 0.9, 1.0);
+  base += stripe * (0.06 + uBeat * 0.035) * vec3(0.2, 0.9, 1.0);
 
   float alpha = uOpacity * clamp(aura, 0.0, 1.4);
   alpha *= 0.88 + 0.12 * scan;
@@ -112,6 +113,7 @@ function makeMaterial(quality: Quality, seed: number) {
     uFresnelPow: { value: (quality === 'high' ? 3.2 : 2.6) * (0.9 + rand() * 0.22) },
     uGlitch: { value: (quality === 'high' ? 0.65 : 0.3) * (0.85 + rand() * 0.3) },
     uPulse: { value: 0 },
+    uBeat: { value: 0 },
   };
 
   return new THREE.ShaderMaterial({
@@ -127,9 +129,11 @@ function makeMaterial(quality: Quality, seed: number) {
 export function HologramToken({
   quality,
   seed,
+  beat = 0,
 }: {
   quality: Quality;
   seed: number;
+  beat?: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const mat = useMemo(() => makeMaterial(quality, seed), [quality, seed]);
@@ -145,6 +149,7 @@ export function HologramToken({
     (mat.uniforms.uPulse.value as number) =
       (0.55 + 0.45 * Math.sin(state.clock.elapsedTime * 0.9)) *
       (quality === 'high' ? 1 : 0.7);
+    (mat.uniforms.uBeat.value as number) = Math.max(0, Math.min(1, beat));
   });
 
   return (
