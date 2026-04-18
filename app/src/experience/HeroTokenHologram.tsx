@@ -1,4 +1,5 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import type { MutableRefObject } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, Float, PerformanceMonitor } from '@react-three/drei';
 import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
@@ -7,6 +8,53 @@ import * as THREE from 'three';
 import { EntanglementLines, HologramToken } from '@/experience/HologramToken';
 
 type HologramQuality = 'low' | 'high';
+
+type BloomFx = { intensity: number };
+type ChromaticFx = { offset?: THREE.Vector2 };
+type NoiseFx = { opacity: number };
+type VignetteFx = { darkness: number };
+
+function clamp01(v: number) {
+  return Math.min(1, Math.max(0, v));
+}
+
+function BeatFx({
+  quality,
+  beatRef,
+  baseCaOffset,
+  bloomRef,
+  caRef,
+  noiseRef,
+  vignetteRef,
+}: {
+  quality: HologramQuality;
+  beatRef: MutableRefObject<number>;
+  baseCaOffset: THREE.Vector2;
+  bloomRef: MutableRefObject<BloomFx | null>;
+  caRef: MutableRefObject<ChromaticFx | null>;
+  noiseRef: MutableRefObject<NoiseFx | null>;
+  vignetteRef: MutableRefObject<VignetteFx | null>;
+}) {
+  useFrame((state) => {
+    const b = clamp01(beatRef.current);
+    const pulse = 0.5 + 0.5 * Math.sin(state.clock.elapsedTime * 1.6 + b * 2.1);
+    const k = b * (0.55 + 0.45 * pulse);
+
+    const bloom = bloomRef.current;
+    if (bloom) bloom.intensity = (quality === 'high' ? 0.9 : 0.5) + k * (quality === 'high' ? 0.78 : 0.34);
+
+    const ca = caRef.current;
+    if (ca?.offset?.set) ca.offset.set(baseCaOffset.x * (1 + 0.9 * k), baseCaOffset.y * (1 + 0.9 * k));
+
+    const noise = noiseRef.current;
+    if (noise) noise.opacity = (quality === 'high' ? 0.18 : 0.14) + k * (quality === 'high' ? 0.12 : 0.08);
+
+    const vig = vignetteRef.current;
+    if (vig) vig.darkness = (quality === 'high' ? 0.65 : 0.58) + k * 0.08;
+  });
+
+  return null;
+}
 
 function AgentsMesh({ count, pointerScale }: { count: number; pointerScale: number }) {
   const pointsRef = useRef<THREE.Points>(null);
@@ -172,10 +220,16 @@ void main() {
 
 function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: HologramQuality; seed?: number }) {
   const [dpr, setDpr] = useState<number | [number, number]>(quality === 'high' ? [1, 1.6] : 1);
-  const caOffset = useMemo(
+  const baseCaOffset = useMemo(
     () => (quality === 'high' ? new THREE.Vector2(0.0011, 0.0007) : new THREE.Vector2(0, 0)),
     [quality],
   );
+  const [beat, setBeat] = useState(0);
+  const beatRef = useRef(0);
+  const bloomRef = useRef<BloomFx | null>(null);
+  const caRef = useRef<ChromaticFx | null>(null);
+  const noiseRef = useRef<NoiseFx | null>(null);
+  const vignetteRef = useRef<VignetteFx | null>(null);
   const agentCount = useMemo(() => {
     const navAny =
       typeof navigator !== 'undefined'
@@ -193,6 +247,20 @@ function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: Hologra
   }, [quality]);
 
   const pointerScale = quality === 'high' ? 1 : 0.55;
+
+  useEffect(() => {
+    const onBeat = (ev: Event) => {
+      const ce = ev as CustomEvent<{ intensity?: number }>;
+      const i = typeof ce.detail?.intensity === 'number' ? ce.detail.intensity : 0;
+      const v = clamp01(i);
+      beatRef.current = v;
+      setBeat(v);
+    };
+    window.addEventListener('solaris:demoBeat', onBeat as EventListener);
+    return () => {
+      window.removeEventListener('solaris:demoBeat', onBeat as EventListener);
+    };
+  }, []);
 
   return (
     <div
@@ -222,22 +290,43 @@ function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: Hologra
         <AgentsMesh count={agentCount} pointerScale={pointerScale} />
         <Float speed={1.05} rotationIntensity={0.35} floatIntensity={0.35}>
           <EntanglementLines quality={quality} seed={seed} />
-          <HologramToken quality={quality} seed={seed} />
+          <HologramToken quality={quality} seed={seed} beat={beat} />
         </Float>
         <EffectComposer multisampling={0}>
           <Bloom
+            ref={bloomRef as unknown as never}
             intensity={quality === 'high' ? 0.9 : 0.5}
             luminanceThreshold={0.1}
             luminanceSmoothing={0.2}
             mipmapBlur
           />
-          <ChromaticAberration offset={caOffset} radialModulation modulationOffset={0.2} />
+          <ChromaticAberration
+            ref={caRef as unknown as never}
+            offset={baseCaOffset}
+            radialModulation
+            modulationOffset={0.2}
+          />
           <Noise
+            ref={noiseRef as unknown as never}
             premultiply
             blendFunction={BlendFunction.SOFT_LIGHT}
             opacity={quality === 'high' ? 0.18 : 0.14}
           />
-          <Vignette eskil={false} offset={0.2} darkness={quality === 'high' ? 0.65 : 0.58} />
+          <Vignette
+            ref={vignetteRef as unknown as never}
+            eskil={false}
+            offset={0.2}
+            darkness={quality === 'high' ? 0.65 : 0.58}
+          />
+          <BeatFx
+            quality={quality}
+            beatRef={beatRef}
+            baseCaOffset={baseCaOffset}
+            bloomRef={bloomRef}
+            caRef={caRef}
+            noiseRef={noiseRef}
+            vignetteRef={vignetteRef}
+          />
         </EffectComposer>
         <Environment preset="city" />
       </Canvas>

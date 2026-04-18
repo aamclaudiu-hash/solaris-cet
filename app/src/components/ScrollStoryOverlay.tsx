@@ -77,7 +77,24 @@ function ScrollStoryOverlay({ routePath }: { routePath: string }) {
         '--story-scale': 1,
       } as gsap.TweenVars);
 
-      const applyBeat = (x: number, y: number, hue: number, opacity: number, scale: number) => {
+      const setDemoBeat = (intensity: number) => {
+        if (variant !== 'demo') return;
+        if (typeof window === 'undefined') return;
+        const i = Math.max(0, Math.min(1, intensity));
+        document.documentElement.style.setProperty('--demo-beat', i.toFixed(3));
+        window.dispatchEvent(new CustomEvent('solaris:demoBeat', { detail: { intensity: i } }));
+      };
+
+      setDemoBeat(0);
+
+      const applyBeat = (
+        x: number,
+        y: number,
+        hue: number,
+        opacity: number,
+        scale: number,
+        intensity: number,
+      ) => {
         gsap.to(el, {
           duration: isMobile ? 0.5 : 0.9,
           ease: 'power3.out',
@@ -88,24 +105,36 @@ function ScrollStoryOverlay({ routePath }: { routePath: string }) {
           '--story-scale': scale,
           overwrite: true,
         } as gsap.TweenVars);
+        setDemoBeat(intensity);
       };
 
       const beats =
-        routePath === '/' || routePath === '/demo'
+        routePath === '/demo'
           ? [
-              { sel: '#hero', x: 42, y: 24, hue: 0, o: variant === 'demo' ? 0.46 : 0.36, s: 1.02 },
-              { sel: '#problem-agriculture', x: 58, y: 38, hue: 10, o: 0.34, s: 1.04 },
-              { sel: '#nova-app', x: 36, y: 44, hue: 22, o: 0.33, s: 1.05 },
-              { sel: '#staking', x: 54, y: 34, hue: -8, o: 0.36, s: 1.06 },
-              { sel: '#rwa', x: 48, y: 30, hue: 16, o: 0.38, s: 1.06 },
-              { sel: '#roadmap', x: 62, y: 28, hue: 28, o: 0.33, s: 1.04 },
-              { sel: '#resources', x: 40, y: 34, hue: 6, o: 0.3, s: 1.03 },
-              { sel: '#faq', x: 46, y: 40, hue: -4, o: 0.28, s: 1.02 },
+              { sel: '#hero', x: 42, y: 24, hue: 0, o: 0.46, s: 1.02, i: 0.55 },
+              { sel: '#problem-agriculture', x: 58, y: 38, hue: 10, o: 0.35, s: 1.05, i: 0.42 },
+              { sel: '#nova-app', x: 36, y: 44, hue: 22, o: 0.34, s: 1.06, i: 0.6 },
+              { sel: '#staking', x: 54, y: 34, hue: -8, o: 0.38, s: 1.07, i: 0.74 },
+              { sel: '#rwa', x: 48, y: 30, hue: 16, o: 0.4, s: 1.07, i: 0.66 },
+              { sel: '#roadmap', x: 62, y: 28, hue: 28, o: 0.34, s: 1.05, i: 0.5 },
+              { sel: '#resources', x: 40, y: 34, hue: 6, o: 0.31, s: 1.03, i: 0.36 },
+              { sel: '#faq', x: 46, y: 40, hue: -4, o: 0.29, s: 1.02, i: 0.22 },
             ]
+          : routePath === '/'
+            ? [
+                { sel: '#hero', x: 42, y: 24, hue: 0, o: 0.36, s: 1.02, i: 0 },
+                { sel: '#problem-agriculture', x: 58, y: 38, hue: 10, o: 0.34, s: 1.04, i: 0 },
+                { sel: '#nova-app', x: 36, y: 44, hue: 22, o: 0.33, s: 1.05, i: 0 },
+                { sel: '#staking', x: 54, y: 34, hue: -8, o: 0.36, s: 1.06, i: 0 },
+                { sel: '#rwa', x: 48, y: 30, hue: 16, o: 0.38, s: 1.06, i: 0 },
+                { sel: '#roadmap', x: 62, y: 28, hue: 28, o: 0.33, s: 1.04, i: 0 },
+                { sel: '#resources', x: 40, y: 34, hue: 6, o: 0.3, s: 1.03, i: 0 },
+                { sel: '#faq', x: 46, y: 40, hue: -4, o: 0.28, s: 1.02, i: 0 },
+              ]
           : routePath === '/rwa'
-            ? [{ sel: '#rwa', x: 48, y: 30, hue: 16, o: 0.36, s: 1.05 }]
+            ? [{ sel: '#rwa', x: 48, y: 30, hue: 16, o: 0.36, s: 1.05, i: 0 }]
             : routePath === '/cet-ai'
-              ? [{ sel: '#cet-ai', x: 50, y: 28, hue: 26, o: 0.36, s: 1.05 }]
+              ? [{ sel: '#cet-ai', x: 50, y: 28, hue: 26, o: 0.36, s: 1.05, i: 0 }]
               : [];
 
       const triggers = beats.map((b) =>
@@ -113,13 +142,14 @@ function ScrollStoryOverlay({ routePath }: { routePath: string }) {
           trigger: b.sel,
           start: 'top 70%',
           end: 'bottom 30%',
-          onEnter: () => applyBeat(b.x, b.y, b.hue, b.o, b.s),
-          onEnterBack: () => applyBeat(b.x, b.y, b.hue, b.o, b.s),
+          onEnter: () => applyBeat(b.x, b.y, b.hue, b.o, b.s, b.i),
+          onEnterBack: () => applyBeat(b.x, b.y, b.hue, b.o, b.s, b.i),
         }),
       );
 
       return () => {
         triggers.forEach((t) => t.kill());
+        setDemoBeat(0);
       };
     }, el);
 
