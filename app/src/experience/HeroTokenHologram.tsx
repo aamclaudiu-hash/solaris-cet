@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import type { MutableRefObject } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment, Float, PerformanceMonitor } from '@react-three/drei';
-import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette } from '@react-three/postprocessing';
+import { Bloom, ChromaticAberration, EffectComposer, Noise, Vignette, DepthOfField } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
 import { EntanglementLines, HologramToken } from '@/experience/HologramToken';
@@ -13,9 +13,15 @@ type BloomFx = { intensity: number };
 type ChromaticFx = { offset?: THREE.Vector2 };
 type NoiseFx = { opacity: number };
 type VignetteFx = { darkness: number };
+type DoFFx = { bokehScale: number; focusDistance: number; focalLength: number };
 
 function clamp01(v: number) {
   return Math.min(1, Math.max(0, v));
+}
+
+function smoothstep(t: number) {
+  const x = clamp01(t);
+  return x * x * (3 - 2 * x);
 }
 
 function BeatFx({
@@ -53,6 +59,66 @@ function BeatFx({
     if (vig) vig.darkness = (quality === 'high' ? 0.65 : 0.58) + k * 0.08;
   });
 
+  return null;
+}
+
+function CameraChoreo({
+  scrubRef,
+  beatRef,
+  quality,
+}: {
+  scrubRef: MutableRefObject<number>;
+  beatRef: MutableRefObject<number>;
+  quality: HologramQuality;
+}) {
+  const { camera } = useThree();
+  const cameraRef = useRef<THREE.PerspectiveCamera | THREE.Camera | null>(null);
+  useEffect(() => {
+    cameraRef.current = camera;
+  }, [camera]);
+  useFrame((state) => {
+    const cam = cameraRef.current;
+    if (!cam) return;
+    const p = smoothstep(scrubRef.current);
+    const b = clamp01(beatRef.current);
+    const t = state.clock.elapsedTime;
+
+    const z0 = 4.2;
+    const z1 = quality === 'high' ? 3.35 : 3.6;
+    const x1 = quality === 'high' ? 0.18 : 0.12;
+    const y1 = quality === 'high' ? 0.08 : 0.05;
+
+    const sway = (Math.sin(t * 0.8) * 0.02 + Math.sin(t * 1.7) * 0.01) * (0.35 + b);
+    const shake = (Math.sin(t * 7.2) * 0.006 + Math.cos(t * 5.9) * 0.004) * b;
+
+    cam.position.z = THREE.MathUtils.lerp(z0, z1, p);
+    cam.position.x = THREE.MathUtils.lerp(0, x1, p) + sway + shake;
+    cam.position.y = THREE.MathUtils.lerp(0, y1, p) + Math.cos(t * 0.9) * 0.01 * (0.4 + b);
+
+    cam.rotation.y = THREE.MathUtils.lerp(0, -0.22, p) + Math.sin(t * 0.6) * 0.02 * (0.25 + b);
+    cam.rotation.x = THREE.MathUtils.lerp(0, 0.09, p) + Math.cos(t * 0.55) * 0.012 * (0.25 + b);
+  });
+  return null;
+}
+
+function FocusPullFx({
+  quality,
+  scrubRef,
+  dofRef,
+}: {
+  quality: HologramQuality;
+  scrubRef: MutableRefObject<number>;
+  dofRef: MutableRefObject<DoFFx | null>;
+}) {
+  useFrame(() => {
+    if (quality !== 'high') return;
+    const p = smoothstep(scrubRef.current);
+    const dof = dofRef.current;
+    if (!dof) return;
+    dof.bokehScale = 0.7 + p * 1.45;
+    dof.focusDistance = 0.02 + p * 0.08;
+    dof.focalLength = 0.02 + p * 0.03;
+  });
   return null;
 }
 
@@ -226,10 +292,12 @@ function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: Hologra
   );
   const [beat, setBeat] = useState(0);
   const beatRef = useRef(0);
+  const scrubRef = useRef(0);
   const bloomRef = useRef<BloomFx | null>(null);
   const caRef = useRef<ChromaticFx | null>(null);
   const noiseRef = useRef<NoiseFx | null>(null);
   const vignetteRef = useRef<VignetteFx | null>(null);
+  const dofRef = useRef<DoFFx | null>(null);
   const agentCount = useMemo(() => {
     const navAny =
       typeof navigator !== 'undefined'
@@ -262,6 +330,18 @@ function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: Hologra
     };
   }, []);
 
+  useEffect(() => {
+    const onScrub = (ev: Event) => {
+      const ce = ev as CustomEvent<{ progress?: number }>;
+      const p = typeof ce.detail?.progress === 'number' ? ce.detail.progress : 0;
+      scrubRef.current = clamp01(p);
+    };
+    window.addEventListener('solaris:demoScrub', onScrub as EventListener);
+    return () => {
+      window.removeEventListener('solaris:demoScrub', onScrub as EventListener);
+    };
+  }, []);
+
   return (
     <div
       aria-hidden
@@ -288,6 +368,7 @@ function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: Hologra
         <directionalLight position={[-3, -2, 2]} intensity={0.55} color="#55F0FF" />
         <fog attach="fog" args={['#020512', 2.8, 9]} />
         <AgentsMesh count={agentCount} pointerScale={pointerScale} />
+        <CameraChoreo scrubRef={scrubRef} beatRef={beatRef} quality={quality} />
         <Float speed={1.05} rotationIntensity={0.35} floatIntensity={0.35}>
           <EntanglementLines quality={quality} seed={seed} />
           <HologramToken quality={quality} seed={seed} beat={beat} />
@@ -318,6 +399,16 @@ function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: Hologra
             offset={0.2}
             darkness={quality === 'high' ? 0.65 : 0.58}
           />
+          {quality === 'high' ? (
+            <DepthOfField
+              ref={dofRef as unknown as never}
+              focusDistance={0.02}
+              focalLength={0.02}
+              bokehScale={0.7}
+            />
+          ) : (
+            <></>
+          )}
           <BeatFx
             quality={quality}
             beatRef={beatRef}
@@ -327,6 +418,7 @@ function HeroTokenHologram({ quality = 'high', seed = 0.5 }: { quality?: Hologra
             noiseRef={noiseRef}
             vignetteRef={vignetteRef}
           />
+          <FocusPullFx quality={quality} scrubRef={scrubRef} dofRef={dofRef} />
         </EffectComposer>
         <Environment preset="city" />
       </Canvas>

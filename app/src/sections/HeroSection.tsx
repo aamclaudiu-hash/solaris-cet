@@ -70,6 +70,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
   const backgroundRef = useRef<HTMLDivElement>(null);
   const titleContainerRef = useRef<HTMLDivElement>(null);
   const tickerContainerRef = useRef<HTMLDivElement>(null);
+  const demoCutRef = useRef<HTMLDivElement>(null);
 
   const prefersReducedMotion = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
@@ -168,12 +169,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
     const bg = backgroundRef.current;
     const title = titleContainerRef.current;
     const ticker = tickerContainerRef.current;
-    if (!el || !bg || !title || !ticker) return;
+    const cut = demoCutRef.current;
+    if (!el || !bg || !title || !ticker || !cut) return;
 
     const ctx = gsap.context(() => {
       gsap.set(bg, { transformOrigin: '50% 50%', willChange: 'transform' });
       gsap.set(title, { willChange: 'transform, opacity' });
       gsap.set(ticker, { willChange: 'transform, opacity' });
+      gsap.set(cut, { willChange: 'transform, opacity', opacity: 0, yPercent: 110 });
+
+      const setScrub = (p: number) => {
+        const v = Math.max(0, Math.min(1, p));
+        document.documentElement.style.setProperty('--demo-scrub', v.toFixed(3));
+        window.dispatchEvent(new CustomEvent('solaris:demoScrub', { detail: { progress: v } }));
+      };
+      setScrub(0);
 
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
@@ -185,15 +195,23 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
           pin: true,
           anticipatePin: 1,
           pinSpacing: true,
+          onUpdate: (self) => setScrub(self.progress),
         },
       });
 
-      tl.to(bg, { y: -80, scale: 1.08 }, 0);
-      tl.to(title, { y: -44, scale: 0.975, opacity: 0.88 }, 0);
-      tl.to(ticker, { y: 26, scale: 0.985, opacity: 0.92 }, 0);
+      tl.to(bg, { y: -96, scale: 1.12 }, 0);
+      tl.to(title, { y: -62, scale: 0.955, opacity: 0.86 }, 0);
+      tl.to(ticker, { y: 38, scale: 0.975, opacity: 0.9 }, 0);
+
+      tl.to(cut, { opacity: 0.86, yPercent: 0 }, 0.74);
+      tl.to(cut, { opacity: 0, yPercent: -110 }, 0.9);
     }, el);
 
-    return () => ctx.revert();
+    return () => {
+      document.documentElement.style.removeProperty('--demo-scrub');
+      window.dispatchEvent(new CustomEvent('solaris:demoScrub', { detail: { progress: 0 } }));
+      ctx.revert();
+    };
   }, [superCinematic]);
 
   useEffect(() => {
@@ -258,6 +276,19 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
         ref={containerRef}
         className="relative min-h-dvh bg-[color:var(--solaris-void)] overflow-x-hidden lg:overflow-hidden flex flex-col justify-center items-center pt-20 pb-16 lg:pb-24 lg:pt-16"
       >
+        {isDemoRoute ? (
+          <div
+            ref={demoCutRef}
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-[12] hidden lg:block"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(2,6,23,0.25) 18%, rgba(46,231,255,0.09) 46%, rgba(242,201,76,0.08) 62%, rgba(0,0,0,0) 100%)',
+              mixBlendMode: 'screen',
+              filter: 'blur(2px)',
+            }}
+          />
+        ) : null}
         {isDemoRoute && cinematic && isDesktop && !isMobile && !isAutomated ? (
           <button
             type="button"
