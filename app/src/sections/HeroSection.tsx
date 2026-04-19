@@ -278,7 +278,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
           <div className="absolute inset-0 bg-gradient-to-b from-[#020510]/20 via-[#020510]/55 to-[#020510]" />
 
           {/* Layer 5 — grain cinematic */}
-          <div className="absolute inset-0 opacity-[0.06] hero-film-grain mix-blend-overlay hidden sm:block" />
+          <div
+            className="absolute inset-0 hero-film-grain mix-blend-overlay hidden sm:block"
+            style={{ opacity: 'calc(0.06 + (var(--demo-beat, 0) * 0.04))' }}
+          />
 
           {/* Layer 6 — ambient quantum glow (CSS, fără JS) */}
           <div className="quantum-ambient-glow" aria-hidden />
@@ -295,7 +298,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 xl:px-12 flex flex-col gap-12 lg:gap-16 pt-12 md:pt-16">
           
-          <div ref={titleContainerRef} className="flex flex-col items-center text-center w-full max-w-4xl mx-auto">
+          <div
+            ref={titleContainerRef}
+            className="flex flex-col items-center text-center w-full max-w-4xl mx-auto"
+            style={{
+              filter: isDemoRoute
+                ? 'drop-shadow(0 0 calc(26px * var(--demo-beat, 0)) rgba(46,231,255,0.28)) drop-shadow(0 0 calc(18px * var(--demo-beat, 0)) rgba(242,201,76,0.2))'
+                : undefined,
+            }}
+          >
             
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-solaris-gold/25 bg-solaris-gold/10 quantum-badge text-solaris-gold text-[10px] sm:text-xs font-semibold tracking-widest uppercase mb-8 shadow-[0_0_18px_rgba(242,201,76,0.15)]">
                <span className="w-1.5 h-1.5 rounded-full bg-solaris-gold animate-pulse" />
