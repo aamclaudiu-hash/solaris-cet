@@ -34,6 +34,7 @@ jobs:
           close-issue-message: |
             🔒 This issue has been automatically closed due to inactivity.
             Feel free to re-open it if the problem persists or the feature is still needed.
+
           days-before-pr-stale: 21
           days-before-pr-close: 7
           stale-pr-label: "stale"
@@ -45,6 +46,7 @@ jobs:
           close-pr-message: |
             🔒 This pull request has been automatically closed due to inactivity.
             Feel free to re-open it if the changes are still needed.
+
           exempt-issue-labels: "pinned,security,in-progress,blocked"
           exempt-pr-labels: "pinned,security,in-progress,blocked,dependencies"
           exempt-all-milestones: true
