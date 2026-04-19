@@ -459,6 +459,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
                   <div className="text-[10px] md:text-xs text-solaris-gold/80 tracking-[0.2em] uppercase mt-2 font-medium">
                     Preț curent
                   </div>
+                  <div className="text-[10px] text-slate-400 mt-1">
+                    {pool.error ? 'DeDust indisponibil' : 'Fără pereche activă'}
+                  </div>
                 </div>
               )}
 
