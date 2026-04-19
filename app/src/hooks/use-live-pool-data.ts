@@ -5,8 +5,9 @@ import { CET_CONTRACT_ADDRESS } from '@/lib/cetContract';
 const REFRESH_INTERVAL_MS = 60_000;
 
 interface DeDustPrice {
-  address: string;
-  price: string;
+  address?: string;
+  symbol?: string;
+  price: string | number;
 }
 
 export interface PoolData {
@@ -64,7 +65,7 @@ export function useLivePoolData(): PoolData {
       }
       const signal = createTimeoutSignal(8000);
       const isDev = import.meta.env.DEV;
-      const pricesUrl = isDev ? '/api-dedust/v2/prices' : 'https://api.dedust.io/v2/prices';
+      const pricesUrl = isDev ? '/api-dedust/v2/prices' : 'https://mainnet.api.dedust.io/v2/prices';
 
       // Fetch chain state (cached promise) and live prices (small 1.1 KB)
       const [state, pricesRes] = await Promise.all([
@@ -77,10 +78,20 @@ export function useLivePoolData(): PoolData {
       }
 
       const prices: DeDustPrice[] = await pricesRes.json();
+      const parseUsd = (v: string | number | null | undefined): number | null => {
+        if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+        if (typeof v === 'string') {
+          const n = Number.parseFloat(v);
+          return Number.isFinite(n) ? n : null;
+        }
+        return null;
+      };
 
       // Get TON USD price from prices endpoint
-      const tonEntry = prices.find((p) => p.address === 'native');
-      const tonPriceUsd = tonEntry ? parseFloat(tonEntry.price) : null;
+      const tonEntry = prices.find(
+        (p) => p.address === 'native' || p.symbol?.toUpperCase() === 'TON',
+      );
+      const tonPriceUsd = tonEntry ? parseUsd(tonEntry.price) : null;
 
       // Use reserves from state.json (cached/indexed)
       // Note: state.json reserves are already formatted to human-readable decimals
@@ -92,9 +103,11 @@ export function useLivePoolData(): PoolData {
       // Look up CET price directly from prices endpoint
       const cetAddressLower = CET_CONTRACT_ADDRESS.toLowerCase();
       const cetEntry = prices.find(
-        (p) => p.address.toLowerCase() === cetAddressLower
+        (p) =>
+          (typeof p.address === 'string' && p.address.toLowerCase() === cetAddressLower) ||
+          p.symbol?.toUpperCase() === 'CET',
       );
-      let priceUsd: number | null = cetEntry ? parseFloat(cetEntry.price) : null;
+      let priceUsd: number | null = cetEntry ? parseUsd(cetEntry.price) : null;
 
       let tvlUsd: number | null = null;
       let volume24hUsd: number | null = null;
@@ -110,7 +123,7 @@ export function useLivePoolData(): PoolData {
 
         // Note: volume_24h is not in state.json yet, so we'll skip it or 
         // rely on a future indexer update to include it.
-        volume24hUsd = null; 
+        volume24hUsd = null;
       }
 
       setData({
