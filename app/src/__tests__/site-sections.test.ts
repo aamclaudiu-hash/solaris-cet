@@ -349,7 +349,7 @@ describe("HowToBuy + sitemap", () => {
     });
     const swap = HOW_TO_BUY_STEPS[2];
     expect(swap.cta.href).toBe(DEDUST_SWAP_URL);
-    expect(swap.cta.href).toContain(DEDUST_POOL_ADDRESS);
+    expect(swap.cta.href).toContain(CET_CONTRACT);
     expect(HOW_TO_BUY_STEPS[0].cta.href).toContain("tonkeeper.com");
     expect(HOW_TO_BUY_STEPS[0].id).toBe("wallet");
     expect(HOW_TO_BUY_STEPS[2].id).toBe("swap");
