@@ -42,6 +42,7 @@ interface TokenState {
 
 interface PoolState {
   address: string;
+  type?: 'volatile' | 'stable' | null;
   reserveTon: string | null;
   reserveCet: string | null;
   assets?: string[] | null;
@@ -93,6 +94,7 @@ async function main(): Promise<void> {
   let reserveCet: bigint | null = null;
   let priceTonPerCet: string | null = null;
   let poolAddress: string | null = null;
+  let poolType: 'volatile' | 'stable' | null = null;
   let poolAssets: string[] | null = null;
   let poolReservesReadable: string[] | null = null;
 
@@ -103,25 +105,37 @@ async function main(): Promise<void> {
     const usdtAddress = Address.parse(USDT_JETTON_MASTER_ADDRESS);
     const usdtAsset = Asset.jetton(usdtAddress);
 
-    const pool = client.open(
-      await factory.getPool(PoolType.VOLATILE, [usdtAsset, cetAsset])
-    );
+    const poolCandidates: Array<{ type: 'stable' | 'volatile'; pool: unknown }> = [];
+    for (const t of [PoolType.STABLE, PoolType.VOLATILE] as const) {
+      try {
+        const pool = client.open(await factory.getPool(t, [usdtAsset, cetAsset]));
+        poolCandidates.push({ type: t === PoolType.STABLE ? 'stable' : 'volatile', pool });
+      } catch {
+        void 0;
+      }
+    }
+
+    const chosen = poolCandidates[0] as { type: 'stable' | 'volatile'; pool: any } | undefined;
+    if (!chosen) throw new Error('No DeDust CET/USDT pool found');
+    const pool = chosen.pool;
+    poolType = chosen.type;
 
     poolAddress = pool.address.toString();
 
     const [r0, r1] = await pool.getReserves();
     // reserves are aligned with requested asset order: [USDT, CET]
     const reserveUsdt = r0;
-    reserveCet = r1;
+    const reserveCetLocal = r1;
+    reserveCet = reserveCetLocal;
     reserveTon = null;
 
     poolAssets = [`jetton:${USDT_JETTON_MASTER_ADDRESS}`, `jetton:${CET_CONTRACT_ADDRESS}`];
     poolReservesReadable = [
       bigintToDecimalString(reserveUsdt, 6),
-      bigintToDecimalString(reserveCet, decimals),
+      bigintToDecimalString(reserveCetLocal, decimals),
     ];
 
-    console.log(`[ton-indexer] Pool reserves — USDT: ${reserveUsdt}, CET: ${reserveCet}`);
+    console.log(`[ton-indexer] Pool ${poolType} reserves — USDT: ${reserveUsdt}, CET: ${reserveCet}`);
   } catch (err) {
     console.warn('[ton-indexer] Failed to fetch DeDust pool data via SDK:', err);
 
@@ -141,6 +155,7 @@ async function main(): Promise<void> {
     },
     pool: {
       address: poolAddress ?? 'unknown',
+      type: poolType,
       reserveTon: reserveTon !== null
         ? bigintToDecimalString(reserveTon, 9)
         : null,
