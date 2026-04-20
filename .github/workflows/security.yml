@@ -24,17 +24,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Trivy scan
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: fs
-          scan-ref: .
-          format: table
-          scanners: vuln,secret,config
-          vuln-type: os,library
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
+      - name: Trivy scan (docker)
+        run: |
+          set -e
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/repo" \
+            aquasec/trivy:0.51.1 \
+            fs \
+            --scanners vuln,secret,config \
+            --vuln-type os,library \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1 \
+            /repo
 
   docker-build-and-scan:
     name: Docker build + image scan
@@ -58,15 +60,18 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Trivy image scan
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: solaris-cet:${{ github.sha }}
-          format: table
-          vuln-type: os,library
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
+      - name: Trivy image scan (docker)
+        run: |
+          set -e
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.51.1 \
+            image \
+            --vuln-type os,library \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1 \
+            solaris-cet:${{ github.sha }}
 
   snyk:
     name: Snyk (optional)
@@ -94,4 +99,3 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
-
