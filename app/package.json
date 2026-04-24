@@ -94,6 +94,7 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.0",
     "@react-three/postprocessing": "^3.0.4",
+    "@sentry/node": "^10.49.0",
     "@ton/core": "^0.63.1",
     "@ton/ton": "16.2.4",
     "@tonconnect/ui-react": "^2.4.4",
@@ -127,7 +128,7 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4.2.2",
     "@testing-library/dom": "^10.4.1",
@@ -141,7 +142,7 @@
     "@vitest/coverage-v8": "^4.1.2",
     "autoprefixer": "^10.4.23",
     "drizzle-kit": "^0.31.10",
-    "eslint": "^9.39.4",
+    "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "esrecurse": "^4.3.0",
