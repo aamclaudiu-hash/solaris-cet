@@ -57,11 +57,17 @@ Mai jos este planul de execuție „resume” (următorii pași logici), în ord
 - Performanță: harta nu încarcă pe homepage; imaginile sub fold sunt lazy.
 
 ## 4) Comenzi recomandate înainte de commit (repo checks)
+Folosește scripturile root (workspace) ca să acoperi **app + api + contracts + scripts**:
+
 ```bash
 cd /root/solaris-cet
-cd app && npm run verify && PW_WORKERS=1 npm run test:e2e
-cd ../contracts && npm test && npx tsc --noEmit
+npm run verify:fast
+npm run verify:all
 ```
+
+Notă: `verify:all` include rularea E2E stabilă (Playwright) prin `app:test:e2e:stable`.
+
+(Detalii implementare curentă: vezi `STATUS_TASK05-10_Implementare_si_Verificari_curente_ro.md`.)
 
 ## 5) Comenzi pentru finalizarea batch-ului (manual)
 ```bash

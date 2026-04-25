@@ -3851,6 +3851,11 @@ const translations: Record<LangCode, Translations> = {
       sovereignNoJs: 'Suveran (fără JS)',
       github: 'GitHub',
     },
+    region: {
+      ariaLabel: 'Regiune',
+      eu: 'Europa',
+      asia: 'Asia',
+    },
     footerMeta: {
       genesisCertification:
         'Ancoră genesis: 2026-03-31T23:23:00Z · Plafon CET: 9.000 · Suprafață: OMEGA-2026',
