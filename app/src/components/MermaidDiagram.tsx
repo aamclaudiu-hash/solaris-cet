@@ -2,8 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { SafeHtml } from './SafeHtml';
 
 export default function MermaidDiagram({ graph }: { graph: string }) {
-  const [svg, setSvg] = useState<string | null>(null);
-  const [failed, setFailed] = useState(false);
+  const [state, setState] = useState<{ graph: string; svg: string | null; failed: boolean }>(() => ({
+    graph: '',
+    svg: null,
+    failed: false,
+  }));
+
+  const svg = state.graph === graph ? state.svg : null;
+  const failed = state.graph === graph ? state.failed : false;
 
   useEffect(() => {
     let alive = true;
@@ -19,16 +25,12 @@ export default function MermaidDiagram({ graph }: { graph: string }) {
         const id = `mermaid-${Math.random().toString(16).slice(2)}`;
         const { svg } = await mermaid.render(id, graph);
         if (!alive) return;
-        setSvg(svg);
-        setFailed(false);
+        setState({ graph, svg, failed: false });
       } catch {
         if (!alive) return;
-        setFailed(true);
+        setState({ graph, svg: null, failed: true });
       }
     };
-
-    setSvg(null);
-    setFailed(false);
     void run();
     return () => {
       alive = false;

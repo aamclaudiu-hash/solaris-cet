@@ -29,6 +29,10 @@ graph TD
 ## 2.Technology Description
 - Frontend: React@18+ (sau 19) + TypeScript + vite
 - Styling/UI: tailwindcss@3 + Radix UI (Dialog/Popover/Accordion) pentru componente accesibile
+- SEO (client-side): `react-helmet-async` (sau echivalent) pentru `title`, `meta description`, canonical, OG/Twitter și `hreflang`; componente JSON-LD (script `application/ld+json`).
+- i18n: `i18next` + `react-i18next`, cu RO default și prefix `/en/*` pentru EN; mapping rută-curentă ↔ rută în cealaltă limbă.
+- Conținut Blog: fișiere Markdown/MDX cu frontmatter (title, description, slug, date, image, locale, translationKey) + generare rute la build.
+- SEO assets: `robots.txt` și `sitemap.xml` generate la build și servite ca fișiere statice (în `public/`).
 - RWA: dataset local (static) în `app/src/lib/rwaPortfolio.ts` + componente UI (map/timeline/docs)
 - Backend (doar pentru AI): route handler serverless/edge `POST /api/chat` (OpenAI SDK), cu:
   - chei API doar pe server (env), fără expunere în client
@@ -42,10 +46,19 @@ graph TD
 ## 3.Route definitions
 | Route | Purpose |
 |-------|---------|
-| / | Pagina principală: hero/preview RWA, teaser CET AI, trust + lead capture |
-| /rwa | Pagina RWA: hartă interactivă + timeline + documente + fallback fără JS |
-| /cet-ai | Pagina CET AI: demo live + explicații/limitări + privacy notice |
+| / | Pagina principală (RO): hero/preview RWA, teaser CET AI, trust + lead capture + switch limbă |
+| /rwa | Pagina RWA (RO): hartă interactivă + timeline + documente + fallback fără JS |
+| /cet-ai | Pagina CET AI (RO): demo live + explicații/limitări + privacy notice |
+| /blog | Blog (RO): listă articole + paginare |
+| /blog/:slug | Articol Blog (RO): conținut + meta + JSON-LD `BlogPosting` |
+| /legal/privacy | Privacy Policy (RO) |
+| /legal/terms | Terms of Use (RO) |
+| /legal/cookies | Cookie Policy (RO) |
+| /404 | Pagina 404 (UI) |
+| /en/* | Variante EN pentru rutele publice (ex. `/en/rwa`, `/en/blog/:slug`) |
 | /api/chat | Endpoint AI securizat (server-side), folosit doar de UI-ul CET AI |
+| /robots.txt | Robots directives + link către sitemap |
+| /sitemap.xml | Sitemap (include URL-uri RO + EN) |
 
 ## 4.API definitions
 ### 4.1 POST /api/chat

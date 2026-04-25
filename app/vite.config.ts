@@ -4,6 +4,7 @@ import path from "path"
 import { OG_IMAGE_FILENAME, SOLARIS_CET_LOGO_FILENAME } from "./src/lib/brandAssetFilenames"
 import { DEDUST_POOL_DEPOSIT_URL } from "./src/lib/dedustUrls"
 import react from "@vitejs/plugin-react"
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 import { defineConfig } from "vite"
 import type { Plugin } from "vite"
 import { compression } from "vite-plugin-compression2"
@@ -100,6 +101,12 @@ function buildTimestamp(): string {
   return process.env.VITE_BUILD_TIMESTAMP?.trim() || new Date().toISOString()
 }
 
+const sentryOrg = process.env.SENTRY_ORG?.trim()
+const sentryProject = process.env.SENTRY_PROJECT?.trim()
+const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN?.trim()
+const sentryUrl = process.env.SENTRY_URL?.trim()
+const sentryEnabled = Boolean(sentryOrg && sentryProject && sentryAuthToken)
+
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
@@ -111,6 +118,17 @@ export default defineConfig({
     previewHealthJson(),
     injectGoogleSiteVerification(),
     react(),
+    ...(sentryEnabled
+      ? [
+          sentryVitePlugin({
+            authToken: sentryAuthToken,
+            org: sentryOrg,
+            project: sentryProject,
+            url: sentryUrl,
+            release: gitShort(),
+          } as unknown as Record<string, unknown>),
+        ]
+      : []),
     // Emit Brotli-compressed (.br) assets alongside regular files.
     // Reduces transfer size by up to 75 % vs gzip — critical for rural
     // low-bandwidth users. Servers that support pre-compressed assets
@@ -286,7 +304,7 @@ export default defineConfig({
         ],
       },
     }),
-  ],
+  ] as any,
   preview: {
     host: '0.0.0.0',
     port: resolvePreviewPort(),
@@ -295,7 +313,7 @@ export default defineConfig({
     target: 'esnext',
     rollupOptions: {
       output: {
-        manualChunks(id) {
+        manualChunks(id: string) {
           if (id.includes('node_modules')) {
             const pkg = id.split('node_modules/')[1];
             // Handle scoped packages like @radix-ui/react-dialog
@@ -332,7 +350,7 @@ export default defineConfig({
       '/api-dedust': {
         target: 'https://api.dedust.io',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-dedust/, ''),
+        rewrite: (path: string) => path.replace(/^\/api-dedust/, ''),
         // Increase timeouts for slow external APIs to prevent ERR_ABORTED
         proxyTimeout: 10000,
         timeout: 10000,
@@ -340,7 +358,7 @@ export default defineConfig({
       '/api-country': {
         target: 'https://api.country.is',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-country/, ''),
+        rewrite: (path: string) => path.replace(/^\/api-country/, ''),
         proxyTimeout: 5000,
         timeout: 5000,
       },

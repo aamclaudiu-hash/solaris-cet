@@ -1,4 +1,6 @@
-FROM node:22-alpine AS builder
+ARG NODE_VERSION=22
+
+FROM node:${NODE_VERSION}-alpine AS builder
 
 WORKDIR /repo
 
@@ -8,7 +10,7 @@ COPY app/package.json app/package.json
 COPY api/package.json api/package.json
 COPY contracts/package.json contracts/package.json
 COPY scripts/package.json scripts/package.json
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 
 # Build prerequisites used by app prebuild script.
 COPY scripts/ scripts/
@@ -16,9 +18,9 @@ COPY static/ static/
 
 # Build the frontend app.
 COPY app/ app/
-RUN npm run build --workspace=app && npm run api:build --workspace=app && npm prune --omit=dev
+RUN --mount=type=cache,target=/root/.npm npm run build --workspace=app && npm run api:build --workspace=app && npm prune --omit=dev
 
-FROM node:22-alpine AS runner
+FROM node:${NODE_VERSION}-alpine AS runner
 
 WORKDIR /app
 
@@ -34,7 +36,7 @@ COPY --from=builder --chown=app:app /repo/app/server /app/server
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:3000/health.json >/dev/null || exit 1
+  CMD node -e "const port=process.env.PORT||3000;fetch('http://127.0.0.1:'+port+'/health.json',{cache:'no-store'}).then(r=>{process.exit(r.ok?0:1)}).catch(()=>process.exit(1))"
 
 USER app
 

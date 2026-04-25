@@ -32,7 +32,7 @@ const PBKDF2_SALT = 'solaris-cet-api-key-v1';
 /**
  * Derive a 256-bit AES-GCM key from `secret` using PBKDF2-SHA-256.
  */
-async function deriveKey(secret: string): Promise<CryptoKey> {
+async function deriveKey(secret: string): Promise<import('node:crypto').webcrypto.CryptoKey> {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
     'raw',

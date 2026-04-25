@@ -1,4 +1,5 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
+import * as Sentry from '@sentry/react';
 import translations from '../i18n/translations';
 import { getActiveLangSync } from '../hooks/useLanguage';
 import { shortSkillWhisper, skillSeedFromLabel } from '@/lib/meshSkillFeed';
@@ -47,6 +48,18 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('[ErrorBoundary] Caught error:', error, errorInfo);
+    try {
+      const anySentry = Sentry as unknown as {
+        captureException?: (e: unknown) => void;
+        withScope?: (cb: (scope: { setExtras?: (extras: Record<string, unknown>) => void }) => void) => void;
+      };
+      anySentry.withScope?.((scope) => {
+        scope.setExtras?.({ componentStack: errorInfo.componentStack });
+        anySentry.captureException?.(error);
+      });
+    } catch {
+      void 0;
+    }
   }
 
   /** Reset the error state so the children are re-rendered without a full page reload. */

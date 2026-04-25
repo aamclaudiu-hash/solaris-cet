@@ -37,7 +37,6 @@ export async function renderHook<T>(
 
   function Wrapper() {
     const hookResult = useHook();
-    // eslint-disable-next-line react-hooks/immutability
     resultRef.current = hookResult;
     return createWrapper ? createWrapper(hookResult) : null;
   }

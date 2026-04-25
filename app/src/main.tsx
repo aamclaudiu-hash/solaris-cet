@@ -2,6 +2,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider } from 'next-themes'
+import * as Sentry from '@sentry/react'
 import '@fontsource/syne/400.css'
 import '@fontsource/syne/600.css'
 import '@fontsource/syne/700.css'
@@ -19,6 +20,22 @@ window.addEventListener('vite:preloadError', () => {
     window.location.reload();
   }
 });
+
+const sentryDsn = String(import.meta.env.VITE_SENTRY_DSN ?? '').trim()
+if (sentryDsn) {
+  const tracesSampleRate = Number.parseFloat(String(import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE ?? '0'))
+  const integrations = [] as unknown[]
+  const anySentry = Sentry as unknown as { browserTracingIntegration?: () => unknown }
+  const browserTracing = anySentry.browserTracingIntegration?.()
+  if (browserTracing) integrations.push(browserTracing)
+  Sentry.init({
+    dsn: sentryDsn,
+    environment: import.meta.env.MODE,
+    tracesSampleRate: Number.isFinite(tracesSampleRate) ? tracesSampleRate : 0,
+    integrations,
+    sendDefaultPii: false,
+  })
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

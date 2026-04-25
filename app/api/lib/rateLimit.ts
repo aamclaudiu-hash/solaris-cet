@@ -24,15 +24,13 @@ export async function withUpstashRateLimit(
 
   try {
     const incr = await fetch(`${url}/incr/${encodeURIComponent(key)}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
+      headers: { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-store' },
     });
     const payload = (await incr.json()) as { result?: unknown };
     const count = typeof payload.result === 'number' ? payload.result : Number.NaN;
     if (Number.isFinite(count) && count === 1) {
       await fetch(`${url}/expire/${encodeURIComponent(key)}/${opts.windowSeconds}`, {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
+        headers: { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-store' },
       });
     }
     if (Number.isFinite(count) && count > opts.limit) return jsonRateLimited(allowedOrigin);
@@ -42,4 +40,3 @@ export async function withUpstashRateLimit(
 
   return null;
 }
-

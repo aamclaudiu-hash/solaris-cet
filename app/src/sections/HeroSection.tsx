@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useRef, useLayoutEffect, useMemo, memo, useEffect, useState } from 'react';
+import React, { lazy, Suspense, useRef, useLayoutEffect, useMemo, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ShieldCheck, TrendingUp, CheckCircle, ChevronDown, FileText } from 'lucide-react';
@@ -592,4 +592,4 @@ const HeroSection: React.FC<HeroSectionProps> = ({ cinematic = false }) => {
   );
 };
 
-export default memo(HeroSection);
+export default React.memo(HeroSection);

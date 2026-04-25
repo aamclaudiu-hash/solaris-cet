@@ -8,8 +8,11 @@
 
 ### Meta (global)
 - Title template: "{Page} | Solaris CET"
-- OG: og:title, og:description, og:image (1200x630), og:type=website
-- Canonical pe fiecare rută publică.
+- Description template: 150–160 caractere, unică per pagină/limbă.
+- OG: og:title, og:description, og:image (1200x630), og:type=website, og:locale (ro_RO / en_US).
+- Twitter: twitter:card=summary_large_image + title/description/image.
+- Canonical pe fiecare rută publică (pe limba curentă).
+- Hreflang: `alternate` pentru ro-RO și en + `x-default` (pe fiecare pagină indexabilă).
 
 ### Tipografie
 - Font: sans modern (ex: Inter) cu fallback system.
@@ -23,13 +26,17 @@
 - Stări: hover (darken), focus (outline 2px), disabled (opacitate + cursor).
 
 ### Componente globale
-- Header: logo + nav (/rwa, /cet-ai) + CTA.
+- Header: logo + nav (/, /rwa, /cet-ai, /blog) + switch limbă (RO/EN) + CTA.
+- Language switcher:
+  - Desktop: dropdown scurt (RO/EN) în header.
+  - Persistență: salvează preferința (localStorage/cookie) și menține pagina curentă (mapping rută).
 - Buttons: Primary / Secondary / Ghost; dimensiuni M/L; focus ring vizibil.
-- Cards: documente, repere timeline, highlight stats.
+- Cards: documente, repere timeline, highlight stats, card articol blog.
 - Skeleton: shimmer subtil; păstrează dimensiunile finale (fără layout shift).
-- Footer (trust + lead capture):
+- Footer (trust + lead capture + legal):
   - Trust: logo-uri parteneri/afilieri (monocrom), insigne + link-uri.
   - Lead capture: form email (required) + nume (optional) + mesaj de consimțământ (copy), stări success/error.
+  - Legal links: Privacy, Terms, Cookies (în limba curentă).
 
 ---
 
@@ -120,6 +127,82 @@
 
 ---
 
+## Blog (/blog)
+### Meta
+- Title: "Blog | Solaris CET" (RO) / "Blog | Solaris CET" (EN)
+- Description: sumar editorial (unică per limbă).
+
+### Page Structure
+- Layout tip listă: header pagină → listă carduri → paginare.
+
+### Secțiuni & componente
+1. Page header
+   - H1: "Blog" + subtitle scurt.
+2. Listă articole
+   - Grid 2–3 coloane (desktop), 1 col (mobile).
+   - Card articol: imagine (16:9), titlu, excerpt (2–3 linii), dată, buton/link "Citește".
+3. Filtrare (minimă)
+   - Opțional: tags/categorii ca chips; fără UI complex.
+
+---
+
+## Articol blog (/blog/:slug)
+### Meta
+- Title/Description per articol (din frontmatter).
+- OG/Twitter image per articol.
+
+### Page Structure
+- Layout: coloană conținut + sidebar (desktop) / stacked (mobile).
+
+### Secțiuni & componente
+1. Header articol
+   - H1 titlu, metadate (dată, autor opțional), imagine cover.
+2. Conținut
+   - Tipografie bogată (H2/H3, liste, citate, code), max-width 72–80 caractere/linie.
+   - TOC: generat automat pentru articole lungi (desktop: sticky; mobile: accordion).
+3. Navigare
+   - Link "Înapoi la Blog" + next/prev.
+4. Structured data
+   - Injectează JSON-LD `BlogPosting` (titlu, descriere, imagine, date, autor/organization, url, inLanguage).
+
+---
+
+## Pagini legale (/legal/*)
+### Meta
+- Title: "Confidențialitate" / "Termeni" / "Cookies" (în limba curentă).
+- Canonical + hreflang.
+
+### Page Structure
+- Layout: conținut lung în centru + mini-nav ancore (desktop).
+
+### Secțiuni & componente
+1. Header
+   - H1 + "Ultima actualizare".
+2. Conținut
+   - Secțiuni numerotate, liste, link mailto de contact.
+3. Navigare
+   - Breadcrumbs (opțional): Home → Legal → Pagina curentă.
+
+---
+
+## Pagina 404 (Not Found)
+### Meta
+- Title: "Pagina nu a fost găsită | Solaris CET" / "Page Not Found | Solaris CET".
+- `robots` meta: noindex (pentru pagina 404).
+
+### Page Structure
+- Centered hero: mesaj → acțiuni → link-uri utile.
+
+### Secțiuni & componente
+1. Mesaj principal
+   - H1 scurt + explicație.
+2. Acțiuni
+   - Butoane: "Acasă", "RWA", "CET AI", "Blog".
+3. Căutare (opțional)
+   - Search input care filtrează link-uri interne (client-side) pentru navigare rapidă.
+
+---
+
 ## Ghid performanță/SEO (aplicat UI)
 - Imagini & media:
   - responsive `srcset`/`sizes`, lazy-load sub fold, placeholder blur/inline SVG, `alt` obligatoriu.
@@ -131,4 +214,7 @@
 - API /api/chat:
   - timeout/abort pe request; buton „Stop”; retry.
 - SEO:
-  - H1 unic/pagină; OG image consistent; canonical pe fiecare rută; internal linking `/` ↔ `/rwa` ↔ `/cet-ai`.
+  - H1 unic/pagină; canonical + hreflang; OG/Twitter complet.
+  - `robots.txt` + `sitemap.xml` publice, actualizate la build.
+  - JSON-LD: `Organization` + `WebSite` global; `BlogPosting` pe articole.
+  - 404: pagină dedicată cu `noindex`.

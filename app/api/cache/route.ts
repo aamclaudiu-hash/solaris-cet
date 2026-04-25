@@ -43,8 +43,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (upstashUrl && upstashToken) {
     try {
       const got = await fetch(`${upstashUrl}/get/${encodeURIComponent(key)}`, {
-        headers: { Authorization: `Bearer ${upstashToken}` },
-        cache: 'no-store',
+        headers: { Authorization: `Bearer ${upstashToken}`, 'Cache-Control': 'no-store' },
       });
       if (got.ok) {
         const payload = (await got.json()) as UpstashResponse<string | null>;
@@ -59,14 +58,13 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   try {
-    const res = await fetch('/api/state.json', { cache: 'no-store' });
+    const res = await fetch('/api/state.json', { headers: { 'Cache-Control': 'no-store' } });
     const json = await res.json();
 
     if (upstashUrl && upstashToken) {
       const setUrl = `${upstashUrl}/set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(json))}`;
       void fetch(`${setUrl}?ex=60`, {
-        headers: { Authorization: `Bearer ${upstashToken}` },
-        cache: 'no-store',
+        headers: { Authorization: `Bearer ${upstashToken}`, 'Cache-Control': 'no-store' },
       }).catch(() => {});
     }
 

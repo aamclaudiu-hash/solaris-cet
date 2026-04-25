@@ -68,9 +68,8 @@ export default async function handler(req: Request): Promise<Response> {
   try {
     const res = await fetch(webhook, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
       body: JSON.stringify({ email }),
-      cache: 'no-store',
     });
     if (!res.ok) {
       return new Response(JSON.stringify({ ok: false, error: 'Upstream rejected' }), {

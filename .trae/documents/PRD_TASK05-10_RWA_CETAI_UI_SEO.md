@@ -9,9 +9,12 @@ Nu este necesară diferențierea pe roluri (conținut public).
 
 ### 2.2 Feature Module
 Cerințele sunt acoperite de următoarele pagini:
-1. **Pagina principală**: hero RWA cu vizual, preview hartă + timeline, teaser CET AI (mockup/quick prompts), entrypoint către RWA și demo, footer cu trust signals + lead capture.
-2. **Pagina RWA**: hartă interactivă (explorare), timeline complet, listă documente (preview/download), media/galerie, fallback fără JS.
-3. **Pagina CET AI**: demo live (chat UI complet), explicație scurtă capabilități/limitări, privacy notice, CTA către contact.
+1. **Pagina principală**: hero RWA cu vizual, preview hartă + timeline, teaser CET AI (mockup/quick prompts), entrypoint către RWA și demo, footer cu trust signals + lead capture + switcher limbă (RO/EN).
+2. **Pagina RWA**: hartă interactivă (explorare), timeline complet, listă documente (preview/download), media/galerie, fallback fără JS (RO/EN).
+3. **Pagina CET AI**: demo live (chat UI complet), explicație scurtă capabilități/limitări, privacy notice, CTA către contact (RO/EN).
+4. **Blog**: listă articole + filtrare minimă, pagină articol (slug SEO), navigare între articole, suport RO/EN.
+5. **Pagini legale**: Privacy Policy, Terms, Cookies (RO/EN), accesibile din footer.
+6. **Pagina 404**: mesaj clar, link-uri utile și căutare/navigare către pagini cheie.
 
 ### 2.3 Page Details
 | Page Name | Module Name | Feature description |
@@ -19,7 +22,10 @@ Cerințele sunt acoperite de următoarele pagini:
 | Global (toate paginile) | Sistem tipografie + spațiere | Definește scale (H1–H6, body, caption), greutăți, line-height și reguli de spacing (multipli de 4px) aplicate consistent în componente. |
 | Global (toate paginile) | Sistem culori + stări | Definește paletă (brand/neutral/semantic), stări (hover/focus/disabled), contrast minim și reguli de utilizare pe fundaluri/suprafețe. |
 | Global (toate paginile) | Navigație | Afișează header cu link-uri către: Acasă, RWA, CET AI; păstrează starea activă și suportă layout responsive. |
-| Global (toate paginile) | SEO de bază | Configurează per pagină: title, description, OG, canonical; asigură heading hierarchy corect (un singur H1/pagină) și link-uri interne coerente. |
+| Global (toate paginile) | SEO de bază | Configurează per pagină: `title`, `meta description`, Open Graph, Twitter Card, canonical; asigură heading hierarchy corect (un singur H1/pagină) și link-uri interne coerente. |
+| Global (toate paginile) | SEO i18n (RO/EN) | Expune toggle de limbă; generează `hreflang` (ro-RO, en) + `x-default`; menține mapping între rute (ex. `/rwa` ↔ `/en/rwa`) și canonical per limbă. |
+| Global (toate paginile) | Sitemap + robots | Publică `sitemap.xml` (include toate rutele indexabile + variantele RO/EN) și `robots.txt` cu link către sitemap; exclude rute tehnice (`/api/*`). |
+| Global (toate paginile) | JSON-LD | Injectează structured data: `Organization` + `WebSite` (global); `BlogPosting` pe pagini de articol; `BreadcrumbList` unde există ierarhie (Blog). |
 | Global (toate paginile) | Performanță percepută | Folosește skeleton/placeholder pentru conținut asincron; lazy-load pentru imagini sub fold; code-splitting pe rute. |
 | Global (toate paginile) | Footer: trust + lead capture | Afișează trust signals (logo-uri/insigne + link-uri) și formular de email cu validare + stări succes/eroare (lead capture). |
 | Pagina principală | Hero RWA (vizual) | Afișează copy scurt + beneficii; vizual (foto) cu parallax subtil (dezactivabil la reduced-motion); CTA către pagina RWA. |
@@ -32,24 +38,32 @@ Cerințele sunt acoperite de următoarele pagini:
 | Pagina RWA | Fallback fără JS | În `<noscript>`, afișează listă proiecte + link-uri documente + timeline în HTML static și mesaj „Pentru hartă interactivă, activează JavaScript.” |
 | Pagina CET AI | Demo UI (live) | Trimite prompt către endpoint securizat (`POST /api/chat`) și afișează răspunsul în format RAV; include stări: idle/loading/success/error, retry, stop/cancel, reset și exemple predefinite. |
 | Pagina CET AI | Explicație, limite și confidențialitate | Clarifică ce face demo-ul și limitele; include mențiune despre context on-chain (DeDust) când e disponibil și privacy notice: nu introduce date personale; conversația nu este salvată server-side. |
+| Blog | Listă articole | Listează articole cu: titlu, excerpt, dată, autor (opțional), tag/categorie (opțional), imagine; suportă paginare simplă; link către articol prin slug. |
+| Blog | Articol (detalii) | Afișează conținut (Markdown/MDX sau HTML), tabel de conținut (dacă e lung), navigare next/prev; setează meta per articol (title/description/OG) + JSON-LD `BlogPosting`. |
+| Pagini legale | Conținut legal (RO/EN) | Afișează Privacy Policy, Terms și Cookies (versiune + „ultima actualizare”); include date de contact; descrie newsletter/lead capture (temei + consimțământ) și cookies (dacă există). |
+| Pagina 404 | Not Found | Afișează mesaj clar, CTA către Home/RWA/CET AI/Blog, și păstrează header/footer pentru navigare rapidă. |
 
 ## 3. Core Process
 Flux vizitator (public):
-1. Intri pe Pagina principală și scanezi rapid valoarea RWA (hero + bullets) și încrederea (trust signals + documente).
-2. Interacționezi cu preview-ul de hartă/timeline și/sau cu teaser-ul CET AI (quick prompts), apoi intri pe /rwa sau /cet-ai.
-3. Pe /rwa, explorezi pe hartă și în timeline, apoi previzualizezi/descarci documente.
-4. Pe /cet-ai, rulezi un prompt (manual sau preset); UI-ul trimite cererea către endpoint-ul securizat și afișează răspunsul; la erori ai mesaje clare + retry.
-5. Dacă vrei follow-up, lași email în footer (lead capture) sau folosești CTA către contact.
+1. Intri pe Pagina principală, alegi limba (RO/EN) și înțelegi rapid oferta (RWA + CET AI).
+2. Navighezi către /rwa pentru explorare (hartă/timeline/documente) sau către /cet-ai pentru demo.
+3. Dacă vrei context editorial, mergi în Blog, deschizi un articol și continui către pagini produs (link-uri interne).
+4. Dacă ai nevoie de claritate juridică, accesezi paginile legale din footer.
+5. Dacă ajungi pe o rută invalidă, Pagina 404 te redirecționează prin link-uri utile.
 
 ```mermaid
 graph TD
   A["Pagina principală"] --> B["Pagina RWA"]
   A --> C["Pagina CET AI"]
+  A --> H["Blog"]
+  A --> I["Pagini legale"]
   A --> G["Footer: Lead capture"]
-  B --> D["Documente (preview/download)"]
-  B --> E["Timeline (deep links)"]
+  H --> J["Articol blog"]
+  J --> B
+  J --> C
   C --> F["Endpoint AI: POST /api/chat"]
   F --> C
+  A --> K["Pagina 404"]
 ```
 
 ## 4. Criterii de acceptanță (aliniate TASK 05–10)

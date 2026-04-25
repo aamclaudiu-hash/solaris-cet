@@ -47,24 +47,24 @@ export default function HierarchyGraph({
   const [data, setData] = useState<MermaidAgentResponse | null>(null);
   const [failed, setFailed] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const [renderDiagram, setRenderDiagram] = useState(false);
-  const [isSourceOpen, setIsSourceOpen] = useState(false);
-
-  useEffect(() => {
+  const [renderDiagram, setRenderDiagram] = useState(() => {
+    if (typeof window === 'undefined') return false;
     try {
-      const v = localStorage.getItem('solaris_mermaid_render');
-      if (v === '1') setRenderDiagram(true);
+      return localStorage.getItem('solaris_mermaid_render') === '1';
     } catch {
-      void 0;
+      return false;
     }
-  }, []);
+  });
+  const [isSourceOpen, setIsSourceOpen] = useState(false);
 
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
     if (typeof IntersectionObserver === 'undefined') {
-      setIsActive(true);
-      return;
+      const id = window.setTimeout(() => setIsActive(true), 0);
+      return () => {
+        window.clearTimeout(id);
+      };
     }
     const fallback = window.setTimeout(() => setIsActive(true), 2000);
     const obs = new IntersectionObserver(

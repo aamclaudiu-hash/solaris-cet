@@ -27,10 +27,7 @@ export default function WalletBalance({ className }: { className?: string }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!address) {
-      setData(null);
-      return;
-    }
+    if (!address) return;
 
     let alive = true;
     const controller = new AbortController();
@@ -64,11 +61,16 @@ export default function WalletBalance({ className }: { className?: string }) {
       }
     };
 
-    void run();
-    const id = window.setInterval(run, 20_000);
+    const first = window.setTimeout(() => {
+      void run();
+    }, 0);
+    const id = window.setInterval(() => {
+      void run();
+    }, 20_000);
     return () => {
       alive = false;
       controller.abort();
+      window.clearTimeout(first);
       window.clearInterval(id);
     };
   }, [address]);
