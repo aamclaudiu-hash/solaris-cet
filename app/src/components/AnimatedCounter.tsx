@@ -45,7 +45,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
       });
-      node.innerText = `${prefix}${formatted}${suffix}`;
+      node.textContent = `${prefix}${formatted}${suffix}`;
       return;
     }
     const target = { val: 0 };
@@ -59,7 +59,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
             minimumFractionDigits: decimals,
             maximumFractionDigits: decimals,
           });
-          node.innerText = `${prefix}${formatted}${suffix}`;
+          node.textContent = `${prefix}${formatted}${suffix}`;
         }
       },
       scrollTrigger: {

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { SolarisLogoMark } from './SolarisLogoMark';
 import LanguageSelector from './LanguageSelector';
+import RegionSelector from './RegionSelector';
 import WalletConnect from './WalletConnect';
 import WalletBalance from './WalletBalance';
 import { HeaderTrustStrip } from './HeaderTrustStrip';
@@ -291,6 +292,7 @@ const Navigation = () => {
             <div className="hidden lg:flex items-center gap-3">
               <div className="flex items-center gap-3">
                 <LanguageSelector />
+                <RegionSelector />
                 <ThemeToggle />
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
@@ -399,6 +401,7 @@ const Navigation = () => {
               </a>
               <div className="w-full flex flex-col items-center gap-4">
                 <LanguageSelector />
+                <RegionSelector />
                 <ThemeToggle />
                 <div className="w-full flex flex-col items-center gap-2">
                   <WalletConnect />

@@ -5,11 +5,13 @@ import GlowOrbs from '../components/GlowOrbs';
 import MeshSkillRibbon from '../components/MeshSkillRibbon';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useLanguage } from '../hooks/useLanguage';
+import { useRegion } from '../hooks/useRegion';
 
 
 const ComplianceSection = () => {
   const { t } = useLanguage();
   const tx = t.complianceUi;
+  const { region } = useRegion();
   const sectionRef = useRef<HTMLDivElement>(null);
   const leftCardRef = useRef<HTMLDivElement>(null);
   const rightCardRef = useRef<HTMLDivElement>(null);
@@ -186,6 +188,10 @@ const ComplianceSection = () => {
           <span className="font-mono text-sm text-solaris-text">Sovereign AI</span>
         </div>
       </div>
+
+      <p className="relative z-[25] w-full max-w-3xl mx-auto px-4 -mt-2 text-sm text-white/70 pointer-events-auto">
+        {region === 'asia' ? t.region.disclaimerAsia : t.region.disclaimerEu}
+      </p>
 
       <div className="relative z-[25] w-full max-w-3xl mx-auto pointer-events-auto xl:absolute xl:bottom-4 xl:left-4 xl:right-4">
         <MeshSkillRibbon variant="compact" saltOffset={1580} className="border-fuchsia-500/12 bg-fuchsia-500/[0.03]" />

@@ -21,9 +21,24 @@ export const users = pgTable(
     walletAddress: text('wallet_address').notNull().unique(),
     referralCode: text('referral_code').unique(),
     points: integer('points').notNull().default(0),
+    role: text('role').notNull().default('visitor'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index('users_wallet_address_idx').on(t.walletAddress)],
+);
+
+export const userMfa = pgTable(
+  'user_mfa',
+  {
+    userId: uuid('user_id')
+      .primaryKey()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    secretEncrypted: text('secret_encrypted'),
+    enabledAt: timestamp('enabled_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('user_mfa_enabled_at_idx').on(t.enabledAt)],
 );
 
 /** Active or historical mining session per user */
@@ -93,6 +108,8 @@ export const auditLogs = pgTable(
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+export type UserMfa = typeof userMfa.$inferSelect;
+export type NewUserMfa = typeof userMfa.$inferInsert;
 export type MiningSession = typeof miningSessions.$inferSelect;
 export type NewMiningSession = typeof miningSessions.$inferInsert;
 export type Transaction = typeof transactions.$inferSelect;

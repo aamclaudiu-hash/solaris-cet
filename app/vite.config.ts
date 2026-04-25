@@ -6,7 +6,7 @@ import { DEDUST_POOL_DEPOSIT_URL } from "./src/lib/dedustUrls"
 import react from "@vitejs/plugin-react"
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import { defineConfig } from "vite"
-import type { Plugin } from "vite"
+import type { PluginOption } from "vite"
 import { compression } from "vite-plugin-compression2"
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -15,7 +15,7 @@ import { VitePWA } from 'vite-plugin-pwa'
  * SPA `htmlFallback` treats paths containing a dot as client routes, so
  * `/health.json` incorrectly returns `index.html`. Serve the real file first.
  */
-function previewHealthJson(): Plugin {
+function previewHealthJson(): PluginOption {
   return {
     name: "preview-health-json",
     configurePreviewServer(server) {
@@ -304,7 +304,7 @@ export default defineConfig({
         ],
       },
     }),
-  ] as any,
+  ] satisfies PluginOption[],
   preview: {
     host: '0.0.0.0',
     port: resolvePreviewPort(),

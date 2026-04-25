@@ -6,6 +6,13 @@ vi.mock('../hooks/useLanguage', () => ({
   getActiveLangSync: () => 'en',
   useLanguage: () => ({
     t: {
+      region: {
+        ariaLabel: 'Region',
+        eu: 'Europe',
+        asia: 'Asia',
+        disclaimerEu: 'Region: Europe.',
+        disclaimerAsia: 'Region: Asia.',
+      },
       nav: {
         primaryNavigation: 'Primary navigation',
         tokenomics: 'Tokenomics',
@@ -74,4 +81,3 @@ describe('Navigation', () => {
     expect(document.getElementById('mobile-menu')).not.toBeNull();
   });
 });
-

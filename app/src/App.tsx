@@ -17,6 +17,7 @@ import MobileConversionDock from './components/MobileConversionDock';
 import PwaInstallPrompt from './components/PwaInstallPrompt';
 import { BuildSeal } from './components/BuildSeal';
 import { LanguageContext, useLanguageState } from './hooks/useLanguage';
+import { RegionContext, useRegionState } from './hooks/useRegion';
 import { useSmoothAnchors } from './hooks/useSmoothAnchors';
 import { applySpaSeo } from '@/lib/spaSeo';
 import './App.css';
@@ -54,6 +55,7 @@ function AppContent() {
   const snapTriggerRef = useRef<ScrollTrigger | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const langState = useLanguageState();
+  const regionState = useRegionState();
   const isLhci = import.meta.env.VITE_LHCI === '1';
 
   useSmoothAnchors();
@@ -279,7 +281,8 @@ function AppContent() {
   }, [activeUrlLocale, langState.t, routePath]);
 
   return (
-    <LanguageContext.Provider value={langState}>
+    <RegionContext.Provider value={regionState}>
+      <LanguageContext.Provider value={langState}>
       {/* Loading overlay — blocks interaction with page until warm-up; shell uses inert + aria-hidden */}
       <div
         ref={loadingRef}
@@ -433,7 +436,8 @@ function AppContent() {
       {!isLhci ? <BackToTop /> : null}
       <BuildSeal />
       <CookieConsentBanner />
-    </LanguageContext.Provider>
+      </LanguageContext.Provider>
+    </RegionContext.Provider>
   );
 }
 
