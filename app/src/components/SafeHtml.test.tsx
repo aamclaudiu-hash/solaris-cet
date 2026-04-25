@@ -39,4 +39,3 @@ describe('SafeHtml', () => {
     expect(root.querySelector('circle')).not.toBeNull();
   });
 });
-
